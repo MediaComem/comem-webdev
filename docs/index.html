@@ -18,6 +18,9 @@
       .remark-code, .remark-inline-code {
         font-family: 'Ubuntu Mono';
       }
+      h1 strong {
+        text-decoration: underline;
+      }
       ul li {
         margin-top: 0.4em;
       }
@@ -142,27 +145,40 @@ function myFunction2() {
 
 # JavaScript supports **first-class functions**
 
-.grid-60[
+New functions can be defined **at runtime**:
 
 ```js
-// Named function
+multiplyByTwo(3); // ReferenceError: multiplyByTwo is not defined
+
 function multiplyByTwo(n) {
   return n * 2;
 }
 
-multiplyByTwo(3); // 6
+multiplyByTwo(3); // Returns 6
+```
 
+--
+
+Functions can be **stored** in data structures:
+
+```js
 // Stored function
 var hello = function(name) {
   console.log("Hello " + name + "!");
 };
 
-hello("World"); // "Hello World!"
+hello("World"); // "Hello World!"```
 
-// Function argument
-function applyToArray(array, func) {
-  for (int i = 0; i < array.length; i++) {
-    array[i] = func(array[i]);
+---
+
+# JavaScript supports **first-class functions**
+
+Functions can be passed as **arguments** to other functions.
+
+```js
+function applyToArray(numbers, func) {
+  for (int i = 0; i < numbers.length; i++) {
+    numbers[i] = func(numbers[i]);
   }
 }
 
@@ -170,16 +186,6 @@ var a = [ 1, 2, 3 ];
 applyToArray(a, multiplyByTwo);
 console.log(a); // [ 2, 4, 6 ]
 ```
-
-]
-
-.grid-40[
-
-* New functions can be defined at **runtime**.
-* Functions can be **stored** in data structures.
-* Functions can be passed as **arguments** to other functions.
-
-]
 
 ---
 
@@ -215,29 +221,6 @@ for (var key in person) {
 * Every object has a different list of properties (**no class**).
 
 ]
-
----
-
-# Array are **objects**
-
-```js
-var fruits = ["apple", "pear"];
-
-fruits.push("banana");
-typeof fruits; // "object"
-
-for (var i = 0; i < fruits.length; i++) {
-  console.log("fruits[" + i + "] = " + fruits[i]);
-}
-
-var transformedFruits = fruits.map( function(fruit) {
-  return fruit.toUpperCase();
-});
-
-transformedFruits.forEach( function(fruit) {
-  console.log(fruit);
-});
-```
 
 ---
 
