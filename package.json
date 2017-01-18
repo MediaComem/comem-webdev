@@ -1,0 +1,27 @@
+{
+  "name": "comem-webdev",
+  "version": "1.0.0",
+  "description": "Materials for the COMEM+ web development courses.",
+  "scripts": {
+    "start": "echo \"Error: not yet implemented\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MediaComem/comem-webdev.git"
+  },
+  "author": "COMEM+",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MediaComem/comem-webdev/issues"
+  },
+  "homepage": "https://github.com/MediaComem/comem-webdev#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-connect": "^5.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-watch": "^4.3.11",
+    "handlebars": "^4.0.6",
+    "lodash": "^4.17.4",
+    "through2": "^2.0.3"
+  }
+}
