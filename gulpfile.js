@@ -1,53 +1,154 @@
 var _ = require('lodash'),
+    chain = require('gulp-chain'),
+    clean = require('gulp-clean'),
     fs = require('fs'),
     gulp = require('gulp'),
     connect = require('gulp-connect'),
     handlebars = require('handlebars'),
     lodash = require('lodash'),
+    markdown = require('gulp-markdown'),
+    markdownPdf = require('gulp-markdown-pdf'),
+    path = require('path'),
     rename = require('gulp-rename'),
+    replace = require('gulp-replace'),
+    runSequence = require('run-sequence'),
     through = require('through2'),
+    util = require('gulp-util'),
     watch = require('gulp-watch');
 
-var remarkTemplate = handlebars.compile(fs.readFileSync('templates/remark.html', { encoding: 'utf-8' }));
+var root = __dirname,
+    indexPageTemplate = loadIndexPageTemplate(),
+    remarkPageTemplate = loadRemarkPageTemplate();
 
-gulp.task('watch', function() {
-  return watch('javascript-intro/**/*.md')
-    .pipe(through.obj(gulpMarkdownToRemarkSlides))
-    .pipe(rename(renameMarkdownToIndex))
-    .pipe(gulp.dest('docs'));
+gulp.task('build-index', function() {
+  return gulp.src('README.md')
+    .pipe(buildIndex());
+});
+
+gulp.task('build-slides', function() {
+  return gulp.src('subjects/**/README.md')
+    .pipe(convertReadmeToRemarkSlides());
+});
+
+gulp.task('build-pdf', function() {
+  return gulp.src('subjects/**/README.md')
+    .pipe(markdownPdf())
+    .pipe(gulp.dest('subjects'));
+});
+
+gulp.task('build', [ 'build-index', 'build-slides' ]);
+
+gulp.task('clean', function() {
+  return gulp.src('subjects/**/index.html', { read: false })
+    .pipe(clean());
 });
 
 gulp.task('serve', function() {
   return connect.server({
-    root: 'docs',
+    root: 'subjects',
     port: process.env.PORT || 3000
   });
 });
 
-gulp.task('default', [ 'serve' ]);
+gulp.task('watch-index', function() {
+  return watch('README.md')
+    .pipe(buildIndex());
+})
 
-function renameMarkdownToIndex(path) {
+gulp.task('watch-slides', function() {
+  return watch('subjects/**/README.md', function(file) {
+    return gulp.src(file.path, { base: 'subjects' })
+      .pipe(convertReadmeToRemarkSlides());
+  });
+});
+
+gulp.task('watch', function() {
+  return runSequence([ 'watch-index', 'watch-slides' ]);
+});
+
+gulp.task('default', function() {
+  return runSequence('clean', 'build', [ 'serve', 'watch']);
+});
+
+var buildIndex = chain(function(stream) {
+
+  var dest = 'subjects';
+
+  return stream
+    .pipe(markdown())
+    .pipe(rename(renameReadmeToIndex))
+    .pipe(replace(/href=(["'])subjects\//g, 'href=$1'))
+    .pipe(through.obj(insertIntoIndexPage))
+    .pipe(logFile(function(file) {
+      var relativePath = path.relative(root, file.path);
+      util.log('Generated ' + util.colors.magenta(path.join(dest, relativePath)));
+    }))
+    .pipe(gulp.dest(dest));
+});
+
+var convertReadmeToRemarkSlides = chain(function(stream) {
+
+  var dest = path.join('subjects');
+
+  return stream
+    .pipe(through.obj(convertMarkdownFileToRemarkSlides))
+    .pipe(rename(renameReadmeToIndex))
+    .pipe(logFile(function(file) {
+      var relativePath = path.relative('subjects', file.path);
+      util.log('Generated ' + util.colors.magenta(path.join(dest, relativePath)));
+    }))
+    .pipe(gulp.dest(dest));
+});
+
+function loadIndexPageTemplate() {
+  return handlebars.compile(fs.readFileSync('templates/index.html', { encoding: 'utf-8' }));
+}
+
+function loadRemarkPageTemplate() {
+  return handlebars.compile(fs.readFileSync('templates/remark.html', { encoding: 'utf-8' }));
+}
+
+function logFile(func) {
+  return through.obj(function(file, enc, callback) {
+    func(file);
+    this.push(file);
+    callback();
+  });
+}
+
+function renameReadmeToIndex(path) {
   path.basename = 'index';
   path.extname = '.html';
 }
 
-function gulpMarkdownToRemarkSlides(file, enc, callback) {
+function insertIntoIndexPage(file, enc, callback) {
 
-  var remarkSlides = markdownToRemarkSlides(file.contents.toString());
-  file.contents = new Buffer(remarkSlides);
+  var contents = file.contents.toString();
 
+  var indexPage = indexPageTemplate({
+    contents: contents
+  });
+
+  file.contents = new Buffer(indexPage);
   this.push(file);
+
   callback();
 }
 
-function markdownToRemarkSlides(markdown) {
+function convertMarkdownFileToRemarkSlides(file, enc, callback) {
 
+  var markdown = file.contents.toString();
   markdown = enrichWithSlideSeparators(markdown);
   markdown = enrichWithUnsemanticColumns(markdown);
 
-  return remarkTemplate({
+  var remarkPage = remarkPageTemplate({
     source: markdown
   });
+
+  file.contents = new Buffer(remarkPage);
+  this.push(file);
+
+  callback();
 }
 
 function enrichWithSlideSeparators(markdown) {
