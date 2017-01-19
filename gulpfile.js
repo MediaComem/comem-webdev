@@ -10,7 +10,6 @@ var _ = require('lodash'),
     markdownPdf = require('gulp-markdown-pdf'),
     path = require('path'),
     rename = require('gulp-rename'),
-    replace = require('gulp-replace'),
     runSequence = require('run-sequence'),
     through = require('through2'),
     util = require('gulp-util'),
@@ -20,82 +19,122 @@ var root = __dirname,
     indexPageTemplate = loadIndexPageTemplate(),
     remarkPageTemplate = loadRemarkPageTemplate();
 
+var buildDir = process.env.BUILD_DIR || 'build';
+
+gulp.task('build-assets', function() {
+  return gulp
+    .src([ 'subjects/**/*.*', '!**/*.md' ])
+    .pipe(copyAssets());
+});
+
 gulp.task('build-index', function() {
-  return gulp.src('README.md')
-    .pipe(buildIndex());
+  return buildIndex();
 });
 
 gulp.task('build-slides', function() {
-  return gulp.src('subjects/**/README.md')
-    .pipe(convertReadmeToRemarkSlides());
+  return gulp
+    .src('subjects/**/*.md')
+    .pipe(buildSlides());
 });
 
 gulp.task('build-pdf', function() {
-  return gulp.src('subjects/**/README.md')
+  var dest = path.join(buildDir, 'subjects');
+  return gulp
+    .src('subjects/**/*.md')
     .pipe(markdownPdf())
-    .pipe(gulp.dest('subjects'));
+    .pipe(gulp.dest(dest));
 });
 
-gulp.task('build', [ 'build-index', 'build-slides' ]);
+gulp.task('build', [ 'build-assets', 'build-index', 'build-slides' ]);
 
 gulp.task('clean', function() {
-  return gulp.src('subjects/**/index.html', { read: false })
+  return gulp
+    .src('build/**/*', { read: false })
     .pipe(clean());
 });
 
 gulp.task('serve', function() {
   return connect.server({
-    root: 'subjects',
+    root: buildDir,
     port: process.env.PORT || 3000
   });
 });
 
+gulp.task('watch-assets', function() {
+  return watch([ 'subjects/**/*.*', '!**/*.md' ], function(file) {
+    return gulp
+      .src(file.path, { base: 'subjects' })
+      .pipe(copyAssets());
+  });
+})
+
 gulp.task('watch-index', function() {
-  return watch('README.md')
-    .pipe(buildIndex());
+  return watch('README.md', function() {
+    return buildIndex();
+  });
+})
+
+gulp.task('watch-index-template', function() {
+  return watch('templates/index.html', function() {
+    indexPageTemplate = loadIndexPageTemplate();
+    return buildIndex();
+  });
 })
 
 gulp.task('watch-slides', function() {
-  return watch('subjects/**/README.md', function(file) {
+  return watch('subjects/**/*.md', function(file) {
     return gulp.src(file.path, { base: 'subjects' })
-      .pipe(convertReadmeToRemarkSlides());
+      .pipe(buildSlides());
+  });
+});
+
+gulp.task('watch-slides-template', function() {
+  return watch('templates/remark.html', function() {
+    remarkPageTemplate = loadRemarkPageTemplate();
+    return gulp.src('subjects/**/*.md')
+      .pipe(buildSlides());
   });
 });
 
 gulp.task('watch', function() {
-  return runSequence([ 'watch-index', 'watch-slides' ]);
+  return runSequence([ 'watch-assets', 'watch-index', 'watch-index-template', 'watch-slides', 'watch-slides-template' ]);
 });
 
 gulp.task('default', function() {
   return runSequence('clean', 'build', [ 'serve', 'watch']);
 });
 
-var buildIndex = chain(function(stream) {
-
-  var dest = 'subjects';
-
-  return stream
+function buildIndex() {
+  var dest = buildDir;
+  return gulp.src('README.md')
     .pipe(markdown())
     .pipe(rename(renameReadmeToIndex))
-    .pipe(replace(/href=(["'])subjects\//g, 'href=$1'))
     .pipe(through.obj(insertIntoIndexPage))
     .pipe(logFile(function(file) {
       var relativePath = path.relative(root, file.path);
       util.log('Generated ' + util.colors.magenta(path.join(dest, relativePath)));
     }))
     .pipe(gulp.dest(dest));
-});
+};
 
-var convertReadmeToRemarkSlides = chain(function(stream) {
-
-  var dest = path.join('subjects');
-
+var buildSlides = chain(function(stream) {
+  var dest = path.join(buildDir, 'subjects');
   return stream
     .pipe(through.obj(convertMarkdownFileToRemarkSlides))
     .pipe(rename(renameReadmeToIndex))
     .pipe(logFile(function(file) {
       var relativePath = path.relative('subjects', file.path);
       util.log('Generated ' + util.colors.magenta(path.join(dest, relativePath)));
+    }))
+    .pipe(gulp.dest(dest));
+});
+
+var copyAssets = chain(function(stream) {
+  var dest = path.join(buildDir, 'subjects');
+  return stream
+    .pipe(logFile(function(file) {
+      var relativePath = path.relative('subjects', file.path);
+      util.log('Copied ' + util.colors.magenta(path.join(dest, relativePath)));
     }))
     .pipe(gulp.dest(dest));
 });

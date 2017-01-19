@@ -27,8 +27,7 @@ echo
 
 echo "Building..."
 echo
-gulp build
-cp -R subjects/ "$TMP_DIR"
+BUILD_DIR="$TMP_DIR" gulp build
 echo
 
 
