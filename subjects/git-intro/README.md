@@ -23,7 +23,13 @@ What can I do with it?
 
 
 
-## A short history: **local** version control systems
+## A short history
+
+<!-- slide-front-matter class: center, middle -->
+
+
+
+### **Local** version control systems
 
 <!-- slide-column 60 -->
 
@@ -42,7 +48,7 @@ Systems such as [RCS][rcs] were developed to automate this process.
 
 
 
-## A short history: **centralized** version control systems
+### **Centralized** version control systems
 
 <!-- slide-column 60 -->
 
@@ -52,19 +58,21 @@ and clients check out files from that central place.
 You can **collaborate** with other people through the server,
 and administrators have **fine-grained control** over who can do what.
 
+<!-- slide-column 40 -->
+
+<center><img src='images/centralized-vcs.png' width='100%' /></center>
+
+<!-- slide-container -->
+
 **But:**
 
 * The centralized server is a **single point of failure**.
   If it goes down, then nobody can collaborate at all or save versioned change to anything they're working on.
 * If the server's hard disk becomes corrupt and proper backups haven't been kept, you **lose the entire history** of the project except whatever single snapshots people happen to have on their local machines.
 
-<!-- slide-column 40 -->
-
-<center><img src='images/centralized-vcs.png' width='100%' /></center>
 
 
-
-## A short history: **distributed** version control systems
+### **Distributed** version control systems
 
 <!-- slide-column 50 -->
 

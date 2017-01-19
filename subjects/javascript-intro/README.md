@@ -41,6 +41,9 @@ They are:
 
 ## JavaScript is a **dynamic** language
 
+When you declare a **variable**, you don't specify a type.
+The type can **change** over time.
+
 ```js
 var myVariable = "aString";
 typeof myVariable; // "string"
@@ -57,12 +60,11 @@ myVariable = {
 typeof myVariable; // "object"
 ```
 
-* When you declare a **variable**, you don't specify a type.
-* The type can **change** over time.
-
 
 
 ## There are **2 scopes** for variables: the (evil) global scope and the function scope
+
+<!-- slide-column 50 -->
 
 ```js
 var aVariableInGlobalScope;
@@ -82,6 +84,8 @@ function myFunction2() {
 }
 ```
 
+<!-- slide-column 50 -->
+
 * A variable declared within a function is **not accessible** outside this function.
 * Unless using **strict mode**, it is not mandatory to declare variables (beware of typos...)
 * Two scripts loaded from the same HTML page share the same global scope (beware of **naming conflicts**...).
@@ -90,6 +94,8 @@ function myFunction2() {
 
 
 ## JavaScript supports **first-class functions**
+
+<!-- slide-column 60 -->
 
 ```js
 // Named function
@@ -117,6 +123,8 @@ var a = [ 1, 2, 3 ];
 applyToArray(a, multiplyByTwo);
 console.log(a); // [ 2, 4, 6 ]
 ```
+
+<!-- slide-column 40 -->
 
 * New functions can be defined at **runtime**.
 * Functions can be **stored** in data structures.
@@ -200,12 +208,7 @@ var child = new Person("olivier", "liechti");
 
 ## Every object **inherits** from a **prototype** object
 
-<div class='mermaid'>
-  graph TB;
-    A["<strong>child</strong><br>firstName: 'Luke'"]-->|prototype|B;
-    B["<strong>father</strong><br>firstName: 'Anakin'<br>lastName: 'Skywalker'"]-->|prototype|C;
-    C["<strong>Object.prototype</strong>"];
-</div>
+TODO: add graph
 
 ```js
 // Prints "Skywalker" on the console
