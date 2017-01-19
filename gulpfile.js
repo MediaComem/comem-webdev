@@ -5,8 +5,8 @@ var _ = require('lodash'),
     gulp = require('gulp'),
     connect = require('gulp-connect'),
     handlebars = require('handlebars'),
-    lodash = require('lodash'),
     markdown = require('gulp-markdown'),
+    MarkdownModel = require('./lib/markdown-model'),
     markdownPdf = require('gulp-markdown-pdf'),
     path = require('path'),
     rename = require('gulp-rename'),
@@ -177,100 +177,14 @@ function insertIntoIndexPage(file, enc, callback) {
 function convertMarkdownFileToRemarkSlides(file, enc, callback) {
 
   var markdown = file.contents.toString();
-  markdown = enrichWithSlideSeparators(markdown);
-  markdown = enrichWithUnsemanticColumns(markdown);
+  var model = new MarkdownModel(markdown);
 
   var remarkPage = remarkPageTemplate({
-    source: markdown
+    source: model.transform()
   });
 
   file.contents = new Buffer(remarkPage);
   this.push(file);
 
   callback();
-}
-
-function enrichWithSlideSeparators(markdown) {
-
-  var titleRegexp = /^\#/mg,
-      remarkSlideSeparator = '---',
-      injection = remarkSlideSeparator + "\n";
-
-  var titleIndices = [];
-
-  var match;
-  while (match = titleRegexp.exec(markdown)) {
-    titleIndices.push(match.index);
-  }
-
-  // Omit first title.
-  titleIndices.shift();
-
-  var addedCharacters = 0;
-
-  _.each(titleIndices, function(titleIndex) {
-    titleIndex += addedCharacters;
-    markdown = markdown.slice(0, titleIndex) + injection + markdown.slice(titleIndex);
-    addedCharacters += injection.length;
-  });
-
-  return markdown;
-}
-
-function enrichWithUnsemanticColumns(markdown) {
-
-  // Build an array containing each slide's Markdown content.
-  var slides = markdown.split(/^---/mg);
-
-  // This regular expression finds all <!-- slide-column NUMBER --> comments.
-  var columnMarkerRegexp = /\<\!\-\-\s*slide-column\s+(\d+)\s*\-\-\>/mg;
-
-  // Modify each slide...
-  slides = _.map(slides, function(slide) {
-
-    var columnMarkers = [];
-
-    // Find all column markers.
-    var match;
-    while (match = columnMarkerRegexp.exec(slide)) {
-      columnMarkers.push({
-        index: match.index, // Index at which the comment starts
-        percentage: match[1] // Column width in percents
-      });
-    }
-
-    // Keep track of how many characters are added/removed from the slide.
-    var addedCharacters = 0;
-
-    _.each(columnMarkers, function(columnMarker, i) {
-
-      // Determine at which index the slide-column comment starts and ends.
-      var commentStartIndex = columnMarker.index += addedCharacters;
-      var commentEndIndex = commentStartIndex + slide.slice(commentStartIndex).indexOf('-->') + 3;
-
-      // Prepare the text that will replace the comment.
-      // For example, ".grid-70[", to open a 70-percent wide column.
-      var injection = '.grid-' + columnMarker.percentage + '[';
-      if (i != 0) {
-        // If this is not the first marker, prepend "]" to close the previous column.
-        injection = "]\n" + injection;
-      }
-
-      // Replace the comment by the constructed text.
-      slide = slide.slice(0, commentStartIndex) + injection + slide.slice(commentEndIndex);
-
-      // Keep track of the number of characters added (the constructed text) and removed (the original comment).
-      addedCharacters = addedCharacters + injection.length - (commentEndIndex - commentStartIndex);
-    });
-
-    // Close the last column.
-    if (columnMarkers.length) {
-      slide = slide + "]\n";
-    }
-
-    return slide;
-  });
-
-  // Rebuild the complete file by joining the individual slides together.
-  return slides.join('---');
 }
