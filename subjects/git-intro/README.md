@@ -44,7 +44,7 @@ Systems such as [RCS][rcs] were developed to automate this process.
 
 <!-- slide-column 40 -->
 
-<center><img src='images/local-vcs.png' width='100%' /></center>
+<img src='images/local-vcs.png' width='100%' />
 
 
 
@@ -60,7 +60,7 @@ and administrators have **fine-grained control** over who can do what.
 
 <!-- slide-column 40 -->
 
-<center><img src='images/centralized-vcs.png' width='100%' /></center>
+<img src='images/centralized-vcs.png' width='100%' />
 
 <!-- slide-container -->
 
@@ -85,7 +85,7 @@ Clients don't just check out the latest snapshot of the files: they **fully mirr
 
 <!-- slide-column 50 -->
 
-<center><img src='images/distributed-vcs.png' width='100%' /></center>
+<img src='images/distributed-vcs.png' width='100%' />
 
 
 
