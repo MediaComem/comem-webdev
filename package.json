@@ -16,10 +16,11 @@
   },
   "homepage": "https://github.com/MediaComem/comem-webdev#readme",
   "dependencies": {
+    "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-chain": "^2.0.1",
-    "gulp-clean": "^0.3.2",
     "gulp-connect": "^5.0.0",
+    "gulp-doctoc": "^0.1.4",
     "gulp-markdown": "^1.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-util": "^3.0.8",

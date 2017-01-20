@@ -1,9 +1,10 @@
 var _ = require('lodash'),
     chain = require('gulp-chain'),
-    clean = require('gulp-clean'),
     fs = require('fs'),
     gulp = require('gulp'),
     connect = require('gulp-connect'),
+    del = require('del'),
+    doctoc = require('gulp-doctoc'),
     handlebars = require('handlebars'),
     markdown = require('gulp-markdown'),
     MarkdownModel = require('./lib/markdown-model'),
@@ -39,9 +40,18 @@ gulp.task('build-slides', function() {
 gulp.task('build', [ 'build-assets', 'build-index', 'build-slides' ]);
 
 gulp.task('clean', function() {
+  return del([ 'build' ]);
+});
+
+gulp.task('doctoc', function() {
   return gulp
-    .src('build/**/*', { read: false })
-    .pipe(clean());
+    .src('subjects/**/*.md')
+    .pipe(doctoc({
+      depth: 3,
+      notitle: true,
+      mode: 'github.com'
+    }))
+    .pipe(gulp.dest('subjects'));
 });
 
 gulp.task('serve', function() {

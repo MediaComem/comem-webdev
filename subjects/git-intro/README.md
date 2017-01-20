@@ -2,6 +2,27 @@
 
 This is a condensed version of the first chapters of the [Git Book](https://git-scm.com/book/en/v2), which you should read if you want more detailed information on the subject.
 
+---
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [What is Git?](#what-is-git)
+- [What is version control?](#what-is-version-control)
+- [A short history](#a-short-history)
+  - [**Local** version control systems](#local-version-control-systems)
+  - [**Centralized** version control systems](#centralized-version-control-systems)
+  - [**Distributed** version control systems](#distributed-version-control-systems)
+- [Git basics](#git-basics)
+  - [Snapshots, not differences](#snapshots-not-differences)
+  - [Nearly every operation is local](#nearly-every-operation-is-local)
+  - [Git has integrity](#git-has-integrity)
+  - [What's in a Git project?](#whats-in-a-git-project)
+  - [The three states](#the-three-states)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 

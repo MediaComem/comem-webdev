@@ -1,5 +1,20 @@
 # JavaScript Introduction
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [JavaScript defines **6 types**](#javascript-defines-6-types)
+- [JavaScript is a **dynamic** language](#javascript-is-a-dynamic-language)
+- [There are **2 scopes** for variables: the (evil) global scope and the function scope](#there-are-2-scopes-for-variables-the-evil-global-scope-and-the-function-scope)
+- [JavaScript supports **first-class functions**](#javascript-supports-first-class-functions)
+- [Objects are **dynamic bags** of properties](#objects-are-dynamic-bags-of-properties)
+- [Array are **objects**](#array-are-objects)
+- [The language has no support for **classes**](#the-language-has-no-support-for-classes)
+- [Every object **inherits** from a **prototype** object](#every-object-inherits-from-a-prototype-object)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 ## JavaScript defines **6 types**
