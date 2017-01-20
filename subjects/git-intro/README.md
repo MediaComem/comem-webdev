@@ -68,6 +68,8 @@ What can I do with it?
 
 
 
+
+
 ### **Local** version control systems
 
 <!-- slide-column 60 -->
@@ -86,6 +88,8 @@ Systems such as [RCS][rcs] were developed to automate this process.
 
 * It is easy to forget which directory you’re in and accidentally write to the wrong file or copy over files you don’t mean to.
 * This is limited to your computer: how do you **collaborate** with other people?
+
+
 
 
 
@@ -110,6 +114,8 @@ and administrators have **fine-grained control** over who can do what.
 * The centralized server is a **single point of failure**.
   If it goes down, then nobody can collaborate at all or save versioned change to anything they're working on.
 * If the server's hard disk becomes corrupt and proper backups haven't been kept, you **lose the entire history** of the project except whatever single snapshots people happen to have on their local machines.
+
+
 
 
 
@@ -138,6 +144,8 @@ Clients don't just check out the latest snapshot of the files: they **fully mirr
 
 
 
+
+
 ### Snapshots, not differences
 
 <!-- slide-column 50 -->
@@ -162,6 +170,8 @@ Git thinks about its data more like a stream of snapshots.
 
 
 
+
+
 ### Nearly every operation is local
 
 Most operations in Git only need local files and resources to operate.
@@ -170,6 +180,8 @@ Because you have the entire history of the project right there on your local dis
 * To browse the history of the project, Git simply reads it directly from your local database.
 * To see the changes introduced in a file since a month ago, Git can look up the file a month ago and do a local difference calculation.
 * If you're offline, you can commit happily until you get to a network connection to upload.
+
+
 
 
 
@@ -190,6 +202,8 @@ A SHA-1 hash looks something like this:
 
 You will see these hash values all over the place in Git because it uses them so much.
 In fact, Git stores everything in its database **not by file name but by the hash value of its contents**.
+
+
 
 
 
@@ -286,6 +300,8 @@ my-project:
 
 
 
+
+
 ### The three states
 
 This is one of the **_most important things to remember about Git_**.
@@ -310,6 +326,219 @@ The basic Git workflow goes something like this:
 
 
 
+
+
+## Getting started
+
+The rest of this documentation is a tutorial where you will learn how to:
+
+* Configure Git for the first time
+* Create a new repository
+* Check the status of your files
+* Track new files
+* Stage and commit modified files
+* Remove files
+* Move files
+* Ignore files
+
+
+
+
+
+### Installing Git
+
+There are a lot of different ways to use Git: the original command line tools and various GUIs of varying capabilities.
+But the command line is the only place you can run **all** Git commands with all their options.
+
+If you know how to run the command line version, you can probably also figure out how to run the GUI version, while the opposite is not necessarily true.
+So the **command line** is what we will use.
+
+Some of you may already have Git installed.
+Run the following command in a terminal to make sure:
+
+```bash
+$> git --version
+git version 2.11.0
+```
+
+If you don't have it, follow these [installation instructions][install-git] to install Git on your machine.
+
+
+
+
+
+### First-time Git setup
+
+Now that you have Git, you must configure your **identity**: your user name and e-mail address.
+This is important because every Git commit uses this information, and it's *immutably* baked into every commit you make.
+
+Use the `git config` command to do this:
+
+```bash
+$> git config --global user.name "John Doe"
+$> git config --global user.email john.doe@example.com
+```
+
+You can also run the command with the `--list` option to check that the settings were successfully applied:
+
+```bash
+$> git config --list
+user.name=John Doe
+user.email=john.doe@example.com
+```
+
+Note that with the `--global` option, Git will store these settings in your user configuration file (`~/.gitconfig`),
+so you only need to do this **once on any given computer**.
+You can also change them at any time by running the commands again.
+
+
+
+
+
+### Creating a new repository
+
+Let's get started by creating a directory for our new project:
+
+```bash
+$> cd
+$> mkdir hello-project
+```
+
+Go into the directory and run `git init` to create a Git repository:
+
+```bash
+$> cd hello-project
+$> git init
+Initialized empty Git repository in ~/hello-project
+```
+
+This creates a Git directory (`.git`) with an empty object database.
+At this point, nothing in your project is tracked yet.
+
+
+
+
+
+### Checking the status of your files
+
+The main tool you use to determine which files are in which state is the `git status` command.
+If you run it in the repo you just created, you should see something like this:
+
+```bash
+$> git status
+On branch master
+
+Initial commit
+
+nothing to commit (create/copy files and use "git add" to track)
+```
+
+This means you have an empty repo with no commits, and a clean *working directory* – there is nothing there.
+
+As you can see, Git often helps you by telling you what you can do next: you need to start adding some files.
+
+
+
+
+
+### Adding new files
+
+Write "Hello World" into a `hello.txt` file in the project's directory and re-run the command:
+
+```bash
+$> echo "Hello World" > hello.txt
+$> git status
+On branch master
+
+Initial commit
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+  hello.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+```
+
+You can see that your new file is **untracked**.
+This means that Git sees a file you didn't have in the previous commit (snapshot).
+
+Git won't start including it in your commit snapshots until you **explicitly** tell it to do so.
+It does this so you don't accidentally begin including huge generated binary files or other files that you did not mean to include.
+
+
+
+
+
+### Tracking new files
+
+In order to begin tracking a new file, you must use the `git add` command:
+
+```bash
+$> git add hello.txt
+$> git status
+On branch master
+
+Initial commit
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+    new file:   hello.txt
+```
+
+Your file is now **staged**.
+You can see that it is because it's under the *Changes to be committed* heading.
+If you commit at this point, the version of the file at the time you ran `git add` is what will be in the historical snapshot.
+
+**Tracking all the files in a directory:** Note that the path you give to `git add` can be a directory.
+For example: `git add dir` would recursively stage all the files within `dir`, or `git add .` everything under the current directory.
+
+
+
+
+
+#### Checking staged changes
+
+You can check what you have staged with the `git diff` command:
+
+```diff
+$> git diff --staged
+diff --git a/hello.txt b/hello.txt
+new file mode 100644
+index 0000000..557db03
+--- /dev/null
++++ b/hello.txt
+@@ -0,0 +1 @@
++Hello World
+```
+
+The output indicates that `hello.txt` is a `new file`.
+It also shows you the new content that will be committed: the lines starting with a `+` sign at the end, in this case just the one "Hello World" line.
+
+
+
+
+
+### Committing your changes
+
+Now that your staging area is set up the way you want it, you can commit your changes.
+
+Committing is done with the `git commit` command.
+When you commit, you must provide a **message** that describes the changes you are committing.
+You should always write relevant commit messages, as they are visible later in the commit history and can help you retrieve what you need from old versions of your project.
+
+```bash
+$> git commit -m "Add hello file"
+[master (root-commit) 99da9e4] Add hello file
+ 1 file changed, 1 insertion(+)
+ create mode 100644 hello.txt
+```
+
+
+
+
+
 [rcs]: https://en.wikipedia.org/wiki/Revision_Control_System
 [cvs]: https://en.wikipedia.org/wiki/Concurrent_Versions_System
 [svn]: https://subversion.apache.org/
@@ -320,3 +549,4 @@ The basic Git workflow goes something like this:
 [darcs]: http://darcs.net/
 [distributed-workflows]: https://git-scm.com/book/en/v2/Distributed-Git-Distributed-Workflows
 [sha1]: https://en.wikipedia.org/wiki/SHA-1
+[install-git]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
