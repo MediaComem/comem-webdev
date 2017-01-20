@@ -7,7 +7,6 @@ var _ = require('lodash'),
     handlebars = require('handlebars'),
     markdown = require('gulp-markdown'),
     MarkdownModel = require('./lib/markdown-model'),
-    markdownPdf = require('gulp-markdown-pdf'),
     path = require('path'),
     rename = require('gulp-rename'),
     runSequence = require('run-sequence'),
@@ -37,14 +36,6 @@ gulp.task('build-slides', function() {
     .pipe(buildSlides());
 });
 
-gulp.task('build-pdf', function() {
-  var dest = path.join(buildDir, 'subjects');
-  return gulp
-    .src('subjects/**/*.md')
-    .pipe(markdownPdf())
-    .pipe(gulp.dest(dest));
-});
-
 gulp.task('build', [ 'build-assets', 'build-index', 'build-slides' ]);
 
 gulp.task('clean', function() {
@@ -56,6 +47,7 @@ gulp.task('clean', function() {
 gulp.task('serve', function() {
   return connect.server({
     root: buildDir,
+    livereload: true,
     port: process.env.PORT || 3000
   });
 });
@@ -114,7 +106,8 @@ function buildIndex() {
       var relativePath = path.relative(root, file.path);
       util.log('Generated ' + util.colors.magenta(path.join(dest, relativePath)));
     }))
-    .pipe(gulp.dest(dest));
+    .pipe(gulp.dest(dest))
+    .pipe(connect.reload());
 };
 
 var buildSlides = chain(function(stream) {
@@ -126,7 +119,8 @@ var buildSlides = chain(function(stream) {
       var relativePath = path.relative('subjects', file.path);
       util.log('Generated ' + util.colors.magenta(path.join(dest, relativePath)));
     }))
-    .pipe(gulp.dest(dest));
+    .pipe(gulp.dest(dest))
+    .pipe(connect.reload());
 });
 
 var copyAssets = chain(function(stream) {
@@ -136,7 +130,8 @@ var copyAssets = chain(function(stream) {
       var relativePath = path.relative('subjects', file.path);
       util.log('Copied ' + util.colors.magenta(path.join(dest, relativePath)));
     }))
-    .pipe(gulp.dest(dest));
+    .pipe(gulp.dest(dest))
+    .pipe(connect.reload());
 });
 
 function loadIndexPageTemplate() {
