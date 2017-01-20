@@ -79,8 +79,8 @@ and administrators have **fine-grained control** over who can do what.
 Systems such as [Git][git], [Mercurial][mercurial], [Bazaar][bazaar] or [Darcs][darcs] are **distributed**.
 Clients don't just check out the latest snapshot of the files: they **fully mirror** the repository.
 
-* If any server dies, any of the client repositories can be copied back up to the server to restore it.
-* You can collaborate with different groups of people in different ways simultaneously within the same project.
+* If any server dies, any of the client repositories can be copied back up to the server to **restore** it.
+* You can **collaborate** with different groups of people in different ways simultaneously within the same project.
   This allows you to set up [several types of workflows][distributed-workflows] that aren't possible in centralized systems, such as hierarchical models.
 
 <!-- slide-column 50 -->
