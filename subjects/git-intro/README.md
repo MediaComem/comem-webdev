@@ -28,6 +28,15 @@ This is a condensed version of the first chapters of the [Git Book](https://git-
   - [Adding new files](#adding-new-files)
   - [Committing your changes](#committing-your-changes)
   - [Modifying files](#modifying-files)
+  - [Removing files](#removing-files)
+  - [Moving files](#moving-files)
+  - [Making changes outside of Git](#making-changes-outside-of-git)
+- [Viewing the commit history](#viewing-the-commit-history)
+  - [Viewing the changes in the history](#viewing-the-changes-in-the-history)
+  - [Viewing the list of changed files](#viewing-the-list-of-changed-files)
+  - [Viewing the history with a custom format](#viewing-the-history-with-a-custom-format)
+  - [Limiting log output](#limiting-log-output)
+- [Undoing things](#undoing-things)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -810,7 +819,134 @@ Many developers simply modify and manipulate files in their favorite editor or I
 
 ## Viewing the commit history
 
-TODO: viewing the commit history
+Git has a very powerful `log` command:
+
+```bash
+$> git log
+commit e753ceb86806b285aa105a846c7295e826439637
+Author: John Doe <john.doe@example.com>
+Date:   Mon Jan 23 11:50:07 2017 +0100
+
+    New lines in hello.txt and hi.txt
+
+commit 4c56257f622c53f1ddeaf3d58b6729b01b35aedb
+Author: John Doe <john.doe@example.com>
+Date:   Mon Jan 23 11:50:00 2017 +0100
+
+    The world is beautiful
+
+commit c90aa36ffca90aad44572c0cb319037c921eceb2
+Author: John Doe <john.doe@example.com>
+Date:   Mon Jan 23 11:01:06 2017 +0100
+
+    Add hello and hi files
+```
+
+Use `git help log` to learn about its many options.
+
+
+
+
+
+### Viewing the changes in the history
+
+The `--patch` option shows the difference introduced in each commit:
+
+```diff
+$> git log --patch
+commit e753ceb86806b285aa105a846c7295e826439637
+Author: John Doe <john.doe@example.com>
+Date:   Mon Jan 23 11:50:07 2017 +0100
+
+    New lines in hello.txt and hi.txt
+
+diff --git a/hello.txt b/hello.txt
+index 2136a8e..730ea5a 100644
+--- a/hello.txt
++++ b/hello.txt
+@@ -1,2 +1,3 @@
+ Hello World
+ You are beautiful
++I see trees of green
+diff --git a/hi.txt b/hi.txt
+index e5db1d9..f74a87a 100644
+--- a/hi.txt
++++ b/hi.txt
+@@ -1 +1,2 @@
+ Hello Bob
++Hi Jane
+```
+
+
+
+
+
+### Viewing the list of changed files
+
+The `--stat` option lists the files that have changed and gives abbreviated statistics:
+
+```bash
+$> git log --stat
+commit e753ceb86806b285aa105a846c7295e826439637
+Author: John Doe <john.doe@example.com>
+Date:   Mon Jan 23 11:50:07 2017 +0100
+
+    New lines in hello.txt and hi.txt
+
+ hello.txt | 1 +
+ hi.txt    | 1 +
+ 2 files changed, 2 insertions(+)
+
+commit 4c56257f622c53f1ddeaf3d58b6729b01b35aedb
+Author: John Doe <john.doe@example.com>
+Date:   Mon Jan 23 11:50:00 2017 +0100
+
+    The world is beautiful
+
+ hello.txt | 1 +
+ 1 file changed, 1 insertion(+)
+```
+
+
+
+
+
+### Viewing the history with a custom format
+
+The `-pretty` option allows you to define your own format:
+
+```bash
+$> git log --pretty=format:"%h by %an %ad: %s" --date=relative
+e753ceb by John Doe 5 hours ago: New lines in hello.txt and hi.txt
+4c56257 by John Doe 5 hours ago: The world is beautiful
+c90aa36 by John Doe 6 hours ago: Add hello and hi files
+```
+
+Check out the [available options][git-log-pretty-formats].
+
+
+
+
+
+### Limiting log output
+
+You can also limit which commits are listed.
+The time-limiting options, in particular, are very useful:
+
+```bash
+$> git log --since=2.weeks
+```
+
+Here are some other useful options:
+
+Option              | Show only
+:-                  | :-
+`-(n)`              | The last n commits.
+`--since, --after`  | Commits made after the specified date.
+`--until, --before` | Commits made before the specified date.
+`--author`          | Commits whose author entry matches the specified string.
+`--grep`            | Commits with a commit message containing the string.
+`-S`                | Commits adding or removing code matching the string.
 
 
 
@@ -836,3 +972,4 @@ TODO: undoing things
 [distributed-workflows]: https://git-scm.com/book/en/v2/Distributed-Git-Distributed-Workflows
 [sha1]: https://en.wikipedia.org/wiki/SHA-1
 [install-git]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+[git-log-pretty-formats]: https://git-scm.com/docs/git-log#_pretty_formats
