@@ -775,7 +775,7 @@ git add people.txt
 
 ### Making changes outside of Git
 
-Rather than using `git mv` and `git rm`, it's simpler to first just move or remove the files yourself:
+It's often simpler to just move or remove the files yourself:
 
 ```bash
 $> mv hi.txt people.txt
@@ -798,7 +798,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 #### Adding all changes
 
-Then tell Git to add all changes (additions, modifications and removals):
+You can tell Git to add all changes (additions, modifications and removals):
 
 ```bash
 $> git add --all .
@@ -939,7 +939,7 @@ $> git log --since=2.weeks
 
 Here are some other useful options:
 
-Option              | Show only
+Option              | Limit to
 :-                  | :-
 `-(n)`              | The last n commits.
 `--since, --after`  | Commits made after the specified date.
