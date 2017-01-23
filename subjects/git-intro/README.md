@@ -26,8 +26,8 @@ This is a condensed version of the first chapters of the [Git Book](https://git-
   - [Creating a new repository](#creating-a-new-repository)
   - [Checking the status of your files](#checking-the-status-of-your-files)
   - [Adding new files](#adding-new-files)
-  - [Tracking new files](#tracking-new-files)
   - [Committing your changes](#committing-your-changes)
+  - [Modifying files](#modifying-files)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -451,10 +451,16 @@ As you can see, Git often helps you by telling you what you can do next: you nee
 
 ### Adding new files
 
-Write "Hello World" into a `hello.txt` file in the project's directory and re-run the command:
+In the project's directory, write "Hello World" into a `hello.txt` file and "Hi Bob" into a `hi.txt` file:
 
 ```bash
 $> echo "Hello World" > hello.txt
+$> echo "Hi Bob" > hi.txt
+```
+
+Re-run the `git status` command:
+
+```bash
 $> git status
 On branch master
 
@@ -464,26 +470,21 @@ Untracked files:
   (use "git add <file>..." to include in what will be committed)
 
   hello.txt
+  hi.txt
 
 nothing added to commit but untracked files present (use "git add" to track)
 ```
 
-You can see that your new file is **untracked**.
-This means that Git sees a file you didn't have in the previous commit (snapshot).
+Those files are **untracked**.
+Git will not include them unless you **explicitly** tell it to do so.
 
-Git won't start including it in your commit snapshots until you **explicitly** tell it to do so.
-It does this so you don't accidentally begin including huge generated binary files or other files that you did not mean to include.
-
-
-
-
-
-### Tracking new files
+#### Tracking new files
 
 In order to begin tracking a new file, you must use the `git add` command:
 
 ```bash
 $> git add hello.txt
+$> git add hi.txt
 $> git status
 On branch master
 
@@ -493,22 +494,19 @@ Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
 
     new file:   hello.txt
+    new file:   hi.txt
 ```
 
-Your file is now **staged**.
-You can see that it is because it's under the *Changes to be committed* heading.
-If you commit at this point, the version of the file at the time you ran `git add` is what will be in the historical snapshot.
+The files are now **staged**: they will be in the next commit.
 
-**Tracking all the files in a directory:** Note that the path you give to `git add` can be a directory.
-For example: `git add dir` would recursively stage all the files within `dir`, or `git add .` everything under the current directory.
+**Tips:**
 
-
-
-
+* `git add *.txt` would have added the two files in one command.
+* `git add .` would have added all the files in the current directory (recursively).
 
 #### Checking staged changes
 
-You can check what you have staged with the `git diff` command:
+Git can show you what you have **staged**:
 
 ```diff
 $> git diff --staged
@@ -519,10 +517,16 @@ index 0000000..557db03
 +++ b/hello.txt
 @@ -0,0 +1 @@
 +Hello World
+diff --git a/hi.txt b/hi.txt
+new file mode 100644
+index 0000000..e5db1d9
+--- /dev/null
++++ b/hi.txt
+@@ -0,0 +1 @@
++Hello Bob
 ```
 
-The output indicates that `hello.txt` is a `new file`.
-It also shows you the new content that will be committed: the lines starting with a `+` sign at the end, in this case just the one "Hello World" line.
+It shows you each staged file and the changes in those files.
 
 
 
@@ -530,18 +534,182 @@ It also shows you the new content that will be committed: the lines starting wit
 
 ### Committing your changes
 
-Now that your staging area is set up the way you want it, you can commit your changes.
-
-Committing is done with the `git commit` command.
-When you commit, you must provide a **message** that describes the changes you are committing.
-You should always write relevant commit messages, as they are visible later in the commit history and can help you retrieve what you need from old versions of your project.
+Now that your staging area is set up the way you want it, you can **commit** your changes:
 
 ```bash
-$> git commit -m "Add hello file"
-[master (root-commit) 99da9e4] Add hello file
- 1 file changed, 1 insertion(+)
+$> git commit -m "Add hello and hi files"
+[master (root-commit) c90aa36] Add hello and hi files
+ 2 files changed, 2 insertions(+)
  create mode 100644 hello.txt
+ create mode 100644 hi.txt
 ```
+
+Note that Git gives you the beginning of the new commit's SHA-1 checksum (`c90aa36`) along with change statistics and other information.
+
+```bash
+$> git status
+On branch master
+nothing to commit, working tree clean
+```
+
+
+
+
+
+### Modifying files
+
+Let's make some changes to both files:
+
+```bash
+echo "You are beautiful" >> hello.txt
+echo "Hi Jane" >> hi.txt
+```
+
+And see what Git tells us:
+
+```bash
+$> git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+  modified:   hello.txt
+  modified:   hi.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+#### Staging modified files
+
+Stage the changes on the `hello.txt` file and check the status:
+
+```bash
+$> git add hello.txt
+
+$> git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+  modified:   hello.txt
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+  modified:   hi.txt
+```
+
+If you commit now, only the changes on `hello.txt` will be included in the snapshot, while the changes in `hi.txt` will remain uncommitted.
+
+#### Modifying a staged file
+
+Before committing, let's make another change to `hello.txt` and check the status:
+
+```bash
+$> echo "I see trees of green" >> hello.txt
+
+$> git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+  modified:   hello.txt
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+  modified:   hello.txt
+  modified:   hi.txt
+```
+
+`hello.txt` is shown both under "Changes to be committed" and "Changes not staged for commit".
+What does this mean?
+
+#### Checking staged and unstaged changes
+
+<!-- slide-column 40 -->
+
+Use `git diff` with the `--staged` option to show **staged** changes.
+
+You can also use it without the option to see **unstaged** changes.
+
+<!-- slide-column 60 -->
+
+```diff
+$> git diff --staged
+diff --git a/hello.txt b/hello.txt
+index 557db03..2136a8e 100644
+--- a/hello.txt
++++ b/hello.txt
+@@ -1 +1,2 @@
+ Hello World
++You are beautiful
+```
+
+```diff
+$> git diff
+diff --git a/hello.txt b/hello.txt
+index 2136a8e..730ea5a 100644
+--- a/hello.txt
++++ b/hello.txt
+@@ -1,2 +1,3 @@
+ Hello World
+ You are beautiful
++I see trees of green
+diff --git a/hi.txt b/hi.txt
+index e5db1d9..f74a87a 100644
+--- a/hi.txt
++++ b/hi.txt
+@@ -1 +1,2 @@
+ Hello Bob
++Hi Jane
+```
+
+#### Staging area versus working directory
+
+This example shows you that the working directory and the staging area and really two separate steps.
+
+* The version of `hello.txt` you have **staged** contains two lines of text ("Hello World" and "You are beautiful").
+  This is what will be committed.
+
+* The version of `hello.txt` in the **working directory** has an additional line of text ("I see trees of green") which you added later.
+  It will not be included in the next commit unless you stage the file again.
+
+<p class='center'><img src='images/areas.png' width='60%' /></p>
+
+#### Committing partially staged changes
+
+```bash
+$> git commit -m "The world is beautiful"
+[master b65ec9c] The world is beautiful
+ 1 file changed, 1 insertion(+)
+
+$> git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+  modified:   hello.txt
+  modified:   hi.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+As expected, the changes we did not stage are still **uncommitted**.
+Let's fix that:
+
+```bash
+$> git add .
+
+$> git commit -m "New lines in hello.txt and hi.txt"
+[master dfc6c75] New lines in hello.txt and hi.txt
+ 2 files changed, 2 insertions(+)
+```
+
 
 
 
