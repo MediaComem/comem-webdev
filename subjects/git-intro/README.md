@@ -714,6 +714,116 @@ $> git commit -m "New lines in hello.txt and hi.txt"
 
 
 
+### Removing files
+
+You can remove files with Git:
+
+```bash
+$> git rm hi.txt
+rm 'hi.txt'
+
+$> git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+  deleted:    hi.txt
+```
+
+If you remove the file yourself, you must still run the `git rm` command to remove it from the staging area.
+
+
+
+
+
+### Moving files
+
+You can move files with Git:
+
+```bash
+$> git mv hi.txt people.txt
+$> git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+  renamed:    hi.txt -> people.txt
+```
+
+Git actually doesn't store the fact that the file was moved:
+it detects it after the fact.
+This is equivalent:
+
+```bash
+mv hi.txt people.txt
+git rm hi.txt
+git add people.txt
+```
+
+
+
+
+
+### Making changes outside of Git
+
+Rather than using `git mv` and `git rm`, it's simpler to first just move or remove the files yourself:
+
+```bash
+$> mv hi.txt people.txt
+
+$> git status
+On branch master
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+  deleted:    hi.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+  people.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+#### Adding all changes
+
+Then tell Git to add all changes (additions, modifications and removals):
+
+```bash
+$> git add --all .
+
+$> git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+  renamed:    hi.txt -> people.txt
+```
+
+Many developers simply modify and manipulate files in their favorite editor or IDE, then use the command above.
+
+
+
+
+
+## Viewing the commit history
+
+TODO: viewing the commit history
+
+
+
+
+
+## Undoing things
+
+TODO: undoing things
+
+
+
+
+
 
 [rcs]: https://en.wikipedia.org/wiki/Revision_Control_System
 [cvs]: https://en.wikipedia.org/wiki/Concurrent_Versions_System
