@@ -1057,6 +1057,14 @@ You should not do this if you have already shared this commit with others.
 
 
 
+## Aliases
+
+TODO: aliases
+
+
+
+
+
 
 [rcs]: https://en.wikipedia.org/wiki/Revision_Control_System
 [cvs]: https://en.wikipedia.org/wiki/Concurrent_Versions_System
