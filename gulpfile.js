@@ -16,14 +16,22 @@ var _ = require('lodash'),
     watch = require('gulp-watch');
 
 var root = __dirname,
-    indexPageTemplate = loadIndexPageTemplate(),
-    remarkPageTemplate = loadRemarkPageTemplate();
+    buildDir = process.env.BUILD_DIR || 'build';
 
-var buildDir = process.env.BUILD_DIR || 'build';
+var src = {
+  assets: [ 'subjects/**/*.*', '!**/*.md', '!**/*.odg', '!**/*.odg#' ],
+  indexTemplate: 'templates/index.html',
+  mainReadme: 'README.md',
+  remarkTemplate: 'templates/remark.html',
+  slides: 'subjects/**/*.md'
+};
+
+var indexPageTemplate = loadIndexPageTemplate(),
+    remarkPageTemplate = loadRemarkPageTemplate();
 
 gulp.task('build-assets', function() {
   return gulp
-    .src([ 'subjects/**/*.*', '!**/*.md' ])
+    .src(src.assets)
     .pipe(copyAssets());
 });
 
@@ -33,7 +41,7 @@ gulp.task('build-index', function() {
 
 gulp.task('build-slides', function() {
   return gulp
-    .src('subjects/**/*.md')
+    .src(src.slides)
     .pipe(buildSlides());
 });
 
@@ -45,7 +53,7 @@ gulp.task('clean', function() {
 
 gulp.task('doctoc', function() {
   return gulp
-    .src('subjects/**/*.md')
+    .src(src.slides)
     .pipe(doctoc({
       depth: 3,
       notitle: true,
@@ -63,7 +71,7 @@ gulp.task('serve', function() {
 });
 
 gulp.task('watch-assets', function() {
-  return watch([ 'subjects/**/*.*', '!**/*.md' ], function(file) {
+  return watch(src.assets, function(file) {
     return gulp
       .src(file.path, { base: 'subjects' })
       .pipe(copyAssets());
@@ -71,29 +79,31 @@ gulp.task('watch-assets', function() {
 })
 
 gulp.task('watch-index', function() {
-  return watch('README.md', function() {
+  return watch(src.mainReadme, function() {
     return buildIndex();
   });
 })
 
 gulp.task('watch-index-template', function() {
-  return watch('templates/index.html', function() {
+  return watch(src.indexTemplate, function() {
     indexPageTemplate = loadIndexPageTemplate();
     return buildIndex();
   });
 })
 
 gulp.task('watch-slides', function() {
-  return watch('subjects/**/*.md', function(file) {
-    return gulp.src(file.path, { base: 'subjects' })
+  return watch(src.slides, function(file) {
+    return gulp
+      .src(file.path, { base: 'subjects' })
       .pipe(buildSlides());
   });
 });
 
 gulp.task('watch-slides-template', function() {
-  return watch('templates/remark.html', function() {
+  return watch(src.remarkTemplate, function() {
     remarkPageTemplate = loadRemarkPageTemplate();
-    return gulp.src('subjects/**/*.md')
+    return gulp
+      .src(src.slides)
       .pipe(buildSlides());
   });
 });
@@ -108,7 +118,8 @@ gulp.task('default', function() {
 
 function buildIndex() {
   var dest = buildDir;
-  return gulp.src('README.md')
+  return gulp
+    .src(src.mainReadme)
     .pipe(markdown())
     .pipe(rename(renameReadmeToIndex))
     .pipe(through.obj(insertIntoIndexPage))
@@ -145,11 +156,11 @@ var copyAssets = chain(function(stream) {
 });
 
 function loadIndexPageTemplate() {
-  return handlebars.compile(fs.readFileSync('templates/index.html', { encoding: 'utf-8' }));
+  return handlebars.compile(fs.readFileSync(src.indexTemplate, { encoding: 'utf-8' }));
 }
 
 function loadRemarkPageTemplate() {
-  return handlebars.compile(fs.readFileSync('templates/remark.html', { encoding: 'utf-8' }));
+  return handlebars.compile(fs.readFileSync(src.remarkTemplate, { encoding: 'utf-8' }));
 }
 
 function logFile(func) {
