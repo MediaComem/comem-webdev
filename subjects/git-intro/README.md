@@ -37,6 +37,9 @@ This is a condensed version of the first chapters of the [Git Book](https://git-
   - [Viewing the history with a custom format](#viewing-the-history-with-a-custom-format)
   - [Limiting log output](#limiting-log-output)
 - [Undoing things](#undoing-things)
+  - [Unmodifying a modified file](#unmodifying-a-modified-file)
+  - [Unstaging a staged file](#unstaging-a-staged-file)
+  - [Changing the commit message](#changing-the-commit-message)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -954,7 +957,101 @@ Option              | Limit to
 
 ## Undoing things
 
-TODO: undoing things
+There are several ways of undoing things with Git.
+We'll review a few of the tools available.
+
+*Be careful:* you can't always undo some of these undos.
+
+
+
+
+
+### Unmodifying a modified file
+
+Sometimes you make a change and you realize you don't need it anymore.
+Git actually tells you what to do to discard that change:
+
+```bash
+$> echo "Hi Steve" >> hi.txt
+
+$> git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+  modified:   hi.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+Simply use `git checkout` as instructed:
+
+```bash
+$> git checkout hi.txt
+
+$> git status
+On branch master
+nothing to commit, working tree clean
+```
+
+
+
+
+
+### Unstaging a staged file
+
+If you have staged a file and don't need the changes in it anymore, a simple `git checkout` is not enough.
+Again, Git tells you what to do:
+
+```bash
+$> echo "Hi Steve" >> hi.txt
+
+$> git add hi.txt
+
+$> git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+  modified:   hi.txt
+```
+
+Use `git reset` as instructed:
+
+```bash
+$> git reset HEAD hi.txt
+Unstaged changes after reset:
+M       hi.txt
+```
+
+The changes will still be in the file, but you can now use `git checkout` to discard them.
+
+
+
+
+
+### Changing the commit message
+
+Oops, you've used the wrong commit message and want to change it?
+
+```bash
+$> git commit -m "Fix teh prblme"
+
+$> git commit --amend -m "Fix the problem"
+```
+
+If you notice that you've forgotten to stage a file into the commit, you can also amend the commit to include it.
+The following commands will only create one commit:
+
+```bash
+$> git commit -m "Fix the problem"
+$> git add TheFix.java
+$> git commit --amend -m "Fix the problem"
+```
+
+**Be careful:** this changes the commit and its SHA-1 hash.
+You should not do this if you have already shared this commit with others.
 
 
 
