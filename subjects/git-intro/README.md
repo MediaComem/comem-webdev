@@ -420,7 +420,7 @@ You can also change them at any time by running the commands again.
 Let's get started by creating a directory for our new project:
 
 ```bash
-$> cd
+$> cd /path/to/projects
 $> mkdir hello-project
 ```
 
