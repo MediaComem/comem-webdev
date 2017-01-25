@@ -8,6 +8,7 @@ var _ = require('lodash'),
     handlebars = require('handlebars'),
     markdown = require('gulp-markdown'),
     MarkdownModel = require('./lib/markdown-model'),
+    open = require('gulp-open'),
     path = require('path'),
     rename = require('gulp-rename'),
     runSequence = require('run-sequence'),
@@ -17,6 +18,20 @@ var _ = require('lodash'),
 
 var root = __dirname,
     buildDir = process.env.BUILD_DIR || 'build';
+
+var config = {
+  port: process.env.PORT
+};
+
+try {
+  _.defaults(config, require('./config'));
+} catch (e) {
+  // ignore
+}
+
+_.defaults(config, {
+  port: 3000
+});
 
 var src = {
   assets: [ 'subjects/**/*.*', '!**/*.md', '!**/*.odg', '!**/*.odg#' ],
@@ -62,11 +77,20 @@ gulp.task('doctoc', function() {
     .pipe(gulp.dest('subjects'));
 });
 
+gulp.task('open', function() {
+  gulp
+    .src(__filename)
+    .pipe(open({
+      app: config.browser,
+      uri: 'http://localhost:' + config.port
+    }));
+});
+
 gulp.task('serve', function() {
   return connect.server({
     root: buildDir,
     livereload: true,
-    port: process.env.PORT || 3000
+    port: config.port
   });
 });
 
@@ -76,20 +100,20 @@ gulp.task('watch-assets', function() {
       .src(file.path, { base: 'subjects' })
       .pipe(copyAssets());
   });
-})
+});
 
 gulp.task('watch-index', function() {
   return watch(src.mainReadme, function() {
     return buildIndex();
   });
-})
+});
 
 gulp.task('watch-index-template', function() {
   return watch(src.indexTemplate, function() {
     indexPageTemplate = loadIndexPageTemplate();
     return buildIndex();
   });
-})
+});
 
 gulp.task('watch-slides', function() {
   return watch(src.slides, function(file) {
@@ -113,7 +137,7 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', function() {
-  return runSequence('clean', 'build', [ 'serve', 'watch']);
+  return runSequence('clean', 'build', [ 'serve', 'watch'], 'open');
 });
 
 function buildIndex() {
