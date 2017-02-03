@@ -233,3 +233,16 @@ console.log(child.lastName);
 * Every object inherits from a prototype object. It **inherits and can override** its properties, including its methods.
 * Objects created with object literals inherit from **Object.prototype**.
 * When you access the property of an object, JavaScript **looks up the prototype chain** until it finds an ancestor that has a value for this property.
+
+
+
+## Resources
+
+* A re-introduction to JavaScript
+  https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript
+* Inheritance and the prototype chain
+  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Inheritance_and_the_prototype_chain
+* Introduction to Object-Oriented JavaScript
+  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript
+* JavaScript objects in detail
+  http://javascriptissexy.com/javascript-objects-in-detail

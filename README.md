@@ -14,3 +14,11 @@ Materials for the COMEM+ web development courses.
 
 * JavaScript Programming
   * [JavaScript Introduction](subjects/javascript-intro/)
+
+* REST APIs
+  * [REST APIs Introduction](subjects/rest-intro/)
+
+* Node.js
+  * [Node.js Introduction](subjects/node-intro/)
+  * [npm](subjects/npm/)
+  * [Express](subjects/express/)
