@@ -131,3 +131,142 @@ Content-Type: text/html
 * Frameworks...
 * Full JavaScript...
 * Specific tools we will use: node, express, mongodb, mongoose
+
+## Testing tools
+
+TODO: install postman
+
+## CRUD
+
+Create, read, update, delete
+
+### Create
+
+```http
+POST /people HTTP/1.1
+Content-type: application/json
+
+{
+  "name": {
+    "first": "John",
+    "last": "Doe"
+  },
+  "age": 24
+}
+```
+
+```http
+HTTP/1.1 201 Created
+Content-type: application/json
+
+{
+  "_id": "3orv8nrg",
+  "name": {
+    "first": "John",
+    "last": "Doe"
+  },
+  "age": 24
+}
+```
+
+The POST method is used to request that the origin server accept the entity enclosed in the request as a new subordinate of the resource identified by the Request URI.
+
+HTTP 201 Created: The request has been fulfilled and resulted in a new resource being created.
+
+### Read
+
+```http
+GET /people HTTP/1.1
+```
+
+```http
+HTTP/1.1 200 OK
+Content-type: application/json
+
+[
+  { "_id": "3orv8nrg", … },
+  { "_id": "a08un2fj", … }
+]
+```
+
+The GET method means retrieve whatever information (in the form of an entity) is identified by the Request URI.
+
+HTTP 200 OK: Standard response for successful HTTP requests. In a GET request, the response will contain an entity corresponding to the requested resource.
+
+#### Collection resource vs. single resource
+
+```http
+GET /people/3orv8nrg HTTP/1.1
+```
+
+```http
+HTTP/1.1 200 OK
+Content-type: application/json
+
+{
+  "_id": "3orv8nrg",
+  "name": {
+    "first": "John",
+    "last": "Doe"
+  },
+  "age": 24
+}
+```
+
+### Update
+
+```http
+PUT /people/3orv8nrg HTTP/1.1
+Content-type: application/json
+
+{
+  "name": {
+    "first": "John",
+    "last": "Smith"
+  },
+  "age": 34
+}
+```
+
+```http
+HTTP/1.1 200 OK
+Content-type: application/json
+
+{
+  "_id": "3orv8nrg",
+  "name": {
+    "first": "John",
+    "last": "Smith"
+  },
+  "age": 34
+}
+```
+
+The PUT method requests that the enclosed entity be stored under the supplied Request URI. If the Request URI refers to an already existing resource, the enclosed entity SHOULD be considered as a modified version of the one residing on the origin server.
+
+HTTP 200 OK: In a PUT request, the response will contain an entity describing or containing the result of the action.
+
+#### Partial updates with PATCH
+
+TODO: partial update with PATCH example
+
+### Delete
+
+```http
+DELETE /people/3orv8nrg HTTP/1.1
+```
+
+```http
+HTTP/1.1 204 No Content
+Content-type: application/json
+```
+
+The DELETE method requests that the origin server delete the resource identified by the Request URI.
+
+HTTP 204 No Content: The server successfully processed the request, but is not returning any content.
+
+### Resources
+
+TODO: HTTP request methods link
+
+TODO: HTTP status codes link
