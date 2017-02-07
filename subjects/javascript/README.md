@@ -12,6 +12,7 @@
 - [Array are **objects**](#array-are-objects)
 - [The language has no support for **classes**](#the-language-has-no-support-for-classes)
 - [Every object **inherits** from a **prototype** object](#every-object-inherits-from-a-prototype-object)
+- [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

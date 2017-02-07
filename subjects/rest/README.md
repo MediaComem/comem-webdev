@@ -1,7 +1,30 @@
 # REST APIs Introduction
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [What is a Web Service?](#what-is-a-web-service)
+- [Big web services](#big-web-services)
+  - [Web services standards overview](#web-services-standards-overview)
+  - [Big web services](#big-web-services-1)
+- [RESTful web services](#restful-web-services)
+  - [Principles of a REST architecture](#principles-of-a-rest-architecture)
+  - [References](#references)
+  - [HTTP is a protocol for interacting with **resources**](#http-is-a-protocol-for-interacting-with-resources)
+  - [What is a resource?](#what-is-a-resource)
+  - [Resource vs. representation](#resource-vs-representation)
+  - [HTTP provides the **content negotiation** mechanisms](#http-provides-the-content-negotiation-mechanisms)
+  - [Languages, platforms, communities](#languages-platforms-communities)
+- [Testing tools](#testing-tools)
+- [CRUD](#crud)
+  - [Create](#create)
+  - [Read](#read)
+  - [Update](#update)
+  - [Delete](#delete)
+  - [Resources](#resources)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## What is a Web Service?
 

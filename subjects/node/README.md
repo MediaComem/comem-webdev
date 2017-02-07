@@ -1,7 +1,22 @@
 # Node.js Introduction
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [What is Node.js?](#what-is-nodejs)
+- [Asynchronous](#asynchronous)
+- [A synchronous example](#a-synchronous-example)
+- [An asynchronous example](#an-asynchronous-example)
+- [Node.js callback convention](#nodejs-callback-convention)
+- [List of Node.js modules](#list-of-nodejs-modules)
+- [Another example (http)](#another-example-http)
+- [HTTP module events](#http-module-events)
+- [Node.js event loop](#nodejs-event-loop)
+- [Node.js event loop](#nodejs-event-loop-1)
+- [Resources](#resources)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## What is Node.js?
 
