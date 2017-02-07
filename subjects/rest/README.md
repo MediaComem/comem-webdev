@@ -65,6 +65,119 @@ Very rich protocol stack (complexity, verbosity, incompatibility issues, theoret
 * REST has been introduced in Roy Fielding’s Ph.D. thesis (Roy Fielding has been a contributor to the HTTP specification, to the apache server, to the apache community).
 * The WWW is one example for a distributed system that exhibits the characteristics of a REST architecture.
 
+## [Hypertext Transfer Protocol (HTTP)][http]
+
+<!-- slide-front-matter class: center, middle -->
+
+> "An [application protocol][application-osi] for distributed, collaborative,
+  and [hypermedia][hypermedia] information systems.
+  HTTP is the foundation of data communication for the World Wide Web"
+
+### Anatomy of an HTTP request
+
+Get the third page of a movies list:
+
+```http
+GET /movies?page=3&pageSize=50 HTTP/1.1
+Accept: application/html,*/*
+Host: www.example.com
+```
+
+Register a new movie:
+
+```http
+POST /api/movies HTTP/1.1
+Content-Type: application/json
+Host: www.example.com
+
+{
+  "name": "The Matrix",
+  "releaseYear": 1999
+}
+```
+
+#### Request method
+
+The first line of an HTTP request is the **request line**:
+
+```
+ `GET` /movies?page=3&pageSize=50 HTTP/1.1
+```
+
+The **request method** is the *desired action* to perform.
+
+| Method | Purpose                               |
+| :---   | :---                                  |
+| GET    | Retrieve data                         |
+| POST   | Create a new resource                 |
+| PUT    | Replace an existing resource          |
+| PATCH  | Partially modify an existing resource |
+| DELETE | Delete a resource                     |
+
+There are [more methods][http-methods].
+
+#### Resource path
+
+The second part of the request line is the **resource path**:
+
+```http
+GET `/movies`?page=3&pageSize=50 HTTP/1.1
+```
+
+It tells the server where to find the resource to perform the action on.
+
+#### Query string
+
+The **query string** is the third part of the request line:
+
+```http
+GET /movies`?page=3&pageSize=50&orderBy=title` HTTP/1.1
+```
+
+These are parameters given to the server, usually to *filter* the request.
+In this case:
+
+* `page=3` - we want the third page.
+* `pageSize=50` - we want pages of 50 movies.
+* `orderBy=title` - we want the movies ordered by title.
+
+#### Headers
+
+After the request line, an HTTP request has one or more **headers**:
+
+```http
+GET /movies?page=3&pageSize=50 HTTP/1.1
+*Accept: application/html,*/*
+*Host: www.example.com
+```
+
+This allows the client to tell the server how to serve the request:
+
+* `Accept: application/html,*/*` - I prefer HTML, but otherwise give me any format you have.
+* `Host: www.example.com` - This is the domain I want the resource from.
+
+There are many [headers][headers] that can be used in requests.
+
+#### Request (or message) body
+
+The **body** is data that the client can ask the server to do something with:
+
+```http
+POST /api/movies HTTP/1.1
+Content-Type: application/json
+Host: www.example.com
+
+*{
+*  "name": "The Matrix",
+*  "releaseYear": 1999
+*}
+```
+
+In this case:
+
+* It's a `POST` request, so the server should create a new resource.
+* The `Content-Type` header is `application/json`, so the server should interepret the body as a JSON payload.
+
 ### Principles of a REST architecture
 
 * The state of the application is captured in a set of resources
@@ -293,3 +406,11 @@ HTTP 204 No Content: The server successfully processed the request, but is not r
 TODO: HTTP request methods link
 
 TODO: HTTP status codes link
+
+
+
+[http]: https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+[application-osi]: https://en.wikipedia.org/wiki/Application_layer
+[hypermedia]: https://en.wikipedia.org/wiki/Hypermedia
+[http-methods]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
+[headers]: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Request_fields
