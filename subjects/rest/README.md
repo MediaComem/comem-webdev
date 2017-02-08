@@ -31,85 +31,158 @@ Requirements:
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## What is a REST API?
 
-* REST means [REpresentational State Transfer][rest]
-  * It is a kind of [Web Service][web-service]
-* API means [Application Programming Interface][api]
 
 ## What is a Web Service?
 
-How do they...
-...find each other?
-...know what logic can be invoked?
-...talk to each other?
+<p class='center'><img src='images/network.jpg' width='70%' /></p>
 
-Image: clients <-> network <-> server (logic + data)
+**Clients** need access to **data** and **logic**.
+How can they find each other, know what logic can be invoked, and talk to each other over the web?
 
-Remote services (RMI) in Java?
+
 
 ## Big web services
 
-### Web services standards overview
+<!-- slide-front-matter class: center, middle -->
+
+
+
+### Remote procedure call (RPC) or remote method invocation (RMI)
+
+TODO: Java RMI diagram
+
+
+
+### Web services standards
 
 <p class='center'><img src='images/web-services-standards-overview.gif' width='90%' /></p>
 
-### Big web services
 
-Approach
-Services are often designed and developed with a RPC style (even if Document-Oriented Services are possible).
 
-Core Standards
-Simple Object Access Protocol (SOAP)
-Web Services Description Language (WSDL)
+### Pros & cons
 
-Benefits
-Very rich protocol stack (support for security, transactions, reliable transfer, etc.)
+Many standards:
 
-Problem
-Very rich protocol stack (complexity, verbosity, incompatibility issues, theoretical human readability, etc.)
+* Simple Object Access Protocol (SOAP)
+* Web Services Description Language (WSDL)
+
+<!-- slide-column 50 -->
+
+**Benefits:**
+
+* Very rich protocol stack:
+  * support for security
+  * transactions
+  * reliable transfer
+
+<!-- slide-column 50 -->
+
+**Problems:**
+
+* Very rich protocol stack:
+  * complexity
+  * verbosity
+  * incompatibility issues
+  * theoretical human readability
+
+
 
 ## RESTful web services
 
-* REST: REpresentational State Transfer
-* REST is an architectural style for building distributed systems.
+<!-- slide-front-matter class: center, middle -->
+
+
+
+### What is a REST API?
+
+* API means [Application Programming Interface][api].
+
+  > A clearly defined method of communication to interact with your program/service.
+
+* REST means [REpresentational State Transfer][rest].
+
+  > An architectural style for building distributed computer systems on the Internet (i.e. it's a type of [Web Service][web-service]).
+
+  > The World Wide Web is one example that exhibits the characteristics of a REST architecture.
+
+???
+
 * REST has been introduced in Roy Fielding’s Ph.D. thesis (Roy Fielding has been a contributor to the HTTP specification, to the apache server, to the apache community).
-* The WWW is one example for a distributed system that exhibits the characteristics of a REST architecture.
 
-### HTTP is a protocol for interacting with **resources**
 
-* At first glance, one could think that a resource is a file on a web server:
-  * an HTML document, an XML document, a PNG document
-* That fits the vision of the “static content” web
-* But of course, the web is now more than a huge library of hypermedia documents:
-  * through the web, we interact with services and a lot of the content is dynamic.
-  * more and more, through the web we interact with physical objects (machines, sensors, actuators)
-  * We need a more generic definition for resources!
 
-### What is a resource?
+### Principles of a REST architecture
 
-* A resource is "something" that can be named and uniquely identified:
-  * Example 1: an article published in the "24 heures" newspaper
-  * Example 2: the collection of articles published in the sport section of the newspaper
-  * Example 3: a person’s resume
-  * Example 4: the current price of the Nestlé stock quote
-  * Example 5: the vending machine in the school hallway
-  * Example 6: the list of grades of the student Jean Dupont
-* URL (Uniform Resource Locator) is a mechanism for identifying resources
-  * Example 1: http://www.24heures.ch/vaud/vaud/2008/08/04/trente-etudiants-partent-rencontre-patrons
-  * Example 2: http://www.24heures.ch/articles/sport
-  * Example 5: http://www.smart-machines.ch/customers/heig/machines/8272
+* The state of the application is captured in a set of **resources**
+  * Users, photos, comments, tags, albums, etc.
+* Resources are identified with a standard format (e.g. **URLs**)
+* Every resource can have several **representations**
+* There is one unique interface for interacting with resources: **HTTP**
+
+
+
+### What is a web resource?
+
+Something that can be uniquely identified on the web:
+
+<!-- slide-column 50 -->
+
+**Static files**
+
+* An article published in the "24 heures" newspaper
+* A person's resume
+
+<!-- slide-column 50 -->
+
+**Dynamic content**
+
+* The collection of articles published in the sport section of the newspaper
+* The list of grades of the student Jean Dupont
+
+<!-- slide-container -->
+
+<!-- slide-column 50 -->
+
+**Intangible things**
+
+* The current price of the Nestlé stock quote
+
+<!-- slide-column 50 -->
+
+**Physical objects**
+
+* The vending machine in the school hallway
+
+
+
+### [Uniform Resource Locator (URL)][url]
+
+> "A reference to a **web resource** that specifies its **location** on a computer network and a **mechanism** for retrieving it."
+
+* http://www.24heures.ch/vaud/2008/08/04/trente-etudiants-manifestent
+* http://imdb.com/movies/best?page=3&pageSize=50&orderBy=title
+* http://www.smart-machines.ch/customers/heig/machines/8272#order
+
+The syntax of an URL is:
+
+```
+scheme:[//[user:password@]host[:port]][/]path[?query][#fragment]
+```
+
+
 
 ### Resource vs. representation
 
-* A "resource" can be something intangible (stock quote) or tangible (vending machine)
-* The HTTP protocol supports the exchange of data between a client and a server.
-* Hence, what is exchanged between a client and a server is not the resource. It is a representation of a resource.
-* Different representations of the same resource can be generated:
-  * HTML representation
-  * XML representation
-  * PNG representation
-  * WAV representation
+* In REST, we use the HTTP protocol to support the exchange of data between a **client** and a **server**.
+* What is exchanged is not the actual resource: it is a **representation** of the resource.
+* The **same resource** could have:
+  * An HTML representation
+  * An XML representation
+  * A PNG representation
+  * A WAV representation
+
+
 
 ## [HyperText Transfer Protocol (HTTP)][http]
 
@@ -119,7 +192,9 @@ Very rich protocol stack (complexity, verbosity, incompatibility issues, theoret
   and [hypermedia][hypermedia] information systems.
   HTTP is the foundation of data communication for the World Wide Web."
 
-### HTTP requests
+
+
+### HTTP is a request-response protocol
 
 When you visit the following page:
 
@@ -151,6 +226,8 @@ Content-Type: text/html; charset=UTF-8
   </body>
 </html>
 ```
+
+
 
 ### Anatomy of an HTTP request
 
@@ -257,6 +334,8 @@ In this case:
 * It's a `POST` request, so the server should create a new resource.
 * The `Content-Type` header is `application/json`, so the server should interepret the body as a JSON payload.
 
+
+
 ### Anatomy of an HTTP response
 
 An HTML page:
@@ -362,25 +441,18 @@ Content-Type: application/json
 *]
 ```
 
-### Principles of a REST architecture
 
-* The state of the application is captured in a set of resources
-  * Users, photos, comments, tags, albums, etc.
-* Every resource is identified with a standard format (e.g. URL)
-* Every resource can have several representations
-* There is one unique interface for interacting with resources (e.g. HTTP methods)
 
-### References
+### HTTP provides the [content negotiation][http-content-negotiation] mechanisms
 
-* Very good article, with presentation of key concepts and illustrative examples:
-  http://www.infoq.com/articles/rest-introduction
-* Suggestions for the design of “pragmatic APIs”
-  http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api
+Different **representations** of a resource can be exchanged at the **same URL**:
 
-### HTTP provides the **content negotiation** mechanisms
+<!-- slide-column 50 -->
+
+A JSON representation:
 
 ```http
-GET /books HTTP/1.1
+GET /shows/game-of-thrones HTTP/1.1
 Accept: application/json
 ```
 
@@ -388,14 +460,21 @@ Accept: application/json
 HTTP/1.1 200 OK
 Content-Type: application/json
 
-[
-  { "title": "Fahrenheit 451" }
-]
+{
+  "title": "Game of Thrones",
+  "releaseYear": 2011,
+  "seasons": 6,
+  "episodes": 60
+}
 ```
 
+<!-- slide-column 50 -->
+
+An HTML representation:
+
 ```http
-GET /article/game-of-thrones HTTP/1.1
-Accept: */*
+GET /shows/game-of-thrones HTTP/1.1
+Accept: text/html,*/*
 ```
 
 ```http
@@ -406,24 +485,29 @@ Content-Type: text/html
   <head>
     <title>Game of Thrones</title>
   </head>
-  <body>Awesome show!</body>
+  <body>
+    <h1>Game of Thrones</h1>
+    <p>A 2011 TV show.</p>
+    <ul>
+      <li>6 seasons</li>
+      <li>60 episodes</li>
+    </ul>
+  </body>
 </html>
 ```
 
-### Languages, platforms, communities
 
-* Client vs. server...
-* Frameworks...
-* Full JavaScript...
-* Specific tools we will use: node, express, mongodb, mongoose
 
-## Testing tools
+## [Create, read, update, delete (CRUD)][crud]
 
-TODO: install postman
+Since REST deals primarily with **resources**, in a REST API you will (mostly):
 
-## CRUD
+* **C**reate new resources
+* **R**ead (or retrieve) a resource or collection of resources
+* **U**pdate resources
+* **D**elete (or detroy) resources
 
-Create, read, update, delete
+
 
 ### Create
 
@@ -457,6 +541,8 @@ Content-type: application/json
 The POST method is used to request that the origin server accept the entity enclosed in the request as a new subordinate of the resource identified by the Request URI.
 
 HTTP 201 Created: The request has been fulfilled and resulted in a new resource being created.
+
+
 
 ### Read
 
@@ -498,6 +584,8 @@ Content-type: application/json
 }
 ```
 
+
+
 ### Update
 
 ```http
@@ -535,6 +623,8 @@ HTTP 200 OK: In a PUT request, the response will contain an entity describing or
 
 TODO: partial update with PATCH example
 
+
+
 ### Delete
 
 ```http
@@ -550,22 +640,38 @@ The DELETE method requests that the origin server delete the resource identified
 
 HTTP 204 No Content: The server successfully processed the request, but is not returning any content.
 
-### Resources
+
+
+### CRUD summary
+
+TODO: table of HTTP method vs. operation on resource/collection
+
+
+
+## Resources
 
 TODO: HTTP request methods link
 
 TODO: HTTP status codes link
 
+* Very good article, with presentation of key concepts and illustrative examples:
+  http://www.infoq.com/articles/rest-introduction
+* Suggestions for the design of “pragmatic APIs”
+  http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api
+
 
 
 [api]: https://en.wikipedia.org/wiki/Application_programming_interface
 [chrome]: https://www.google.com/chrome/
+[crud]: https://en.wikipedia.org/wiki/Create,_read,_update_and_delete
 [http]: https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
 [headers]: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Request_fields
+[http-content-negotiation]: https://en.wikipedia.org/wiki/Content_negotiation
 [http-methods]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 [http-status-codes]: https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#1xx_Informational
 [hypermedia]: https://en.wikipedia.org/wiki/Hypermedia
 [osi-application]: https://en.wikipedia.org/wiki/Application_layer
 [postman]: https://www.getpostman.com
 [rest]: https://en.wikipedia.org/wiki/Representational_state_transfer
+[url]: https://en.wikipedia.org/wiki/Uniform_Resource_Locator
 [web-service]: https://en.wikipedia.org/wiki/Web_service
