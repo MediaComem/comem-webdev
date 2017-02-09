@@ -18,125 +18,268 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## What is Node.js?
 
-Node.js is a platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications.
 
-Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices.
+## What is [Node.js][node]?
 
-Job trends?
+<!-- slide-front-matter class: center, middle -->
 
-## Asynchronous
+> "Node.js is an **asynchronous JavaScript runtime** built on Chrome's V8 JavaScript engine.
+> Node.js uses an **event-driven**, **non-blocking I/O** model that makes it lightweight and efficient."
 
-Single-threaded & asynchronous
 
-“I am not leaving until you are done...”
-vs
-“Wake me up when you have result”
 
-## A synchronous example
+### Installation
+
+<p class='center'><img src='images/installation.png' width='80%' /></p>
+
+
+
+### Which Node.js version to choose?
+
+<p class='center'><img src='images/lts-schedule.png' width='80%' /></p>
+
+* Odd-numbered versions (e.g. v5, v7) are **unstable** releases with the latest features, and will **no longer be supported after 6-9 months**.
+* Even-numbered versions (e.g. v4, v6) have **long term support (LTS)**.
+  They are actively developed for 6 months.
+  They are supported for 18 months after that.
+  They are still maintained (e.g. security fixes) for 12 months after that.
+  So they are **supported for 36 months**.
+
+
+
+## Synchronous vs. Asynchronous
+
+<!-- slide-front-matter class: center, middle -->
+
+
+
+### Synchronous code
+
+Basic JavaScript code is synchronous.
+
+It means that only one command or function can be executed at a time.
 
 ```js
-var fs = require("fs");
-
-/**
- * Simple function to test the synchronous readFileSync function of Node.js
- * @param {string} filename - the file to read
- */
-function testSyncRead(filename) {
-  console.log("I am about to read a file: " + filename);
-  var data = fs.readFileSync(filename);
-  console.log("I have read " + data.length + " bytes (synchronously).");
-  console.log("I am done.");
+function getRandomNumber() {
+  return Math.random();
 }
 
-// We get the file name from the argument passed on the command line
-var filename = process.argv[2];
+console.log('Hello');
 
-console.log("\nTesting the synchronous call");
-testSyncRead(filename);
+var result = getRandomNumber();
+
+console.log('Result: ' + result);
+console.log('End of program');
 ```
 
-```bash
-$ node sample2.js medium.txt
+Code executes **sequentially**:
 
-Testing the synchronous call
-I am about to read a file: medium.txt
-I have read 1024 bytes (synchronously).
-I am done.
+```txt
+Hello
+Result: 0.12438
+End of program
 ```
 
-* We use a standard Node module for accessing the file system
-* fs.readFileSync is synchronous: it blocks the main thread until the data is available.
-* Synchronous functions are easier to use, but they have severe performance implications!!
+The call to `getRandomNumber()` blocks the thread until its execution is complete.
 
-## An asynchronous example
+
+
+### Asynchronous code
+
+With asynchronous code, some operations are executed **in parallel**.
 
 ```js
-var fs = require("fs");
+var fs = require('fs');
 
-/**
- * Simple function to test the asynchronous readFile function of Node.js
- * @param {string} filename - the file to read
- */
-function testAsyncRead(filename) {
-  console.log("I am about to read a file: " + filename);
+console.log('Hello');
 
-  fs.readFile(filename, function (err, data) {
-    console.log("Nodes just told me that I have read the file.”);
-  });
+fs.readFile('random.txt', { encoding: 'utf-8' }, function(err, result) {
+  console.log('Result: ' + result);
+  console.log('Done');
+});
 
-  console.log("I am done. Am I?");
-}
-// We get the file name from the argument passed on the command line
-var filename = process.argv[2];
-
-console.log("\nTesting the asynchronous call");
-testAsyncRead(filename);
+console.log('End of program');
 ```
+
+Code execution is **not sequential**:
+
+```txt
+Hello
+End of program
+Result: 0.581
+Done
+```
+
+How does this work?
+
+
+
+### Non-blocking I/O
+
+The signature of `fs.readFile` is:
+
+```
+  fs.readFile(file[, options], callback)
+```
+
+The third argument is a **callback function**:
+
+* With synchronous code, the call blocks the thread until it is done.
+* With asynchronous code, the rest of the code keeps executing, and `fs.readFile`
+  will **call you back** when it is done.
+
+Under the hood, Node.js will read the file in a separate thread,
+then execute your callback function when it's ready.
+
+
+
+### Your Node.js code is single-threaded
+
+Although I/O operations are non-blocking, **your code always executes in a single thread**:
 
 ```js
-$ node sample2.js medium.txt
+var value = 1;
 
-Testing the asynchronous call
-I am about to read a file: medium.txt
-I am done. Am I?
-Nodes just told me that I have read the file.
+fs.readFile('five.txt', { encoding: 'utf-8' }, function(err, result) {
+  value = value + parseFloat(result);
+});
+
+value = value * 2;
+console.log(value);
 ```
 
-* fs.readFile is asynchronous: it does not block the main thread until the data is available.
-* We must provide a callback function, which Node.js will invoke when the data is available.
-* Problems can happen when an (asynchronous) function is called.
-* Node.js developers have to learn the asynchronous programming style.
+This will always log **7** (i.e. (1 * 2) + 5).
+
+Even if the file is read instantaneously and the contents of the file is ready immediately,
+Node.js **guarantees** that `value = value * 2` will be executed first.
+
+Callback functions will always wait for the blocking code to finish executing.
+
+
+
+### The event loop
+
+This is the mechanism that enables the behavior in the previous slides:
+
+<img src='images/event-loop.png' width='100%' />
+
+???
+
+* Event loop:
+  * Run the initial script (which will register callbacks)
+  * Get the next event in the queue
+  * Invoke the registered callbacks in sequence
+  * Delegate I/O operations to the Node platform (in separate, non-blocking threads)
+
+
+
+### Other event-driven, non-blocking I/O architectures
+
+Similar mechanisms are used in other frameworks and tools:
+
+* [Event Machine][event-machine] (Ruby event-processing library)
+* [nginx][nginx] (web server written in C with an event-driven architecture)
+* [Twisted][twisted] (Python event-driven networking engine)
+
+
 
 ## Node.js callback convention
 
-When calling an asynchronous operation, the convention in Node.js is to use a callback function that will be called with 2 arguments. If an error occurs, the first argument will be an error describing the problem. If the operation succeeds, the second argument will be the result. You will only receive one or the other, not both.
+Node.js callback functions usually have this signature:
+
+```
+  function(err, result)
+```
+
+There are two ways that the function can be called back:
+
+1. The operation **failed**:
+  * `err` contains an error describing the problem
+  * `result` is `null` or `undefined`
+
+2. The operation **succeeded**:
+  * `err` is `null` or `undefined`
+  * `result` contains the result of the operation
+
+
+
+### **Always** check for errors
+
+You should never forget to check for errors:
 
 ```js
-var fs = require("fs");
+fs.readFile('name.txt', { encoding: 'utf-8' }, function(err, data) {
+* if (err) {
+*   console.warn('Oops, could not read the file because: ' + err.message);
+*   return;
+* }
 
-fs.readFile(filename, function (err, data) {
-
-  if (err) {
-    // handle the error
-    console.warn("An error occurred: " + err.message);
-    return;
-  }
-
-  // do something with the data
-  process(data)
+  console.log('Hello ' + data);
 });
 ```
 
-* The callback function with its two arguments.
-* Before doing anything with the data, check if there is an error.
-* If there was an error, handle it and stop there. There is no data available.
-* Otherwise, if there was no error, you may use the data.
+If you forget to check `err`, this code could log `Hello undefined` if the operation fails (e.g. the file doesn't exist, is corrupt, etc).
 
-## List of Node.js modules
+Do not forget the `return` either, or use `else`, to ensure that your "success" code is not run when an error occurs.
 
-...
+
+
+## Node.js core modules
+
+<!-- slide-front-matter class: center, middle -->
+
+
+
+## Node.js has many modules out of the box
+
+<!-- slide-column 30 -->
+
+* Assertion Testing
+* Buffer
+* C/C++ Addons
+* **Child Processes**
+* Cluster
+* Command Line Options
+* Console
+* **Crypto**
+* Debugger
+* DNS
+* Domain
+* Errors
+
+<!-- slide-column 30 -->
+
+* **Events**
+* **File System**
+* Globals
+* **HTTP**
+* **HTTPS**
+* Modules
+* Net
+* OS
+* **Path**
+* **Process**
+* Punycode
+* Query Strings
+
+<!-- slide-column 30 -->
+
+* Readline
+* REPL
+* Stream
+* String Decoder
+* Timers
+* TLS/SSL
+* TTY
+* UDP/Datagram
+* URL
+* Utilities
+* V8
+* VM
+* ZLIB
+
+
 
 ## Another example (http)
 
@@ -174,31 +317,15 @@ runHttpServer();
 * We can send back data to the client.
 * We have wired everything, let’s welcome clients!
 
+
+
 ## HTTP module events
 
 Screenshot of http docs
 
 * These are events that are emitted by the class. You can write callbacks and react to these events.
 
-## Node.js event loop
 
-Callback functions that you have written and registered
-
-```js
-on(’request’, function(req, res) { // my code});
-on(’data’, function(data) { // my code});
-```
-
-* Event loop: get the next event in the queue; invoke the registered callbacks in sequence; delegate I/O operations to the Node platform
-
-* Queue of events that have been emitted
-* All the code that you write runs on a single thread
-* The long-running tasks (I/Os) are executed by Node in parallel; Node emits events to report progress (which triggers your callbacks).
-* Another pattern is to provide a callback to node when invoking an asynchronous function.
-
-## Node.js event loop
-
-<img src='images/node-event-loop.png' width='100%' />
 
 ## Resources
 
@@ -208,3 +335,10 @@ on(’data’, function(data) { // my code});
   http://book.mixu.net/node/ch2.html
 * Node.js Explained, video
   http://kunkle.org/talks/
+
+
+
+[event-machine]: http://rubyeventmachine.com
+[nginx]: https://www.nginx.com
+[node]: https://nodejs.org/en/
+[twisted]: http://twistedmatrix.com/trac/
