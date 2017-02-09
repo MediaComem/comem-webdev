@@ -11,7 +11,7 @@ Materials for the COMEM+ web development courses.
   * [Collaborating with Git](subjects/git-collaborating/)
 
 * JavaScript
-  * [JavaScript Introduction](subjects/javascript/)
+  * [JavaScript Introduction](subjects/js/)
   * [Node.js Introduction](subjects/node/)
   * [npm](subjects/npm/)
 

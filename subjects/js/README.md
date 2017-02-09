@@ -80,6 +80,8 @@ typeof myVariable; // "object"
 
 ## There are **2 scopes** for variables: the (evil) global scope and the function scope
 
+TODO: ES6 scopes (const, let)
+
 <!-- slide-column 50 -->
 
 ```js
@@ -199,6 +201,8 @@ transformedFruits.forEach( function(fruit) {
 
 
 ## The language has no support for **classes**
+
+TODO: ES6 classes
 
 There are 3 ways to create objects.
 
