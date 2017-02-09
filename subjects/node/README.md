@@ -178,6 +178,7 @@ This is the mechanism that enables the behavior in the previous slides:
 
 Similar mechanisms are used in other frameworks and tools:
 
+* JavaScript running in the browser also runs on an event loop
 * [Event Machine][event-machine] (Ruby event-processing library)
 * [nginx][nginx] (web server written in C with an event-driven architecture)
 * [Twisted][twisted] (Python event-driven networking engine)
@@ -231,7 +232,7 @@ Do not forget the `return` either, or use `else`, to ensure that your "success" 
 
 
 
-## Node.js has many modules out of the box
+### Node.js has many modules out of the box
 
 <!-- slide-column 30 -->
 
@@ -281,49 +282,57 @@ Do not forget the `return` either, or use `else`, to ensure that your "success" 
 
 
 
-## Another example (http)
+### The HTTP module
+
+Node.js provides a ready-to-use HTTP server.
+Thanks to the event loop, this one small server can handle many clients concurrently.
 
 ```js
-/*global require */
+// Require the HTTP module.
+const http = require('http');
 
-var http = require("http");
+// Define configuration properties.
+const hostname = '127.0.0.1';
+const port = 3000;
 
-/**
- * This function starts a http daemon on port 9000. It also
- * registers a callback handler, to handle incoming HTTP
- * requests (a simple message is sent back to clients).
- */
-function runHttpServer() {
-  var server = http.createServer();
+// Create an HTTP server that will respond to
+// all requests with "Hello World" in plain text.
+const server = http.createServer(function(req, res) {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('Hello World\n');
+});
 
-  server.on("request", function (req, res) {
-    console.log("A request has arrived: URL=" + req.url);
-    res.writeHead(200, {
-      'Content-Type': 'text/plain'
-    });
-    res.end('Hello World\n');
-  });
-
-  console.log("Starting http server...");
-  server.listen(9000);
-}
-
-runHttpServer();
+// Run the server on the configured host and port.
+// Register a callback function to be notified when
+// the server has started successfully.
+server.listen(port, hostname, function() {
+  console.log('Server running at http://' + hostname + ':' + port + '/');
+});
 ```
 
-* We use a standard Node module that takes care of the HTTP protocol.
-* Node can provide us with a ready-to-use server.
-* We can attach event handlers to the server. Node will notify us asynchronously, and give us access to the request and response.
-* We can send back data to the client.
-* We have wired everything, let’s welcome clients!
 
 
+### Event emitters
 
-## HTTP module events
+Many Node.js objects are [event emitters][node-event-emitter].
+You can register callback functions to **react** to these events:
 
-Screenshot of http docs
+<!-- slide-column 30 -->
 
-* These are events that are emitted by the class. You can write callbacks and react to these events.
+<img src='images/http-events.png' width='100%' />
+
+<!-- slide-column 70 -->
+
+```js
+server.on('connection', function(socket) {
+  console.log(socket.remoteAddress + ' connected');
+});
+
+server.on('request', function(message) {
+  console.log(message.url + ' requested');
+});
+```
 
 
 
@@ -341,4 +350,5 @@ Screenshot of http docs
 [event-machine]: http://rubyeventmachine.com
 [nginx]: https://www.nginx.com
 [node]: https://nodejs.org/en/
+[node-event-emitter]: https://nodejs.org/api/events.html
 [twisted]: http://twistedmatrix.com/trac/
