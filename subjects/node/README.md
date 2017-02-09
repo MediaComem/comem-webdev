@@ -4,16 +4,22 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [What is Node.js?](#what-is-nodejs)
-- [Asynchronous](#asynchronous)
-- [A synchronous example](#a-synchronous-example)
-- [An asynchronous example](#an-asynchronous-example)
+- [What is [Node.js][node]?](#what-is-nodejsnode)
+  - [Installation](#installation)
+  - [Which Node.js version to choose?](#which-nodejs-version-to-choose)
+- [Synchronous vs. Asynchronous](#synchronous-vs-asynchronous)
+  - [Synchronous code](#synchronous-code)
+  - [Asynchronous code](#asynchronous-code)
+  - [Non-blocking I/O](#non-blocking-io)
+  - [Your Node.js code is single-threaded](#your-nodejs-code-is-single-threaded)
+  - [The event loop](#the-event-loop)
+  - [Other event-driven, non-blocking I/O architectures](#other-event-driven-non-blocking-io-architectures)
 - [Node.js callback convention](#nodejs-callback-convention)
-- [List of Node.js modules](#list-of-nodejs-modules)
-- [Another example (http)](#another-example-http)
-- [HTTP module events](#http-module-events)
-- [Node.js event loop](#nodejs-event-loop)
-- [Node.js event loop](#nodejs-event-loop-1)
+  - [**Always** check for errors](#always-check-for-errors)
+- [Node.js core modules](#nodejs-core-modules)
+  - [Node.js has many modules out of the box](#nodejs-has-many-modules-out-of-the-box)
+  - [The HTTP module](#the-http-module)
+  - [Event emitters](#event-emitters)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
