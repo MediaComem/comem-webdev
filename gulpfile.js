@@ -20,7 +20,8 @@ var root = __dirname,
     buildDir = process.env.BUILD_DIR || 'build';
 
 var config = {
-  port: process.env.PORT
+  port: process.env.PORT,
+  liveReloadPort: process.env.LIVERELOAD_PORT
 };
 
 try {
@@ -30,7 +31,8 @@ try {
 }
 
 _.defaults(config, {
-  port: 3000
+  port: 3000,
+  liveReloadPort: 35729
 });
 
 var src = {
@@ -89,7 +91,9 @@ gulp.task('open', function() {
 gulp.task('serve', function() {
   return connect.server({
     root: buildDir,
-    livereload: true,
+    livereload: {
+      port: config.liveReloadPort
+    },
     port: config.port
   });
 });
