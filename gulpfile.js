@@ -25,10 +25,12 @@ var config = {
 };
 
 try {
-  _.defaults(config, require('./config'));
+  _.defaults(config, require('./local.config'));
 } catch (e) {
   // ignore
 }
+
+_.defaults(config, require('./config'));
 
 _.defaults(config, {
   port: 3000,
@@ -221,10 +223,13 @@ function insertIntoIndexPage(file, enc, callback) {
 function convertMarkdownFileToRemarkSlides(file, enc, callback) {
 
   var markdown = file.contents.toString();
-  var model = new MarkdownModel(markdown);
+
+  var subjectTitleMatch = markdown.match(/^#\s*([^\n]+)/m);
+  var subjectTitle = subjectTitleMatch ? subjectTitleMatch[1] : 'Slides';
 
   var remarkPage = remarkPageTemplate({
-    source: model.transform()
+    title: subjectTitle + ' (' + config.title + ')',
+    source: new MarkdownModel(markdown).transform()
   });
 
   file.contents = new Buffer(remarkPage);

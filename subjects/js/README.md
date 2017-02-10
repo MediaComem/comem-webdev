@@ -518,6 +518,7 @@ Just **don't do it**.
 ## TODO
 
 * Strings: single quotes, double quotes, template literals
+* Array operations
 
 
 
