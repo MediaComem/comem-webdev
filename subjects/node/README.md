@@ -342,6 +342,58 @@ server.on('request', function(message) {
 
 
 
+## Modularizing
+
+<!-- slide-front-matter class: center, middle -->
+
+
+
+### Writing Node.js modules
+
+TODO: rewrite this slide
+
+m1.js
+
+```js
+module.exports.a = "b";
+
+module.exports.hello = function() {
+  console.log("Hello!");
+};
+```
+
+m2.js
+
+```js
+module.exports = function(name) {
+  console.log("Hello " + name + "!");
+};
+```
+
+myScript.js
+
+```js
+var module1 = require("./m1");
+
+console.log(module1.a);
+module1.hello();
+
+var module2 = require("./m2");
+
+module2("World");
+```
+
+Run it!
+
+```js
+$> node myScript.js
+b
+Hello!
+Hello World!
+```
+
+
+
 ## Resources
 
 * Understanding the Node.js Event Loop

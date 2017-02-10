@@ -12,22 +12,12 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Command-line interface (CLI)
+## TODO
 
-TODO: command-line interface
-
-## Command and arguments
-
-TODO: commands and arguments
-
-### Getting help
-
-TODO: getting help
-
-## Navigating the filesystem
-
-TODO: navigating the filesystem
-
-## Environment variables
-
-TODO: environment variables
+* command-line interface (cli)
+* commands and arguments
+* navigating the filesystem
+* spaces and non-ascii characters
+* environment variables
+* getting help
+* interactive help in commands (q, ctrl-c)
