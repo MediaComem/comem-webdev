@@ -87,6 +87,14 @@ console.log(typeof aBoolean); // "boolean"
 console.log(typeof nullValue); // "object"
 console.log(typeof undefinedValue); // "undefined"
 console.log(typeof aSymbol); // "symbol"
+
+// There is no integer type
+console.log(isInteger(aNumber)); // false
+console.log(typeof 4); // "number"
+console.log(isInteger(4)); // true
+
+// Symbols are unique identifiers
+console.log(Symbol('foo') == aSymbol); // false
 ```
 
 <!-- slide-column 30 -->
@@ -102,7 +110,6 @@ The types are:
 
 <!-- slide-container -->
 
-* We'll talk about symbols later.
 * Note that `null` is a type, but `typeof null === object`.
   This is a [remnant][js-typeof-null] from the first version of JavaScript.
 
