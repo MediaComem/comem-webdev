@@ -38,11 +38,11 @@ _.defaults(config, {
 });
 
 var src = {
-  assets: [ 'subjects/**/*.*', '!**/*.md', '!**/*.odg', '!**/*.odg#' ],
+  assets: [ 'subjects/**/*.*', '!**/*.md', '!**/*.odg', '!**/*.odg#', '!**/node_modules/**' ],
   indexTemplate: 'templates/index.html',
   mainReadme: 'README.md',
   remarkTemplate: 'templates/remark.html',
-  slides: 'subjects/**/*.md'
+  slides: [ 'subjects/**/*.md', '!subjects/**/node_modules/**/*.md' ]
 };
 
 var indexPageTemplate = loadIndexPageTemplate(),
