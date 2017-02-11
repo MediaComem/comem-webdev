@@ -151,7 +151,7 @@ function buildIndex() {
   return gulp
     .src(src.mainReadme)
     .pipe(markdown())
-    .pipe(rename(renameReadmeToIndex))
+    .pipe(rename(renameMarkdownToHtml))
     .pipe(through.obj(insertIntoIndexPage))
     .pipe(logFile(function(file) {
       var relativePath = path.relative(root, file.path);
@@ -165,7 +165,7 @@ var buildSlides = chain(function(stream) {
   var dest = path.join(buildDir, 'subjects');
   return stream
     .pipe(through.obj(convertMarkdownFileToRemarkSlides))
-    .pipe(rename(renameReadmeToIndex))
+    .pipe(rename(renameMarkdownToHtml))
     .pipe(logFile(function(file) {
       var relativePath = path.relative('subjects', file.path);
       util.log('Generated ' + util.colors.magenta(path.join(dest, relativePath)));
@@ -201,9 +201,15 @@ function logFile(func) {
   });
 }
 
-function renameReadmeToIndex(path) {
-  path.basename = 'index';
-  path.extname = '.html';
+function renameMarkdownToHtml(file) {
+  if (file.basename == 'README') {
+    file.basename = 'index';
+  } else {
+    file.dirname = path.join(file.dirname, file.basename.toLowerCase());
+    file.basename = 'index';
+  }
+
+  file.extname = '.html';
 }
 
 function insertIntoIndexPage(file, enc, callback) {
