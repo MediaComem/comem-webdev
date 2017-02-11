@@ -19,5 +19,6 @@
 * navigating the filesystem
 * spaces and non-ascii characters
 * environment variables
+* PATH
 * getting help
 * interactive help in commands (q, ctrl-c)
