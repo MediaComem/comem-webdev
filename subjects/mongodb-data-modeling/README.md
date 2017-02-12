@@ -1,4 +1,18 @@
-# MongoDB Data modeling
+# MongoDB data modeling
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Modeling rules](#modeling-rules)
+- [One-to-one relationships](#one-to-one-relationships)
+- [Resources](#resources)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
+
+## Modeling rules
 
 <!-- slide-front-matter class: center, middle -->
 

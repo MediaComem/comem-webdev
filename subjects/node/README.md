@@ -20,6 +20,8 @@
   - [Node.js has many modules out of the box](#nodejs-has-many-modules-out-of-the-box)
   - [The HTTP module](#the-http-module)
   - [Event emitters](#event-emitters)
+- [Modularizing](#modularizing)
+  - [Writing Node.js modules](#writing-nodejs-modules)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

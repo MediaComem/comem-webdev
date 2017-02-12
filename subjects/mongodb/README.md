@@ -4,12 +4,23 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Document-oriented database](#document-oriented-database)
-- [Schema-less collections](#schema-less-collections)
-- [Data modeling](#data-modeling)
-- [Installation](#installation)
-- [Test MongoDB on Linux/OS X](#test-mongodb-on-linuxos-x)
-- [Test MongoDB on Windows](#test-mongodb-on-windows)
+- [What is MongoDB?](#what-is-mongodb)
+  - [Key features](#key-features)
+  - [Document-oriented database](#document-oriented-database)
+  - [Schema-less collections](#schema-less-collections)
+- [Query language](#query-language)
+  - [Connecting](#connecting)
+  - [Inserting documents](#inserting-documents)
+  - [Finding documents](#finding-documents)
+  - [Updating documents](#updating-documents)
+  - [Removing documents](#removing-documents)
+- [Indexes](#indexes)
+  - [Query performance](#query-performance)
+  - [Creating indexes](#creating-indexes)
+  - [Index scan](#index-scan)
+  - [Compound indexes](#compound-indexes)
+  - [Unique indexes](#unique-indexes)
+- [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

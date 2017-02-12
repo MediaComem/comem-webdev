@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Installing MongoDB](#installing-mongodb)
+  - [Test MongoDB on Linux/OS X](#test-mongodb-on-linuxos-x)
+  - [Test MongoDB on Windows](#test-mongodb-on-windows)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Installing MongoDB
 
 TODO: rewrite mongodb installation instructions
