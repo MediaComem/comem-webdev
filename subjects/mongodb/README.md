@@ -401,13 +401,40 @@ db.people.remove({ "interests": "Chocolate" }, { "justOne": true })
 
 <!-- slide-front-matter class: center, middle -->
 
-Indexes can support the efficient execution of queries and enforce unicity.
+Indexes can support the efficient execution of queries and enforce constraints.
 
 
+
+### Query performance
+
+Without indexes, MongoDB must perform a **full collection scan** to find the matching documents.
+Use `explain` to find out how a query will be executed:
+
+```bash
+> db.people.find({ name: "John A. Smith" }).explain()
+{
+  "queryPlanner" : {
+    "plannerVersion" : 1,
+    "namespace" : "test.people",
+    "indexFilterSet" : false,
+    "parsedQuery" : {
+      "name" : { "$eq" : "John A. Smith" }
+    },
+*   "winningPlan" : {
+*     "stage" : "COLLSCAN",
+      "filter" : {
+        "name" : { "$eq" : "John A. Smith" }
+      },
+      "direction" : "forward"
+    },
+    "rejectedPlans" : [ ]
+  },
+  "ok" : 1
+}
+```
 
 ### Creating indexes
 
-Without indexes, MongoDB must perform a **full collection scan** to find the matching documents.
 If an appropriate index exists for a query, MongoDB can use the index to **limit the number of documents it must inspect**.
 
 Use [createIndex][create-index] to add an index:
@@ -423,32 +450,94 @@ Use [createIndex][create-index] to add an index:
 }
 ```
 
+### Index scan
+
+Run `explain` again to confirm that your index will be applied:
+
+```bash
+> db.people.find({ name: "John A. Smith" }).explain()
+{
+  "queryPlanner" : {
+    "plannerVersion" : 1,
+    "namespace" : "demo.people",
+    "indexFilterSet" : false,
+    "parsedQuery" : {
+      "name" : { "$eq" : "John A. Smith" }
+    },
+*   "winningPlan" : {
+      "stage" : "FETCH",
+      "inputStage" : {
+*       "stage" : "IXSCAN",
+        "keyPattern" : { "name" : 1 },
+        "indexName" : "name_1",
+        ...
+      }
+    },
+    "rejectedPlans" : [ ]
+  },
+  "ok" : 1
+}
+```
 
 
-## Data modeling
 
-<!-- slide-front-matter class: center, middle -->
+### Compound indexes
 
-Creating a data model with MongoDB does not have to follow the rules that apply for relational databases. Often, they should not.
+You can create an index on **multiple fields**:
+
+```js
+// Create an index of people sorted first from oldest to youngest,
+// then by ascending name
+db.people.createIndex({ "birthDate": -1, "name": 1 });
+```
+
+**Be careful:** for compound indexes, the **order** of fields is important:
+it determines what queries the index can support:
+
+```js
+// Queries sorted like the index will use it
+db.people.find({}).sort({ "birthDate": -1, "name": 1 })
+
+// Reverse order is supported as well
+db.people.find({}).sort({ "birthDate": 1, "name": -1 })
+
+// But this is an incompatible sort order
+// The index will NOT be used, and MongoDB will revert to a collection scan
+db.people.find({}).sort({ "birthDate": 1, "name": 1 })
+```
 
 
 
-### One-to-one relationships
+### Unique indexes
 
-* Consider theses questions: is this a composition relationship (containment)? Is this "aggregate" of documents often used at the same time (i.e. can we reduce chattiness)? Would embedding lead to "a lot" of data duplication?
+A unique index enforces uniqueness for the indexed fields
 
-Normalized data model (references) vs. Embedded data model (sub-documents)
+```js
+// Ensure that there are no two people born on the same day
+db.people.createIndex({ "birthDate": 1 }, { "unique": true })
 
-TODO: examples
+// Ensure that there are no two people with the same name in the same city
+db.people.createIndex({ "name": 1, "address.city": 1 }, { "unique": true })
+```
 
-https://docs.mongodb.com/manual/core/data-modeling-introduction/
+By default, MongoDB creates a unique index on the `_id` field during the creation of a collection.
 
-https://docs.mongodb.org/getting-started/shell/
+Read the [documentation on indexes][indexes] to find out more about other types of indexes.
+
+
+
+
 
 
 
 ## Resources
 
+* [Getting started with MongoDB][getting-started]
+* [db.collection.find][find] & [query operators][query-operators]
+* [db.collection.update][update] & [update operators][update-operators]
+* [db.collection.remove][remove]
+* [db.collection.createIndex][create-index]
+* [Indexes][indexes]
 * [SQL comparison][sql-comparison]
 
 
@@ -456,6 +545,8 @@ https://docs.mongodb.org/getting-started/shell/
 [bson]: https://www.mongodb.com/json-and-bson
 [create-index]: https://docs.mongodb.com/manual/reference/method/db.collection.createIndex/
 [find]: https://docs.mongodb.com/manual/reference/method/db.collection.find/
+[getting-started]: https://docs.mongodb.com/getting-started/shell/
+[indexes]: https://docs.mongodb.com/manual/indexes/
 [query-operators]: https://docs.mongodb.com/manual/reference/operator/query/
 [remove]: https://docs.mongodb.com/manual/reference/method/db.collection.remove/
 [sql-comparison]: https://docs.mongodb.com/manual/reference/sql-comparison/

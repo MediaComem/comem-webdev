@@ -1,5 +1,7 @@
 # Installing MongoDB
 
+TODO: rewrite mongodb installation instructions
+
 https://www.mongodb.com
 
 After downloading MongoDB, you must follow the installation procedure for your platform:
