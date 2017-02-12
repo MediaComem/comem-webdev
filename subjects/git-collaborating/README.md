@@ -88,11 +88,15 @@ Both group members should register on GitHub:
 
 <p class='center'><img src='images/github-account.jpg' width='100%'></p>
 
+TODO: add ssh key to account
 
 
-## Collaborating on GitHub
+
+## Sharing changes
 
 <!-- slide-front-matter class: center, middle -->
+
+Clone repositories, push and pull commits
 
 
 
@@ -274,41 +278,240 @@ but that the remote-tracking branch origin/master **is not up-to-date** in **Per
 <!-- slide-container -->
 
 Git does not automatically sync repositories.
-So **as far as Person A knows** looking at information from their local repository,
+**As far as Person A knows** looking at information from their local repository,
 the master branch still points to `4f94ga` in the shared repository.
 
 
 
+### A: fetch changes from the shared repository
 
-### Cloning a Git repository
-
-You can get a Git repository either by cloning an existing one or creating a new one and importing a project's files into it.
-Let's start by getting an existing repository – the repository for this course:
+**Person A** should now get the changes from the shared repository:
 
 ```bash
-$> git clone https://github.com/MediaComem/comem-webdev.git
-remote: Counting objects: 155, done.
-remote: Compressing objects: 100% (99/99), done.
-remote: Total 155 (delta 51), reused 142 (delta 38), pack-reused 0
-Receiving objects: 100% (155/155), 656.15 KiB | 520.00 KiB/s, done.
-Resolving deltas: 100% (51/51), done.
+$> git fetch origin
+remote: Counting objects: 2, done.
+remote: Compressing objects: 100% (1/1), done.
+remote: Total 2 (delta 1), reused 2 (delta 1), pack-reused 0
+Unpacking objects: 100% (2/2), done.
+From github.com:PersonA/github-demo
+   4f94ga..92fb8c  master     -> origin/master
 ```
 
-It will create a directory named `comem-webdev`, initialize a `.git` repository inside it, pull down all the data for that repository, and check out a working copy of the latest version.
+<!-- slide-column 60 -->
 
-If you wish to clone the repository into another directory name, you can specify that as the next command line option:
+<img src='images/demo-5-git-fetch.png' width='100%' />
+
+<!-- slide-column 40 -->
+
+The new commit is now here and the remote-tracking branch has been updated.
+
+However, the local master branch **has not moved** and the working directory has **not been updated**.
+
+
+
+### A: check the state of branches
+
+Now you can use `git merge` like in the previous tutorial to bring the changes of origin/master into master:
 
 ```bash
-$> git clone https://github.com/MediaComem/comem-webdev.git awesome-stuff
+$> git merge origin/master
+Updating 4f94ga..92fb8c
+Fast-forward
+ addition.js => add.js | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename addition.js => add.js (100%)
 ```
 
-Note that Git will perform a **full copy** of all data that the server has: every version of every file for the history of the project is pulled down by default.
+<!-- slide-column 60 -->
+
+<img src='images/demo-6-git-merge.png' width='100%' />
+
+<!-- slide-column 40 -->
+
+As expected, master has been fast-forwarded to the commit pointed to by origin/master and the working directory has been updated.
+
+**Person A**'s repository is now up-to-date.
 
 
 
-## TODO
+### Using git pull
 
-* ssh reminder
+You can also use `git pull [remote] [branch]` to save time.
+
+The following command:
+
+```bash
+$> git pull origin master
+```
+
+Is equivalent to running the two commands we just used:
+
+```bash
+$> git fetch origin
+$> git merge origin/master
+```
+
+
+
+## Managing conflicting commit histories
+
+<!-- slide-front-matter class: center, middle -->
+
+
+
+### A: fix the bug
+
+**Person A** now notices that the last change breaks the calculator.
+This is because the files were renamed, but the `<script>` tags in `index.html` were not updated.
+
+Fix that bug, then commit and push the change:
+
+```bash
+(Make the fix...)
+$> git add index.html
+$> git commit -m "Fix bad <script> tags"
+$> git push origin master
+```
+
+
+
+### B: make other changes
+
+**Person B**, not having noticed the bug, proceeds to make 2 changes on `index.html`:
+
+* Add an `<h2>` title before each computation
+* Put the two last `<script>` tags on one line
+
+```html
+<h2>Addition</h2>
+<p id="addition">...</p>
+
+<h2>Subtraction</h2>
+<p id="subtraction">...</p>
+
+<script src="calculations.js"></script>
+<script src="addition.js"></script><script src="subtraction.js"></script>
+```
+
+Commit and push the changes:
+
+```bash
+$> git add index.html
+$> git commit -m "Improve layout"
+$> git push origin master
+```
+
+
+
+### Rejected pushes
+
+```bash
+To github.com:PersonA/github-demo.git
+ ! [rejected]        master -> master (fetch first)
+error: failed to push some refs to 'git@github.com:PersonA/github-demo.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+```
+
+<!-- slide-column 60 -->
+
+<img src='images/demo-7-b-state.png' width='100%' />
+
+<!-- slide-column 40 -->
+
+The push was **rejected** by the remote repository. Why?
+
+This is the state of **Person B**'s repository right now.
+
+
+
+### Divergent history
+
+<!-- slide-column 60 -->
+
+<img src='images/demo-8-git-fetch.png' width='100%' />
+
+<!-- slide-column 40 -->
+
+It's for the same reason as in the previous tutorial:
+**Person A** and **Person B**'s work have diverged from a common ancestor.
+
+If **Person B** did a `git fetch` now, this is what their repository would look like.
+
+
+
+### B: pull changes from the shared repository
+
+**Person B** wants to fetch and merge the changes made by **Person A**.
+Let's use the `git pull` command:
+
+```bash
+$> git pull origin master
+remote: Counting objects: 3, done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 1), reused 3 (delta 1), pack-reused 0
+Unpacking objects: 100% (3/3), done.
+From github.com:PersonA/github-demo
+ * branch            master     -> FETCH_HEAD
+   92fb8c..3ff531    master     -> origin/master
+Auto-merging index.html
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+The fetch succeeded, but the merge failed because of a **conflict** on `index.html`.
+
+
+
+### B: check the conflict markers
+
+**Person B** should take a look at `index.html`:
+
+```txt
+<<<<<<< HEAD
+    <script src="addition.js"></script><script src="subtraction.js"></script>
+=======
+    <script src="add.js"></script>
+    <script src="sub.js"></script>
+>>>>>>> 3ff5311406e73c7d2cc1691f9535214c2543937f
+```
+
+Let's make sure we keep it on one line while still renaming the files, and remove the conflict markers::
+
+```txt
+    <script src="add.js"></script><script src="sub.js"></script>
+```
+
+Mark the conflict as resolved and finish the merge:
+
+```bash
+$> git add index.html
+$> git commit -m "Merge origin/master"
+```
+
+
+
+### B: check the state of branches
+
+Now the state of **Person B**'s local repository is consistent with the state of the shared repository:
+the commit pointed to by **master** is ahead of the commit pointed to by **origin/master**.
+
+<img src='images/demo-9-b-state.png' width='80%' />
+
+
+
+### B: push the changes
+
+The push will be accepted now:
+
+```bash
+$> git push origin master
+```
+
+<img src='images/demo-10-git-push.png' width='80%' />
 
 
 
