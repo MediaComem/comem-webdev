@@ -26,5 +26,4 @@ Materials for the COMEM+ web development courses.
 
 * Databases
   * [MongoDB](subjects/mongodb/)
-  * [MongoDB Data Modeling](subjects/mongodb-data-modeling/)
   * [Mongoose (Node.js MongoDB client)](subjects/mongoose/)
