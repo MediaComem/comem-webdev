@@ -34,7 +34,7 @@ Requirements:
 
 <!-- slide-front-matter class: center, middle -->
 
-Fast, unopinionated, **minimalist** web framework for Node.js
+A fast, unopinionated, **minimalist** web framework for Node.js
 
 
 
@@ -50,7 +50,7 @@ Map HTTP methods and URLs to controllers
 
 **Middleware**
 
-Intercept and modify HTTP requests and responses during request-response processing
+Intercept and modify HTTP requests and responses
 
 <!-- slide-column 33 -->
 
@@ -67,7 +67,7 @@ Use the many **middleware** packages at your disposal to build more complex appl
 
 ### Install the express generator
 
-It's not hard to create an express app from scratch, but we'll use **express-generator** to quickly create an application skeleton:
+You can create an express app from scratch, but we'll use **express-generator** to quickly create an application skeleton:
 
 ```bash
 $> npm install -g express-generator
@@ -127,7 +127,58 @@ $> express my-app
      $ DEBUG=my-app:* npm start
 ```
 
-#### The server component
+
+
+### Install dependencies and run it
+
+As instructed, let's install the dependencies:
+
+```bash
+$> cd my-app
+$> npm install
+├─┬ body-parser@1.15.2
+├─┬ cookie-parser@1.4.3
+├─┬ debug@2.2.0
+├─┬ express@4.14.1
+│ ├─┬ ...
+```
+
+And run it:
+
+```bash
+$> DEBUG=my-app:* npm start
+
+> my-app@0.0.0 start /path/to/projects/my-app
+> node ./bin/www
+
+  my-app:server Listening on port 3000 +0ms
+```
+
+
+
+### Browse the landing page
+
+Visit [http://localhost:3000](http://localhost:3000) in your browser and you should see the app running:
+
+<p class='center'><img src='images/express-running.png' width='60%' /></p>
+
+In the terminal where you're running the app, you should also see that your request was **logged**:
+
+```txt
+  my-app:server Listening on port 3000 +0ms
+GET / 200 321.805 ms - -
+GET /stylesheets/style.css 200 2.457 ms - -
+```
+
+
+
+## Application structure
+
+<!-- slide-front-matter class: center, middle -->
+
+
+
+### The server component
 
 Let's take a look at the generated files:
 
@@ -144,12 +195,14 @@ bin
 * `package.json` is used to track **dependencies** with npm
 * `app.js` is the **main script** that will create and configure the express app
 * `routes` contains files that define the app's **routes and controllers**
-* `bin/www` is the **entrypoint** (the script to execute to launch the app)
+* `bin/www` is the **entrypoint** (the script you execute to launch the app)
 
 The above files are executed **locally** on your machine when you develop,
 or **on the server** when you deploy to a host.
 
-#### The client component
+
+
+### The client component
 
 The rest of the files are:
 
@@ -168,17 +221,14 @@ public
 * `views` contains the page templates (written in [Jade][jade] by default)
   that will be rendered to HTML by the server and served to the browser
 * `public` contains **static files** that will be served to the browser
-  * `public/javascripts` contains the client-side JavaScript that will be executed in the browser
-  * `public/images` contains images used in your app's templates
-  * `public/stylesheets` contains your app's CSS stylesheets
 
-#### The package.json file
+### The package.json file
 
 Let's take a look at the generated `package.json`:
 
 ```json
 {
-  "name": "express-demo",
+  "name": "my-app",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -203,7 +253,7 @@ Let's take a look at the generated `package.json`:
 
 ## Express entry point (app.js)
 
-TODO: app.js code
+TODO: adapt (content copied from previous course's slides)
 
 * Dependencies
 * npm packages
@@ -214,6 +264,8 @@ TODO: app.js code
 
 
 ## Express middleware
+
+TODO: adapt (content copied from previous course's slides)
 
 * Incoming HTTP requests can be processed by multiple components, organized in a pipeline
 * The components can inspect and even modify the incoming HTTP requests and HTTP responses (think about security, compression, etc.).
@@ -228,16 +280,9 @@ https://expressjs.com/en/guide/using-middleware.html
 
 
 
-### Express configuration
-
-TODO: check what the express generator generates
-
-* third-party middleware packages
-* use the middleware one after the other; each can modify the request, send a response, or pass the request along to the next middleware
-
-
-
 ### Adding your own middleware
+
+TODO: adapt (content copied from previous course's slides)
 
 * after standard middleware
 * before error handling
@@ -245,6 +290,8 @@ TODO: check what the express generator generates
 
 
 ## Express routing
+
+TODO: adapt (content copied from previous course's slides)
 
 * Routing consists in finding some piece of code (a function) to execute when an HTTP request has been issued.
 * We will see later (in a few weeks) that routing can happen on the client side. Today, we are looking at routing on the server side.
@@ -256,6 +303,8 @@ TODO: check what the express generator generates
 
 ### The home page
 
+TODO: adapt (content copied from previous course's slides)
+
 * Express router
 * Add the router as middleware (filtered by path)
 * Define a route: `GET /`
@@ -263,6 +312,8 @@ TODO: check what the express generator generates
 
 
 ### Routing
+
+TODO: adapt (content copied from previous course's slides)
 
 https://expressjs.com/en/guide/routing.html
 
@@ -273,6 +324,8 @@ https://expressjs.com/en/guide/routing.html
 
 
 ### Router
+
+TODO: adapt (content copied from previous course's slides)
 
 * For large applications, it is better to split the controllers in multiple, isolated components. You should use multiple routers for that purpose.
 * express.Router() creates a new router. (no need for r = new Router())
