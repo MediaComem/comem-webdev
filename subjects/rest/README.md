@@ -515,6 +515,8 @@ Since REST deals primarily with **resources**, in a REST API you will (mostly):
 
 ### Create
 
+TODO: adapt (content copied from previous course's slides)
+
 ```http
 POST /people HTTP/1.1
 Content-type: application/json
@@ -550,6 +552,8 @@ HTTP 201 Created: The request has been fulfilled and resulted in a new resource 
 
 ### Read
 
+TODO: adapt (content copied from previous course's slides)
+
 ```http
 GET /people HTTP/1.1
 ```
@@ -569,6 +573,8 @@ The GET method means retrieve whatever information (in the form of an entity) is
 HTTP 200 OK: Standard response for successful HTTP requests. In a GET request, the response will contain an entity corresponding to the requested resource.
 
 #### Collection resource vs. single resource
+
+TODO: adapt (content copied from previous course's slides)
 
 ```http
 GET /people/3orv8nrg HTTP/1.1
@@ -591,6 +597,8 @@ Content-type: application/json
 
 
 ### Update
+
+TODO: adapt (content copied from previous course's slides)
 
 ```http
 PUT /people/3orv8nrg HTTP/1.1
@@ -630,6 +638,8 @@ TODO: partial update with PATCH example
 
 
 ### Delete
+
+TODO: adapt (content copied from previous course's slides)
 
 ```http
 DELETE /people/3orv8nrg HTTP/1.1

@@ -2,6 +2,8 @@
 
 Elegant MongoDB object modeling for Node.js.
 
+TODO: rewrite (content copy-pasted from previous course's slides)
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 

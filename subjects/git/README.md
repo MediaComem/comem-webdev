@@ -1058,9 +1058,10 @@ You should not do this if you have already shared this commit with others.
 
 
 
-## Aliases
+## TODO
 
-TODO: aliases
+* Aliases
+* Ignoring files
 
 
 

@@ -352,7 +352,7 @@ server.on('request', function(message) {
 
 ### Writing Node.js modules
 
-TODO: rewrite this slide
+TODO: adapt (content copy-pasted from previous course's slides)
 
 m1.js
 
