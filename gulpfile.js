@@ -7,7 +7,7 @@ var _ = require('lodash'),
     doctoc = require('gulp-doctoc'),
     handlebars = require('handlebars'),
     markdown = require('gulp-markdown'),
-    MarkdownModel = require('./lib/markdown-model'),
+    md2remark = require('md2remark'),
     open = require('gulp-open'),
     path = require('path'),
     rename = require('gulp-rename'),
@@ -233,13 +233,18 @@ function convertMarkdownFileToRemarkSlides(file, enc, callback) {
   var subjectTitleMatch = markdown.match(/^#\s*([^\n]+)/m);
   var subjectTitle = subjectTitleMatch ? subjectTitleMatch[1] : 'Slides';
 
-  var remarkPage = remarkPageTemplate({
-    title: subjectTitle + ' (' + config.title + ')',
-    source: new MarkdownModel(markdown).transform()
+  var options = {
+    gridContainerClass: 'container'
+  };
+
+  md2remark(markdown, options).then(function(remarkMarkdown) {
+
+    var remarkPage = remarkPageTemplate({
+      title: subjectTitle + ' (' + config.title + ')',
+      source: remarkMarkdown
+    });
+
+    file.contents = new Buffer(remarkPage);
+    callback(undefined, file);
   });
-
-  file.contents = new Buffer(remarkPage);
-  this.push(file);
-
-  callback();
 }
