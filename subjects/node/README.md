@@ -172,7 +172,7 @@ This is the mechanism that enables the behavior in the previous slides:
 
 <img src='images/event-loop.png' width='100%' />
 
-???
+<!-- slide-notes -->
 
 * Event loop:
   * Run the initial script (which will register callbacks)

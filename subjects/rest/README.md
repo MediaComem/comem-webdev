@@ -110,7 +110,7 @@ Many standards:
 
   > The World Wide Web is one example that exhibits the characteristics of a REST architecture.
 
-???
+<!-- slide-notes -->
 
 * REST has been introduced in Roy Fielding’s Ph.D. thesis (Roy Fielding has been a contributor to the HTTP specification, to the apache server, to the apache community).
 
