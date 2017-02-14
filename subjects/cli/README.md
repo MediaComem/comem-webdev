@@ -10,11 +10,14 @@
 
 ## TODO
 
-* command-line interface (cli)
-* commands and arguments
-* navigating the filesystem
-* spaces and non-ascii characters
-* environment variables
-* PATH
-* getting help
-* interactive help in commands (q, ctrl-c)
+* command-line interface (cli): what is a command line? why use it? unix emulation on Windows, installation
+* copy-paste on Windows
+* commands and arguments: pay attention to spaces (escaping)
+* getting help (--help)
+* avoid spaces and non-ascii characters in directory names
+* navigating the filesystem (cd <path>, .., ~, /, auto-completion), Windows filesystem root (/c on Git Bash)
+* creating directories with mkdir -p
+* PATH, (export PATH="/path/to/bin:$PATH")
+* interactive help in commands (press q to quit)
+* interrupting running commands (ctrl-c)
+* vim basics (some tools automatically open vim: do not panic, command vs insert mode, esc, i, :wq, :q!)
