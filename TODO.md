@@ -1,5 +1,7 @@
 # TODO
 
+
+
 ## Slides
 
 * JavaScript or Node.js: add a setInterval example to illustrate callback functions
@@ -9,8 +11,16 @@
 * Git branching: create diagrams for the 2 conflict examples at the end
 * Collaborating with git: when adding a collaborator on GitHub, do not forget to accept the invitation (sent by e-mail)
 
+
+
 ## Build
 
 * Template: add logo
 * Template: add back link to return to index
 * Template: auto-add target="\_blank" to links
+
+
+
+## Ideas for new subjects
+
+* **npm updating**: how `npm outdated` and `npm update` work, semantic versioning, package.json version syntax
