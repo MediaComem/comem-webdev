@@ -5,6 +5,8 @@
 
 
 - [TODO](#todo)
+- [What is the Command Line Interface (CLI)](#what-is-the-command-line-interface-cli)
+- [Why use it](#why-use-it)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -21,3 +23,44 @@
 * interactive help in commands (press q to quit)
 * interrupting running commands (ctrl-c)
 * vim basics (some tools automatically open vim: do not panic, command vs insert mode, esc, i, :wq, :q!)
+
+## What is the Command Line Interface (CLI)
+
+The CLI is a tool that allows you to use your computer by writing what you want to do (i.e. **commands**), instead of clicking on things.
+
+It's installed on computers (almost) since the beginnings of time, but it has evolved a little since then. It usually looks something like this:
+
+<p class='center'><img src='images/cli.jpg' width='100%' /></p>
+
+## Why use it
+
+CLI is not very user-friendly or visually appealing but it has several advantages:
+
+* Requires very **few resources**
+* Can be easily **automated** through scripting
+* Is ultimatly **more powerful and efficient** than any GUI
+
+For these reasons, a lot of tools _(especially development tools)_ don't have any GUI and are only usable through a CLI.
+
+**Thus, the CLI is a required tool for any nowadays developer.**
+
+## How do I use this ?
+
+**CLI are available in every actual OS.**
+
+On **UNIX-like** systems _(like MacOS or Linux)_, it's called the **Terminal** and you can use it right away, as it's the _de-facto_ standard.
+
+On **Windows**, the default CLI is called **Invite de commandes** or **cmd**. But it does not use the same syntax than UNIX-like CLI have _(plus, it's bad)_.
+
+<!-- slide-column 30 -->
+
+<p class='center'><img src='images/gitbashlogo.png' width='70%' /></p>
+
+<!-- slide-column -->
+
+To solve this problem, you're going to install **Git Bash**, an alternate CLI that emulates a UNIX-like terminal on Windows.
+
+You can download the **Git Bash Installer** on the [Git for Windows website][gitbash], and install the software, leaving all default options.
+
+
+[gitbash]: https://git-for-windows.github.io/
