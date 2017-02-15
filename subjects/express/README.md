@@ -628,7 +628,7 @@ Mapping HTTP methods and URLs to handler functions
 
 ### Basic routing
 
-As we've seen, basic routing can be applied to middleware by using `.get`, `.post`, etc and passing a path to `app.use()`:
+As we've seen, basic routing can be applied to middleware by using `.get`, `.post`, etc and passing a path:
 
 ```js
 app.get('/hello', function() {
@@ -647,7 +647,7 @@ app.get('/authors/`:authorId`/books/`:bookId`', function(req, res, next) {
 Calling `http://localhost:3000/authors/24/books/33` will produce the following response:
 
 ```txt
-Getting book 33 by 42
+Getting book 33 by 24
 ```
 
 
@@ -655,9 +655,9 @@ Getting book 33 by 42
 ### Routers
 
 An Express [router][router] is an **isolated instance of middleware and routes**.
-It's basically **mini-app**.
+It's basically a **mini-app**.
 
-Image that you have the following API routes:
+Imagine that you have the following API routes:
 
 <!-- slide-column -->
 
