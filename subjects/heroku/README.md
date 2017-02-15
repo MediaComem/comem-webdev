@@ -263,6 +263,12 @@ there are free versions available that are restricted, but more powerful version
 
 
 
+## TODO
+
+* configuration through environment variables
+
+
+
 [dev-center]: https://devcenter.heroku.com
 [faas]: https://en.wikipedia.org/wiki/Function_as_a_Service
 [free-dyno-hours]: https://devcenter.heroku.com/articles/free-dyno-hours
