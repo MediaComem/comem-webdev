@@ -11,19 +11,38 @@ Requirements:
 
 
 - [What is express?](#what-is-express)
-- [Express: core functionality](#express-core-functionality)
-- [Install express](#install-express)
-- [Express uses a Movel-View-Controller (MVC) structure](#express-uses-a-movel-view-controller-mvc-structure)
-- [Express file structure](#express-file-structure)
-- [Express entry point (app.js)](#express-entry-point-appjs)
-- [package.json](#packagejson)
+  - [Core functionality](#core-functionality)
+  - [Install the express generator](#install-the-express-generator)
+  - [Generate a skeleton application](#generate-a-skeleton-application)
+  - [Install dependencies and run it](#install-dependencies-and-run-it)
+  - [Browse the landing page](#browse-the-landing-page)
+- [Application structure](#application-structure)
+  - [The server component](#the-server-component)
+  - [The client component](#the-client-component)
+  - [The package.json file](#the-packagejson-file)
 - [Express middleware](#express-middleware)
-  - [Express configuration](#express-configuration)
-  - [Adding your own middleware](#adding-your-own-middleware)
-- [Express routing](#express-routing)
-  - [The home page](#the-home-page)
-  - [Routing](#routing)
-  - [Router](#router)
+  - [What is middleware?](#what-is-middleware)
+  - [Middleware function signature](#middleware-function-signature)
+  - [Plug in middleware functions](#plug-in-middleware-functions)
+  - [Add your own](#add-your-own)
+  - [Limiting middleware by HTTP method or URL path](#limiting-middleware-by-http-method-or-url-path)
+  - [Controlling the middleware stack](#controlling-the-middleware-stack)
+  - [Attaching data to the request in a middleware](#attaching-data-to-the-request-in-a-middleware)
+  - [Asynchronous middleware](#asynchronous-middleware)
+  - [How to deal with errors in middlewares](#how-to-deal-with-errors-in-middlewares)
+- [Routing](#routing)
+  - [Basic routing](#basic-routing)
+  - [Routers](#routers)
+- [The request object](#the-request-object)
+  - [Request example](#request-example)
+  - [Getting the HTTP method, URL path and query parameters](#getting-the-http-method-url-path-and-query-parameters)
+  - [Getting HTTP headers](#getting-http-headers)
+  - [Getting the HTTP request body](#getting-the-http-request-body)
+- [The response object](#the-response-object)
+  - [Sending the response](#sending-the-response)
+  - [Setting the HTTP status code](#setting-the-http-status-code)
+  - [Sending HTTP response headers](#sending-http-response-headers)
+  - [Chain response methods](#chain-response-methods)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -38,7 +57,7 @@ A fast, unopinionated, **minimalist** web framework for Node.js
 
 
 
-## Core functionality
+### Core functionality
 
 <!-- slide-column 33 -->
 
@@ -715,7 +734,7 @@ It will handle HTTP requests to `/books/42`, for example.
 
 
 
-## The HTTP request object
+## The request object
 
 <!-- slide-front-matter class: center, middle -->
 
@@ -831,7 +850,7 @@ app.all('/test/:param1/:param2', function(req, res, next) {
 
 
 
-## The HTTP response object
+## The response object
 
 <!-- slide-front-matter class: center, middle -->
 
@@ -882,7 +901,7 @@ Content-Type: application/json
 
 
 
-### Setting the status code
+### Setting the HTTP status code
 
 Use `res.status()` to set the status code:
 
@@ -923,7 +942,7 @@ HTTP/1.1 204 No Content
 
 
 
-### Sending response headers
+### Sending HTTP response headers
 
 Use `res.set()` to set headers:
 
@@ -984,14 +1003,44 @@ Some text
 
 
 
+### Chain response methods
+
+You can also chain all the previous methods together:
+
+<!-- slide-column -->
+
+```js
+res
+  .set('Header-1', 'foo')
+  .status(201)
+  .send('Some text');
+```
+
+<!-- slide-column -->
+
+```http
+HTTP/1.1 201 Created
+Content-Type: text/plain
+Header-1: foo
+
+Some text
+```
+
+
+
 ## Resources
 
-http://expressjs.com/en/4x/api.html
+* [API reference][api] (documentation for `app`, `req`, `res` and `Router`)
+* [Routing][routing]
+* [Using middleware][using-middleware]
 
 
 
+[api]: http://expressjs.com/en/4x/api.html
 [chrome]: https://www.google.com/chrome/
 [jade]: https://www.npmjs.com/package/jade
+[using-middleware]: http://expressjs.com/en/guide/using-middleware.html
 [node]: https://nodejs.org/en/
 [router]: http://expressjs.com/en/4x/api.html#router
+[routing]: http://expressjs.com/en/guide/routing.html
 [postman]: https://www.getpostman.com

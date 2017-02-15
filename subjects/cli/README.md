@@ -7,6 +7,7 @@
 - [TODO](#todo)
 - [What is the Command Line Interface (CLI)](#what-is-the-command-line-interface-cli)
 - [Why use it](#why-use-it)
+- [How do I use this ?](#how-do-i-use-this-)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
