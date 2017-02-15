@@ -20,6 +20,7 @@ var root = __dirname,
     buildDir = process.env.BUILD_DIR || 'build';
 
 var config = {
+  browser: process.env.BROWSER,
   port: process.env.PORT,
   liveReloadPort: process.env.LIVERELOAD_PORT
 };
