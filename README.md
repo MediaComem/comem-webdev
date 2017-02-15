@@ -2,28 +2,47 @@
 
 Materials for the COMEM+ web development courses.
 
-## Table of contents
 
-* Tooling
-  * [Command Line](subjects/cli/)
-  * [Git Introduction](subjects/git/)
+
+## Subjects
+
+### Tooling
+
+* [Command Line](subjects/cli/)
+* [Git](subjects/git/)
   * [Git Branching](subjects/git-branching/)
   * [Collaborating with Git on GitHub](subjects/git-collaborating/)
 
-* JavaScript
-  * [Introduction](subjects/js/)
+### Languages
 
-* Node.js
-  * [Introduction](subjects/node/)
+* [JavaScript](subjects/js/)
+* [Node.js](subjects/node/)
   * [npm (package manager)](subjects/npm/)
 
-* Frameworks
-  * [Express (Node.js web framework)](subjects/express/)
+### Web Services
 
-* REST APIs
-  * [REST APIs](subjects/rest/)
+* [REST APIs](subjects/rest/)
   * [REST Conventions](subjects/rest-conventions/)
 
-* Databases
-  * [MongoDB](subjects/mongodb/)
-  * [Mongoose (Node.js MongoDB client)](subjects/mongoose/)
+### Web Frameworks
+
+* [Express (Node.js web framework)](subjects/express/)
+
+### Databases
+
+* [MongoDB](subjects/mongodb/)
+  * [Mongoose (Node.js client)](subjects/mongoose/)
+
+### Cloud
+
+* [Heroku](subjects/heroku/)
+
+
+
+## Contributing
+
+See [CONTRIBUTING.md][contributing].
+
+
+
+[contributing]: CONTRIBUTING.md
