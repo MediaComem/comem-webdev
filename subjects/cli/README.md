@@ -17,7 +17,8 @@
   - [Command : `mkdir`](#command--mkdir)
 - [Naming things when using CLI](#naming-things-when-using-cli)
 - [For Windows Users](#for-windows-users)
-- [Manipulating the PATH](#manipulating-the-path)
+- [The `PATH` variable](#the-path-variable)
+  - [Using non-system command](#using-non-system-command)
 - [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
