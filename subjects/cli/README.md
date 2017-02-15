@@ -5,9 +5,19 @@
 
 
 - [What is the Command Line Interface (CLI)](#what-is-the-command-line-interface-cli)
-- [Why use it](#why-use-it)
-- [How do I use this ?](#how-do-i-use-this-)
-- [Install Git Bash (Windows users only)](#install-git-bash-windows-users-only)
+  - [Why use it](#why-use-it)
+  - [Open a CLI](#open-a-cli)
+  - [Install Git Bash (Windows users only)](#install-git-bash-windows-users-only)
+- [How to use the CLI](#how-to-use-the-cli)
+  - [Writing commands](#writing-commands)
+  - [Command : `help`](#command--help)
+  - [Command : `pwd`](#command--pwd)
+  - [Command : `ls`](#command--ls)
+  - [Command : `cd`](#command--cd)
+  - [Command : `mkdir`](#command--mkdir)
+- [Naming things when using CLI](#naming-things-when-using-cli)
+- [For Windows Users](#for-windows-users)
+- [Manipulating the PATH](#manipulating-the-path)
 - [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -75,7 +85,7 @@ $>
 ```
 These symbols represent **the prompt** and are used to indicate that you have the lead, that is the computer is waiting for you to type something for it to execute.
 
-> Note : To stop any running work and force the CLI to give you back the lead, hit the `Ctrl + c` command.
+> To stop any running process and force the CLI to give you back the lead, hit the `Ctrl + c` command.
 
 **For consistency, we will always use the `$>` symbols to represent the prompt.**
 
@@ -83,7 +93,7 @@ These symbols represent **the prompt** and are used to indicate that you have th
 
 Please note that, depending on your OS and your CLI, the prompt can be composed of different characters.
 
-When the computer's working, the `$` disappear and you won't have the lead until the `$` reappear again.
+When the computer's working, the prompt disappear and you won't have the lead until the prompt reappear again.
 
 ### Writing commands
 
@@ -94,17 +104,41 @@ The syntax for using command could be resumed like this:
 ```bash
 $> name [argument ...]
 ```
-
 **Note the use of space to separate the differents elements of a command.**
 
 * `name` represents the name of the command you want to execute
 * `[argument ...]` represents additionnal information has to how the command must be executed, **each of them separeted by a space**.
 
-<!-- slide-notes -->
+### Command : `help`
 
-A parameter is used to give additionel information to the computer has to how it must execute the command.
+The first command you'd like to type is the `help` command.
 
-This is the only possible way to list parameters when typing a command.
+As its name implies, it's designed to **give you some help** depending on the context.
+
+Executing the command alone will bring up a **list of available commands**.
+
+```bash
+$> help
+```
+Executing it with the name of a command will bring up **all you need to know about said command**:
+
+```bash
+$> help help
+```
+This `help` command is only available for **system's commands**, but most of the tools that you'll install offer help through the `--help` argument:
+
+```bash
+$> [command name] --help
+```
+#### Interactive helps
+
+Some helps or commands will print their result all over the screen, effectively hidding the prompt or the previous interactions.
+
+Usually, it means that these helps or commands have content that takes more than one screen to be shown.
+
+You can "scroll" down  line-by-line using the `Enter` key, each stroke printing one more line at the bottom of the screen.
+
+To quit these helps or commands, use the `q` key.
 
 ### Command : `pwd`
 
@@ -133,14 +167,14 @@ $> ls
 
 By default, `ls` doesn't list **hidden elements**.
 
-For `ls` to do that, you need to pass it the argument `--all` (or `-a`):
+If you want it to do that, you need to pass the argument `--all` (or `-a`):
 
 ```bash
 $> ls -a
 [lots and lots of files, including the hidden ones]
 ```
 
-### Command : `cd` (1/2)
+### Command : `cd`
 
 It's time to go out a little and move to another directory.
 
@@ -171,13 +205,15 @@ If there is more than one possible name with this letters, the CLI will do nothi
 ```bash
 $> pwd
 /Users/Batman
+
 $> cd Do
 # Hitting the Tab key will fail
+
 $> cd Do
 # Hitting it again list the possibilites
 Documents/ Downloads/
 ```
-### Command : `cd` (2/2)
+#### `cd` shortcuts
 
 At anytime and from anywhere, you can return to your **personnal folder** with the `cd` command, using the `~` shortcut as argument:
 
@@ -190,17 +226,48 @@ $> cd ~
 $> pwd
 /Users/Batman
 ```
-----
-**For Windows Users**
-
-To access your drives (`C:`, `D:`, etc), you can use either notation :
+You can also drag and drop a folder from your Explorer or your Finder to the CLI to see its absolute path automaticaly written.
 
 ```bash
-$> cd c:
-# Or
-$> cd /c
+$> cd
+# Drag'n'drop a folder from your Explorer/Finder, and...
+$> cd /Users/Batman/Pictures/
 ```
-### Naming things when using CLI
+
+### Command : `mkdir`
+
+You can create folders with the CLI.
+
+To do this, you need to use the `mkdir` command, passing it either...
+* the **name** of the folder to create, if you want to create it in the current directory
+* 
+```bash
+$> mkdir BatmobileSchematics
+```
+* the **path** to the folder, if you want to create it elsewhere
+* 
+```bash
+$> mkdir /Users/Batman/BatmobileSchematics
+```
+> All folders but the last should be already existing.
+
+<!-- slide-notes -->
+
+If you want to create a folder that should be inside another folder that doesn't exist, `mkdir` will raise an error by default.
+
+But if you pass it the `-p` argument, `mkdir` will create all the non-existing folders
+
+```bash
+$> ls
+Project/ Documents/ Files/
+
+$> mkdir Pictures/Vacation/Gotham/
+mkdir: Pictures: No such file or directory
+
+$> mkdir -p Pictures/Vacation/Gotham
+```
+
+## Naming things when using CLI
 
 You should avoid using (in folders et files name):
 
@@ -213,7 +280,7 @@ They can cause **errors** in some scripts or tools, and will inevitably complica
 # Will not work
 $> cd ./My Wonderful Folder/
 ```
-This command will be interpreted as a call to the `cd` command with three arguments : `./My`, `Wonderful` and `Folder/`.
+> This command will be interpreted as a call to the `cd` command with three arguments : `./My`, `Wonderful` and `Folder/`.
 
 You **can** use names with space, but you have to **escape** them first, using **quotation marks** around:
 
@@ -221,16 +288,48 @@ You **can** use names with space, but you have to **escape** them first, using *
 # This will work
 $> cd ./"My Wonderful Folder"/
 ```
+## For Windows Users
+
+**Reference to drives**
+
+To reference or use your drives (`C:`, `D:`, etc), you must use the following notation:
+
+```bash
+$> cd /c
+```
+----
+**Copy/Paste**
+
+Since the `Ctrl + c` key ise used to stop the current process, it can't be used as a shortcut for copy things from the CLI.
+
+Instead, Git Bash has two shortcuts custom shortcuts:
+* `Ctrl + Insert` to **copy** things from the CLI
+* `Shift + Insert` to **paste** things to the CLI
+
+> You can still use the **Right-clik > Paste** manipulation if you don't have the `Insert` key.
+
+## Manipulating the PATH
+
+When you type a command in the CLI, it will try to see **if it knows this command**, by looking in some folders to see if there is an **executable file that matchs the requested name**.
+
+```bash
+$> rubbish
+bash: rubbish: command not found
+```
+> This means that the CLI failed to found the executable named `rubbish` in any of the folders where it looked.
+
+The list of the folders (and their paths) in which the CLI searches is stored in the `PATH` variable, each of them being separated with a `:`.
+
+You can print the content of your `PATH` variable to see this list:
+
+```bash
+$> echo $PATH
+/usr/local/bin:/bin:/usr/bin:Users/Batman/BatRadar/bin
+```
 
 ## TODO
 
-* copy-paste on Windows
-* getting help (--help)
-* navigating the filesystem (cd <path>, .., ~, /, auto-completion), Windows filesystem root (/c on Git Bash)
-* creating directories with mkdir -p
 * PATH, (export PATH="/path/to/bin:$PATH")
-* interactive help in commands (press q to quit)
-* interrupting running commands (ctrl-c)
 * vim basics (some tools automatically open vim: do not panic, command vs insert mode, esc, i, :wq, :q!) 
 
 [gitbash]: https://git-for-windows.github.io/
