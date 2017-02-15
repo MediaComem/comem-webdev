@@ -343,7 +343,10 @@ You could also run the command from anywhere by writing **the path to the execut
 ```bash
 $> /Users/Batman/Application/Batsignal/batsignal
 ```
-> If you want to try, you can [downaload the batsignal script](batsignal) !
+
+<!-- slide-notes -->
+
+> If you want to try, you can [downaload the batsignal script](script/batsignal) !
 
 ## TODO
 
