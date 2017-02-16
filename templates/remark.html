@@ -100,13 +100,25 @@
         padding-right: 35px;
         border-right: 5px solid khaki;
       }
+
+      #logo {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      #logo img {
+        height: 60px;
+      }
     </style>
   </head>
   <body>
+    <span id='logo' style='display:none;'><img src='../heig.png' /></span>
     <textarea id='source'>
 {{{source}}}
     </textarea>
     <script src='https://remarkjs.com/downloads/remark-latest.min.js'></script>
+    <script src='https://code.jquery.com/jquery-3.1.1.slim.min.js' integrity='sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=' crossorigin='anonymous'></script>
     <script>
       var slideshow = remark.create({
         navigation: {
@@ -116,6 +128,8 @@
         highlightSpans: true,
         countIncrementalSlides: false
       });
+
+      $('#logo').remove().prependTo($('.remark-slide-content')).show();
     </script>
   </body>
 </html>
