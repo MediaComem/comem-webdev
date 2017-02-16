@@ -427,10 +427,6 @@ But, ideally, you would want to **just type the name of the command**, and see i
 
 For this, you need to **change the value** of your `PATH` variable.
 
-<!-- slide-notes -->
-
-> If you want to try, you can [downaload the batsignal script](script/batsignal) !
-
 ### Updating the `PATH` variable
 
 To add a new path in your `PATH` variable, you have to edit a special file, used by your CLI. This file depends upon the CLI you are using:
