@@ -343,14 +343,45 @@ You could also run the command from anywhere by writing **the path to the execut
 ```bash
 $> /Users/Batman/Application/Batsignal/batsignal
 ```
+But, ideally, you would want to **just type the name of the command**, and see it executed.
+
+For this, you need to **change the value** of your `PATH` variable.
 
 <!-- slide-notes -->
 
 > If you want to try, you can [downaload the batsignal script](script/batsignal) !
 
+### Updating the `PATH` variable
+
+To add a new path in your `PATH` variable, you have to edit a special file, used by your CLI.
+
+The file you need to edit depends upon the CLI you are using
+
+CLI | File to edit
+--- | ---
+Terminal / Git Bash | `~/.bashrc`
+[ZSH][zsh-site] | `~/.zshrc`
+
+Open up the adequate file (here `.bashrc`) from the CLI with `vim`...
+
+```bash
+$> vim ~/.bashrc
+```
+... and add this line at the bottom of your file (use `i` to enter _insert_ mode)
+
+```vim
+export PATH="path/to/directory:$PATH"
+```
+...with `path/to/directory` being **the path to the directory** that contains the command(s), **not the path to the command itself**.
+
+Save the file (`Esc` then `:wq`) and restart your CLI.
+
+## VIM
+
+
 ## TODO
 
-* PATH, (export PATH="/path/to/bin:$PATH")
 * vim basics (some tools automatically open vim: do not panic, command vs insert mode, esc, i, :wq, :q!) 
 
 [gitbash]: https://git-for-windows.github.io/
+[zsh-site]: http://zsh.sourceforge.net/
