@@ -10,14 +10,19 @@
 * Git branching: show git log after cloning to explain what the state of the project is at the beginning (there are a few existing commits)
 * Git branching: create diagrams for the 2 conflict examples at the end
 * Collaborating with git: when adding a collaborator on GitHub, do not forget to accept the invitation (sent by e-mail)
+* Node: add nested callbacks example (in the form of a question?)
+* Node: return in callback example
+* npm: add express example at the end
+* Heroku: add note on git hooks in "How?" slide
+* Express: always send a response (e.g. 500 when error occurs)
 
 
 
 ## Build
 
-* Template: add logo
-* Template: add back link to return to index
-* Template: auto-add target="\_blank" to links
+* Template: back link to return to index
+* Template: auto target="\_blank" to links
+* Template: breadcrumbs
 
 
 
