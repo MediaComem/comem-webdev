@@ -32,6 +32,7 @@
   - [Custom scripts](#custom-scripts)
   - [Scripts and the PATH](#scripts-and-the-path)
 - [Resources](#resources)
+- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -597,6 +598,12 @@ Hit CTRL-C to stop the server
   https://docs.npmjs.com/cli/npm
 * package.json format
   https://docs.npmjs.com/files/package.json
+
+
+
+## TODO
+
+* https://docs.npmjs.com/getting-started/fixing-npm-permissions
 
 
 
