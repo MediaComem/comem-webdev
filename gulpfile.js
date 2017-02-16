@@ -235,7 +235,7 @@ function convertMarkdownFileToRemarkSlides(file, enc, callback) {
   var subjectTitle = subjectTitleMatch ? subjectTitleMatch[1] : 'Slides';
 
   var options = {
-    gridContainerClass: 'container'
+    breadcrumbs: true
   };
 
   md2remark(markdown, options).then(function(remarkMarkdown) {
