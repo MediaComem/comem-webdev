@@ -1,5 +1,7 @@
 # Command Line Introduction
 
+<!-- slide-front-matter class: center, middle -->
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
@@ -17,9 +19,12 @@
   - [Command : `mkdir`](#command--mkdir)
 - [Naming things when using CLI](#naming-things-when-using-cli)
 - [For Windows Users](#for-windows-users)
+- [VIM](#vim)
+  - [Normal mode](#normal-mode)
+  - [Command mode](#command-mode)
 - [The `PATH` variable](#the-path-variable)
   - [Using non-system command](#using-non-system-command)
-- [TODO](#todo)
+  - [Updating the `PATH` variable](#updating-the-path-variable)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -57,13 +62,13 @@ You can use it right away, as it's the _de-facto_ standard.
 
 On **Windows**, the default CLI is called **Invite de commandes** or **cmd**.
 
-But it does not use the same syntax than UNIX-like CLI have _(plus, it's bad)_.
+But it does not use the same syntax than UNIX-like CLI _(plus, it's bad)_.
 
 > **You'll need to install an alternative.**
 
 ### Install Git Bash (Windows users only)
 
-You're going to install **Git Bash**, an alternate CLI that emulates a UNIX-like terminal on Windows.
+You're going to install **Git Bash**, an alternative CLI that emulates a UNIX-like terminal on Windows.
 
 <!-- slide-column 30 -->
 
@@ -77,6 +82,10 @@ When it's done, install the software, without changing any default options.
 
 Then, search and open the **Git Bash** software.
 
+<!-- slide-container -->
+
+> Installing **Git Bash** will also install **Git** and **Git GUI** _(see the slide-deck about Git for more information)_.
+
 ## How to use the CLI
 
 When you open the CLI you should find a blank screen with something like this:
@@ -86,13 +95,13 @@ $>
 ```
 These symbols represent **the prompt** and are used to indicate that you have the lead, that is the computer is waiting for you to type something for it to execute.
 
-> To stop any running process and force the CLI to give you back the lead, hit the `Ctrl + c` command.
+> At anytime, hit the `Ctrl + c` command to stop any running task and get the lead back.
 
 **For consistency, we will always use the `$>` symbols to represent the prompt.**
 
 <!-- slide-notes -->
 
-Please note that, depending on your OS and your CLI, the prompt can be composed of different characters.
+Please note that, depending on your OS and your CLI, **the prompt can be composed of different characters**.
 
 When the computer's working, the prompt disappear and you won't have the lead until the prompt reappear again.
 
@@ -129,11 +138,11 @@ $> help help
 This `help` command is only available for **system's commands**, but most of the tools that you'll install offer help through the `--help` argument:
 
 ```bash
-$> [command name] --help
+$> [command-name] --help
 ```
 #### Interactive helps
 
-Some helps or commands will print their result all over the screen, effectively hidding the prompt or the previous interactions.
+Some helps or commands will print their result all over the screen, effectively hidding the prompt or previous interactions.
 
 Usually, it means that these helps or commands have content that takes more than one screen to be shown.
 
@@ -145,9 +154,11 @@ To quit these helps or commands, use the `q` key.
 
 When the CLI starts, it places you in your **personnal directory**.
 
-From there you can navigate your filesystem to go to other directories.
+From there you can navigate your filesystem to go to other directories _(more on that later)_.
 
-But first, you might want to check **where** you currently are. To do this, use the `pwd` command:
+But first, you might want to check **where** you currently are.
+
+To do this, use the `pwd` command:
 
 ```bash
 $> pwd
@@ -218,24 +229,32 @@ Documents/ Downloads/
 ```
 #### `cd` shortcuts
 
-At anytime and from anywhere, you can return to your **personnal directory** with the `cd` command, using the `~` shortcut as argument:
-
-> To type the `~` character, use this combination:
-> * `AltGr + ^` on **Windows**
-> * `Alt + n` on **Mac**
-
+* To go back one directory at a time, use the `..` shortcut (**don't forget the space!**):
 ```bash
-$> cd ~
+$> pwd
+/Users/Batman/Documents
+$> cd ..
 $> pwd
 /Users/Batman
 ```
-You can also drag and drop a directory from your Explorer or your Finder to the CLI to see its absolute path automaticaly written.
 
+* You can also drag and drop a directory from your Explorer or your Finder to the CLI to see its absolute path automaticaly written.
 ```bash
 $> cd
 # Drag'n'drop a directory from your Explorer/Finder, and...
 $> cd /Users/Batman/Pictures/
 ```
+
+* At anytime and from anywhere, you can return to your **personnal directory** with the `cd` command, using the `~` shortcut as argument:
+```bash
+$> cd ~
+$> pwd
+/Users/Batman
+```
+<!-- slide-notes -->
+> To type the `~` character, use this combination:
+> * `AltGr + ^` on **Windows**
+> * `Alt + n` on **Mac**
 
 ### Command : `mkdir`
 
@@ -250,7 +269,7 @@ $> mkdir BatmobileSchematics
 * the **path** to the directory, if you want to create it elsewhere
 * 
 ```bash
-$> mkdir /Users/Batman/BatmobileSchematics
+$> mkdir /Users/Batman/Documents/TopSecret/BatmobileSchematics
 ```
 > All directories but the last should be already existing.
 
@@ -281,24 +300,25 @@ They can cause **errors** in some scripts or tools, and will inevitably complica
 
 ```bash
 # Will not work
-$> cd ./My Wonderful Directory/
+$> cd ./Why So Serious/
 ```
-> This command will be interpreted as a call to the `cd` command with three arguments : `./My`, `Wonderful` and `Directory/`.
+> This command will be interpreted as a call to the `cd` command with three arguments : `./Why`, `So` and `Serious/`.
 
 You **can** use names with space, but you have to **escape** them first, using **quotation marks** around:
 
 ```bash
 # This will work
-$> cd ./"My Wonderful Directory"/
+$> cd ./"Why So Serious"/
 ```
 ## For Windows Users
 
 **Reference to drives**
 
-To reference or use your drives (`C:`, `D:`, etc), you must use the following notation:
+To reference or use your drives (`C:`, `D:`, etc), use the following notation:
 
 ```bash
 $> cd /c
+$> cd /d
 ```
 ----
 **Copy/Paste**
@@ -309,11 +329,70 @@ Instead, Git Bash has two shortcuts custom shortcuts:
 * `Ctrl + Insert` to **copy** things from the CLI
 * `Shift + Insert` to **paste** things to the CLI
 
-> You can still use the **Right-clik > Paste** manipulation if you don't have the `Insert` key.
+> You can still use the **Right-clik > Paste** manipulation if you don't have an `Insert` key.
+
+## VIM
+
+<!-- slide-front-matter class: center, middle -->
+
+Some tools or command could open the infamous **VIM**, which is a text-based text editor bundled into your CLI.
+
+If this happens (_and it will_), there's **one** imperative rule to follow:
+
+**DO NOT PANIC!**
+
+### Generalities
+
+VIM can be unsetteling at first, until you know how it works.
+
+The first thing to understand whith VIM is that it has three modes :
+* **Normal** mode (the one you're in when VIM starts)
+* **Command** mode (the one to use to save or quit)
+* **Insert** mode (the one to use to insert text)
+
+To go into each mode use this keys :
+
+| From           | To      | Key   |
+| :------------- | :------ | :---- |
+| Normal         | Command | `:`   |
+| Normal         | Insert  | `i`   |
+| Command/Insert | Normal  | `Esc` |
+
+### Normal mode
+
+The **Normal** mode of VIM is the one you'r in when VIM starts. In this mode, you can move the cursor around with the arrow keys.
+
+You can also use some commands to interact with the text:
+
+| Command | Effect                                                           |
+| :------ | :--------------------------------------------------------------- |
+| `:`     | Enter **Command** mode.                                          |
+| `i`     | Enter **Insert** mode.                                           |
+| `x`     | Delete the first character after the cursor position.            |
+| `dw`    | Delete a word, with the cursor standing before the first letter. |
+| `dd`    | Delete the complete line the cursor is on.                       |
+| `u`     | Undo the last command.                                           |
+
+> At anytime, you can hit the `Esc` key to go back to the **Normal** mode.
+
+### Command mode
+
+The **Command** mode, which you can only access from the **Normal** mode, is the one you'll use to manipulate the file you're in.
+
+To enter **Command** mode, hit the `:` key.
+
+From there, you can use some commands:
+
+| Command     | Effect                                                     |
+| :---------- | :--------------------------------------------------------- |
+| `q`         | Quit VIM (will fail if you have unsaved modifications).    |
+| `w`         | Save the file and all its modifications.                   |
+| `q!`        | Force VIM to quit (any unsaved modification will be lost). |
+| `wq` or `x` | Save the file then quit VIM.                               |
 
 ## The `PATH` variable
 
-When you type a command in the CLI, it will try to see **if it knows this command**, by looking in some directories to see if there is an **executable file that matchs the requested name**.
+When you type a command in the CLI, it will try to see **if it knows this command**, by looking in some directories to see if there is an **executable file that matches the requested name**.
 
 ```bash
 $> rubbish
@@ -354,14 +433,12 @@ For this, you need to **change the value** of your `PATH` variable.
 
 ### Updating the `PATH` variable
 
-To add a new path in your `PATH` variable, you have to edit a special file, used by your CLI.
+To add a new path in your `PATH` variable, you have to edit a special file, used by your CLI. This file depends upon the CLI you are using:
 
-The file you need to edit depends upon the CLI you are using
-
-CLI | File to edit
---- | ---
-Terminal / Git Bash | `~/.bashrc`
-[ZSH][zsh-site] | `~/.zshrc`
+| CLI                 | File to edit |
+| :------------------ | :----------- |
+| Terminal / Git Bash | `~/.bashrc`  |
+| [ZSH][zsh-site]     | `~/.zshrc`   |
 
 Open up the adequate file (here `.bashrc`) from the CLI with `vim`...
 
@@ -376,13 +453,6 @@ export PATH="path/to/directory:$PATH"
 ...with `path/to/directory` being **the path to the directory** that contains the command(s), **not the path to the command itself**.
 
 Save the file (`Esc` then `:wq`) and restart your CLI.
-
-## VIM
-
-
-## TODO
-
-* vim basics (some tools automatically open vim: do not panic, command vs insert mode, esc, i, :wq, :q!) 
 
 [gitbash]: https://git-for-windows.github.io/
 [zsh-site]: http://zsh.sourceforge.net/
