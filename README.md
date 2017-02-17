@@ -35,6 +35,7 @@ Materials for the COMEM+ web development courses.
 
 * [JavaScript](subjects/js/)
   * [JavaScript closures](subjects/js-closure/)
+  * [Angular](subjects/angular/) (frontend web application framework)
 * [Node.js](subjects/node/)
   * [npm (package manager)](subjects/npm/)
   * [Express (Node.js web framework)](subjects/express/)
