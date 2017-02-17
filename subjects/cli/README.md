@@ -20,6 +20,7 @@
 - [Naming things when using CLI](#naming-things-when-using-cli)
 - [For Windows Users](#for-windows-users)
 - [VIM](#vim)
+  - [Generalities](#generalities)
   - [Normal mode](#normal-mode)
   - [Command mode](#command-mode)
 - [The `PATH` variable](#the-path-variable)
