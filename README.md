@@ -37,6 +37,9 @@ Materials for the COMEM+ web development courses.
 
 * [Heroku](subjects/heroku/)
 
+### Advanced subjects
+
+* [JS - Closure](subjects/js-closure)
 
 
 ## Contributing
