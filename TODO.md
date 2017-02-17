@@ -4,6 +4,7 @@
 
 ## Slides
 
+* Glossary
 * CLI: use actual example `command arg1 arg2 arg3` instead of Unix syntax (`command [argument ...]`)
 * CLI: also explain traditional option format: `command -v -o value --option value`
 * CLI: explain `cd /path/to/projects`
