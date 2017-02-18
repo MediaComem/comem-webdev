@@ -150,7 +150,11 @@
         countIncrementalSlides: false
       });
 
+      // Remove logo from body and add it to each slide
       $('#logo').remove().prependTo($('.remark-slide-content')).show();
+
+      // Make all external links open a new window
+      $('a[href]').not('[href^="#"]').attr('target', '_blank');
     </script>
   </body>
 </html>
