@@ -39,7 +39,8 @@ _.defaults(config, {
 });
 
 var src = {
-  assets: [ 'subjects/**/*.*', '!**/*.md', '!**/*.odg', '!**/*.odg#', '!**/node_modules/**' ],
+  assets: [ 'assets/**/*.*' ],
+  content: [ 'subjects/**/*.*', '!**/*.md', '!**/*.odg', '!**/*.odg#', '!**/node_modules/**' ],
   indexTemplate: 'templates/index.html',
   mainReadme: 'README.md',
   remarkTemplate: 'templates/remark.html',
@@ -55,6 +56,12 @@ gulp.task('build-assets', function() {
     .pipe(copyAssets());
 });
 
+gulp.task('build-content', function() {
+  return gulp
+    .src(src.content)
+    .pipe(copyContent());
+});
+
 gulp.task('build-index', function() {
   return buildIndex();
 });
@@ -65,7 +72,7 @@ gulp.task('build-slides', function() {
     .pipe(buildSlides());
 });
 
-gulp.task('build', [ 'build-assets', 'build-index', 'build-slides' ]);
+gulp.task('build', [ 'build-assets', 'build-content', 'build-index', 'build-slides' ]);
 
 gulp.task('clean', function() {
   return del([ 'build' ]);
@@ -104,8 +111,16 @@ gulp.task('serve', function() {
 gulp.task('watch-assets', function() {
   return watch(src.assets, function(file) {
     return gulp
-      .src(file.path, { base: 'subjects' })
+      .src(file.path, { base: 'assets' })
       .pipe(copyAssets());
+  });
+});
+
+gulp.task('watch-content', function() {
+  return watch(src.content, function(file) {
+    return gulp
+      .src(file.path, { base: 'subjects' })
+      .pipe(copyContent());
   });
 });
 
@@ -140,7 +155,7 @@ gulp.task('watch-slides-template', function() {
 });
 
 gulp.task('watch', function() {
-  return runSequence([ 'watch-assets', 'watch-index', 'watch-index-template', 'watch-slides', 'watch-slides-template' ]);
+  return runSequence([ 'watch-assets', 'watch-content', 'watch-index', 'watch-index-template', 'watch-slides', 'watch-slides-template' ]);
 });
 
 gulp.task('default', function() {
@@ -175,11 +190,22 @@ var buildSlides = chain(function(stream) {
     .pipe(connect.reload());
 });
 
-var copyAssets = chain(function(stream) {
+var copyContent = chain(function(stream) {
   var dest = path.join(buildDir, 'subjects');
   return stream
     .pipe(logFile(function(file) {
       var relativePath = path.relative('subjects', file.path);
+      util.log('Copied ' + util.colors.magenta(path.join(dest, relativePath)));
+    }))
+    .pipe(gulp.dest(dest))
+    .pipe(connect.reload());
+});
+
+var copyAssets = chain(function(stream) {
+  var dest = path.join(buildDir, 'assets');
+  return stream
+    .pipe(logFile(function(file) {
+      var relativePath = path.relative('assets', file.path);
       util.log('Copied ' + util.colors.magenta(path.join(dest, relativePath)));
     }))
     .pipe(gulp.dest(dest))
