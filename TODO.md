@@ -22,7 +22,6 @@
 ## Build
 
 * Template: back link to return to index
-* Template: breadcrumbs
 * PDF
 
 
