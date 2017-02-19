@@ -104,7 +104,7 @@ var fs = require('fs');
 
 console.log('Hello');
 
-fs.readFile('random.txt', { encoding: 'utf-8' }, function(err, result) {
+fs.readFile('random.txt', 'utf-8', function(err, result) {
   console.log('Result: ' + result);
   console.log('Done');
 });
@@ -151,7 +151,7 @@ Although I/O operations are non-blocking, **your code always executes in a singl
 ```js
 var value = 1;
 
-fs.readFile('five.txt', { encoding: 'utf-8' }, function(err, result) {
+fs.readFile('five.txt', 'utf-8', function(err, result) {
   value = value + parseFloat(result);
 });
 
@@ -220,7 +220,7 @@ There are two ways that the function can be called back:
 You should never forget to check for errors:
 
 ```js
-fs.readFile('name.txt', { encoding: 'utf-8' }, function(err, data) {
+fs.readFile('name.txt', 'utf-8', function(err, data) {
 * if (err) {
 *   console.warn('Oops, could not read the file because: ' + err.message);
 *   return;
