@@ -1,12 +1,5 @@
 # Slides Webdoc
 
-## JavaScript
-
-* 9 : `typeof aVariable === 'array'` ? Dans la slide d'avant, tu dis que c'est égal à `object`
-* 13 : Problème au niveau du commentaire de `compute`
-* 14 : L'appelation `Functionnal programming` ne serait clairement pas connue de tous (déjà que moi, ça me parle moyen ^^)
-* 19 : on which they **are** used.
-
 ## npm
 
 * 6 : Être plus explicite sur ce qu'est un package

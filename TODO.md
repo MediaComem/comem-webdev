@@ -7,7 +7,6 @@
 * CLI: use actual example `command arg1 arg2 arg3` instead of Unix syntax (`command [argument ...]`)
 * CLI: also explain traditional option format: `command -v -o value --option value`
 * CLI: explain `cd /path/to/projects`
-* JavaScript: turn compute function example into an exercise with CodePen
 * Git branching: show git log after cloning to explain what the state of the project is at the beginning (there are a few existing commits)
 * Git branching: create diagrams for the 2 conflict examples at the end
 * Git branching: checkout conflict

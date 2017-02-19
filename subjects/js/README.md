@@ -196,7 +196,7 @@ aVariable = true;
 console.log(typeof aVariable); // "boolean"
 
 aVariable = [ 1, 2, 3 ];
-console.log(typeof aVariable); // "array"
+console.log(typeof aVariable); // "object"
 
 aVariable = {
   aProperty: "aValue"
@@ -285,35 +285,50 @@ return function(n) {
 A function can take another function as an argument.
 
 ```js
+function hello(name) {
+  console.log('Hello ' + name + '!');
+}
+
+function callIt(func) {
+  func('World');
+}
+
+callIt(hello); // "Hello World!"
+```
+
+#### Function as argument exercise
+
+```js
 // Let's define a couple of arithmetic function
 function add(a, b) {
   return a + b;
 }
-
 function multiply(a, b) {
   return a * b;
 }
 
-// Define a function that takes two numbers and a 
+// Define a function that takes two numbers
 // and a function to apply to those numbers
-function compute(a, b, operation) {
-  // Call the operation function with the two numbers
-  var result = operation(a, b);
-  // Return the result
-  return result;
+function compute() {
+  // Give me some arguments and implement me!
 }
 
-// We can pass "add" to the "compute" function
+// Call compute with "add"
 var value = compute(2, 4, add);
 console.log(value); // 6
 
+// Call compute with "multiply"
 value = compute(2, 4, multiply);
 console.log(value); // 8
 ```
 
+Try to [implement it!][ex-function-as-argument]
+
+Use the console in your browser's developer tools to see what the `console.log` calls print.
 
 
-### Functional programming
+
+### Transforming data with functions
 
 These properties of functions enable powerful functional programming patterns:
 
@@ -429,7 +444,7 @@ logThings([ 'apple', 'banana', 'pear' ]);
 ### The block scope
 
 The `let` and `const` keywords introduced in **ES6** create **block-scoped** variables,
-only visible in the block, statement or expression on which they is used.
+only visible in the block, statement or expression on which they are used.
 
 ```js
 function logThings(things) {
@@ -547,6 +562,7 @@ Just **don't do it**.
 
 [babel]: http://babeljs.io
 [es]: https://en.wikipedia.org/wiki/ECMAScript
+[ex-function-as-argument]: http://codepen.io/AlphaHydrae/pen/dNBpPv?editors=0010
 [first-class-functions]: https://en.wikipedia.org/wiki/First-class_function
 [js-arrow-functions]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
 [js-async]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
