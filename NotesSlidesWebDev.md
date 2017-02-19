@@ -1,17 +1,5 @@
 # Slides Webdoc
 
-## Git
-
-* 6 / 7 / 8 : Virer tout le texte et ne laisser que le schéma et la liste ?
-* 10 : Ne laisser que les schémas, le reste peut être dit à l'oral
-* 12 : Pas convaincu qu'il faille parler de checksum ou SHA-1
-* 14 : Indiquer que par défaut, c'est caché de toute façon
-* 18 / 20 / 21 : Enlever le texte et le dire à l'oral ?
-* 34 / 35 : Pas convaincu. Les gens les utilisent vraiment ces commandes `git rm` et `git mv` ?
-* 38 - 42 : Pas sûr qu'il soit utile de monter ça. Peut-être juste leur indiquer qu'il y a cette info pour ceux qui sont intéressés.
-* 44 : Indiquer que dans ce cas-là, le changement est perdu pour de bon.
-* 45 : L'utilisation de `git reset` est surtout utilisée pour virer un fichier d'un commit, non ?
-
 ## Git branching
 
 * 6 : Montrer le git branch sur la slide 9.
