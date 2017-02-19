@@ -62,6 +62,12 @@ This will convert the slides to PDF and save them in the `pdf` directory.
 Apparently, webfonts (custom fonts loaded through CSS) are somewhat buggy in PhantomJS.
 Before running this script, you should install the custom fonts used in the slides on your system (they are in the `assets/fonts` directory).
 
+### Create a new subject
+
+* Create a new directory under `subjects`, e.g. `subjects/space-time-continuum`
+* Copy the [subject template][subject-template] at `templates/README.md` into the new directory and edit as needed
+* Create a `subjects/space-time-continuum/images` directory if you need images
+
 
 
 ## Documentation
@@ -105,3 +111,4 @@ exports.sourceVersion = 'master';
 [phantomjs]: http://phantomjs.org
 [remark]: https://remarkjs.com
 [remark-syntax]: https://github.com/gnab/remark/wiki/Markdown
+[subject-template]: templates/README.md
