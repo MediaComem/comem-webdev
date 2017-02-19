@@ -36,7 +36,7 @@ echo
 
 echo "Building..."
 echo
-BUILD_DIR="$TMP_DIR" gulp build
+BUILD_DIR="$TMP_DIR" npm run build
 echo
 
 

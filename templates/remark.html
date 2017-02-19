@@ -3,10 +3,12 @@
   <head>
     <title>{{ title }}</title>
     <meta charset='utf-8'>
-    <link rel='stylesheet' href='../../assets/unsemantic-grid-desktop.css'>
-    <link rel='stylesheet' href='../../assets/fonts/YanoneKaffeesatz/YanoneKaffeesatz.css'>
-    <link rel='stylesheet' href='../../assets/fonts/DroidSerif/DroidSerif.css'>
-    <link rel='stylesheet' href='../../assets/fonts/UbuntuMono/UbuntuMono.css'>
+    <link rel='stylesheet' href='{{ basePath }}/assets/unsemantic-grid-desktop.css'>
+    {{#if webfonts}}
+    <link rel='stylesheet' href='{{ basePath }}/assets/fonts/YanoneKaffeesatz/YanoneKaffeesatz.css'>
+    <link rel='stylesheet' href='{{ basePath }}/assets/fonts/DroidSerif/DroidSerif.css'>
+    <link rel='stylesheet' href='{{ basePath }}/assets/fonts/UbuntuMono/UbuntuMono.css'>
+    {{/if}}
     <style>
       body {
         font-family: 'Droid Serif';
@@ -133,8 +135,8 @@
     <textarea id='source'>
 {{{source}}}
     </textarea>
-    <script src='../../assets/remark.min.js'></script>
-    <script src='../../assets/jquery-3.1.1.slim.min.js' integrity='sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=' crossorigin='anonymous'></script>
+    <script src='{{ basePath }}/assets/remark.min.js'></script>
+    <script src='{{ basePath }}/assets/jquery-3.1.1.slim.min.js' integrity='sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=' crossorigin='anonymous'></script>
     <script>
       var slideshow = remark.create({
         highlightLines: true,

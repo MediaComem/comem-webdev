@@ -16,13 +16,17 @@ const through = require('through2');
 const util = require('gulp-util');
 const watch = require('gulp-watch');
 
+const generatePdfFromSlides = require('./pdf');
+
 const root = __dirname;
-const buildDir = process.env.BUILD_DIR || 'build';
 
 const config = {
   browser: process.env.BROWSER,
+  buildDir: process.env.BUILD_DIR || 'build',
+  liveReloadPort: process.env.LIVERELOAD_PORT,
+  pdfBuildDir: process.env.PDF_BUILD_DIR || 'pdf',
   port: process.env.PORT,
-  liveReloadPort: process.env.LIVERELOAD_PORT
+  webfonts: true
 };
 
 try {
@@ -43,6 +47,7 @@ const src = {
   content: [ 'subjects/**/*.*', '!**/*.md', '!**/*.odg', '!**/*.odg#', '!**/node_modules/**' ],
   indexTemplate: 'templates/index.html',
   mainReadme: 'README.md',
+  pdfSource: 'tmp/pdf/subjects/*/**/index.html',
   remarkTemplate: 'templates/remark.html',
   slides: [ 'subjects/**/*.md', '!subjects/**/node_modules/**/*.md' ]
 };
@@ -74,8 +79,16 @@ gulp.task('build-slides', function() {
 
 gulp.task('build', [ 'build-assets', 'build-content', 'build-index', 'build-slides' ]);
 
-gulp.task('clean', function() {
+gulp.task('clean-build', function() {
   return del([ 'build' ]);
+});
+
+gulp.task('clean-pdf', function() {
+  return del([ 'tmp/pdf' ]);
+});
+
+gulp.task('clean', function() {
+  return runSequence([ 'clean-build', 'clean-pdf' ]);
 });
 
 gulp.task('doctoc', function() {
@@ -89,6 +102,12 @@ gulp.task('doctoc', function() {
     .pipe(gulp.dest('subjects'));
 });
 
+gulp.task('generate-pdf', [ 'build' ], function() {
+  return gulp
+    .src(src.pdfSource)
+    .pipe(generatePdf());
+});
+
 gulp.task('open', function() {
   gulp
     .src(__filename)
@@ -98,9 +117,15 @@ gulp.task('open', function() {
     }));
 });
 
+gulp.task('pdf', function() {
+  config.buildDir = 'tmp/pdf';
+  config.webfonts = false;
+  return runSequence([ 'clean-build', 'clean-pdf' ], 'generate-pdf', 'clean-pdf');
+});
+
 gulp.task('serve', function() {
   return connect.server({
-    root: buildDir,
+    root: config.buildDir,
     livereload: {
       port: config.liveReloadPort
     },
@@ -159,11 +184,11 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', function() {
-  return runSequence('clean', 'build', [ 'serve', 'watch'], 'open');
+  return runSequence('clean-build', 'build', [ 'serve', 'watch'], 'open');
 });
 
 function buildIndex() {
-  const dest = buildDir;
+  const dest = config.buildDir;
   return gulp
     .src(src.mainReadme)
     .pipe(markdown())
@@ -178,10 +203,9 @@ function buildIndex() {
 };
 
 const buildSlides = chain(function(stream) {
-  const dest = path.join(buildDir, 'subjects');
+  const dest = path.join(config.buildDir, 'subjects');
   return stream
     .pipe(through.obj(convertMarkdownFileToRemarkSlides))
-    .pipe(rename(renameMarkdownToHtml))
     .pipe(logFile(function(file) {
       const relativePath = path.relative('subjects', file.path);
       util.log('Generated ' + util.colors.magenta(path.join(dest, relativePath)));
@@ -191,7 +215,7 @@ const buildSlides = chain(function(stream) {
 });
 
 const copyContent = chain(function(stream) {
-  const dest = path.join(buildDir, 'subjects');
+  const dest = path.join(config.buildDir, 'subjects');
   return stream
     .pipe(logFile(function(file) {
       const relativePath = path.relative('subjects', file.path);
@@ -202,7 +226,7 @@ const copyContent = chain(function(stream) {
 });
 
 const copyAssets = chain(function(stream) {
-  const dest = path.join(buildDir, 'assets');
+  const dest = path.join(config.buildDir, 'assets');
   return stream
     .pipe(logFile(function(file) {
       const relativePath = path.relative('assets', file.path);
@@ -210,6 +234,21 @@ const copyAssets = chain(function(stream) {
     }))
     .pipe(gulp.dest(dest))
     .pipe(connect.reload());
+});
+
+const generatePdf = chain(function(stream) {
+  const base = 'tmp/pdf/subjects';
+  const dest = path.relative(__dirname, config.pdfBuildDir);
+  return stream
+    .pipe(through.obj((file, enc, callback) => {
+      const relativePath = path.relative(base, file.path);
+      const destPath = `${path.dirname(relativePath)}.pdf`;
+      const pdfFile = path.join(config.pdfBuildDir, destPath);
+      generatePdfFromSlides(file.path, pdfFile).then(() => {
+        util.log(`Generated ${util.colors.magenta(pdfFile)}`);
+        callback(undefined, file)
+      }, callback);
+    }));
 });
 
 function loadIndexPageTemplate() {
@@ -229,13 +268,7 @@ function logFile(func) {
 }
 
 function renameMarkdownToHtml(file) {
-  if (file.basename == 'README') {
-    file.basename = 'index';
-  } else {
-    file.dirname = path.join(file.dirname, file.basename.toLowerCase());
-    file.basename = 'index';
-  }
-
+  file.basename = 'index';
   file.extname = '.html';
 }
 
@@ -255,8 +288,34 @@ function insertIntoIndexPage(file, enc, callback) {
 
 function convertMarkdownFileToRemarkSlides(file, enc, callback) {
 
-  const markdown = file.contents.toString();
+  let isReadme = false;
+  let markdown = file.contents.toString();
 
+  const basenameWithoutExt = path.basename(file.path, '.md');
+  if (basenameWithoutExt == 'README') {
+    isReadme = true;
+    // Convert subjects/a/b/c/README.md to subjects/a/b/c/index.html
+    file.path = path.join(path.dirname(file.path), 'index.html');
+  } else {
+    // Convert subjects/a/b/c/INSTALL.md to subjects/a/b/c/install/index.html
+    file.path = path.join(path.dirname(file.path), basenameWithoutExt.toLowerCase(), 'index.html');
+
+    // Update relative Markdown links to take into account the new directory
+    markdown = markdown
+      .replace(/(\[[^\]]+\]\(\.\.\/)/g, '$1../') // "[foo](../something)" => "[foo](../../something)"
+      .replace(/^(\[[^\]]+\]:\s*\.\.\/)/g, '$1../'); // "[foo]: ../something" => "[foo]: ../../something"
+  }
+
+  // Determine depth of Markdown file compared to subjects directory
+  // (subjects/a/index.html has depth 1, subjects/a/b/index.html has depth 2, etc)
+  let depth = 0;
+  let tmpPath = path.relative('subjects', path.dirname(file.path));
+  while (tmpPath != '.') {
+    depth++;
+    tmpPath = path.dirname(tmpPath);
+  }
+
+  // Use the first Markdown header as the HTML <title>
   const subjectTitleMatch = markdown.match(/^#\s*([^\n]+)/m);
   const subjectTitle = subjectTitleMatch ? subjectTitleMatch[1] : 'Slides';
 
@@ -264,11 +323,15 @@ function convertMarkdownFileToRemarkSlides(file, enc, callback) {
     breadcrumbs: true
   };
 
+  // Convert the Markdown content to Remark Markdown
   md2remark(markdown, options).then(function(remarkMarkdown) {
 
+    // Insert the Remark Markdown into our HTML template
     const remarkPage = remarkPageTemplate({
+      basePath: '../'.repeat(depth + 1).replace(/\/$/, ''),
+      source: remarkMarkdown,
       title: subjectTitle + ' (' + config.title + ')',
-      source: remarkMarkdown
+      webfonts: config.webfonts
     });
 
     file.contents = new Buffer(remarkPage);

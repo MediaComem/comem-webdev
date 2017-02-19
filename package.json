@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Materials for the COMEM+ web development courses.",
   "scripts": {
+    "build": "gulp build",
+    "deploy": "./deploy.sh",
+    "pdf": "gulp pdf",
     "start": "gulp"
   },
   "repository": {
