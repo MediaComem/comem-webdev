@@ -43,17 +43,46 @@
 
 ## What is branching?
 
-> Branching means you diverge from the main line of development and continue to do work without messing with that main line.
+<!-- slide-front-matter class: center, middle -->
 
 <p class='center'><img src='images/commits.png' width='45%' /></p>
 
-Git has a very powerful branching model:
+> Branching means you diverge from the main line of development and continue to do work without messing with that main line.
 
-* Git branches are incredibly **lightweight**.
-* Branching operations are nearly **instantaneous**.
-* Switching between branches is generally just as **fast**.
 
-Git encourages workflows that branch and merge often.
+
+### Why use branches?
+
+Git has a very powerful branching model that is very **lightweight and fast**: it encourages workflows that branch and merge often.
+
+Many teams using Git create a **separate branch** to develop **each feature**.
+This has many advantages:
+
+* Each developer can work on his own feature, **isolated** from changes going on elsewhere
+* They can pull in changes from the mainline **at their own pace**
+* The team can choose **which features to release** and when
+
+
+
+### What is a branch?
+
+Remember that Git stores data as a series of snapshots.
+
+<img src='images/snapshots.png' width='45%' />
+
+Each **commit** contains a pointer to the snapshot of the content you staged, the author's user name and e-mail,
+and also a pointer to the previous commit.
+
+#### Branches point to commits
+
+A branch is simply a lightweight, movable pointer to a commit.
+
+<img src='images/branch.png' width='45%' />
+
+The default branch is **master**.
+The special **HEAD** pointer indicates the current branch.
+
+As you start making commits, the current branch pointer **automatically moves** forward to your latest commit.
 
 
 
@@ -75,27 +104,9 @@ Open the project with your favorite editor and open its `index.html` page in a b
 
 
 
-### What is a branch?
+## Working with branches
 
-Remember that Git stores data as a series of snapshots.
-
-<img src='images/snapshots.png' width='45%' />
-
-Each **commit** contains a pointer to the snapshot of the content you staged, the author's user name and e-mail,
-and also a pointer to the previous commit.
-
-
-
-### Branches point to commits
-
-A branch is simply a lightweight, movable pointer to a commit.
-
-<img src='images/branch.png' width='45%' />
-
-The default branch is **master**.
-The special **HEAD** pointer indicates the current branch.
-
-As you start making commits, the current branch pointer **automatically moves** forward to your latest commit.
+<!-- slide-front-matter class: center, middle -->
 
 
 
@@ -110,7 +121,7 @@ $> git log --oneline --decorate --graph --all
  * 387f12 First version
 ```
 
-In fact, this command is so useful you should make an alias:
+In fact, this command is so useful you should make an **alias**, as we will use it a lot in this tutorial:
 
 ```bash
 $> git config --global alias.graph "log --oneline --graph --decorate --all"
@@ -120,30 +131,6 @@ $> git graph
  * 9ab3gd Fix addition
  * 387f12 First version
 ```
-
-You can also use `git branch` to simply see the list of branches and which one you are currently on:
-
-```bash
-$> git branch
- * master
-```
-
-
-
-### Why use branches?
-
-Many teams using Git create a **separate branch** to develop **each feature**.
-This has many advantages:
-
-* Each developer can work on his own feature, **isolated** from changes going on elsewhere.
-* They can pull in changes from the mainline **at their own pace**.
-* The team can choose **which features to release** and when.
-
-
-
-## Working with branches
-
-<!-- slide-front-matter class: center, middle -->
 
 
 
@@ -162,6 +149,16 @@ $> git branch feature-sub
 
 There is now a new pointer to the current commit.
 Note that **HEAD** didn't move – we are still on the **master** branch.
+
+#### Showing the current branch
+
+You can use `git branch` without arguments to simply see the list of branches and which one you are currently on:
+
+```bash
+$> git branch
+ * master
+   feature-sub
+```
 
 
 

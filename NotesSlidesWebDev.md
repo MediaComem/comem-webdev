@@ -1,10 +1,5 @@
 # Slides Webdoc
 
-## Git branching
-
-* 6 : Montrer le git branch sur la slide 9.
-* 7 : Cette slide devrait être au tout début du slidedeck (après la slide 2)
-
 ## Collaborating with Git
 
 * 14 : copies the **remote** repository to your machine.
