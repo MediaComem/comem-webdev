@@ -1,5 +1,7 @@
 # REST APIs Introduction
 
+<!-- slide-include ../../BANNER.md -->
+
 Requirements:
 
 * [Google Chrome][chrome] (recommended, any browser with developer tools will do)

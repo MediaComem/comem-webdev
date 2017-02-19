@@ -268,12 +268,11 @@ function insertIntoIndexPage(file, enc, callback) {
 
 function convertMarkdownFileToRemarkSlides(file, enc, callback) {
 
-  let isReadme = false;
   let markdown = file.contents.toString();
+  const sourcePath = file.path;
 
   const basenameWithoutExt = path.basename(file.path, '.md');
   if (basenameWithoutExt == 'README') {
-    isReadme = true;
     // Convert subjects/a/b/c/README.md to subjects/a/b/c/index.html
     file.path = path.join(path.dirname(file.path), 'index.html');
   } else {
@@ -301,7 +300,8 @@ function convertMarkdownFileToRemarkSlides(file, enc, callback) {
   const subjectTitle = subjectTitleMatch ? subjectTitleMatch[1] : 'Slides';
 
   const options = {
-    breadcrumbs: true
+    breadcrumbs: true,
+    file: sourcePath
   };
 
   // Convert the Markdown content to Remark Markdown

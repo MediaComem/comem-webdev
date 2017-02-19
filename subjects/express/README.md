@@ -1,5 +1,7 @@
 # Express
 
+<!-- slide-include ../../BANNER.md -->
+
 Requirements:
 
 * [Node.js][node] 4+

@@ -1,5 +1,7 @@
 # Collaborating with Git
 
+<!-- slide-include ../../BANNER.md -->
+
 Requirements:
 
 * [Git][git]

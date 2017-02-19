@@ -1,6 +1,6 @@
 # Command Line Introduction
 
-<!-- slide-front-matter class: center, middle -->
+<!-- slide-include ../../BANNER.md -->
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

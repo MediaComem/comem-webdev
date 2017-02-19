@@ -32,7 +32,7 @@
     "handlebars": "^4.0.6",
     "html-pdf": "^2.1.0",
     "lodash": "^4.17.4",
-    "md2remark": "~0.1.4",
+    "md2remark": "~0.1.5",
     "run-sequence": "^1.2.2",
     "through2": "^2.0.3"
   }

@@ -137,7 +137,7 @@
   <body>
 
     <!-- Slides top-left logo -->
-    <span id='slide-logo' style='display:none;'><img src='../heig.png' /></span>
+    <span id='slide-logo' style='display:none;'><a href='http://www.heig-vd.ch/'><img src='../heig.png' /></a></span>
 
     <!-- Slides top-right links -->
     <div id='slide-links' style='display:none;'>
@@ -166,15 +166,15 @@
       $('#slide-links .home-link').each(function() {
         var $a = $(this);
 
-        var queryParams = URI(window.location.href).search(true);
-        if (!queryParams.home || typeof(queryParams.home) != 'string') {
-          return;
-        }
+        var currentUri = URI(window.location.href);
+        var home = currentUri.search(true).home
 
-        if (queryParams.home.match(/^[a-z0-9\-\_\.]+\/[a-z0-9\-\_\.]+(?:#.*)?$/i)) {
-          $a.attr('href', 'https://github.com/' + queryParams.home);
-        } else {
-          $a.attr('href', queryParams.home);
+        if (typeof(home) == 'string' && home.match(/^[a-z0-9\-\_\.]+\/[a-z0-9\-\_\.]+(?:#.*)?$/i)) {
+          $a.attr('href', 'https://github.com/' + home);
+        } else if (typeof(home) == 'string') {
+          $a.attr('href', home);
+        } else if (currentUri.hostname() == 'localhost') {
+          $a.attr('href', currentUri.path('').hash('').toString());
         }
       });
 
@@ -187,7 +187,7 @@
       $('#slide-links').remove().prependTo(slides).show();
 
       // Make all external links open a new window
-      $('a[href]').not('[href^="#"]').attr('target', '_blank');
+      $('a[href]').not('.home-link').not('[href^="#"]').attr('target', '_blank');
     </script>
   </body>
 </html>

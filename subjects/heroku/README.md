@@ -1,5 +1,7 @@
 # Heroku
 
+<!-- slide-include ../../BANNER.md -->
+
 Requirements:
 
 * [Git][git]
