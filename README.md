@@ -1,3 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [COMEM+ Web Development](#comem-web-development)
+  - [Subjects](#subjects)
+    - [Tooling](#tooling)
+    - [Languages](#languages)
+    - [Web Services](#web-services)
+    - [Web Frameworks](#web-frameworks)
+    - [Databases](#databases)
+    - [Cloud](#cloud)
+    - [Advanced subjects](#advanced-subjects)
+  - [Contributing](#contributing)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # COMEM+ Web Development
 
 Materials for the COMEM+ web development courses.

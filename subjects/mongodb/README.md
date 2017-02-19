@@ -17,11 +17,11 @@
   - [Updating documents](#updating-documents)
   - [Removing documents](#removing-documents)
 - [Indexes](#indexes)
-  - [Query performance](#query-performance)
-  - [Creating indexes](#creating-indexes)
-  - [Index scan](#index-scan)
-  - [Compound indexes](#compound-indexes)
   - [Unique indexes](#unique-indexes)
+  - [Query performance](#query-performance)
+  - [Improving performance with indexes](#improving-performance-with-indexes)
+  - [Index scan](#index-scan)
+  - [Performance of compound indexes](#performance-of-compound-indexes)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

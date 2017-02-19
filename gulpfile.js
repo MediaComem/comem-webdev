@@ -22,6 +22,7 @@ const generatePdfFromSlides = require('./pdf');
 const src = {
   assets: [ 'assets/**/*.*' ],
   content: [ 'subjects/**/*.*', '!**/*.md', '!**/*.odg', '!**/*.odg#', '!**/node_modules/**' ],
+  doctoc: [ 'README.md', 'CONTRIBUTING.md', 'subjects/**/*.md', '!subjects/**/node_modules/**/*.md' ],
   indexTemplate: 'templates/index.html',
   mainReadme: 'README.md',
   pdfSource: 'tmp/pdf/subjects/*/**/index.html',
@@ -69,13 +70,13 @@ gulp.task('clean', function() {
 
 gulp.task('doctoc', function() {
   return gulp
-    .src(src.slides)
+    .src(src.doctoc, { base: '.' })
     .pipe(doctoc({
       depth: 3,
       notitle: true,
       mode: 'github.com'
     }))
-    .pipe(gulp.dest('subjects'));
+    .pipe(gulp.dest('.'));
 });
 
 gulp.task('generate-pdf', [ 'build' ], function() {

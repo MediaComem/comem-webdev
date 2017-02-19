@@ -1,7 +1,18 @@
 # Contributing
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [First-time setup](#first-time-setup)
+- [Usage](#usage)
+  - [Run slides server](#run-slides-server)
+  - [Generate slides and deploy to GitHub pages](#generate-slides-and-deploy-to-github-pages)
+  - [Generate slides as PDF](#generate-slides-as-pdf)
+- [Documentation](#documentation)
+- [Configuration](#configuration)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 
