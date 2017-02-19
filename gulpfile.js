@@ -29,8 +29,7 @@ const src = {
   slides: [ 'subjects/**/*.md', '!subjects/**/node_modules/**/*.md' ]
 };
 
-const indexPageTemplate = loadIndexPageTemplate();
-const remarkPageTemplate = loadRemarkPageTemplate();
+let cachedIndexPageTemplate, cachedRemarkPageTemplate;
 
 gulp.task('build-assets', function() {
   return gulp
@@ -134,7 +133,7 @@ gulp.task('watch-index', function() {
 
 gulp.task('watch-index-template', function() {
   return watch(src.indexTemplate, function() {
-    indexPageTemplate = loadIndexPageTemplate();
+    cachedIndexPageTemplate = null;
     return buildIndex();
   });
 });
@@ -149,7 +148,7 @@ gulp.task('watch-slides', function() {
 
 gulp.task('watch-slides-template', function() {
   return watch(src.remarkTemplate, function() {
-    remarkPageTemplate = loadRemarkPageTemplate();
+    cachedRemarkPageTemplate = null;
     return gulp
       .src(src.slides)
       .pipe(buildSlides());
@@ -228,19 +227,26 @@ const generatePdf = chain(function(stream) {
     }));
 });
 
-function loadIndexPageTemplate() {
-  return handlebars.compile(fs.readFileSync(src.indexTemplate, { encoding: 'utf-8' }));
+function getIndexPageTemplate() {
+  if (!cachedIndexPageTemplate) {
+    cachedIndexPageTemplate = handlebars.compile(fs.readFileSync(src.indexTemplate, { encoding: 'utf-8' }));
+  }
+
+  return cachedIndexPageTemplate;
 }
 
-function loadRemarkPageTemplate() {
-  return handlebars.compile(fs.readFileSync(src.remarkTemplate, { encoding: 'utf-8' }));
+function getRemarkPageTemplate() {
+  if (!cachedRemarkPageTemplate) {
+    cachedRemarkPageTemplate = handlebars.compile(fs.readFileSync(src.remarkTemplate, { encoding: 'utf-8' }));
+  }
+
+  return cachedRemarkPageTemplate;
 }
 
 function logFile(func) {
   return through.obj(function(file, enc, callback) {
     func(file);
-    this.push(file);
-    callback();
+    callback(undefined, file);
   });
 }
 
@@ -251,16 +257,13 @@ function renameMarkdownToHtml(file) {
 
 function insertIntoIndexPage(file, enc, callback) {
 
-  const contents = file.contents.toString();
-
-  const indexPage = indexPageTemplate({
-    contents: contents
+  const templateFunc = getIndexPageTemplate();
+  const indexPage = templateFunc({
+    contents: file.contents.toString()
   });
 
   file.contents = new Buffer(indexPage);
-  this.push(file);
-
-  callback();
+  callback(undefined, file);
 }
 
 function convertMarkdownFileToRemarkSlides(file, enc, callback) {
@@ -304,7 +307,8 @@ function convertMarkdownFileToRemarkSlides(file, enc, callback) {
   md2remark(markdown, options).then(function(remarkMarkdown) {
 
     // Insert the Remark Markdown into our HTML template
-    const remarkPage = remarkPageTemplate({
+    const templateFunc = getRemarkPageTemplate();
+    const remarkPage = templateFunc({
       basePath: '../'.repeat(depth + 1).replace(/\/$/, ''),
       source: remarkMarkdown,
       title: subjectTitle + ' (' + config.title + ')',
