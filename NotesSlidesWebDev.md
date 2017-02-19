@@ -1,11 +1,5 @@
 # Slides Webdoc
 
-## Collaborating with Git
-
-* 14 : copies the **remote** repository to your machine.
-* 16 : project's files **names** are too complicated
-* 30 : Indiquez que A peut maintenant mettre à jour son repo pour prendre en compte les changements de B (sans forcément le faire dans le tuto)
-
 ## JavaScript
 
 * 9 : `typeof aVariable === 'array'` ? Dans la slide d'avant, tu dis que c'est égal à `object`
