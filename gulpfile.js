@@ -1,25 +1,25 @@
-var _ = require('lodash'),
-    chain = require('gulp-chain'),
-    fs = require('fs'),
-    gulp = require('gulp'),
-    connect = require('gulp-connect'),
-    del = require('del'),
-    doctoc = require('gulp-doctoc'),
-    handlebars = require('handlebars'),
-    markdown = require('gulp-markdown'),
-    md2remark = require('md2remark'),
-    open = require('gulp-open'),
-    path = require('path'),
-    rename = require('gulp-rename'),
-    runSequence = require('run-sequence'),
-    through = require('through2'),
-    util = require('gulp-util'),
-    watch = require('gulp-watch');
+const _ = require('lodash');
+const chain = require('gulp-chain');
+const fs = require('fs');
+const gulp = require('gulp');
+const connect = require('gulp-connect');
+const del = require('del');
+const doctoc = require('gulp-doctoc');
+const handlebars = require('handlebars');
+const markdown = require('gulp-markdown');
+const md2remark = require('md2remark');
+const open = require('gulp-open');
+const path = require('path');
+const rename = require('gulp-rename');
+const runSequence = require('run-sequence');
+const through = require('through2');
+const util = require('gulp-util');
+const watch = require('gulp-watch');
 
-var root = __dirname,
-    buildDir = process.env.BUILD_DIR || 'build';
+const root = __dirname;
+const buildDir = process.env.BUILD_DIR || 'build';
 
-var config = {
+const config = {
   browser: process.env.BROWSER,
   port: process.env.PORT,
   liveReloadPort: process.env.LIVERELOAD_PORT
@@ -38,7 +38,7 @@ _.defaults(config, {
   liveReloadPort: 35729
 });
 
-var src = {
+const src = {
   assets: [ 'assets/**/*.*' ],
   content: [ 'subjects/**/*.*', '!**/*.md', '!**/*.odg', '!**/*.odg#', '!**/node_modules/**' ],
   indexTemplate: 'templates/index.html',
@@ -47,8 +47,8 @@ var src = {
   slides: [ 'subjects/**/*.md', '!subjects/**/node_modules/**/*.md' ]
 };
 
-var indexPageTemplate = loadIndexPageTemplate(),
-    remarkPageTemplate = loadRemarkPageTemplate();
+const indexPageTemplate = loadIndexPageTemplate();
+const remarkPageTemplate = loadRemarkPageTemplate();
 
 gulp.task('build-assets', function() {
   return gulp
@@ -163,49 +163,49 @@ gulp.task('default', function() {
 });
 
 function buildIndex() {
-  var dest = buildDir;
+  const dest = buildDir;
   return gulp
     .src(src.mainReadme)
     .pipe(markdown())
     .pipe(rename(renameMarkdownToHtml))
     .pipe(through.obj(insertIntoIndexPage))
     .pipe(logFile(function(file) {
-      var relativePath = path.relative(root, file.path);
+      const relativePath = path.relative(root, file.path);
       util.log('Generated ' + util.colors.magenta(path.join(dest, relativePath)));
     }))
     .pipe(gulp.dest(dest))
     .pipe(connect.reload());
 };
 
-var buildSlides = chain(function(stream) {
-  var dest = path.join(buildDir, 'subjects');
+const buildSlides = chain(function(stream) {
+  const dest = path.join(buildDir, 'subjects');
   return stream
     .pipe(through.obj(convertMarkdownFileToRemarkSlides))
     .pipe(rename(renameMarkdownToHtml))
     .pipe(logFile(function(file) {
-      var relativePath = path.relative('subjects', file.path);
+      const relativePath = path.relative('subjects', file.path);
       util.log('Generated ' + util.colors.magenta(path.join(dest, relativePath)));
     }))
     .pipe(gulp.dest(dest))
     .pipe(connect.reload());
 });
 
-var copyContent = chain(function(stream) {
-  var dest = path.join(buildDir, 'subjects');
+const copyContent = chain(function(stream) {
+  const dest = path.join(buildDir, 'subjects');
   return stream
     .pipe(logFile(function(file) {
-      var relativePath = path.relative('subjects', file.path);
+      const relativePath = path.relative('subjects', file.path);
       util.log('Copied ' + util.colors.magenta(path.join(dest, relativePath)));
     }))
     .pipe(gulp.dest(dest))
     .pipe(connect.reload());
 });
 
-var copyAssets = chain(function(stream) {
-  var dest = path.join(buildDir, 'assets');
+const copyAssets = chain(function(stream) {
+  const dest = path.join(buildDir, 'assets');
   return stream
     .pipe(logFile(function(file) {
-      var relativePath = path.relative('assets', file.path);
+      const relativePath = path.relative('assets', file.path);
       util.log('Copied ' + util.colors.magenta(path.join(dest, relativePath)));
     }))
     .pipe(gulp.dest(dest))
@@ -241,9 +241,9 @@ function renameMarkdownToHtml(file) {
 
 function insertIntoIndexPage(file, enc, callback) {
 
-  var contents = file.contents.toString();
+  const contents = file.contents.toString();
 
-  var indexPage = indexPageTemplate({
+  const indexPage = indexPageTemplate({
     contents: contents
   });
 
@@ -255,18 +255,18 @@ function insertIntoIndexPage(file, enc, callback) {
 
 function convertMarkdownFileToRemarkSlides(file, enc, callback) {
 
-  var markdown = file.contents.toString();
+  const markdown = file.contents.toString();
 
-  var subjectTitleMatch = markdown.match(/^#\s*([^\n]+)/m);
-  var subjectTitle = subjectTitleMatch ? subjectTitleMatch[1] : 'Slides';
+  const subjectTitleMatch = markdown.match(/^#\s*([^\n]+)/m);
+  const subjectTitle = subjectTitleMatch ? subjectTitleMatch[1] : 'Slides';
 
-  var options = {
+  const options = {
     breadcrumbs: true
   };
 
   md2remark(markdown, options).then(function(remarkMarkdown) {
 
-    var remarkPage = remarkPageTemplate({
+    const remarkPage = remarkPageTemplate({
       title: subjectTitle + ' (' + config.title + ')',
       source: remarkMarkdown
     });
