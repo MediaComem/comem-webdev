@@ -41,7 +41,7 @@ npm run pdf
 
 This will convert the slides to PDF and save them in the `pdf` directory.
 
-**Warning:** slides are converted to PDF in [PhantomJS][phantomjs] through the [html-pdf][html-pdf] npm package.
+**Warning:** slides are converted to PDF with [PhantomJS][phantomjs] through the [html-pdf][html-pdf] npm package.
 Apparently, webfonts (custom fonts loaded through CSS) are somewhat buggy in PhantomJS.
 Before running this script, you should install the custom fonts on your system (they are in `assets/fonts`).
 
