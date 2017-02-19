@@ -10,6 +10,7 @@
   - [Generate slides and deploy to GitHub pages](#generate-slides-and-deploy-to-github-pages)
   - [Generate slides as PDF](#generate-slides-as-pdf)
   - [Create a new subject](#create-a-new-subject)
+  - [Update tables of contents](#update-tables-of-contents)
 - [Documentation](#documentation)
 - [Configuration](#configuration)
 
@@ -69,6 +70,14 @@ Before running this script, you should install the custom fonts used in the slid
 * Copy the [subject template][subject-template] at `templates/README.md` into the new directory and edit as needed
 * Create a `subjects/space-time-continuum/images` directory if you need images
 
+### Update tables of contents
+
+```bash
+npm run doctoc
+```
+
+This will update the tables of contents in all Markdown files using [doctoc][doctoc].
+
 
 
 ## Documentation
@@ -107,6 +116,7 @@ exports.sourceVersion = 'master';
 
 [docs]: https://mediacomem.github.io/comem-webdev-docs/
 [docs-repo]: https://github.com/MediaComem/comem-webdev-docs
+[doctoc]: https://github.com/thlorenz/doctoc
 [html-pdf]: https://www.npmjs.com/package/html-pdf
 [md2remark]: https://github.com/AlphaHydrae/md2remark#md2remark
 [phantomjs]: http://phantomjs.org

@@ -1,7 +1,40 @@
 # Angular
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+Getting started with and understanding the basics of [AngularJS][angular] (version 1), the JavaScript front-end web application framework.
+
+<!-- slide-include ../../BANNER.md -->
+
+**Recommended reading**
+
+* [JavaScript](../js/)
+* [JavaScript closures](../js-closures/)
+* [JavaScript prototypes](../js-prototypes/)
+
+**Requirements**
+
+* [Google Chrome][chrome] (recommended, any browser with developer tools will do)
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [What is Angular?](#what-is-angular)
+  - [Traditional Model-View-Controller (MVC) architecture](#traditional-model-view-controller-mvc-architecture)
+  - [DOM manipulation and AJAX requests](#dom-manipulation-and-ajax-requests)
+  - [Single-page applications](#single-page-applications)
+  - [Dynamic HTML](#dynamic-html)
+  - [Angular 2](#angular-2)
+- [Getting started](#getting-started)
+  - [Starter template](#starter-template)
+  - [Overview](#overview)
+  - [Modules](#modules)
+  - [Controllers](#controllers)
+  - [Services](#services)
+  - [Filters](#filters)
+- [TODO](#todo)
+- [Resources](#resources)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 
@@ -104,9 +137,9 @@ src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js'>
 * Modules
 * Controllers
 * Scope
-* Components (directives)
-* Filters
 * Services
+* Filters
+* Directives & components
 * Constants
 * Config functions
 * Run functions
@@ -116,8 +149,7 @@ src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js'>
 **Angular concepts**
 
 * Interpolation
-* Data binding
-* Two-way binding
+* Two-way data binding
 * Dependency injection
 * Form validation
 
@@ -161,11 +193,9 @@ angular.module('starter').controller(`'HelloController'`, function($scope) {
 You can apply your controller to the HTML tags you want to control with the `ng-controller` attribute:
 
 ```html
-<body>
-  <div `ng-controller='HelloController'`>
-    <p>Hello {{ name }}!</p>
-  </div>
-</body>
+<div `ng-controller='HelloController'`>
+  <p>Hello {{ name }}!</p>
+</div>
 ```
 
 Let's dig into that line by line.
@@ -210,17 +240,15 @@ angular.module('starter').controller('HelloController', function(`$scope`) {
 Properties you attach to the scope can be interpolated into HTML templates with double curly braces:
 
 ```html
-<body>
-  <div ng-controller='HelloController'>
-    <p>Hello `{{ name }}`!</p>
-  </div>
-</body>
+<div ng-controller='HelloController'>
+  <p>Hello `{{ name }}`!</p>
+</div>
 ```
 
 #### Named controllers
 
 You can also access the scope by using **named controllers**.
-Instead of using the `$scope` explicitly, you use `this`:
+Instead of using the `$scope`, you attach properties directly to the controller using `this`:
 
 ```js
 angular.module('starter').controller('HelloController', function() {
@@ -232,17 +260,280 @@ In the template, use `MyController as myName` in the `ng-controller` attribute.
 This assigns a name to the controller, which you can then use in interpolation:
 
 ```html
-<body>
-  <div ng-controller='HelloController `as ctrl`'>
-    <p>Hello {{ `ctrl.name` }}!</p>
-  </div>
-</body>
+<div ng-controller='HelloController `as ctrl`'>
+  <p>Hello {{ `ctrl.name` }}!</p>
+</div>
+```
+
+Even when using this syntax, there is still a **scope** being created and used.
+
+You will find examples of both (using only the scope or using named controllers) in the documentation and examples online.
+
+#### Using functions in the view
+
+You can also attach functions to the scope or controller:
+
+```js
+angular.module('starter').controller('HelloController', function() {
+  this.name = 'World';
+* this.double = function(n) {
+*   return n * 2;
+* };
+});
+```
+
+These functions can be called in the view:
+
+```html
+<div ng-controller='HelloController as ctrl'>
+  <p>Hello {{ ctrl.name }}!</p>
+* <p>Two times two equals {{ double(2) }}</p>
+</div>
+```
+
+#### Data binding
+
+Using `ng-model`, you can bind data from the view to the scope:
+
+```html
+<p>Two times <input `ng-model='ctrl.value'` /> equals {{ double(`ctrl.value`) }}</p>
+```
+
+What's interesting is that it goes both ways with Angular:
+
+```js
+angular.module('starter').controller('HelloController', function() {
+  var ctrl = this;
+  // ...
+* this.reset = function() {
+*   ctrl.value = 2;
+* };
+});
+```
+
+Add a button below the previous HTML:
+
+```html
+<p>Two times <input ng-model='ctrl.value' /> equals {{ double(ctrl.value) }}</p>
+*<button type='button' ng-click='ctrl.reset()'>Reset</button>
+```
+
+See how the view changes when you modify the value and click the reset button.
+
+#### Two-way data binding
+
+<!-- slide-column -->
+
+Traditional templating systems bind data **in only one direction**.
+
+The developer has to write code that constantly syncs the view with the model and vice versa.
+
+<img src='images/one-way-data-binding.png' width='100%' />
+
+<!-- slide-column -->
+
+With Angular changes are **immediately reflected** in both view and model.
+
+This is one of the great strengths of Angular: the **controller** is completely **isolated from and unaware of the view**.
+It does not care about DOM manipulation or rendering concerns.
+
+<img src='images/two-way-data-binding.png' width='100%' />
+
+
+
+### Services
+
+In general, controllers shouldn't try to do too much.
+They should contain only the business logic needed for a **single view**.
+Keep controllers slim is by encapsulating work that doesn't belong to controllers into **services** and then using these services in controllers.
+
+You can create a service by calling `factory()`.
+As the name implies, you must pass a **factory function** that will create and return the service.
+
+Let's create a service with that `double` function we wrote earlier:
+
+```js
+angular.module('starter')`.factory('HelloService', function() {`
+
+  var service = {};
+
+  service.double = function(n) {
+    return n * 2;
+  };
+
+  return service;
+`}`);
+```
+
+#### Dependency injection
+
+Using the service is as simple as adding it as an argument to our controller:
+
+```js
+angular.module('starter').controller('HelloController', function(`HelloService`) {
+  this.name = 'World';
+  this.double = `HelloService.double`;
+});
+```
+
+This works because Angular is built around **dependency injection**:
+
+* When you define a controller, service or other kind of Angular element, you give it **a name**
+* In the factory function that creates the controller (or other element), you tell Angular **the names of the other elements you need** as arguments
+* Angular will **inject** the required elements into your factory function for you
+
+#### Why dependency injection?
+
+<!-- slide-column -->
+
+**Strong coupling**
+
+```js
+function Car() {
+  this.engine = new Engine(24);
+}
+function Engine(gasLead) {
+  this.gas = new Gas(gasLead);
+}
+function Gas(lead) {
+  this.lead = lead;
+}
+```
+
+<img src='images/di-new.png' width='100%' />
+
+<!-- slide-column -->
+
+**Loose coupling** (with an *injector*)
+
+```js
+function Car(engine) {
+  this.engine = engine;
+}
+function Engine(gas) {
+  this.gas = gas;
+}
+function Gas(lead) {
+  this.lead = lead;
+}
+```
+
+<img src='images/di-injection.png' width='100%' />
+
+#### The $http service
+
+Angular provides several useful services out of the box.
+The `$http` service can make AJAX requests for you:
+
+```js
+angular.module('starter').factory(HelloService, function(`$http`) {
+
+  var service = {};
+
+  service.retrieveJoke = function() {
+    return `$http.get('https://api.icndb.com/jokes/random')`.then(function(res) {
+      return res.data.value.joke;
+    });
+  };
+
+  // ...
+
+  return service;
+});
+```
+
+#### Making HTTP requests through a service
+
+It's good practice to make HTTP requests in a service rather than in a controller directly.
+That way your controller remains **as simple as possible** and only manages the view:
+
+```js
+angular.module('starter').controller('HelloController', function(HelloService) {
+
+  var ctrl = this;
+  this.name = 'World';
+  this.double = HelloService.double;
+
+  HelloService.retrieveJoke().then(function(joke) {
+    ctrl.joke = joke;
+  });
+});
+```
+
+You can now display the joke in the HTML template:
+
+```html
+<div ng-controller='HelloController as ctrl'>
+  <p>Hello {{ ctrl.name }}!</p>
+  <p>Two times two equals {{ double(2) }}</p>
+* <p>Did you hear? {{ joke }}</p>
+</div>
+```
+
+
+
+### Filters
+
+Filters are simple functions that format a value for display to the user.
+
+To create a filter, you must use `filter()` and pass a factory function (where you can inject dependencies if you need them).
+This function **must return the filter function** that will be called with the value:
+
+```js
+angular.module('starter').filter('hello', function() {
+* return function(input) {
+*   return 'Hello ' + input + '!';
+* };
+});
+```
+
+You apply a filter by "piping" a value into it.
+Let's modify the first paragraph of our previous template a bit:
+
+```html
+<p>{{ `ctrl.name | hello` }}</p>
+```
+
+#### Built-in filters
+
+Angular has a number of useful [built-in filters][angular-built-in-filters]:
+
+Filter    | Purpose
+:---      | :---
+filter    | Filter an array
+currency  | Format a number as currency
+number    | Format a number as text (e.g. with thousands separator)
+date      | Format date a string with a custom format
+json      | Converts a JavaScript object into a JSON string
+lowercase | Converts a string to lower case
+uppercase | Converts a string to upper case
+limitTo   | Select a subset from an array
+orderBy   | Order an array's elements
+
+#### A few filter examples
+
+Several filters can be "piped" together:
+
+```html
+<p>{{ ctrl.name | uppercase | hello }}</p>
+```
+
+Let's try the `date` filter:
+
+```html
+<p>It's {{ new Date() | date: 'HH:mm:ss' }}</p>
 ```
 
 
 
 ## TODO
 
+* Directives & components
+* Constants
+* Config functions
+* Run functions
+* Scope hierarchy
+* Form validation
 * Angular gotchas (dom manipulation in controllers, injection syntaxes for minification)
 
 
@@ -253,6 +544,8 @@ This assigns a name to the controller, which you can then use in interpolation:
 
 
 
-[angular]: https://angular.io/
+[angular]: https://angularjs.org/
 [angular-codepen]: http://codepen.io/AlphaHydrae/pen/LxoRze?editors=1010#0
+[angular-built-in-filters]: https://docs.angularjs.org/api/ng/filter
+[chrome]: https://www.google.com/chrome/
 [html-history-api]: https://developer.mozilla.org/en-US/docs/Web/API/History_API

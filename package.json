@@ -5,6 +5,7 @@
   "scripts": {
     "build": "gulp build",
     "deploy": "./deploy.sh",
+    "doctoc": "gulp doctoc",
     "pdf": "gulp pdf",
     "start": "gulp"
   },
