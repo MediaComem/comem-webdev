@@ -9,6 +9,7 @@
   - [Run slides server](#run-slides-server)
   - [Generate slides and deploy to GitHub pages](#generate-slides-and-deploy-to-github-pages)
   - [Generate slides as PDF](#generate-slides-as-pdf)
+  - [Create a new subject](#create-a-new-subject)
 - [Documentation](#documentation)
 - [Configuration](#configuration)
 
