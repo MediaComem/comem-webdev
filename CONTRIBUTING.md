@@ -24,6 +24,8 @@ cd comem-webdev
 npm install
 ```
 
+You will also have to re-run `npm install` when someones adds or updates a dependency.
+
 
 
 ## Usage
@@ -44,7 +46,9 @@ This will serve the compiled slides (with live-reload) at [http://localhost:3000
 npm run deploy
 ```
 
-Note that this runs a script which requires a **Unix shell** (use Git Bash or equivalent on Windows).
+This will compile the slides and commit them to a [separate repository][docs-repo] that is published on GitHub Pages at [https://mediacomem.github.io/comem-webdev-docs/][docs].
+
+**Warning:** this runs a script which requires a **Unix shell** (use Git Bash or equivalent on Windows).
 
 ### Generate slides as PDF
 
@@ -56,13 +60,13 @@ This will convert the slides to PDF and save them in the `pdf` directory.
 
 **Warning:** slides are converted to PDF with [PhantomJS][phantomjs] through the [html-pdf][html-pdf] npm package.
 Apparently, webfonts (custom fonts loaded through CSS) are somewhat buggy in PhantomJS.
-Before running this script, you should install the custom fonts on your system (they are in `assets/fonts`).
+Before running this script, you should install the custom fonts used in the slides on your system (they are in the `assets/fonts` directory).
 
 
 
 ## Documentation
 
-You should be familiar with:
+To edit the slides, you should be familiar with:
 
 * [Remark][remark]
 * Remark's [Markdown syntax][remark-syntax]
@@ -81,7 +85,7 @@ The following environment variables can be used for customization:
 * `$PORT` - The port on which the slides server is run (defaults to 3000)
 * `$SOURCE_VERSION` - The branch/commit to which source links to GitHub (in the top-right corner of slides) will point to (defaults to the current branch, or the latest commit when using `npm run deploy`)
 
-You can also put these settings in a `local.config.js` file in the project's directory:
+You can also put these settings in a `local.config.js` file in the project's directory (which will be ignored by Git):
 
 ```js
 exports.browser = 'Google Chrome';
@@ -94,6 +98,8 @@ exports.sourceVersion = 'master';
 
 
 
+[docs]: https://mediacomem.github.io/comem-webdev-docs/
+[docs-repo]: https://github.com/MediaComem/comem-webdev-docs
 [html-pdf]: https://www.npmjs.com/package/html-pdf
 [md2remark]: https://github.com/AlphaHydrae/md2remark#md2remark
 [phantomjs]: http://phantomjs.org
