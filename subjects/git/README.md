@@ -27,7 +27,7 @@ This is a condensed version of the first chapters of the [Git Book](https://git-
   - [Adding new files](#adding-new-files)
   - [Committing your changes](#committing-your-changes)
   - [Modifying files](#modifying-files)
-  - [Making changes outside of Git](#making-changes-outside-of-git)
+  - [Moving and removing files](#moving-and-removing-files)
 - [Viewing the commit history](#viewing-the-commit-history)
   - [Viewing the changes in the history](#viewing-the-changes-in-the-history)
   - [Other log options](#other-log-options)

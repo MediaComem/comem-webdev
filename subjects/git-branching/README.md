@@ -7,12 +7,11 @@
 
 
 - [What is branching?](#what-is-branching)
-  - [Example repository](#example-repository)
-  - [What is a branch?](#what-is-a-branch)
-  - [Branches point to commits](#branches-point-to-commits)
-  - [Showing branches on the command line](#showing-branches-on-the-command-line)
   - [Why use branches?](#why-use-branches)
+  - [What is a branch?](#what-is-a-branch)
+  - [Example repository](#example-repository)
 - [Working with branches](#working-with-branches)
+  - [Showing branches on the command line](#showing-branches-on-the-command-line)
   - [Create a new branch](#create-a-new-branch)
   - [Switch branches](#switch-branches)
   - [Commit on a branch](#commit-on-a-branch)

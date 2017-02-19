@@ -18,7 +18,7 @@
   - [Storing functions in variables or data structures](#storing-functions-in-variables-or-data-structures)
   - [Returning functions from a function](#returning-functions-from-a-function)
   - [Passing functions as arguments](#passing-functions-as-arguments)
-  - [Functional programming](#functional-programming)
+  - [Transforming data with functions](#transforming-data-with-functions)
 - [Variables](#variables)
   - [Defining variables](#defining-variables)
   - [Dynamic or constant variables](#dynamic-or-constant-variables)

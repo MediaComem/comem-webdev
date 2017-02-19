@@ -40,6 +40,7 @@ Requirements:
   - [B: check the conflict markers](#b-check-the-conflict-markers)
   - [B: check the state of branches](#b-check-the-state-of-branches-1)
   - [B: push the changes](#b-push-the-changes)
+  - [A: pull the changes](#a-pull-the-changes)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
