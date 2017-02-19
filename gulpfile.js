@@ -16,31 +16,8 @@ const through = require('through2');
 const util = require('gulp-util');
 const watch = require('gulp-watch');
 
+const config = require('./config');
 const generatePdfFromSlides = require('./pdf');
-
-const root = __dirname;
-
-const config = {
-  browser: process.env.BROWSER,
-  buildDir: process.env.BUILD_DIR || 'build',
-  liveReloadPort: process.env.LIVERELOAD_PORT,
-  pdfBuildDir: process.env.PDF_BUILD_DIR || 'pdf',
-  port: process.env.PORT,
-  webfonts: true
-};
-
-try {
-  _.defaults(config, require('./local.config'));
-} catch (e) {
-  // ignore
-}
-
-_.defaults(config, require('./config'));
-
-_.defaults(config, {
-  port: 3000,
-  liveReloadPort: 35729
-});
 
 const src = {
   assets: [ 'assets/**/*.*' ],
@@ -195,7 +172,7 @@ function buildIndex() {
     .pipe(rename(renameMarkdownToHtml))
     .pipe(through.obj(insertIntoIndexPage))
     .pipe(logFile(function(file) {
-      const relativePath = path.relative(root, file.path);
+      const relativePath = path.relative(config.root, file.path);
       util.log('Generated ' + util.colors.magenta(path.join(dest, relativePath)));
     }))
     .pipe(gulp.dest(dest))
