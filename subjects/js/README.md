@@ -543,6 +543,7 @@ Just **don't do it**.
 
 * Strings: single quotes, double quotes, template literals
 * JSON: relationship to JavaScript objects, parsing and serializing
+* Constructor functions
 * Array operations
 
 
