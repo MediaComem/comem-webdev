@@ -3,13 +3,16 @@
   <head>
     <title>{{ title }}</title>
     <meta charset='utf-8'>
+
     <link rel='stylesheet' href='{{ basePath }}/assets/unsemantic-grid-base.css'>
     <link rel='stylesheet' href='{{ basePath }}/assets/unsemantic-grid-desktop.css'>
+
     {{#if webfonts}}
     <link rel='stylesheet' href='{{ basePath }}/assets/fonts/YanoneKaffeesatz/YanoneKaffeesatz.css'>
     <link rel='stylesheet' href='{{ basePath }}/assets/fonts/DroidSerif/DroidSerif.css'>
     <link rel='stylesheet' href='{{ basePath }}/assets/fonts/UbuntuMono/UbuntuMono.css'>
     {{/if}}
+
     <style>
       body {
         font-family: 'Droid Serif';
@@ -91,13 +94,13 @@
         border-right: 5px solid khaki;
       }
 
-      #logo {
+      #slide-logo {
         position: absolute;
         top: 0;
         left: 0;
       }
 
-      #logo img {
+      #slide-logo img {
         height: 60px;
       }
 
@@ -121,15 +124,38 @@
       .center.middle .breadcrumbs {
         display: none;
       }
+
+      #slide-links {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 15px;
+        text-align: right;
+      }
     </style>
   </head>
   <body>
-    <span id='logo' style='display:none;'><img src='../heig.png' /></span>
+
+    <!-- Slides top-left logo -->
+    <span id='slide-logo' style='display:none;'><img src='../heig.png' /></span>
+
+    <!-- Slides top-right links -->
+    <div id='slide-links' style='display:none;'>
+      <!-- GitHub link -->
+      <a href='{{ sourceUrl }}'><img src='{{ basePath }}/assets/github.svg' width='24' height='24' alt='Source code' title='GitHub' /></a>
+      <!-- Home link -->
+      <a class='home-link' href='{{ homeUrl }}'><img src='{{ basePath }}/assets/home.svg' width='24' height='24' alt='Home' title='Home' /></a>
+    </div>
+
+    <!-- Remark slides -->
     <textarea id='source'>
 {{{source}}}
     </textarea>
+
     <script src='{{ basePath }}/assets/remark.min.js'></script>
     <script src='{{ basePath }}/assets/jquery-3.1.1.slim.min.js' integrity='sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=' crossorigin='anonymous'></script>
+    <script src='{{ basePath }}/assets/uri-1.18.7.js'></script>
+
     <script>
       var slideshow = remark.create({
         highlightLines: true,
@@ -137,8 +163,28 @@
         countIncrementalSlides: false
       });
 
+      $('#slide-links .home-link').each(function() {
+        var $a = $(this);
+
+        var queryParams = URI(window.location.href).search(true);
+        if (!queryParams.home || typeof(queryParams.home) != 'string') {
+          return;
+        }
+
+        if (queryParams.home.match(/^[a-z0-9\-\_\.]+\/[a-z0-9\-\_\.]+\/?$/i)) {
+          $a.attr('href', 'https://github.com/' + queryParams.home);
+        } else {
+          $a.attr('href', queryParams.home);
+        }
+      });
+
+      var slides = $('.remark-slide-content');
+
       // Remove logo from body and add it to each slide
-      $('#logo').remove().prependTo($('.remark-slide-content')).show();
+      $('#slide-logo').remove().prependTo(slides).show();
+
+      // Remove links from body and add them to each slide
+      $('#slide-links').remove().prependTo(slides).show();
 
       // Make all external links open a new window
       $('a[href]').not('[href^="#"]').attr('target', '_blank');

@@ -289,10 +289,11 @@ function convertMarkdownFileToRemarkSlides(file, enc, callback) {
   // Determine depth of Markdown file compared to subjects directory
   // (subjects/a/index.html has depth 1, subjects/a/b/index.html has depth 2, etc)
   let depth = 0;
-  let tmpPath = path.relative('subjects', path.dirname(file.path));
-  while (tmpPath != '.') {
+  const subjectPath = path.relative('subjects', path.dirname(file.path));
+  let currentPath = subjectPath;
+  while (currentPath != '.') {
     depth++;
-    tmpPath = path.dirname(tmpPath);
+    currentPath = path.dirname(currentPath);
   }
 
   // Use the first Markdown header as the HTML <title>
@@ -306,12 +307,20 @@ function convertMarkdownFileToRemarkSlides(file, enc, callback) {
   // Convert the Markdown content to Remark Markdown
   md2remark(markdown, options).then(function(remarkMarkdown) {
 
-    // Insert the Remark Markdown into our HTML template
     const templateFunc = getRemarkPageTemplate();
+
+    const basePath = '../'.repeat(depth + 1).replace(/\/$/, '');
+    const homeUrl = config.webUrl.replace(/([^\/])$/, '$1/');
+    const sourceUrl = `${config.repoUrl}/tree/${config.sourceVersion}/subjects/${subjectPath}/`;
+    const title = `${subjectTitle} (${config.title})`;
+
+    // Insert the Remark Markdown into our HTML template
     const remarkPage = templateFunc({
-      basePath: '../'.repeat(depth + 1).replace(/\/$/, ''),
+      basePath: basePath,
+      homeUrl: homeUrl,
       source: remarkMarkdown,
-      title: subjectTitle + ' (' + config.title + ')',
+      sourceUrl: sourceUrl,
+      title: title,
       webfonts: config.webfonts
     });
 

@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const cp = require('child_process');
 const fs = require('fs');
 
 // Fixed options that cannot be overriden
@@ -17,6 +18,7 @@ const envOptions = {
   liveReloadPort: process.env.LIVERELOAD_PORT,
   pdfBuildDir: process.env.PDF_BUILD_DIR,
   port: process.env.PORT,
+  sourceVersion: process.env.SOURCE_VERSION
 };
 
 // Options from local.config.js (if present)
@@ -30,7 +32,8 @@ const defaultOptions = {
   buildDir: 'build',
   liveReloadPort: 35729,
   pdfBuildDir: 'pdf',
-  port: 3000
+  port: 3000,
+  sourceVersion: cp.execSync('git rev-parse --abbrev-ref HEAD', { cwd: __dirname }).toString().trim()
 };
 
 module.exports = _.defaults({}, fixedOptions, envOptions, localFileOptions, defaultOptions);

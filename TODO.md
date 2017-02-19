@@ -21,7 +21,7 @@
 
 ## Build
 
-* Template: back link to return to index
+* Rev assets
 
 
 
