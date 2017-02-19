@@ -17,6 +17,8 @@ npm install
 
 ## Usage
 
+All the following commands should be run from the project's directory.
+
 ### Run slides server
 
 ```bash
@@ -66,13 +68,17 @@ The following environment variables can be used for customization:
 * `$LIVERELOAD_PORT` - The port on which the live-reload server is run (defaults to 35729)
 * `$PDF_BUILD_DIR` - The directory in which the generated PDF slides are saved (defaults to `pdf`)
 * `$PORT` - The port on which the slides server is run (defaults to 3000)
+* `$SOURCE_VERSION` - The branch/commit to which source links to GitHub (in the top-right corner of slides) will point to (defaults to the current branch, or the latest commit when using `npm run deploy`)
 
 You can also put these settings in a `local.config.js` file in the project's directory:
 
 ```js
 exports.browser = 'Google Chrome';
-exports.port = 3000;
+exports.buildDir = 'build';
 exports.liveReloadPort = 35729;
+exports.pdfBuildDir = 'pdf';
+exports.port = 3000;
+exports.sourceVersion = 'master';
 ```
 
 
