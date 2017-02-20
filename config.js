@@ -7,8 +7,7 @@ const fixedOptions = {
   root: __dirname,
   title: 'COMEM+ Web Dev',
   repoUrl: 'https://github.com/MediaComem/comem-webdev',
-  webfonts: true,
-  webUrl: 'https://mediacomem.github.io/comem-webdev-docs'
+  webfonts: true
 };
 
 // Options from environment variables
@@ -18,7 +17,8 @@ const envOptions = {
   liveReloadPort: process.env.LIVERELOAD_PORT,
   pdfBuildDir: process.env.PDF_BUILD_DIR,
   port: process.env.PORT,
-  sourceVersion: process.env.SOURCE_VERSION
+  sourceVersion: process.env.SOURCE_VERSION,
+  webUrl: process.env.WEB_URL
 };
 
 // Options from local.config.js (if present)
@@ -33,7 +33,8 @@ const defaultOptions = {
   liveReloadPort: 35729,
   pdfBuildDir: 'pdf',
   port: 3000,
-  sourceVersion: cp.execSync('git rev-parse --abbrev-ref HEAD', { cwd: __dirname }).toString().trim()
+  sourceVersion: cp.execSync('git rev-parse --abbrev-ref HEAD', { cwd: __dirname }).toString().trim(),
+  webUrl: 'https://mediacomem.github.io/comem-webdev-docs'
 };
 
 module.exports = _.defaults({}, fixedOptions, envOptions, localFileOptions, defaultOptions);
