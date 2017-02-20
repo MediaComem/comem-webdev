@@ -97,7 +97,7 @@ gulp.task('open', function() {
 gulp.task('pdf', function() {
   config.buildDir = 'tmp/pdf';
   config.webfonts = false;
-  return runSequence([ 'clean-build', 'clean-pdf' ], 'generate-pdf', 'clean-pdf');
+  return runSequence('clean-pdf', 'generate-pdf', 'clean-pdf');
 });
 
 gulp.task('serve', function() {
