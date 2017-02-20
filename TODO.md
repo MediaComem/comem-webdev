@@ -19,6 +19,8 @@
 ## Build
 
 * Rev assets
+* Link to slide from README
+* Slide-specific css
 
 
 
