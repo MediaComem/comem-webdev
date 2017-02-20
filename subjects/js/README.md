@@ -637,36 +637,34 @@ var starship = {
 
 ### Using JSON
 
-Describing **manually** a JavaScript object in JSON (or the opposite) can be quite tedious, especially with complicated and intricate objects.
+**Manually** describing a JavaScript object in JSON (or the opposite) can be quite tedious, especially with complicated and intricate objects.
 
-Fortunately, JavaScript provide you with an utilitary object called `JSON` that can do that for you.
+Fortunately, JavaScript provides you with **an utilitary object called `JSON`** that can do that for you.
 
-To transform a JavaScript object to its JSON description, use the `JSON.stringify()` method:
+To transform a **JavaScript object to its JSON description**, use the `JSON.stringify()` method:
 
 ```js
-var crew = {name: "T'Pol", specie: "Vulcan", function: "Science Officer"};
-var deviceJson = JSON.stringify(device);
-console.log(deviceJson);
-// Output : "{"name":"transporter","origin":"earth"}"
-
+var crew = {name: "T'Pol", specie: "Vulcan", station: "Science Officer"};
+var crewJson = JSON.stringify(crew);
+console.log(crewJson);
+// Output : "{"name":"T'Pol","specie":"Vulcan","station":"Science Officer"}"
 ```
 
 To do the opposite, that is creating a JavaScript object from a JSON string, use the `JSON.parse()` method:
 
 ```js
-var deviceJson = '{"name":"protein resequencer","origin":"earth"}'
+var crewJson = '{"name": "Trip", "specie": "Human", "station": "Chief Engineer"}';
+var crew = JSON.parse(crewJson);
+console.log(crew);
+// Output : "{"name":"T'Pol","specie":"Vulcan","station":"Science Officer"}"
 ```
 
 ## TODO
 
-* Strings: single quotes, double quotes, template literals
 * JSON: relationship to JavaScript objects, parsing and serializing
-* Constructor functions
+* Constructor functions (syntax with `new`)
 * Array operations
 * Arrow functions (syntax)
-* "constructor" (syntax with `new`)
-
-
 
 ## Resources
 
