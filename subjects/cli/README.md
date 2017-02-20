@@ -451,5 +451,14 @@ export PATH="path/to/directory:$PATH"
 
 Save the file (`Esc` then `:wq`) and restart your CLI.
 
+## TODO
+
+* CLI: use actual example `command arg1 arg2 arg3` instead of Unix syntax (`command [argument ...]`)
+* CLI: also explain traditional option format: `command -v -o value --option value`
+* CLI: explain `cd /path/to/projects`
+* CLI: avoid `#` at the beginning of a line in block codes
+* CLI: link to other subjects
+* CLI: add slide(s) to explain the UNIX command syntax
+
 [gitbash]: https://git-for-windows.github.io/
 [zsh-site]: http://zsh.sourceforge.net/
