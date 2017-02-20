@@ -85,7 +85,7 @@ Then, search and open the **Git Bash** software.
 
 <!-- slide-container -->
 
-> Installing **Git Bash** will also install **Git** and **Git GUI** _(see the slide-deck about Git for more information)_.
+> Installing **Git Bash** will also install **Git** and **Git GUI** _(see [the slide-deck about Git][slide-git] for more information)_.
 
 ## How to use the CLI
 
@@ -187,6 +187,25 @@ Usually, it means that these helps or commands have content that takes more than
 You can "scroll" down  line-by-line using the `Enter` key, each stroke printing one more line at the bottom of the screen.
 
 To quit these helps or commands, use the `q` key.
+
+#### Unix Command Syntax
+
+When calling the `help` function or looking up some documentation, you could eventually found some strange lines that apparently makes no sense, like:
+
+```bash
+cd [-L|[-P [-e]] [-@]] [dir]
+```
+
+Here are some explanations:
+
+* `[]`: Whatever's inside is **optionnal** (ex: `[-e]`).
+* `|`: You have to **chose between** options (ex: `-L|-P`).
+* `...`: Whatever's before can be **repeated** (ex: `[options ...]`).
+
+> Depending on the documentation, you could also found symbols like this:
+> 
+> * `<value>` = **Don't write that**. Replace it by a value that you should provide.
+
 
 ### Command : `pwd`
 
@@ -503,10 +522,6 @@ export PATH="path/to/directory:$PATH"
 
 Save the file (`Esc` then `:wq`) and restart your CLI.
 
-## TODO
-
-* CLI: link to other subjects
-* CLI: add slide(s) to explain the UNIX command syntax
-
 [gitbash]: https://git-for-windows.github.io/
 [zsh-site]: http://zsh.sourceforge.net/
+[slide-git]: ../git
