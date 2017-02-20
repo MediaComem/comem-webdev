@@ -661,7 +661,7 @@ HTTP 204 No Content: The server successfully processed the request, but is not r
 
 ### CRUD summary
 
-TODO: table of HTTP method vs. operation on resource/collection
+TODO: table of HTTP method vs. operation on resource/collection, and common status codes
 
 
 
