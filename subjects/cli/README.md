@@ -176,7 +176,7 @@ To do this, use the `ls` command:
 
 ```bash
 $> ls
-[lots and lots of files]
+(lots and lots of files)
 ```
 > The `ls` command, that means "local storage", lists the files and directories that the current directory contains.
 
@@ -186,7 +186,7 @@ If you want it to do that, you need to pass the argument `--all` (or `-a`):
 
 ```bash
 $> ls -a
-[lots and lots of files, including the hidden ones]
+(lots and lots of files, including the hidden ones)
 ```
 
 ### Command : `cd`
@@ -198,12 +198,12 @@ Suppose you have a _"Documents"_ directory in your personnal directory, that con
 To do this, use the `cd` command, passing it as argument **the path to the directory** you want to go to.
 
 ```bash
-# You can use relative path...
+(You can use relative path...)
 $> pwd
 /Users/Batman
 $> cd Documents/TopSecret
 
-# ...or use absolute path
+(...or use absolute path)
 $> cd /Users/Batman/Documents/TopSecret
 ```
 > While you type the name of directories or files, hit the `Tab` key after having entered some letters and your CLI can try and autocomplete the name.
@@ -212,7 +212,7 @@ $> cd /Users/Batman/Documents/TopSecret
 
 ```bash
 $> cd /Us
-# Hit the Tab key and the CLI completes the name
+(Hit the Tab key and the CLI completes the name)
 $> cd /Users
 ```
 If there is more than one possible name with this letters, the CLI will do nothing. Hitting the `Tab` key a second time will list all the possibilities matching the letters you typed.
@@ -222,10 +222,10 @@ $> pwd
 /Users/Batman
 
 $> cd Do
-# Hitting the Tab key will fail
+(Hitting the Tab key will fail)
 
 $> cd Do
-# Hitting it again list the possibilites
+(Hitting it again list the possibilites)
 Documents/ Downloads/
 ```
 #### `cd` shortcuts
@@ -242,16 +242,17 @@ $> pwd
 * You can also drag and drop a directory from your Explorer or your Finder to the CLI to see its absolute path automaticaly written.
 ```bash
 $> cd
-# Drag'n'drop a directory from your Explorer/Finder, and...
+(Drag and drop a directory from your Explorer/Finder, and...)
 $> cd /Users/Batman/Pictures/
 ```
 
-* At anytime and from anywhere, you can return to your **personnal directory** with the `cd` command, using the `~` shortcut as argument:
+* At anytime and from anywhere, you can return to your **personnal directory** with the `cd` command, without any argument (or with the `~`):
 ```bash
-$> cd ~
+$> cd
 $> pwd
 /Users/Batman
 ```
+
 <!-- slide-notes -->
 > To type the `~` character, use this combination:
 > * `AltGr + ^` on **Windows**
@@ -300,7 +301,7 @@ You should avoid using (in directories et files name):
 They can cause **errors** in some scripts or tools, and will inevitably complicate using the CLI.
 
 ```bash
-# Will not work
+(Will not work)
 $> cd ./Why So Serious/
 ```
 > This command will be interpreted as a call to the `cd` command with three arguments : `./Why`, `So` and `Serious/`.
@@ -308,7 +309,7 @@ $> cd ./Why So Serious/
 You **can** use names with space, but you have to **escape** them first, using **quotation marks** around:
 
 ```bash
-# This will work
+(This will work)
 $> cd ./"Why So Serious"/
 ```
 ## For Windows Users
@@ -456,7 +457,6 @@ Save the file (`Esc` then `:wq`) and restart your CLI.
 * CLI: use actual example `command arg1 arg2 arg3` instead of Unix syntax (`command [argument ...]`)
 * CLI: also explain traditional option format: `command -v -o value --option value`
 * CLI: explain `cd /path/to/projects`
-* CLI: avoid `#` at the beginning of a line in block codes
 * CLI: link to other subjects
 * CLI: add slide(s) to explain the UNIX command syntax
 
