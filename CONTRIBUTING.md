@@ -60,6 +60,12 @@ npm run pdf
 
 This will convert the slides to PDF and save them in the `pdf` directory.
 
+If you want the home links to point to a different URL, run the script with the `$WEB_URL` environment variable:
+
+```bash
+WEB_URL="https://github.com/MediaComem/comem-webserv#readme" npm run pdf
+```
+
 **Warning:** slides are converted to PDF with [PhantomJS][phantomjs] through the [html-pdf][html-pdf] npm package.
 Apparently, webfonts (custom fonts loaded through CSS) are somewhat buggy in PhantomJS.
 Before running this script, you should install the custom fonts used in the slides on your system (they are in the `assets/fonts` directory).
@@ -100,6 +106,7 @@ The following environment variables can be used for customization:
 * `$PDF_BUILD_DIR` - The directory in which the generated PDF slides are saved (defaults to `pdf`)
 * `$PORT` - The port on which the slides server is run (defaults to 3000)
 * `$SOURCE_VERSION` - The branch/commit to which source links to GitHub (in the top-right corner of slides) will point to (defaults to the current branch, or the latest commit when using `npm run deploy`)
+* `$WEB_URL` - The URL to which the home link (in the top-right corner of slides) will point to (defaults to `https://mediacomem.github.io/comem-webdev-docs/`)
 
 You can also put these settings in a `local.config.js` file in the project's directory (which will be ignored by Git):
 
@@ -110,6 +117,7 @@ exports.liveReloadPort = 35729;
 exports.pdfBuildDir = 'pdf';
 exports.port = 3000;
 exports.sourceVersion = 'master';
+exports.webUrl = 'https://mediacomem.github.io/comem-webdev-docs/';
 ```
 
 
