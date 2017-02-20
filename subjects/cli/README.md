@@ -73,7 +73,7 @@ You're going to install **Git Bash**, an alternative CLI that emulates a UNIX-li
 
 <!-- slide-column 30 -->
 
-<p class='center'><img src='images/gitbashlogo.png' width='80%' /></p>
+<p class='gitbash'><img src='images/gitbashlogo.png' /></p>
 
 <!-- slide-column -->
 
@@ -113,12 +113,49 @@ A command is a word that you have to type on the CLI, that will tell the compute
 The syntax for using command could be resumed like this:
 
 ```bash
-$> name [argument ...]
+$> name arg1 arg2 arg3 ...
 ```
 **Note the use of space to separate the differents elements of a command.**
 
 * `name` represents the name of the command you want to execute
-* `[argument ...]` represents additionnal information has to how the command must be executed, **each of them separeted by a space**.
+* `arg1 arg2 arg3 ...` represent additionnal information about the command, **each of them separeted by a space**.
+
+### How and what
+
+There are two types of arguments to use with a command (if needed):
+
+<!-- slide-column -->
+
+**Options** specify **how** the command will behave.
+
+They are identifiable by the `-` or `--` that precedes them.
+
+```bash
+$> ls -l --all
+```
+
+We use the `ls` command to list the content of the current directory. The options tell `ls` **how** it should do so:
+* `--all` tells it to print all elements
+* `-l` tells it to print elements in a list format, rather than on one line.
+
+<!-- slide-column -->
+
+**Arguments** specify **what** will be used by or is the subject of the command.
+
+They are preceded by nothing.
+
+```bash
+$> cd /Users/Batman
+```
+Here, we use the `cd` command to move to another directory.
+
+And the argument `/Users/Batman` tells the command **what** directory we want to move to.
+
+<!-- slide-notes -->
+
+In the **first example**, we use the `ls` command to list elements in the current directory. We also use options to tell `ls` how it should print elements:
+* `--all` tells it to print all elements
+* `-l` tells it to print elements in a list format, rather than on one line.
 
 ### Command : `help`
 
@@ -257,6 +294,20 @@ $> pwd
 > To type the `~` character, use this combination:
 > * `AltGr + ^` on **Windows**
 > * `Alt + n` on **Mac**
+
+#### Special note
+
+Throughout this course, you will often found the following line of information (_or something resembling it_):
+
+```bash
+$> cd path/to/folder
+```
+
+This means that you should use **the path that leads to the directory in which you store your projects**.
+
+> You shouldn't **actually write** `path/to/folder`.
+> 
+> It will obviously fail, unless you happen to have a `path` directory that contains a `to` directory that contains a `folder` directory...
 
 ### Command : `mkdir`
 
@@ -454,9 +505,6 @@ Save the file (`Esc` then `:wq`) and restart your CLI.
 
 ## TODO
 
-* CLI: use actual example `command arg1 arg2 arg3` instead of Unix syntax (`command [argument ...]`)
-* CLI: also explain traditional option format: `command -v -o value --option value`
-* CLI: explain `cd /path/to/projects`
 * CLI: link to other subjects
 * CLI: add slide(s) to explain the UNIX command syntax
 
