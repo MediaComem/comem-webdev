@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Materials for the COMEM+ web development courses.",
   "scripts": {
+    "build": "gulp build",
+    "deploy": "./deploy.sh",
+    "doctoc": "gulp doctoc",
+    "pdf": "gulp pdf",
     "start": "gulp"
   },
   "repository": {
@@ -27,8 +31,9 @@
     "gulp-util": "^3.0.8",
     "gulp-watch": "^4.3.11",
     "handlebars": "^4.0.6",
+    "html-pdf": "^2.1.0",
     "lodash": "^4.17.4",
-    "md2remark": "~0.1.4",
+    "md2remark": "~0.1.5",
     "run-sequence": "^1.2.2",
     "through2": "^2.0.3"
   }

@@ -1,5 +1,7 @@
 # Collaborating with Git
 
+<!-- slide-include ../../BANNER.md -->
+
 Requirements:
 
 * [Git][git]
@@ -38,6 +40,7 @@ Requirements:
   - [B: check the conflict markers](#b-check-the-conflict-markers)
   - [B: check the state of branches](#b-check-the-state-of-branches-1)
   - [B: push the changes](#b-push-the-changes)
+  - [A: pull the changes](#a-pull-the-changes)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -126,7 +129,7 @@ Clone repositories, push and pull commits
 
 ### A: add B as a collaborator
 
-TODO: add B as a collaborator
+TODO: add B as a collaborator (do not forget to accept the invitation in the e-mail)
 
 
 
@@ -162,7 +165,7 @@ It's time for **Person A** to put the code in the shared GitHub repository.
 This is done using the `git push` command:
 
 ```bash
-$> git push origin master
+$> git push -u origin master
 Counting objects: 35, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (33/33), done.
@@ -174,6 +177,8 @@ To github.com:PersonA/github-demo.git
 ```
 
 The command `git push [remote] [branch]` tells Git to push the commit pointed to by `[branch]` to the remote named `[remote]`.
+
+The `-u` option (or `--set-upstream`) tells Git to remember that you have linked this branch to that remote.
 
 
 
@@ -214,7 +219,7 @@ Resolving deltas: 100% (14/14), done.
 $> cd github-demo
 ```
 
-The `git clone [url]` command copies the repository to your machine.
+The `git clone [url]` command copies the **remote** repository to your machine.
 
 
 
@@ -239,7 +244,7 @@ so that you can know what the current state of the remote is.
 
 ### B: make local changes
 
-**Person B** thinks that the project's files are too complicated. Let's simplify:
+**Person B** thinks that the project's filenames are too long. Let's fix that:
 
 ```bash
 $> mv addition.js add.js
@@ -522,6 +527,18 @@ $> git push origin master
 ```
 
 <img src='images/demo-10-git-push.png' width='80%' />
+
+
+
+### A: pull the changes
+
+**Person A** can now pull those latest changes to keep up-to-date:
+
+```bash
+$> git pull origin master
+```
+
+<img src='images/demo-11-git-pull.png' width='80%' />
 
 
 

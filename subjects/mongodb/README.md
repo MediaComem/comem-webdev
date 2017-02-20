@@ -1,5 +1,7 @@
 # MongoDB
 
+<!-- slide-include ../../BANNER.md -->
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
@@ -15,11 +17,11 @@
   - [Updating documents](#updating-documents)
   - [Removing documents](#removing-documents)
 - [Indexes](#indexes)
-  - [Query performance](#query-performance)
-  - [Creating indexes](#creating-indexes)
-  - [Index scan](#index-scan)
-  - [Compound indexes](#compound-indexes)
   - [Unique indexes](#unique-indexes)
+  - [Query performance](#query-performance)
+  - [Improving performance with indexes](#improving-performance-with-indexes)
+  - [Index scan](#index-scan)
+  - [Performance of compound indexes](#performance-of-compound-indexes)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -416,10 +418,29 @@ Indexes can support the efficient execution of queries and enforce constraints.
 
 
 
+### Unique indexes
+
+A unique index enforces uniqueness for the indexed fields:
+
+```js
+// Ensure that there are no two people born on the same day
+db.people.createIndex({ "birthDate": 1 }, { "unique": true })
+
+// Ensure that there are no two people with the same name in the same city
+db.people.createIndex({ "name": 1, "address.city": 1 }, { "unique": true })
+```
+
+By default, MongoDB creates a unique index on the `_id` field during the creation of a collection.
+
+Read the [documentation on indexes][indexes] to find out more about other types of indexes.
+
+
+
 ### Query performance
 
 Without indexes, MongoDB must perform a **full collection scan** to find the matching documents.
-Use `explain` to find out how a query will be executed:
+Use `explain` to find out how a query will be executed.
+The `COLLSCAN` value in the `winningPlan` object tells us that a collection scan will be performed when executing that query:
 
 ```bash
 > db.people.find({ name: "John A. Smith" }).explain()
@@ -444,7 +465,7 @@ Use `explain` to find out how a query will be executed:
 }
 ```
 
-### Creating indexes
+### Improving performance with indexes
 
 If an appropriate index exists for a query, MongoDB can use the index to **limit the number of documents it must inspect**.
 
@@ -463,7 +484,7 @@ Use [createIndex][create-index] to add an index:
 
 ### Index scan
 
-Run `explain` again to confirm that your index will be applied:
+Run `explain` again to confirm that your index will be applied (you should see `IXSCAN` in the `winningPlan` object):
 
 ```bash
 > db.people.find({ name: "John A. Smith" }).explain()
@@ -492,7 +513,7 @@ Run `explain` again to confirm that your index will be applied:
 
 
 
-### Compound indexes
+### Performance of compound indexes
 
 You can create an index on **multiple fields**:
 
@@ -516,24 +537,6 @@ db.people.find({}).sort({ "birthDate": 1, "name": -1 })
 // The index will NOT be used, and MongoDB will revert to a collection scan
 db.people.find({}).sort({ "birthDate": 1, "name": 1 })
 ```
-
-
-
-### Unique indexes
-
-A unique index enforces uniqueness for the indexed fields
-
-```js
-// Ensure that there are no two people born on the same day
-db.people.createIndex({ "birthDate": 1 }, { "unique": true })
-
-// Ensure that there are no two people with the same name in the same city
-db.people.createIndex({ "name": 1, "address.city": 1 }, { "unique": true })
-```
-
-By default, MongoDB creates a unique index on the `_id` field during the creation of a collection.
-
-Read the [documentation on indexes][indexes] to find out more about other types of indexes.
 
 
 

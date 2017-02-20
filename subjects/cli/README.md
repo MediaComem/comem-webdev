@@ -1,6 +1,6 @@
 # Command Line Introduction
 
-<!-- slide-front-matter class: center, middle -->
+<!-- slide-include ../../BANNER.md -->
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -73,7 +73,7 @@ You're going to install **Git Bash**, an alternative CLI that emulates a UNIX-li
 
 <!-- slide-column 30 -->
 
-<p class='gitbashlogo'><img src='images/gitbashlogo.png' /></p>
+<p class='center'><img src='images/gitbashlogo.png' width='80%' /></p>
 
 <!-- slide-column -->
 

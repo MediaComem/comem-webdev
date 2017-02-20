@@ -11,7 +11,8 @@ fi
 set -e
 
 CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-CURRENT_COMMIT="$(git rev-parse --verify --short HEAD)"
+CURRENT_COMMIT="$(git rev-parse --verify HEAD)"
+CURRENT_COMMIT_SHORT="$(git rev-parse --verify --short HEAD)"
 
 echo
 
@@ -36,7 +37,7 @@ echo
 
 echo "Building..."
 echo
-BUILD_DIR="$TMP_DIR" gulp build
+BUILD_DIR="$TMP_DIR" SOURCE_VERSION="$CURRENT_COMMIT" npm run build
 echo
 
 
@@ -56,7 +57,7 @@ echo
 cd "$TMP_DIR"
 git reset --soft origin/master
 git add --all .
-git commit -m "Generated content from ${CURRENT_BRANCH}@${CURRENT_COMMIT}"
+git commit -m "Generated content from ${CURRENT_BRANCH}@${CURRENT_COMMIT_SHORT}"
 git push origin master
 echo
 

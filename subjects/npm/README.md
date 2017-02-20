@@ -1,5 +1,7 @@
 # npm
 
+<!-- slide-include ../../BANNER.md -->
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
@@ -11,9 +13,6 @@
   - [npm packages](#npm-packages)
 - [The npm command](#the-npm-command)
   - [How do I use it?](#how-do-i-use-it)
-- [npm init](#npm-init)
-  - [Interactively create a package.json file](#interactively-create-a-packagejson-file)
-  - [What it looks like](#what-it-looks-like)
 - [npm install](#npm-install)
   - [Installing packages](#installing-packages)
   - [Using installed packages](#using-installed-packages)
@@ -22,15 +21,17 @@
   - [npm install with a package.json](#npm-install-with-a-packagejson)
   - [The --save-dev and --production option](#the---save-dev-and---production-option)
   - [The --global option](#the---global-option)
-- [npm publish](#npm-publish)
-  - [What do I need to publish?](#what-do-i-need-to-publish)
-  - [Publishing](#publishing)
-  - [Avoiding publication](#avoiding-publication)
 - [npm scripts](#npm-scripts)
   - [The scripts property](#the-scripts-property)
   - [Lifecycle scripts](#lifecycle-scripts)
   - [Custom scripts](#custom-scripts)
-  - [Scripts and the PATH](#scripts-and-the-path)
+- [npm init](#npm-init)
+  - [Interactively create a package.json file](#interactively-create-a-packagejson-file)
+  - [What it looks like](#what-it-looks-like)
+- [npm publish](#npm-publish)
+  - [What do I need to publish?](#what-do-i-need-to-publish)
+  - [Publishing](#publishing)
+  - [Avoiding publication](#avoiding-publication)
 - [Resources](#resources)
 - [TODO](#todo)
 
@@ -88,9 +89,10 @@ For operating systems:
 
 ### npm packages
 
-An npm **package** or **module** is a basically:
+An npm **package** or **module** is basically a **reusable piece of code** that you can install and use.
+It's composed of:
 
-* A directory with some files in it
+* A directory with some files in it (what will be installed)
 * A [package.json][package.json] file with some metadata about the package:
 
 ```json
@@ -147,68 +149,6 @@ npm help npm     involved overview
 
 
 
-## npm init
-
-<!-- slide-front-matter class: center, middle -->
-
-Create a new package
-
-
-
-### Interactively create a package.json file
-
-Create and move into a new project directory:
-
-```bash
-$> cd /path/to/projects
-$> mkdir npm-demo
-$> cd npm-demo
-```
-
-Run `npm init`:
-
-```bash
-$> npm init
-This utility will walk you through creating a package.json file.
-It only covers the most common items, and tries to guess sensible defaults.
-
-...
-
-Press ^C at any time to quit.
-name: (npm-demo)
-version: (1.0.0)
-description: npm demo
-entry point: (index.js)
-test command:
-git repository:
-keywords: npm, demo
-author: John Doe <john.doe@example.com>
-license: (ISC)
-```
-
-
-
-### What it looks like
-
-```json
-{
-  "name": "npm-demo",
-  "version": "1.0.0",
-  "description": "npm demo",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [ "npm", "demo" ],
-  "author": "John Doe <john.doe@example.com>",
-  "license": "ISC"
-}
-```
-
-Read the [documentation][package.json] to find out everything you can configure in this file.
-
-
-
 ## npm install
 
 <!-- slide-front-matter class: center, middle -->
@@ -219,7 +159,8 @@ Install a package
 
 ### Installing packages
 
-When you install a package, npm creates a `node_modules` directory where it saves the downloaded packages.
+When you install a package with the `npm install` command, npm creates a `node_modules` directory in the current working directory.
+It then saves the downloaded packages in that directory:
 
 ```bash
 $> npm install lodash
@@ -278,6 +219,9 @@ module.js:471
 
 Error: Cannot find module 'lodash'
 ```
+
+You could reinstall it manually, but image that you have **dozens** of dependencies.
+Do you want each team member to **re-type** the same `npm install` commands all the time (or forget them)?
 
 
 
@@ -393,69 +337,6 @@ http-server
 
 
 
-## npm publish
-
-<!-- slide-front-matter class: center, middle -->
-
-Publish a package
-
-
-
-### What do I need to publish?
-
-You need a valid `package.json` file.
-
-You should also set the `main` property:
-
-```json
-{
-  "name": "npm-demo",
-* "main": "./script.js",
-  ...
-}
-```
-
-When people `require` your module after installing it,
-they will get the same result as if they had required that file.
-
-
-
-### Publishing
-
-Publishing is as simple as running the `npm publish` command in the directory where your `package.json` file is located:
-
-```js
-npm publish
-```
-
-You of course need an **npm account**.
-
-You can only publish a new package if the package name is not already used.
-Names are registered on a **first-come, first-serve** basis.
-
-
-
-### Avoiding publication
-
-Sometimes you write code that should not be published:
-
-* A website (something where using `require` makes no sense)
-* A private package with confidential information
-
-In these cases, you can set the `private` property of the `package.json` file:
-
-```json
-{
-  "name": "npm-demo",
-* "private": true,
-  ...
-}
-```
-
-`npm publish` will then refuse to publish the package.
-
-
-
 ## npm scripts
 
 <!-- slide-front-matter class: center, middle -->
@@ -523,7 +404,7 @@ You can also define your own custom scripts:
 These scripts are run with `npm run <script>`:
 
 ```bash
-$> npm run serve-static
+$> npm run hello
 
 > npm-demo@1.0.0 serve-static /path/to/projects/npm-demo
 > echo Hello World!
@@ -533,62 +414,128 @@ Hello World!
 
 
 
-### Scripts and the PATH
+## npm init
 
-Package scripts (both lifecycle and custom scripts) have an interesting property:
+<!-- slide-front-matter class: center, middle -->
 
-* If you add packages that provide **command-line tools** as dependencies,
-  their binaries will be **added to the PATH**.
-* It's a way to add package dependencies that are normally installed globally,
-  so that your team doesn't have to reinstall them on every machine.
+Create a new package
 
-#### Installing a "global" module as a dependency
 
-Uninstall the global version of the static HTTP server we used earlier,
-and install it as a development dependency instead:
+
+### Interactively create a package.json file
+
+Create and move into a new project directory:
 
 ```bash
-$> npm uninstall --global http-server
-$> npm install --save-dev http-server
+$> cd /path/to/projects
+$> mkdir npm-demo
+$> cd npm-demo
 ```
 
-You should no longer be able to run it:
+Run `npm init`:
 
 ```bash
-$> http-server
-http-server: command not found
+$> npm init
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+...
+
+Press ^C at any time to quit.
+name: (npm-demo)
+version: (1.0.0)
+description: npm demo
+entry point: (index.js)
+test command:
+git repository:
+keywords: npm, demo
+author: John Doe <john.doe@example.com>
+license: (ISC)
 ```
 
-Since it was not installed globally, its binary is **not in the PATH**.
 
-#### Running a "global" module with a run script
 
-However, if you put it in a custom package script:
+### What it looks like
 
 ```json
 {
   "name": "npm-demo",
-* "scripts": {
-*   "serve-static": "http-server"
-* },
+  "version": "1.0.0",
+  "description": "npm demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [ "npm", "demo" ],
+  "author": "John Doe <john.doe@example.com>",
+  "license": "ISC"
+}
+```
+
+Read the [documentation][package.json] to find out everything you can configure in this file.
+
+
+
+## npm publish
+
+<!-- slide-front-matter class: center, middle -->
+
+Publish a package
+
+
+
+### What do I need to publish?
+
+You need a valid `package.json` file.
+
+You should also set the `main` property:
+
+```json
+{
+  "name": "npm-demo",
+* "main": "./script.js",
   ...
 }
 ```
 
-It works because npm puts it in the PATH for you.
+When people `require` your module after installing it,
+they will get the same result as if they had required that file.
 
-```bash
-$> npm run serve-static
 
-> npm-demo@1.0.0 serve-static /path/to/projects/npm-demo
-> http-server
 
-Starting up http-server, serving ./
-Available on:
-  http://127.0.0.1:8080
-  http://10.192.112.121:8080
-Hit CTRL-C to stop the server
+### Publishing
+
+Publishing is as simple as running the `npm publish` command in the directory where your `package.json` file is located:
+
+```js
+npm publish
 ```
+
+You of course need an **npm account**.
+
+You can only publish a new package if the package name is not already used.
+Names are registered on a **first-come, first-serve** basis.
+
+
+
+### Avoiding publication
+
+Sometimes you write code that should not be published:
+
+* A website (something where using `require` makes no sense)
+* A private package with confidential information
+
+In these cases, you can set the `private` property of the `package.json` file:
+
+```json
+{
+  "name": "npm-demo",
+* "private": true,
+  ...
+}
+```
+
+`npm publish` will then refuse to publish the package.
 
 
 
@@ -604,6 +551,7 @@ Hit CTRL-C to stop the server
 ## TODO
 
 * https://docs.npmjs.com/getting-started/fixing-npm-permissions
+* show more complex install example with Express
 
 
 

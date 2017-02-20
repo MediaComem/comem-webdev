@@ -1,8 +1,8 @@
 # Git Introduction
 
-This is a condensed version of the first chapters of the [Git Book](https://git-scm.com/book/en/v2), which you should read if you want more detailed information on the subject.
+<!-- slide-include ../../BANNER.md -->
 
----
+This is a condensed version of the first chapters of the [Git Book](https://git-scm.com/book/en/v2), which you should read if you want more detailed information on the subject.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -16,10 +16,9 @@ This is a condensed version of the first chapters of the [Git Book](https://git-
   - [**Distributed** version control systems](#distributed-version-control-systems)
 - [Git basics](#git-basics)
   - [Snapshots, not differences](#snapshots-not-differences)
-  - [Nearly every operation is local](#nearly-every-operation-is-local)
   - [Git has integrity](#git-has-integrity)
   - [What's in a Git project?](#whats-in-a-git-project)
-  - [The three states](#the-three-states)
+  - [The basic Git workflow](#the-basic-git-workflow)
 - [Getting started](#getting-started)
   - [Installing Git](#installing-git)
   - [First-time Git setup](#first-time-git-setup)
@@ -28,14 +27,10 @@ This is a condensed version of the first chapters of the [Git Book](https://git-
   - [Adding new files](#adding-new-files)
   - [Committing your changes](#committing-your-changes)
   - [Modifying files](#modifying-files)
-  - [Removing files](#removing-files)
-  - [Moving files](#moving-files)
-  - [Making changes outside of Git](#making-changes-outside-of-git)
+  - [Moving and removing files](#moving-and-removing-files)
 - [Viewing the commit history](#viewing-the-commit-history)
   - [Viewing the changes in the history](#viewing-the-changes-in-the-history)
-  - [Viewing the list of changed files](#viewing-the-list-of-changed-files)
-  - [Viewing the history with a custom format](#viewing-the-history-with-a-custom-format)
-  - [Limiting log output](#limiting-log-output)
+  - [Other log options](#other-log-options)
 - [Undoing things](#undoing-things)
   - [Unmodifying a modified file](#unmodifying-a-modified-file)
   - [Unstaging a staged file](#unstaging-a-staged-file)
@@ -93,13 +88,13 @@ What can I do with it?
 
 ### **Local** version control systems
 
-<!-- slide-column 60 -->
+<!-- slide-column -->
 
-You can manually copy your files into another directory to keep old versions.
+Basically, you **manually** copy your files into other directories to keep old versions.
 
-Systems such as [RCS][rcs] were developed to automate this process.
+Systems such as [RCS][rcs] automate this process.
 
-<!-- slide-column 40 -->
+<!-- slide-column -->
 
 <img src='images/local-vcs.png' width='100%' />
 
@@ -107,8 +102,8 @@ Systems such as [RCS][rcs] were developed to automate this process.
 
 **But:**
 
-* It is easy to forget which directory you’re in and accidentally write to the wrong file or copy over files you don’t mean to.
-* This is limited to your computer: how do you **collaborate** with other people?
+* It's easy to accidentally edit the wrong files
+* It's hard to **collaborate** on different versions with other people
 
 
 
@@ -116,15 +111,14 @@ Systems such as [RCS][rcs] were developed to automate this process.
 
 ### **Centralized** version control systems
 
-<!-- slide-column 60 -->
+<!-- slide-column -->
 
-Systems such as [CVS][cvs], [Subversion][svn], and [Perforce][perforce] have a **single server** that contains all the versioned files,
-and clients check out files from that central place.
+Systems such as [CVS][cvs] and [Subversion][svn] use a **single central server** that keeps all the versioned files.
+and clients get files from there.
 
-You can **collaborate** with other people through the server,
-and administrators have **fine-grained control** over who can do what.
+Administrators have **fine-grained control** over who can do what.
 
-<!-- slide-column 40 -->
+<!-- slide-column -->
 
 <img src='images/centralized-vcs.png' width='100%' />
 
@@ -132,9 +126,8 @@ and administrators have **fine-grained control** over who can do what.
 
 **But:**
 
-* The centralized server is a **single point of failure**.
-  If it goes down, then nobody can collaborate at all or save versioned change to anything they're working on.
-* If the server's hard disk becomes corrupt and proper backups haven't been kept, you **lose the entire history** of the project except whatever single snapshots people happen to have on their local machines.
+* The centralized server is a **single point of failure**
+* If proper backups are not kept, the history of the project **can be lost**
 
 
 
@@ -142,16 +135,15 @@ and administrators have **fine-grained control** over who can do what.
 
 ### **Distributed** version control systems
 
-<!-- slide-column 50 -->
+<!-- slide-column -->
 
-Systems such as [Git][git], [Mercurial][mercurial], [Bazaar][bazaar] or [Darcs][darcs] are **distributed**.
-Clients don't just check out the latest snapshot of the files: they **fully mirror** the repository.
+Systems such as [Git][git] and [Mercurial][mercurial] are **distributed**.
+Clients **fully mirror** the repository, not just the latest snapshot.
 
-* If any server dies, any of the client repositories can be copied back up to the server to **restore** it.
-* You can **collaborate** with different groups of people in different ways simultaneously within the same project.
-  This allows you to set up [several types of workflows][distributed-workflows] that aren't possible in centralized systems, such as hierarchical models.
+* Each client has a **full backup** of the project
+* Different [types of collaborative workflows][distributed-workflows] can be used
 
-<!-- slide-column 50 -->
+<!-- slide-column -->
 
 <img src='images/distributed-vcs.png' width='100%' />
 
@@ -169,9 +161,27 @@ Clients don't just check out the latest snapshot of the files: they **fully mirr
 
 ### Snapshots, not differences
 
-<!-- slide-column 50 -->
+<!-- slide-column 45 -->
 
-Other VCSs, like Subversion, store information as a list of file-based **changes**.
+Unlike other version control systems, Git stores its data as **snapshots** instead of file-based changes.
+
+Because Git stores all versions of all files **locally**, most Git operations are almost instantaneous and do not require a connection to a server:
+
+* Browsing the history
+* Checking a file's changes from a month ago
+* Committing
+
+<!-- slide-column -->
+
+**Changes (Subversion)**
+
+<img src='images/deltas.png' width='100%' />
+
+**Snapshots (Git)**
+
+<img src='images/snapshots.png' width='100%' />
+
+<!-- slide-notes -->
 
 Git thinks of its data more like a set of **snapshots** of a miniature filesystem.
 
@@ -179,50 +189,27 @@ Every time you save the state of your project in Git, it basically takes a pictu
 To be efficient, **if files have not changed, Git doesn't store the file again**, just a link to the previous identical file it has already stored.
 Git thinks about its data more like a stream of snapshots.
 
-<!-- slide-column 50 -->
-
-**Changes**
-
-<img src='images/deltas.png' width='100%' />
-
-**Snapshots**
-
-<img src='images/snapshots.png' width='100%' />
-
-
-
-
-
-### Nearly every operation is local
-
-Most operations in Git only need local files and resources to operate.
-Because you have the entire history of the project right there on your local disk, most operations seem almost instantaneous:
-
-* To browse the history of the project, Git simply reads it directly from your local database.
-* To see the changes introduced in a file since a month ago, Git can look up the file a month ago and do a local difference calculation.
-* If you're offline, you can commit happily until you get to a network connection to upload.
-
 
 
 
 
 ### Git has integrity
 
-Everything in Git is check-summed before it is stored and is then referred to by that **checksum**.
-This means it's impossible to change the contents of any file or directory without Git knowing about it.
-This functionality is built into Git at the lowest levels and is integral to its philosophy.
-You can’t lose information in transit or get file corruption without Git being able to detect it.
-
-The mechanism that Git uses for this checksumming is called a [SHA-1][sha1] hash.
-This is a 40-character string composed of hexadecimal characters (0–9 and a–f) and calculated based on the contents of a file or directory structure in Git.
-A SHA-1 hash looks something like this:
+All Git objects are identified by a [SHA-1][sha1] hash that looks like this:
 
 ```
 24b9da6552252987aa493b52f8696cd6d3b00373
 ```
 
-You will see these hash values all over the place in Git because it uses them so much.
-In fact, Git stores everything in its database **not by file name but by the hash value of its contents**.
+You will see them all over the place in Git.
+Often you will only see a prefix (the first 6-7 characters):
+
+```
+24b9da6
+```
+
+Because all content is hashed, it's impossible for files to be lost or corrupted without Git knowing about it.
+This functionality is built into Git at the lowest levels and is integral to its philosophy.
 
 
 
@@ -255,8 +242,8 @@ A Git project has three main sections:
 
 #### The Git directory
 
-The Git directory is where Git stores the metadata and object database for your project: all the **snapshots** of the different **versions** of your files.
-This is the most important part of Git, and it is what is copied when you clone a repository from another computer.
+The Git directory is where Git stores all the **snapshots** of the different **versions** of your files.
+This is the most important part of Git, and it is what is copied when you clone a repository from another computer or a server.
 
 It's located in the `.git` directory in the project's directory:
 
@@ -275,12 +262,14 @@ my-project:
     file3.txt
 ```
 
-There's no reason to modify any of the files in this directory yourself.
-You could easily corrupt the Git repository.
+You should never modify any of the files in this directory yourself;
+you could easily corrupt the Git repository.
+
+It is hidden by default, but you can see it on the command line.
 
 #### The working directory (also called the working tree)
 
-The working directory is a **single checkout of one version** of the project: these are **the files you are currently working on**.
+The working directory contains the **files you are currently working on**; that is, **one specific version** of your project.
 These files are pulled out of the compressed database in the Git directory and placed in your project's directory for you to use or modify:
 
 ```txt
@@ -300,9 +289,9 @@ These files are pulled out of the compressed database in the Git directory and p
 
 #### The staging area (also called the index)
 
-The staging area is a file, generally contained in your Git directory, that stores information about **what will go into your next commit**.
+The staging area is a file, generally contained in your Git directory, that stores information about **what will go into the next commit (or version)**.
 
-Before file snapshots are committed in the Git directory, they must go through the *staging area*.
+Before file snapshots are **committed** in the Git directory, they must go through the *staging area*:
 
 ```txt
 my-project:
@@ -323,27 +312,22 @@ my-project:
 
 
 
-### The three states
+### The basic Git workflow
 
-This is one of the **_most important things to remember about Git_**.
-
-Git has three main states that your files can reside in: *committed*, *modified*, and *staged*:
-
-* **Committed** means that the data is safely stored in your local database (the *Git directory*).
-* **Modified** means that you have changed the file but have not committed it to your database yet.
-* **Staged** means that you have marked a *new* or *modified* file in its current version to go into your next commit snapshot.
-  It is in the *staging area*.
-
-#### The basic Git workflow
-
-The basic Git workflow goes something like this:
+This is one of the **most important things to remember about Git**:
 
 <p class='center'><img src='images/areas.png' width='60%' /></p>
 
-* You **check out** a specific version of your files into the *working directory*.
-* You **modify** files in your *working directory*.
-* You **stage** the files, adding snapshots of them to your *staging area*.
-* You do a **commit**, which takes the files as they are in the *staging area* and stores that snapshot permanently to your *Git directory*.
+* You **check out** a specific version of your files into the *working directory*
+* You **modify** files (or add new files) in your *working directory*
+* You **stage** the files, adding snapshots of them to your *staging area*
+* You do a **commit**, which takes the files as they are in the *staging area* and stores that snapshot permanently to your *Git directory*
+
+#### Using the staging area
+
+New snapshots of files **MUST go through the staging area** to be **committed** into the Git directory.
+
+<img src='images/staging-area-loading-dock.jpg' width='100%' />
 
 
 
@@ -358,8 +342,7 @@ The rest of this documentation is a tutorial where you will learn how to:
 * Check the status of your files
 * Track new files
 * Stage and commit modified files
-* Remove files
-* Move files
+* Move and remove files
 * Ignore files
 
 
@@ -727,59 +710,10 @@ $> git commit -m "New lines in hello.txt and hi.txt"
 
 
 
-### Removing files
+### Moving and removing files
 
-You can remove files with Git:
-
-```bash
-$> git rm hi.txt
-rm 'hi.txt'
-
-$> git status
-On branch master
-Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
-
-  deleted:    hi.txt
-```
-
-If you remove the file yourself, you must still run the `git rm` command to remove it from the staging area.
-
-
-
-
-
-### Moving files
-
-You can move files with Git:
-
-```bash
-$> git mv hi.txt people.txt
-$> git status
-On branch master
-Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
-
-  renamed:    hi.txt -> people.txt
-```
-
-Git actually doesn't store the fact that the file was moved:
-it detects it after the fact.
-This is equivalent:
-
-```bash
-mv hi.txt people.txt
-git rm hi.txt
-git add people.txt
-```
-
-
-
-
-
-### Making changes outside of Git
-
-It's often simpler to just move or remove the files yourself:
+Git has a `git mv` and `git rm` command, but nobody uses them for day-to-day work on files.
+It's simpler to just move or remove the files yourself:
 
 ```bash
 $> mv hi.txt people.txt
@@ -805,7 +739,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 You can tell Git to add all changes (additions, modifications and removals):
 
 ```bash
-$> git add --all .
+$> git add --all
 
 $> git status
 On branch master
@@ -846,15 +780,13 @@ Date:   Mon Jan 23 11:01:06 2017 +0100
     Add hello and hi files
 ```
 
-Use `git help log` to learn about its many options.
-
 
 
 
 
 ### Viewing the changes in the history
 
-The `--patch` option shows the difference introduced in each commit:
+With the `--patch` option, you can see that Git shows you the differences you introduced in each commit:
 
 ```diff
 $> git log --patch
@@ -885,72 +817,23 @@ index e5db1d9..f74a87a 100644
 
 
 
-### Viewing the list of changed files
+### Other log options
 
-The `--stat` option lists the files that have changed and gives abbreviated statistics:
-
-```bash
-$> git log --stat
-commit e753ceb86806b285aa105a846c7295e826439637
-Author: John Doe <john.doe@example.com>
-Date:   Mon Jan 23 11:50:07 2017 +0100
-
-    New lines in hello.txt and hi.txt
-
- hello.txt | 1 +
- hi.txt    | 1 +
- 2 files changed, 2 insertions(+)
-
-commit 4c56257f622c53f1ddeaf3d58b6729b01b35aedb
-Author: John Doe <john.doe@example.com>
-Date:   Mon Jan 23 11:50:00 2017 +0100
-
-    The world is beautiful
-
- hello.txt | 1 +
- 1 file changed, 1 insertion(+)
-```
-
-
-
-
-
-### Viewing the history with a custom format
-
-The `-pretty` option allows you to define your own format:
-
-```bash
-$> git log --pretty=format:"%h by %an %ad: %s" --date=relative
-e753ceb by John Doe 5 hours ago: New lines in hello.txt and hi.txt
-4c56257 by John Doe 5 hours ago: The world is beautiful
-c90aa36 by John Doe 6 hours ago: Add hello and hi files
-```
-
-Check out the [available options][git-log-pretty-formats].
-
-
-
-
-
-### Limiting log output
-
-You can also limit which commits are listed.
-The time-limiting options, in particular, are very useful:
-
-```bash
-$> git log --since=2.weeks
-```
-
+The `git log` has many options to customize its output or limit what commits it shows you.
 Here are some other useful options:
 
-Option              | Limit to
-:-                  | :-
-`-(n)`              | The last n commits.
-`--since, --after`  | Commits made after the specified date.
-`--until, --before` | Commits made before the specified date.
-`--author`          | Commits whose author entry matches the specified string.
-`--grep`            | Commits with a commit message containing the string.
-`-S`                | Commits adding or removing code matching the string.
+Option     | Limit to
+:-         | :-
+`--stat`   | Show the list of changed files
+`--pretty` | Show the commit history with a [custom format][git-log-pretty-formats]
+`-(n)`     | Only the last n commits
+`--after`  | Only commits made after the specified date
+`--before` | Only commits made before the specified date
+`--author` | Only commits whose author matches the specified string
+`--grep`   | Only commits with a commit message containing the string
+`-S`       | Only commits adding or removing code matching the string
+
+Use `git help log` or read [the documentation][git-log] to learn more.
 
 
 
@@ -961,7 +844,7 @@ Option              | Limit to
 There are several ways of undoing things with Git.
 We'll review a few of the tools available.
 
-*Be careful:* you can't always undo some of these undos.
+**_Be careful:_** you can't always undo some of these operations.
 
 
 
@@ -969,12 +852,11 @@ We'll review a few of the tools available.
 
 ### Unmodifying a modified file
 
-Sometimes you make a change and you realize you don't need it anymore.
+Sometimes you make a change and you realize it was wrong or you don't need it anymore.
 Git actually tells you what to do to discard that change:
 
 ```bash
 $> echo "Hi Steve" >> hi.txt
-
 $> git status
 On branch master
 Changes not staged for commit:
@@ -996,20 +878,19 @@ On branch master
 nothing to commit, working tree clean
 ```
 
+Note that in this case, **the change is forever lost** as it was never committed.
+
 
 
 
 
 ### Unstaging a staged file
 
-If you have staged a file and don't need the changes in it anymore, a simple `git checkout` is not enough.
-Again, Git tells you what to do:
+If you have staged a file but realize you don't want it in the next commit anymore, Git also tells you what to do:
 
 ```bash
 $> echo "Hi Steve" >> hi.txt
-
 $> git add hi.txt
-
 $> git status
 On branch master
 Changes to be committed:
@@ -1026,7 +907,8 @@ Unstaged changes after reset:
 M       hi.txt
 ```
 
-The changes will still be in the file, but you can now use `git checkout` to discard them.
+The changes will still be in the file in the working directory.
+If you want to completely get rid of them, you can use `git checkout` as shown before.
 
 
 
@@ -1071,11 +953,9 @@ You should not do this if you have already shared this commit with others.
 [rcs]: https://en.wikipedia.org/wiki/Revision_Control_System
 [cvs]: https://en.wikipedia.org/wiki/Concurrent_Versions_System
 [svn]: https://subversion.apache.org/
-[perforce]: https://en.wikipedia.org/wiki/Perforce_Helix
 [git]: https://git-scm.com/
+[git-log]: https://git-scm.com/book/en/v2/Git-Basics-Viewing-the-Commit-History
 [mercurial]: https://www.mercurial-scm.org/
-[bazaar]: http://bazaar.canonical.com/
-[darcs]: http://darcs.net/
 [distributed-workflows]: https://git-scm.com/book/en/v2/Distributed-Git-Distributed-Workflows
 [sha1]: https://en.wikipedia.org/wiki/SHA-1
 [install-git]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git

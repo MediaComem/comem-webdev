@@ -1,6 +1,6 @@
 # JS - Closure
 
-<!-- slide-front-matter class: center, middle -->
+<!-- slide-include ../../BANNER.md -->
 
 What's a Closure?
 

@@ -1,5 +1,7 @@
 # REST APIs Introduction
 
+<!-- slide-include ../../BANNER.md -->
+
 Requirements:
 
 * [Google Chrome][chrome] (recommended, any browser with developer tools will do)
@@ -100,11 +102,11 @@ Many standards:
 
 ### What is a REST API?
 
-* API means [Application Programming Interface][api].
+* API means [Application Programming Interface][api]
 
   > A clearly defined method of communication to interact with your program/service.
 
-* REST means [REpresentational State Transfer][rest].
+* REST means [REpresentational State Transfer][rest]
 
   > An architectural style for building distributed computer systems on the Internet (i.e. it's a type of [Web Service][web-service]).
 
@@ -112,7 +114,7 @@ Many standards:
 
 <!-- slide-notes -->
 
-* REST has been introduced in Roy Fielding’s Ph.D. thesis (Roy Fielding has been a contributor to the HTTP specification, to the apache server, to the apache community).
+REST has been introduced in Roy Fielding’s Ph.D. thesis (Roy Fielding has been a contributor to the HTTP specification, to the apache server, to the apache community).
 
 
 
@@ -178,8 +180,8 @@ scheme:[//[user:password@]host[:port]][/]path[?query][#fragment]
 
 ### Resource vs. representation
 
-* In REST, we use the HTTP protocol to support the exchange of data between a **client** and a **server**.
-* What is exchanged is not the actual resource: it is a **representation** of the resource.
+* In REST, we use the HTTP protocol to support the exchange of data between a **client** and a **server**
+* What is exchanged is not the actual resource: it is a **representation** of the resource
 * The **same resource** could have:
   * An HTML representation
   * An XML representation
@@ -297,9 +299,9 @@ The **query string** is the third part of the request line:
 These are parameters given to the server, usually to *filter* the resource.
 In this case:
 
-* `page=3` - we want the third page.
-* `pageSize=50` - we want pages of 50 movies.
-* `orderBy=title` - we want the movies ordered by title.
+* `page=3` - we want the third page
+* `pageSize=50` - we want pages of 50 movies
+* `orderBy=title` - we want the movies ordered by title
 
 #### Headers
 
@@ -313,8 +315,8 @@ GET /movies/best?page=3&pageSize=50&orderBy=title HTTP/1.1
 
 This allows the client to tell the server how to serve the request:
 
-* `Accept: application/html,*/*` - I prefer HTML, but otherwise give me any format you have.
-* `Host: www.example.com` - This is the domain I want the resource from.
+* `Accept: application/html,*/*` - I prefer HTML, but otherwise give me any format you have
+* `Host: www.example.com` - This is the domain I want the resource from
 
 There are many [headers][headers] that can be used in requests.
 
@@ -335,8 +337,9 @@ Host: www.example.com
 
 In this case:
 
-* It's a `POST` request, so the server should create a new resource.
-* The `Content-Type` header is `application/json`, so the server should interepret the body as a JSON payload.
+* It's a `POST` request, so the server should create a new resource
+* The `Content-Type` header is `application/json`, so the server should interepret the body as a JSON payload
+  and use that data to create the resource
 
 
 
@@ -409,9 +412,9 @@ HTTP/1.1 200 OK
 
 It allows the server to give the client additional metadata about the response:
 
-* `Content-Language: en` - The response contains information in English.
-* `Content-Type: application/json` - The response body is a JSON payload.
-* `Last-Modified: Tue, 07 Feb 2017 02:12:22 GMT` - The resource was last modified on February 7th.
+* `Content-Language: en` - The response contains information in English
+* `Content-Type: application/json` - The response body is a JSON payload
+* `Last-Modified: Tue, 07 Feb 2017 02:12:22 GMT` - The resource was last modified on February 7th
 
 There are many [headers][headers] that can be used in responses.
 
