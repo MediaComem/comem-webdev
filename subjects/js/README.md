@@ -520,13 +520,133 @@ console.log(i); // 2
 
 Just **don't do it**.
 
+## String syntax
 
+In JavaScript, you have (now) three ways to use strings:
+
+```js
+// single-quote: '
+var string = 'I\'m your "Wurst" nightmare: ' + worstNightmare;
+```
+You have to **escape** all other single-quotes, and use `+` to concatenate.
+
+```js
+// double-quote: "
+var string = "I'm your \"Wurst\" nightmare: " + worstNightmare;
+```
+You have to escape all other double-quotes, and use `+` to concatenate.
+
+**ES6 only!**
+
+```js
+// back-tick (or template literals): `
+var string = `I'm your "Wurst" nightmare: ${worstNightmare}`;
+```
+> To do a back-tick use `Shift + ^`, then hit the `Space` bar.
+
+You don't have to escape anything. To insert variables inside the string, use the `${<variable>}` notation. *Note that using* `+` *still works.*
+
+## JSON
+
+<!-- slide-front-matter class: center, middle -->
+
+### JSON who?
+
+JSON, that stands for **J**ava**S**cript **O**bject **N**otation, is a syntax that is used to **represent JavaScript objects** with **strings**.
+
+JSON can only describe the following types:
+
+| Types   | Notation                |
+|:------- | :---------------------- |
+| Object  | `{"property": "value"}` |
+| Array   | `["value"]`             |
+| Number  | `2`                     |
+| String  | `"text"`                |
+| Null    | `null`                  |
+| Boolean | `true`, `false`         |
+
+> Note that **objects' properties** are **double-quoted**.
+>
+> **It is not possible to describ a JavaScript function in JSON!**
+
+### Example
+
+Here is an example of a **JavaScript object**, and it's **description in JSON**:
+
+<!-- slide-column -->
+
+```js
+var starship = {
+	designation: "NX-01",
+	crew: 83,
+	captain: {
+		firstname: "Jonathan",
+		lastname: "Archer",
+		activeService: true
+	},
+	species: [
+		"human",
+		"denobulan",
+		"vulcan"
+	],
+	warp: 5,
+	cloak: null,
+}
+
+```
+
+<!-- slide-column -->
+
+```json
+{
+	"designation": "NX-01",
+	"crew": 83,
+	"captain": {
+		"firstname": "Jonathan",
+		"lastname": "Archer",
+		"activeService": true
+	},
+	"species": [
+		"human",
+		"denobulan",
+		"vulcan"
+	],
+	"warp": 5,
+	"cloak": null,
+}
+```
+
+> Again, note the `"` around the **object's properties**.
+
+### Using JSON
+
+Describing **manually** a JavaScript object in JSON (or the opposite) can be quite tedious, especially with complicated and intricate objects.
+
+Fortunately, JavaScript provide you with an utilitary object called `JSON` that can do that for you.
+
+To transform a JavaScript object to its JSON description, use the `JSON.stringify()` method:
+
+```js
+var crew = {name: "T'Pol", specie: "Vulcan", function: "Science Officer"};
+var deviceJson = JSON.stringify(device);
+console.log(deviceJson);
+// Output : "{"name":"transporter","origin":"earth"}"
+
+```
+
+To do the opposite, that is creating a JavaScript object from a JSON string, use the `JSON.parse()` method:
+
+```js
+var deviceJson = '{"name":"protein resequencer","origin":"earth"}'
+```
 
 ## TODO
 
 * Strings: single quotes, double quotes, template literals
 * JSON: relationship to JavaScript objects, parsing and serializing
 * Array operations
+* Arrow functions (syntax)
+* "constructor" (syntax with `new`)
 
 
 
