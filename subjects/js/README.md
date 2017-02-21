@@ -373,7 +373,7 @@ var result = compute(3, 4, (nb1, nb2) => nb1 / nb2);
 
 If it's the case, then you're facing a new **ES6** syntax for functions.
 
-The example above is completely equivalent to writing:
+The example above is equivalent to writing:
 
 ```js
 var result = compute(3, 4, function(nb1, nb2) {
@@ -417,12 +417,6 @@ The `return` keyword is **implicit** with one-line bodies that have no brackets:
 // This arrow function will return the square root of the number
 var squareroot = compute(16, number => sqrt(number));
 ```
-If you want your one-line function to **return nothing**, add brackets:
-
-```js
-// This arrow function will return "undefined"
-var squareroot = compute(16, number => { sqrt(number) });
-```
 
 If the body has **more than one line**, you **have to add** brackets `{}` around (_and use the `return` keyword if necessary_):
 
@@ -448,7 +442,7 @@ function Starship() {
 
 var discovery = new Starship();
 ```
-> The `discovery` variable will now store a new (and empty) object, of type `Startship`.
+> The `discovery` variable will now store a new (and empty) object, of type `Starship`.
 
 ### The `this` keyword
 
