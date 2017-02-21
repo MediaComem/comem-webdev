@@ -365,7 +365,7 @@ console.log(lastNames); // [ "Doe", "Smith", "Smith" ]
 
 ### Arrow functions *(ES6)*
 
-While seaching for example in the Web, you could stumble upon some strange syntax looking like this:
+While seaching for examples in the Web, you could stumble upon some strange syntax looking like this:
 
 ```js
 var result = compute(3, 4, (nb1, nb2) => nb1 / nb2);
@@ -377,7 +377,7 @@ The example above is equivalent to writing:
 
 ```js
 var result = compute(3, 4, function(nb1, nb2) {
-  return nb1 / nb2
+  return nb1 / nb2;
 });
 ```
 
@@ -393,7 +393,7 @@ The part left of the `=>` represents the **function's arguments**.
 If your function has **only one** argument, you can **omit** the parenthesis:
 
 ```js
-var squareroot = compute(16, number => sqrt(number));
+var squareroot = compute(16, number => Math.sqrt(number));
 ```
 
 But if your function has **no argument**, you **have to** add empty parenthesis:
@@ -415,7 +415,7 @@ The `return` keyword is **implicit** with one-line bodies that have no brackets:
 
 ```js
 // This arrow function will return the square root of the number
-var squareroot = compute(16, number => sqrt(number));
+var squareroot = compute(16, number => Math.sqrt(number));
 ```
 
 If the body has **more than one line**, you **have to add** brackets `{}` around (_and use the `return` keyword if necessary_):
