@@ -68,7 +68,7 @@ You can have **several of them**.
 
 Collaborating with others involves **pushing** and **pulling** data to and from these remote repositories when you need to share work.
 
-TODO: multiple remotes diagram (local network, internet, etc)
+<p class='center'><img src='images/remotes.png' width='70%' /></p>
 
 
 
@@ -101,7 +101,61 @@ Both group members should register on GitHub:
 
 <p class='center'><img src='images/github-account.jpg' width='100%'></p>
 
-TODO: add ssh key to account
+#### Create an SSH key
+
+To push code to GitHub, you will need to **authenticate** yourself.
+There are two methods of authentication: HTTPS username/password or SSH keys.
+We will use an **SSH key** for this tutorial.
+You can check if you have one already with this command:
+
+```bash
+$> ls ~/.ssh
+id_rsa  id_rsa.pub
+```
+
+If you see these files, then you already have an SSH key pair (`id_rsa` is the **private** key, `id_rsa.pub` is the **public** key).
+
+If you don't (or see a *"No such file or directory"* error), use this command to generate a new key pair (press Enter at every prompt to keep the defaults):
+
+```bash
+$> ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/.ssh/id_rsa.
+Your public key has been saved in /home/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:ULmjUQDN4Snkh0s9u093mcva4cI94cDk name@host
+```
+
+#### Copy the SSH key
+
+To authenticate using your SSH key on GitHub, you will need to copy your **public key**.
+You can display it on the terminal with this command:
+
+```bash
+$> cat ~/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAEAQC+OMYWxBCiKa1lZuUc8sLcSBW17h
+l4VTy9DaarFC98KxS3NQao/7+eMkOS3o1II4QL7pn7WMYITWpWP9UdJKNef/KQlTpS
+1QVbhb6iJ2z2+GGt8+b0GvBRAZgab9TeOIrzN1QyknO4 name@host
+```
+
+#### Add the SSH key to your GitHub account
+
+<!-- slide-column 20 -->
+
+<img src='images/github-settings.png' width='100%' />
+
+<img src='images/github-settings-ssh.png' width='100%' />
+
+<!-- slide-column -->
+
+On GitHub, find the **SSH and GPG keys** section of your account settings and paste your **public SSH key** there:
+
+<img src='images/github-settings-ssh-key.png' width='100%' />
+
+(The title of the key is not important. It's useful when you have multiple keys, to remember which is which.)
 
 
 
@@ -129,17 +183,27 @@ Clone repositories, push and pull commits
 
 ### A: add B as a collaborator
 
-TODO: add B as a collaborator (do not forget to accept the invitation in the e-mail)
+For this tutorial, both team members will need push access to the repository.
+**Person A** should go to the repository's **collaborator settings**,
+and add the GitHub username of **Person B** as a collaborator:
+
+<img src='images/github-collaborators.png' width='100%' />
+
+**Person B** must then **_accept the invitation sent by e-mail_** for the change to be effective.
 
 
 
-### A: add a remote to your local repository
+### A: copy the remote SSH URL
 
 **Person A** should copy the SSH URL of the GitHub repository:
 
 <img src='images/github-ssh-url.png' width='100%' />
 
-Then move into their local repository and add it as a remote:
+
+
+### A: add the remote to your local repository
+
+**Person A** should move into their local repository and add the GitHub repository as a remote:
 
 ```bash
 $> cd /path/to/projects/comem-webdev-git-branching-ex
@@ -199,6 +263,14 @@ This includes not only the commit pointed to by master, but also the **entire hi
 Note the **origin/master** branch that has appeared in your local repository.
 This is a **remote-tracking branch**.
 It tells you where the **master** branch points to on the **origin** remote (the GitHub repository in this case).
+
+
+
+### B: get the remote repository's SSH URL
+
+**Person B** can now go to the repository's page on GitHub (under **Person A**'s account) and copy the SSH URL:
+
+<img src='images/github-clone-url.png' width='100%' />
 
 
 
