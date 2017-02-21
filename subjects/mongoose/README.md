@@ -476,12 +476,6 @@ Blog.collection.insertOne({ foo: 'bar' }, function(err, commandResult) {
 
 
 
-## TODO
-
-* unique constraints
-
-
-
 ## Resources
 
 * MongoDB Node.js client
@@ -491,6 +485,12 @@ Blog.collection.insertOne({ foo: 'bar' }, function(err, commandResult) {
   * [Getting started][mongoose-getting-started]
   * [Guide][mongoose-guide]
   * [API documentation][mongoose-api]
+
+
+
+## TODO
+
+* unique constraints
 
 
 

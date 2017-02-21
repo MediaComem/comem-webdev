@@ -664,6 +664,8 @@ HTTP 204 No Content: The server successfully processed the request, but is not r
 
 TODO: table of HTTP method vs. operation on resource/collection, and common status codes
 
+http://www.restapitutorial.com/lessons/httpmethods.html
+
 
 
 ## TODO
