@@ -35,6 +35,7 @@
   - [Check the status of the file conflict](#check-the-status-of-the-file-conflict)
   - [Resolving the file conflict](#resolving-the-file-conflict)
 - [Resources](#resources)
+- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

@@ -12,6 +12,7 @@
   - [Install Git Bash (Windows users only)](#install-git-bash-windows-users-only)
 - [How to use the CLI](#how-to-use-the-cli)
   - [Writing commands](#writing-commands)
+  - [How and what](#how-and-what)
   - [Command : `help`](#command--help)
   - [Command : `pwd`](#command--pwd)
   - [Command : `ls`](#command--ls)

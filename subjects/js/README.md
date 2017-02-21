@@ -25,6 +25,11 @@
   - [The function scope](#the-function-scope)
   - [The block scope](#the-block-scope)
   - [The (evil) global scope](#the-evil-global-scope)
+- [String syntax](#string-syntax)
+- [JSON](#json)
+  - [JSON who?](#json-who)
+  - [Example](#example)
+  - [Using JSON](#using-json)
 - [TODO](#todo)
 - [Resources](#resources)
 
@@ -603,6 +608,7 @@ var starship = {
 	},
 	species: [
 		"human",
+		"dog",
 		"denobulan",
 		"vulcan"
 	],
@@ -625,6 +631,7 @@ var starship = {
 	},
 	"species": [
 		"human",
+		"dog",
 		"denobulan",
 		"vulcan"
 	],
@@ -644,24 +651,23 @@ Fortunately, JavaScript provides you with **an utilitary object called `JSON`** 
 To transform a **JavaScript object to its JSON description**, use the `JSON.stringify()` method:
 
 ```js
-var crew = {name: "T'Pol", specie: "Vulcan", station: "Science Officer"};
+var crew = {name: "T'Pol", species: "Vulcan", station: "Science Officer"};
 var crewJson = JSON.stringify(crew);
 console.log(crewJson);
-// Output : "{"name":"T'Pol","specie":"Vulcan","station":"Science Officer"}"
+// Output : "{"name":"T'Pol","species":"Vulcan","station":"Science Officer"}"
 ```
 
 To do the opposite, that is creating a JavaScript object from a JSON string, use the `JSON.parse()` method:
 
 ```js
-var crewJson = '{"name": "Trip", "specie": "Human", "station": "Chief Engineer"}';
+var crewJson = '{"name": "Travis", "species": "Human", "station": "Helm"}';
 var crew = JSON.parse(crewJson);
 console.log(crew);
-// Output : "{"name":"T'Pol","specie":"Vulcan","station":"Science Officer"}"
+// Output : Object {name: "Travis", species: "Human", station: "Helm"}
 ```
 
 ## TODO
 
-* JSON: relationship to JavaScript objects, parsing and serializing
 * Constructor functions (syntax with `new`)
 * Array operations
 * Arrow functions (syntax)
