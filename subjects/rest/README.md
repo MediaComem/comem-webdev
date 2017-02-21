@@ -33,7 +33,6 @@ Requirements:
   - [Update](#update)
   - [Delete](#delete)
   - [CRUD summary](#crud-summary)
-- [TODO](#todo)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -57,7 +56,7 @@ How can they find each other, know what logic can be invoked, and talk to each o
 
 ### Remote procedure call (RPC) or remote method invocation (RMI)
 
-TODO: Java RMI diagram
+<p class='center'><img src='images/rmi.png' width='80%' /></p>
 
 
 
@@ -126,6 +125,8 @@ REST has been introduced in Roy Fielding’s Ph.D. thesis (Roy Fielding has been
 * Resources are identified with a standard format (e.g. **URLs**)
 * Every resource can have several **representations**
 * There is one unique interface for interacting with resources: **HTTP**
+
+<p class='center'><img src='images/rest.jpg' width='70%' /></p>
 
 
 
@@ -321,7 +322,7 @@ This allows the client to tell the server how to serve the request:
 
 There are many [headers][headers] that can be used in requests.
 
-#### Request (or message) body
+#### Request body
 
 The **body** is data that the client can ask the server to do something with:
 
@@ -419,7 +420,7 @@ It allows the server to give the client additional metadata about the response:
 
 There are many [headers][headers] that can be used in responses.
 
-#### Response (or message) body
+#### Response body
 
 The response body is the (optional) data sent by the server.
 Its nature depends on what the request was and what the response status code indicates.
@@ -515,175 +516,282 @@ Since REST deals primarily with **resources**, in a REST API you will (mostly):
 * **U**pdate resources
 * **D**elete (or detroy) resources
 
+Let's try these operations with a prepared REST API:
+
+https://evening-meadow-25867.herokuapp.com
+
+
+
+### Postman
+
+To make requests to the API, we will use [Postman][postman], an HTTP client with a GUI.
+**Download and launch** the application now.
+
+You don't have to sign up when it prompts you to, you can skip it:
+
+<p class='center'><img src='images/postman-skip-signup.png' width='70%' /></p>
+
+#### Postman interface
+
+Postman allows you to make any HTTP **request/response** (e.g. `POST`, `PUT`, custom headers, etc).
+It also remembers your **previous requests**..
+
+<img src='images/postman-ui.png' width='100%' />
+
 
 
 ### Create
 
-TODO: adapt (content copied from previous course's slides)
+The API allows us to **create a person** by making a `POST` request with a **JSON representation** of the person.
+This is the request we want to make:
 
 ```http
-POST /people HTTP/1.1
+POST https://evening-meadow-25867.herokuapp.com/api/people HTTP/1.1
 Content-type: application/json
 
-{
-  "name": {
-    "first": "John",
-    "last": "Doe"
-  },
-  "age": 24
-}
+{ "name": "Your Name", "gender": "male" }
 ```
 
-```http
-HTTP/1.1 201 Created
-Content-type: application/json
+Let's make that request with Postman:
 
-{
-  "_id": "3orv8nrg",
-  "name": {
-    "first": "John",
-    "last": "Doe"
-  },
-  "age": 24
-}
-```
+<img src='images/postman-create.png' width='100%' />
 
-The POST method is used to request that the origin server accept the entity enclosed in the request as a new subordinate of the resource identified by the Request URI.
+**Tip:** use your name to avoid collisions.
 
-HTTP 201 Created: The request has been fulfilled and resulted in a new resource being created.
+#### Create request headers
+
+You can see and modify the request headers in the **Headers** tab:
+
+<img src='images/postman-create-headers.png' width='100%' />
+
+Notice that Postman has automatically set the `Content-Type` header to `application/json` when you selected JSON as the body type.
+
+Press the **Send** button to send the request.
+
+#### Create response
+
+You should see the response below the request configuration:
+
+<img src='images/postman-create-response.png' width='100%' />
+
+> "The **POST** method is used to request that the origin server accept the entity enclosed in the request as a **new subordinate** of the resource identified by the Request-URI in the Request-Line."
+
+> "If a resource has been **created** on the origin server, the response SHOULD be **201 (Created)** and contain an entity which describes the status of the request and refers to the new resource, and a **Location header**."
+
+In other words: the server tells us that **a new person has been created** by responding with the status code `201 Created` and the person's data.
+
+#### Create response headers
+
+You can also see the response headers in the **Headers** tab:
+
+<img src='images/postman-create-response-headers.png' width='100%' />
+
+> "If a resource has been **created** [...] the response SHOULD [...] contain a **Location header**."
+
+The server tells us where to find the new resource in the **Location** header.
 
 
 
 ### Read
 
-TODO: adapt (content copied from previous course's slides)
+Let's make a request to **read** (or **retrieve**) the person we created.
+This time we need a simple `GET` request to the path given to us in the **Location** header of the previous response:
 
 ```http
-GET /people HTTP/1.1
+GET https://evening-meadow-25867.herokuapp.com/api/people/58a...1c5 HTTP/1.1
 ```
+
+Configure that request in Postman:
+
+<img src='images/postman-read-single.png' width='100%' />
+
+#### Read response
+
+Press **Send** and you should retrieve the person in the response:
+
+<img src='images/postman-read-single-response.png' width='100%' />
+
+> "The **GET** method means retrieve whatever information (in the form of an entity) is identified by the Request-URI."
+
+Basically, the server is sending us the **JSON representation** of the `/api/people/58a...1c5` resource.
+The `200 OK` status code indicates that the request was **successful**.
+
+#### Read a resource that does not exist
+
+Configure the same request but change the last character of the URL path:
+
+<img src='images/postman-read-404.png' width='100%' />
+
+Press **Send** and you will see that the server responds with an error message:
+
+<img src='images/postman-read-404-response.png' width='100%' />
+
+By sending a response with the `404 Not Found` status code, the server tells us that **no resource exists at that URL**.
+
+#### Read a collection
+
+The API also has a resource that represents the **collection of people** that have been created.
+Let's make a `GET` request to **read** that.
+We simply have to remove the person's ID from the URL path:
 
 ```http
-HTTP/1.1 200 OK
-Content-type: application/json
-
-[
-  { "_id": "3orv8nrg", … },
-  { "_id": "a08un2fj", … }
-]
+GET https://evening-meadow-25867.herokuapp.com/api/people HTTP/1.1
 ```
 
-The GET method means retrieve whatever information (in the form of an entity) is identified by the Request URI.
+Configure that request in Postman:
 
-HTTP 200 OK: Standard response for successful HTTP requests. In a GET request, the response will contain an entity corresponding to the requested resource.
+<img src='images/postman-read-collection.png' width='100%' />
 
-#### Collection resource vs. single resource
+#### Read collection response
 
-TODO: adapt (content copied from previous course's slides)
+Press **Send** and you should receive a response with several people in it:
 
-```http
-GET /people/3orv8nrg HTTP/1.1
-```
+<img src='images/postman-read-collection-response.png' width='100%' />
 
-```http
-HTTP/1.1 200 OK
-Content-type: application/json
-
-{
-  "_id": "3orv8nrg",
-  "name": {
-    "first": "John",
-    "last": "Doe"
-  },
-  "age": 24
-}
-```
+Again, the server is sending us the **JSON representation** of the `/api/people` resource.
+Since that represents multiple people, we receive a **JSON array**, where each element is a **JSON object** representing a person.
 
 
 
 ### Update
 
-TODO: adapt (content copied from previous course's slides)
+The API also allows us to **update** a person by making a `PUT` request to the person's resource with a **JSON representation** of the updated person.
+Let's make a request to add your birthdate:
 
 ```http
-PUT /people/3orv8nrg HTTP/1.1
+PUT https://evening-meadow-25867.herokuapp.com/api/people/58a...1c5 HTTP/1.1
 Content-type: application/json
 
-{
-  "name": {
-    "first": "John",
-    "last": "Smith"
-  },
-  "age": 34
-}
+{ "name": "Your Name", "gender": "male", "birthDate": "2000-01-01" }
 ```
 
-```http
-HTTP/1.1 200 OK
-Content-type: application/json
+Configure that request with Postman:
 
-{
-  "_id": "3orv8nrg",
-  "name": {
-    "first": "John",
-    "last": "Smith"
-  },
-  "age": 34
-}
-```
+<img src='images/postman-update.png' width='100%' />
 
-The PUT method requests that the enclosed entity be stored under the supplied Request URI. If the Request URI refers to an already existing resource, the enclosed entity SHOULD be considered as a modified version of the one residing on the origin server.
+#### Update response
 
-HTTP 200 OK: In a PUT request, the response will contain an entity describing or containing the result of the action.
+Press **Send** and you should receive the updated person in the response:
+
+<img src='images/postman-update-response.png' width='100%' />
+
+> "The **PUT** method requests that the enclosed **entity** be stored under the supplied Request-URI. If the Request-URI refers to an **already existing resource**, the enclosed entity SHOULD be considered as a **modified version** of the one residing on the origin server."
+
+> "If an existing resource is modified, either the **200 (OK)** or 204 (No Content) response codes SHOULD be sent to indicate successful completion of the request."
+
+Basically, we **replaced** the person's data with the representation we sent.
+Since no new resource was created, the server simply responds with `200 OK`.
+
+#### Partial update with PUT
+
+Now, configure the same request but **without the gender**, and press **Send**:
+
+<img src='images/postman-update-failed.png' width='100%' />
+
+#### Partial update response with PUT
+
+The server is responding with the status code `422 Unprocessable Entity`, meaning that the request was refused because the person representation you sent is invalid (it is missing the gender property):
+
+<img src='images/postman-update-failed-response.png' width='100%' />
+
+According to the HTTP specification, the `PUT` method is used to store the **entire representation** you are sending as the **new state of the resource**,
+which it cannot do in this case because it is **invalid**. API operations using `PUT` should **not support partial updates**.
 
 #### Partial updates with PATCH
 
-TODO: partial update with PATCH example
+The `PATCH` method was later added to the HTTP specification to support **partial updates**.
+The API also supports it, so let's make a PATCH request to update your birthdate:
+
+```http
+PATCH https://evening-meadow-25867.herokuapp.com/api/people/58a...1c5 HTTP/1.1
+Content-type: application/json
+
+{ "birthDate": "2000-01-02" }
+```
+
+Configure that request with Postman:
+
+<img src='images/postman-partial-update.png' width='100%' />
+
+#### Partial update response with PATCH
+
+This time the request was accepted:
+
+<img src='images/postman-partial-update-response.png' width='100%' />
+
+> "The [PATCH][http-methods-patch-rfc] method requests that a **set of changes** described in the request entity be **applied to the resource** identified by the Request-URI."
+
+Instead of a replacement of the entire resource, our JSON representation is interpreted as a **partial update** to the resource,
+in this case an update of the `birthDate` property.
+
+Like with `PUT`, no new resource was created, so the server responds with `200 OK`.
 
 
 
 ### Delete
 
-TODO: adapt (content copied from previous course's slides)
+Finally, let's **delete** the person.
+We simply need to make a `DELETE` request with no request body:
 
 ```http
-DELETE /people/3orv8nrg HTTP/1.1
+DELETE https://evening-meadow-25867.herokuapp.com/api/people/58a...1c5 HTTP/1.1
 ```
 
-```http
-HTTP/1.1 204 No Content
-Content-type: application/json
-```
+Configure that request with Postman:
 
-The DELETE method requests that the origin server delete the resource identified by the Request URI.
+<img src='images/postman-delete.png' width='100%' />
 
-HTTP 204 No Content: The server successfully processed the request, but is not returning any content.
+#### Delete response
+
+Press **Send** and you should get a response from the server with no response body:
+
+<img src='images/postman-delete-response.png' width='100%' />
+
+> "The DELETE method requests that the origin server **delete the resource** identified by the Request-URI."
+
+> "A successful response SHOULD be 200 (OK) if the response includes an entity describing the status, 202 (Accepted) if the action has not yet been enacted, or **204 (No Content)** if the action has been enacted but **the response does not include an entity**."
+
+The server has **successfully deleted the person resource** and is not sending us any additional data as indicated by the `204 No Content` status code.
+
+As you can see in the method's documentation, the server could also respond differently (e.g. `200 OK` with a representation of the deleted resource),
+but `204 No Content` was chosen for this API implementation.
 
 
 
 ### CRUD summary
 
-TODO: table of HTTP method vs. operation on resource/collection, and common status codes
+Method   | Collection op                                                                                                 | Resource op
+:---     | :---                                                                                                          | :---
+`POST`   | **Create a new resource** in the collection, `201 Created` and `Location` header (and optional response body) | -
+`GET`    | **Read a list of resources** (with optional pagination, sorting and filtering), `200 OK`                      | **Read one resource**, `200 OK`
+`PUT`    | *(Batch update)*                                                                                              | **Fully update one resource**, `200 OK` (with body) or `204 No Content` (without body)
+`PATCH`  | *(Batch partial update)*                                                                                      | **Partially update one resource**, `200 OK` (with body) or `204 No Content` (without body)
+`DELETE` | *(Batch delete)*                                                                                              | **Delete one resource**, `200 OK` (with body) or `204 No Content` (without body)
 
-http://www.restapitutorial.com/lessons/httpmethods.html
+#### CRUD errors summary
 
-
-
-## TODO
-
-* Postman usage screenshots
+Method   | Collection errors                                                                              | Resource errors
+:---     | :---                                                                                           | :---
+`POST`   | `400 Bad Request` (JSON malformed), `404 Not Found`, `422 Unprocessable Entity` (Data invalid) | -
+`GET`    | `400 Bad Request` (Query parameters invalid)                                                   | `404 Not Found`
+`PUT`    | -                                                                                              | `400 Bad Request` (JSON malformed), `404 Not Found`, `422 Unprocessable Entity` (Data invalid)
+`PATCH`  | -                                                                                              | `400 Bad Request` (JSON malformed), `404 Not Found`, `422 Unprocessable Entity` (Data invalid)
+`DELETE` | -                                                                                              | `404 Not Found`, `409 Conflict` (Cannot be deleted)
 
 
 
 ## Resources
 
-TODO: HTTP request methods link
+**Documentation**
 
-TODO: HTTP status codes link
+* [HTTP request methods][http-methods] ([RFC][http-methods-rfc], [PATCH RFC][http-methods-patch-rfc])
+* [HTTP status codes][http-status-codes] ([RFC][http-status-codes-rfc])
 
-* Very good article, with presentation of key concepts and illustrative examples:
-  http://www.infoq.com/articles/rest-introduction
-* Suggestions for the design of “pragmatic APIs”
-  http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api
+**Articles**
+
+* [A brief introduction to REST][rest-intro]
+* [Using HTTP Methods for RESTful Services][http-methods-rest]
+* [Best Practices for Designing a Pragmatic RESTful API][rest-pragmatic]
 
 
 
@@ -694,10 +802,16 @@ TODO: HTTP status codes link
 [headers]: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Request_fields
 [http-content-negotiation]: https://en.wikipedia.org/wiki/Content_negotiation
 [http-methods]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
-[http-status-codes]: https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#1xx_Informational
+[http-methods-patch-rfc]: https://tools.ietf.org/html/rfc5789
+[http-methods-rfc]: https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
+[http-methods-rest]: http://www.restapitutorial.com/lessons/httpmethods.html
+[http-status-codes]: https://httpstatuses.com
+[http-status-codes-rfc]: https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
 [hypermedia]: https://en.wikipedia.org/wiki/Hypermedia
 [osi-application]: https://en.wikipedia.org/wiki/Application_layer
 [postman]: https://www.getpostman.com
 [rest]: https://en.wikipedia.org/wiki/Representational_state_transfer
+[rest-intro]: https://www.infoq.com/articles/rest-introduction
+[rest-pragmatic]: http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api
 [url]: https://en.wikipedia.org/wiki/Uniform_Resource_Locator
 [web-service]: https://en.wikipedia.org/wiki/Web_service
