@@ -25,6 +25,7 @@
 - [Merge conflicts](#merge-conflicts)
   - [Find the common ancestor](#find-the-common-ancestor)
   - [Create a branch "in the past"](#create-a-branch-in-the-past)
+  - [Make a conflicting change](#make-a-conflicting-change)
   - [Merge the conflicting branch](#merge-the-conflicting-branch)
   - [Check the status of the conflict](#check-the-status-of-the-conflict)
   - [Inspect the conflicted file](#inspect-the-conflicted-file)
