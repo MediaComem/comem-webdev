@@ -4,6 +4,7 @@
 * Rev assets
 * Link to slide form from README
 * Slide-specific css
+* Slide-specific remark options
 
 
 

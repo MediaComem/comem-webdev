@@ -96,11 +96,16 @@ $> cd /path/to/projects
 $> git clone https://github.com/MediaComem/comem-webdev-git-branching-ex.git
 
 $> cd comem-webdev-git-branching-ex
+```
 
+Remove the link to the remote repository (will we talk more about it in [Collaborating with Git](../git-collaborating/)):
+
+```bash
 $> git remote rm origin
 ```
 
-Open the project with your favorite editor and open its `index.html` page in a browser.
+As you can see if you type `git log`, there are some commits already.
+Open the project with your favorite editor and open the `index.html` page in a browser.
 
 
 
@@ -184,7 +189,7 @@ This moves `HEAD` to point to the `feature-sub` branch.
 As you commit, the current branch (the one pointed to by **HEAD**), moves forward to the new commit.
 
 ```bash
-$> git add subtract.js
+$> git add subtraction.js
 $> git commit -m "Implement subtraction"
 ```
 
@@ -397,8 +402,14 @@ Make a copy of that commit hash.
 You can create a branch at any point in the project's history by passing an additional commit reference to `git checkout`:
 
 ```bash
-git checkout -b better-sub 4f94ga
+$> git checkout -b better-sub 4f94ga
 ```
+
+<img src='images/better-sub-branch.png' width='90%' />
+
+
+
+### Make a conflicting change
 
 Now edit `subtraction.js` and implement subtraction again, but in a different way.
 For example:
@@ -409,12 +420,29 @@ function subtract(a, b) {
 }
 ```
 
+Note that if you try to check out the `master` branch at this point,
+Git won't let you do it because the state of `subtraction.js` is different in that branch:
+
+```bash
+$> git checkout master
+error: Your local changes to the following files would be overwritten by checkout:
+  subtraction.js
+Please commit your changes or stash them before you switch branches.
+Aborting
+```
+
 Commit your changes:
 
 ```bash
-git add subtraction.js
-git commit -m "Implemented a better subtract"
+$> git add subtraction.js
+$> git commit -m "Implemented a better subtract"
 ```
+
+#### The state before merging
+
+Viewing the graph of commits, it's clear that the change has been made **in parallel** with our earlier changes:
+
+<img src='images/better-sub-commit.png' width='90%' />
 
 
 
@@ -431,7 +459,9 @@ Recorded preimage for 'subtraction.js'
 Automatic merge failed; fix conflicts and then commit the result.
 ```
 
-Git tells you that a **content conflict** occurred in `subtraction.js`.
+Git tells you that a **content conflict** has occurred in `subtraction.js`.
+
+The merge has failed and no new commit has been created.
 
 
 
@@ -454,9 +484,7 @@ Unmerged paths:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-Git tells you several things:
-
-* The merge is **not complete**:
+* Git tells you that the merge is **not complete**:
   * You can either fix the conflicts and run `git commit` to end the merge, or cancel the whole thing with `git merge --abort`
 * `subtraction.js` was modified in **both the current branch and the branch we are trying to merge in**
 * You can use `git add <file>` to **mark the conflicts in a file as resolved**
@@ -540,6 +568,20 @@ $> git commit -m "Merge better-sub into master"
 
 If you do not specify a commit message with `-m`, Git will generate one for you and open the configured editor (vim by default) for you to check and/or change the message.
 Type `:wq` to exit from vim and make the commit.
+
+#### The state after merging
+
+Finally, delete the branch:
+
+```bash
+$> git branch -d better-sub
+```
+
+The latest commit on `master` now includes the changes from all lines of development:
+
+<img src='images/better-sub-merged.png' width='90%' />
+
+
 
 
 
@@ -641,9 +683,7 @@ $> git commit -m "Merge cleanup (kept implemented subtraction.js)"
 
 ## TODO
 
-* Show git log after cloning to explain what the state of the project is at the beginning (there are a few existing commits)
-* Create diagrams for the 2 conflict examples at the end
-* Checkout conflict
+* Create diagram for the last conflict example
 
 
 
