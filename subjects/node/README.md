@@ -78,7 +78,7 @@ function getRandomNumber() {
 
 console.log('Hello');
 
-var result = getRandomNumber();
+const result = getRandomNumber();
 
 console.log('Result: ' + result);
 console.log('End of program');
@@ -101,7 +101,7 @@ The call to `getRandomNumber()` blocks the thread until its execution is complet
 With asynchronous code, some operations are executed **in parallel**.
 
 ```js
-var fs = require('fs');
+const fs = require('fs');
 
 console.log('Hello');
 
@@ -136,9 +136,9 @@ The signature of `fs.readFile` is:
 
 The third argument is a **callback function**:
 
-* With synchronous code, the call blocks the thread until it is done.
-* With asynchronous code, the rest of the code keeps executing, and `fs.readFile`
-  will **call you back** when it is done.
+* With synchronous code, the call blocks the thread until it is done
+* With asynchronous code, the rest of the code keeps executing;
+  you pass a function to `fs.readFile` and Node.js will **call you back** when it is done
 
 Under the hood, Node.js will read the file in a separate thread,
 then execute your callback function when it's ready.
@@ -221,10 +221,10 @@ There are two ways that the function can be called back:
 You should never forget to check for errors:
 
 ```js
+const fs = require('fs');
 fs.readFile('name.txt', 'utf-8', function(err, data) {
 * if (err) {
-*   console.warn('Oops, could not read the file because: ' + err.message);
-*   return;
+*   return console.warn('Could not read the file because: ' + err.message);
 * }
 
   console.log('Hello ' + data);
@@ -234,6 +234,307 @@ fs.readFile('name.txt', 'utf-8', function(err, data) {
 If you forget to check `err`, this code could log `Hello undefined` if the operation fails (e.g. the file doesn't exist, is corrupt, etc).
 
 Do not forget the `return` either, or use `else`, to ensure that your "success" code is not run when an error occurs.
+
+
+
+## Spot the mistake
+
+<!-- slide-front-matter class: center, middle -->
+
+
+
+### Mistake 1
+
+What's wrong with this code?
+
+```js
+const fs = require('fs');
+
+// Read a name from name.txt
+const name = fs.readFile('name.txt', 'utf-8', function(err, nameInFile) {
+  if (err) {
+    return console.warn('Could not read file because: ' + err.message);
+  }
+
+  return nameInFile;
+});
+
+// Save a salutation into hello.txt
+const salutation = 'Hello ' + name + '!';
+fs.writeFile('hello.txt', salutation, 'utf-8', function(err) {
+  if (err) {
+    console.warn('Could not write in file because: ' + err.message);
+  }
+});
+```
+
+#### Mistake 1 result
+
+If you save this script in `bug1.js`, save a `name.txt` file containing a name and execute the script, this is what will happen:
+
+```bash
+$> echo World > name.txt
+
+$> node bug1.js
+
+$> cat hello.txt
+Hello undefined!
+```
+
+The script could not read the name from `name.txt`.
+
+#### Mistake 1 asynchronous issue
+
+There are two problems with this code. First, Node.js I/O functions (such as file operations) are **asynchronous**.
+
+When `fs.readFile()` is called, Node.js will start a thread and read the file in the background.
+Meanwhile, **your code will keep executing** and the call to `fs.writeFile` will occur **before the callback function of `fs.readFile` is called back**.
+
+```js
+const fs = require('fs');
+
+// Read a name from name.txt
+const name = `fs.readFile`('name.txt', 'utf-8', function(err, nameInFile) {
+  if (err) {
+    return console.warn('Could not read file because: ' + err.message);
+  }
+  return nameInFile;
+});
+
+// Save a salutation into hello.txt
+const salutation = 'Hello ' + name + '!';
+`fs.writeFile`('hello.txt', salutation, 'utf-8', function(err) {
+  if (err) {
+    console.warn('Could not write in file because: ' + err.message);
+  }
+});
+```
+
+#### Mistake 1 return issue
+
+Second, even if there was no asynchronous issue, the assignment of `const name` would still be `undefined`:
+
+* You are calling `fs.readFile()`, which returns `undefined`, and that is what is stored in the `name` variable
+* **When** Node.js is done reading the file in a separate thread, **it will call your callback function (later)**
+* The return value of your callback function is **not going anywhere**
+
+```js
+const fs = require('fs');
+
+// Read a name from name.txt
+`const name` = fs.readFile('name.txt', 'utf-8', function(err, nameInFile) {
+  `return nameInFile`;
+});
+
+// Save a salutation into hello.txt
+const salutation = 'Hello ' + name + '!';
+fs.writeFile('hello.txt', salutation, 'utf-8', function(err) {
+  if (err) {
+    console.warn('Could not write in file because: ' + err.message);
+  }
+});
+```
+
+#### Mistake 1 correct implementation
+
+The second asynchronous call must be performed **inside the callback function of the previous call**.
+That way, it will not be executed **until the first call is done** and Node.js has called your callback function.
+
+You will also have direct access to the **result** passed to the callback function:
+
+```js
+const fs = require('fs');
+
+// Read a name from name.txt
+fs.readFile('name.txt', 'utf-8', function(err, `nameInFile`) {
+  if (err) {
+    return console.warn('Could not read file because: ' + err.message);
+  }
+
+  // Save a salutation into hello.txt
+  const salutation = 'Hello ' + `nameInFile` + '!';
+  fs.writeFile('hello.txt', salutation, 'utf-8', function(err) {
+    if (err) {
+      console.warn('Could not write in file because: ' + err.message);
+    }
+  });
+});
+```
+
+
+
+### Mistake 2
+
+What's wrong with this code?
+
+```js
+const fs = require('fs');
+
+// Read the contents of a file
+fs.readFile('foo.txt', 'utf-8', function(err, text) {
+  if (err) {
+    console.warn('Could not read file because: ' + err.message);
+  }
+
+  // Log the contents in upper case
+  console.log(text.toUpperCase());
+});
+```
+
+#### Mistake 2 result
+
+If you save this script in `bug2.js` and execute it, this is what will happen:
+
+```bash
+$> node bug2.js
+Could not read file because: ENOENT: no such file or directory, open 'foo.txt'
+/path/to/projects/node-demo/bug2.js:9
+  console.log(text.toUpperCase());
+                  ^
+
+TypeError: Cannot read property 'toUpperCase' of undefined
+    at ReadFileContext.callback (/path/to/projects/node-demo/bug2.js:9:19)
+    at FSReqWrap.readFileAfterOpen [as oncomplete] (fs.js:365:13)
+```
+
+As expected, we see the `Could not read file because: ...` log.
+But we also see another **unexpected error** and its stack trace.
+
+#### Mistake 2 issue
+
+There is an error check, but execution of the callback function is **not stopped**
+as there is no `return` and no `else`.
+
+If an error occurs, **both the `console.warn` and the `console.log` calls will be executed**.
+This will cause a "null pointer exception":
+
+```js
+const fs = require('fs');
+
+// Read the contents of a file
+fs.readFile('foo.txt', 'utf-8', function(err, text) {
+  if (err) {
+*   console.warn('Could not read file because: ' + err.message);
+  }
+
+  // Log the contents in upper case
+* console.log(text.toUpperCase());
+});
+```
+
+#### Mistake 2 correct implementation
+
+You can add a `return` to solve the issue:
+
+```js
+// Read the contents of a file
+fs.readFile('foo.txt', 'utf-8', function(err, text) {
+  if (err) {
+    `return` console.warn('Could not read file because: ' + err.message);
+  }
+
+  // Log the contents in upper case
+  console.log(text.toUpperCase());
+});
+```
+
+Or use an `if/else`:
+
+```js
+// Read the contents of a file
+fs.readFile('foo.txt', 'utf-8', function(err, text) {
+  `if (err) {`
+    console.warn('Could not read file because: ' + err.message);
+  `} else {`
+    // Log the contents in upper case
+    console.log(text.toUpperCase());
+  `}`
+});
+```
+
+
+
+## Modularizing
+
+<!-- slide-front-matter class: center, middle -->
+
+Writing your own modules
+
+
+
+### Create and execute a Node.js file
+
+Create a `script.js` file in a new `node-demo` project directory:
+
+```js
+function hello(name) {
+  console.log('Hello ' + name + '!');
+}
+
+hello('World');
+```
+
+Execute it by running it with the `node` executable:
+
+```bash
+$> cd /path/to/projects/node-demo
+
+$> node script.js
+Hello World!
+```
+
+### Create a new module
+
+Let's say we want to extract the `hello` function to another file.
+Create a `utils.js` file:
+
+```js
+// Attach properties to exports so that you can use
+// them when requiring this file
+`exports`.hello = function(name) {
+  console.log('Hello ' + name + '!');
+};
+```
+
+Node.js provides the `require()` function to you so you can use functionality from other files.
+Update `hello.js` to use the exported function from `utils.js`:
+
+```js
+// Use require with a relative path to include your own modules
+const utils = `require('./utils')`;
+utils.hello('World');
+```
+
+It should still work:
+
+```bash
+$> node script.js
+Hello World!
+```
+
+### Export properties
+
+You can attach whatever you want to the `exports` object:
+
+```js
+exports.theMeaningOfLife = 42;
+```
+
+And use it where the file is required:
+
+```js
+const utils = require('./utils');
+utils.hello('World');
+console.log('The meaning of life is ' + utils.theMeaningOfLife);
+```
+
+This will print:
+
+```bash
+$> node script.js
+Hello World!
+The meaning of life is 42
+```
 
 
 
@@ -347,58 +648,6 @@ server.on('request', function(message) {
 
 
 
-## Modularizing
-
-<!-- slide-front-matter class: center, middle -->
-
-
-
-### Writing Node.js modules
-
-TODO: adapt (content copy-pasted from previous course's slides)
-
-m1.js
-
-```js
-module.exports.a = "b";
-
-module.exports.hello = function() {
-  console.log("Hello!");
-};
-```
-
-m2.js
-
-```js
-module.exports = function(name) {
-  console.log("Hello " + name + "!");
-};
-```
-
-myScript.js
-
-```js
-var module1 = require("./m1");
-
-console.log(module1.a);
-module1.hello();
-
-var module2 = require("./m2");
-
-module2("World");
-```
-
-Run it!
-
-```js
-$> node myScript.js
-b
-Hello!
-Hello World!
-```
-
-
-
 ## Resources
 
 * Understanding the Node.js Event Loop
@@ -412,9 +661,7 @@ Hello World!
 
 ## TODO
 
-* Add nested callbacks example (in the form of a question?)
-* Return in callback example
-* Wrong return example
+* Speak about Node.js modules and server-side at the very beginning
 
 
 
