@@ -1042,6 +1042,9 @@ Some text
 ## TODO
 
 * Always send a response (e.g. 500 when error occurs)
+* Better explain routers (in separate files)
+* Slide 34 (creating a router): explain hardcoded vs database call
+* Slide 44 (Sending HTTP response headers): replace Pagination header examples with something more generic
 
 
 
