@@ -19,6 +19,8 @@
   - [Returning functions from a function](#returning-functions-from-a-function)
   - [Passing functions as arguments](#passing-functions-as-arguments)
   - [Transforming data with functions](#transforming-data-with-functions)
+- [Constructors](#constructors)
+  - [The `this` keyword](#the-this-keyword)
 - [Variables](#variables)
   - [Defining variables](#defining-variables)
   - [Dynamic or constant variables](#dynamic-or-constant-variables)
@@ -26,6 +28,8 @@
   - [The block scope](#the-block-scope)
   - [The (evil) global scope](#the-evil-global-scope)
 - [String syntax](#string-syntax)
+- [Array functions](#array-functions)
+  - [Examples](#examples)
 - [JSON](#json)
   - [JSON who?](#json-who)
   - [Example](#example)
@@ -359,13 +363,52 @@ var lastNames = people.map(getName);
 console.log(lastNames); // [ "Doe", "Smith", "Smith" ]
 ```
 
+## Constructors
 
+Though JavaScript doesn't really have classes **(until ES6)**, any function can behave like a constructor and create an object.
+
+For a function to act as a constructor, you don't have to declare it differently than any other function.
+
+All you have to do is _"new-ing"_ the function, i.e. use the `new` keyword followed by a call to the function:
+
+```js
+function Starship() {
+	// ...
+}
+
+var discovery = new Starship();
+```
+> The `discovery` variable will now store a new (and empty) object, of type `Startship`.
+
+### The `this` keyword
+
+These "constructor" functions that you can _"new"_ give you access to the `this` keyword in their body.
+
+With it, you can alter the object that is being created to add it properties, for example.
+
+You could assign to those properties the values passed as arguments:
+
+```js
+function Starship(name, designation) {
+	this.name = name;
+	this.designation = designation;
+}
+
+var discovery = new Starship("Discovery", "NCC-1031");
+```
+
+Now, if we look up this new object, we'll see:
+
+```js
+console.log(discovery);
+// Output: Starship {name: "Discovery", designation: "NCC-1031"}
+``` 
+
+> You'll see more about "class-like" behavior in the [JS Prototypes slide-deck](../js-prototypes).
 
 ## Variables
 
 <!-- slide-front-matter class: center, middle -->
-
-
 
 ### Defining variables
 
@@ -568,6 +611,52 @@ var string = `I'm your "Wurst" nightmare: ${worstNightmare}`;
 
 You don't have to escape anything. To insert variables inside the string, use the `${<variable>}` notation. *Note that using* `+` *still works.*
 
+## Array functions
+
+Arrays in JavaScript are objects. Therefor, they provide you with a handful of practical methods to manipulate items. Here's some of them:
+
+| Function | Effect |
+| :------- | :----- |
+| `.forEach()` | Applies a specified function to every element in the array. |
+| `.concat()` | Concatenates two arrays into one, and returns this new array. |
+| `.find()` | Finds the **first** element that passes a provided test function. |
+| `.pop()` | Removes the **last** element, and returns it (`.shift()` does the same but for the **first** element).|
+| `.push()` | Adds new elements to **the end** of an array (`.unshift()` does the same but adds them in the **beginning** of the array). |
+| `.slice()` | Selects **a part** of an array, and returns the new array. |
+| `.reverse()` | Reverses the order of the elements in an array. **This will modify the original array**|
+
+### Examples
+
+`.forEach()`
+
+```js
+var crew = ["Jonathan", "T'Pol", "Trip", "Malcolm", "Sato", "Travis"];
+crew.forEach(function(element, index) {
+		console.log("Hello, my name is " + element + ", and I'm n°" + index);
+});	
+```
+
+`.find()`
+
+```js
+var ages = [3, 10, 19, 25];
+var adult = ages.find(function(age) {
+	return age >= 18;
+});
+console.log(adult);
+// Output : 19
+```
+
+`.slice()`
+ 
+```js
+var starships = ["NX-01", "NCC-1701", "NCC-1701 D", "NCC-1764", "NCC-74656"];
+// Start at position 0, included, and end before position 3, excluded.
+var enterprises = starships.slice(0, 3);
+console.log(enterprises);
+// Output: ["NX-01", "NCC-1701", "NCC-1701 D"]
+```
+
 ## JSON
 
 <!-- slide-front-matter class: center, middle -->
@@ -668,8 +757,6 @@ console.log(crew);
 
 ## TODO
 
-* Constructor functions (syntax with `new`)
-* Array operations
 * Arrow functions (syntax)
 
 ## Resources
@@ -682,6 +769,8 @@ console.log(crew);
   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript
 * JavaScript objects in detail
   http://javascriptissexy.com/javascript-objects-in-detail
+* Complete list of native Array methods
+  https://www.w3schools.com/jsref/jsref_obj_array.asp
 
 
 
@@ -698,3 +787,10 @@ console.log(crew);
 [js-shared-memory]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer
 [js-typeof-null]: http://www.2ality.com/2013/10/typeof-null.html
 [js-symbol]: https://developer.mozilla.org/en-US/docs/Glossary/Symbol
+[foreach-doc]: https://www.w3schools.com/jsref/jsref_forEach.asp
+[concat-doc]: https://www.w3schools.com/jsref/jsref_concat_array.asp
+[find-doc]: https://www.w3schools.com/jsref/jsref_find.asp
+[pop-doc]: https://www.w3schools.com/jsref/jsref_pop.asp
+[push-doc]: https://www.w3schools.com/jsref/jsref_push.asp
+[slice-doc]: https://www.w3schools.com/jsref/jsref_slice_array.asp
+[reverse-doc]: https://www.w3schools.com/jsref/jsref_reverse.asp
