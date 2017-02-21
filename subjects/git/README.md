@@ -942,7 +942,6 @@ You should not do this if you have already shared this commit with others.
 
 ## TODO
 
-* Aliases
 * Ignoring files
 
 

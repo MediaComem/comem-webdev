@@ -268,7 +268,8 @@ there are free versions available that are restricted, but more powerful version
 
 ## TODO
 
-* configuration through environment variables
+* Configuration through environment variables
+* Add note on git hooks in "How?" slide
 
 
 

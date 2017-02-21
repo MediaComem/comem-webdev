@@ -551,7 +551,7 @@ In these cases, you can set the `private` property of the `package.json` file:
 ## TODO
 
 * https://docs.npmjs.com/getting-started/fixing-npm-permissions
-* show more complex install example with Express
+* Show more complex install example with Express
 
 
 

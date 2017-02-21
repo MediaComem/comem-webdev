@@ -638,5 +638,13 @@ $> git commit -m "Merge cleanup (kept implemented subtraction.js)"
 
 
 
+## TODO
+
+* Show git log after cloning to explain what the state of the project is at the beginning (there are a few existing commits)
+* Create diagrams for the 2 conflict examples at the end
+* Checkout conflict
+
+
+
 [advanced-merging]: https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging
 [branching]: https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell

@@ -1038,6 +1038,12 @@ Some text
 
 
 
+## TODO
+
+* Always send a response (e.g. 500 when error occurs)
+
+
+
 [api]: http://expressjs.com/en/4x/api.html
 [chrome]: https://www.google.com/chrome/
 [jade]: https://www.npmjs.com/package/jade
