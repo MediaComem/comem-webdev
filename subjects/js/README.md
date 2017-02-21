@@ -19,6 +19,7 @@
   - [Returning functions from a function](#returning-functions-from-a-function)
   - [Passing functions as arguments](#passing-functions-as-arguments)
   - [Transforming data with functions](#transforming-data-with-functions)
+  - [Arrow functions *(ES6)*](#arrow-functions-es6)
 - [Constructors](#constructors)
   - [The `this` keyword](#the-this-keyword)
 - [Variables](#variables)
@@ -34,7 +35,6 @@
   - [JSON who?](#json-who)
   - [Example](#example)
   - [Using JSON](#using-json)
-- [TODO](#todo)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -363,6 +363,76 @@ var lastNames = people.map(getName);
 console.log(lastNames); // [ "Doe", "Smith", "Smith" ]
 ```
 
+### Arrow functions *(ES6)*
+
+While seaching for example in the Web, you could stumble upon some strange syntax looking like this:
+
+```js
+let result = compute(3, 4, (nb1, nb2) => nb1 / nb2);
+```
+
+If it's the case, then you're facing a new **ES6** syntax for functions.
+
+The example above is completely equivalent to writing:
+
+```js
+let result = compute(3, 4, function(nb1, nb2) {
+	return nb1 / nb2
+});
+```
+
+#### Anatomy: arguments
+
+Let's see how an arrow function is written.
+```js
+`(nb1, nb2)` => nb1 / nb2
+```
+
+This part, before the `=>`, represents the function's arguments.
+
+If your function has only one argument, you can omit the parenthesis:
+
+```js
+let squareroot = compute(16, `number` => sqrt(number));
+```
+
+But if your function has no argument, you have to add empty parenthesis:
+
+```js
+// No argument
+setTimeout(`()` => console.log("Timeout finished"), 1000);
+```
+
+#### Anatomy: body
+
+```js
+(nb1, nb2) => `nb1 / nb2`
+```
+
+This part, after the `=>`, is the body of the function; note the absence of brackets.
+
+The `return` keywrods is implicit with one-line bodies that have no brackets:
+
+```js
+// This arrow function will return the square root of the number
+let squareroot = compute(16, `number => sqrt(number)`);
+```
+If you want your one-line function to return nothing, add brackets anyway:
+
+```js
+// This arrow function will return "undefined"
+let squareroot = compute(16, `number => { sqrt(number) }`);
+```
+
+If the body has more than one line, you have to add brackets `{}` around:
+
+```js
+let square = compute(4, number => `{`
+*   let result = number * number;
+*   return number;
+`}`);
+```
+
 ## Constructors
 
 Though JavaScript doesn't really have classes **(until ES6)**, any function can behave like a constructor and create an object.
@@ -644,7 +714,7 @@ var adult = ages.find(function(age) {
 	return age >= 18;
 });
 console.log(adult);
-// Output : 19
+// Output: 19
 ```
 
 `.slice()`
@@ -743,7 +813,7 @@ To transform a **JavaScript object to its JSON description**, use the `JSON.stri
 var crew = {name: "T'Pol", species: "Vulcan", station: "Science Officer"};
 var crewJson = JSON.stringify(crew);
 console.log(crewJson);
-// Output : "{"name":"T'Pol","species":"Vulcan","station":"Science Officer"}"
+// Output: "{"name":"T'Pol","species":"Vulcan","station":"Science Officer"}"
 ```
 
 To do the opposite, that is creating a JavaScript object from a JSON string, use the `JSON.parse()` method:
@@ -752,12 +822,8 @@ To do the opposite, that is creating a JavaScript object from a JSON string, use
 var crewJson = '{"name": "Travis", "species": "Human", "station": "Helm"}';
 var crew = JSON.parse(crewJson);
 console.log(crew);
-// Output : Object {name: "Travis", species: "Human", station: "Helm"}
+// Output: Object {name: "Travis", species: "Human", station: "Helm"}
 ```
-
-## TODO
-
-* Arrow functions (syntax)
 
 ## Resources
 
