@@ -31,15 +31,15 @@ This is a condensed version of the first chapters of the [Git Book](https://git-
 - [Viewing the commit history](#viewing-the-commit-history)
   - [Viewing the changes in the history](#viewing-the-changes-in-the-history)
   - [Other log options](#other-log-options)
+- [Ignoring files](#ignoring-files)
+  - [Status of ignored files](#status-of-ignored-files)
+  - [Committing the ignore file](#committing-the-ignore-file)
 - [Undoing things](#undoing-things)
   - [Unmodifying a modified file](#unmodifying-a-modified-file)
   - [Unstaging a staged file](#unstaging-a-staged-file)
   - [Changing the commit message](#changing-the-commit-message)
-- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-
 
 
 
@@ -55,8 +55,6 @@ Its goals are:
 * Strong support for **non-linear development** (thousands of parallel branches)
 * Fully **distributed**
 * Able to handle **large projects** like the Linux kernel efficiently (speed and data size)
-
-
 
 
 
@@ -76,13 +74,9 @@ What can I do with it?
 
 
 
-
-
 ## A short history
 
 <!-- slide-front-matter class: center, middle -->
-
-
 
 
 
@@ -104,8 +98,6 @@ Systems such as [RCS][rcs] automate this process.
 
 * It's easy to accidentally edit the wrong files
 * It's hard to **collaborate** on different versions with other people
-
-
 
 
 
@@ -131,8 +123,6 @@ Administrators have **fine-grained control** over who can do what.
 
 
 
-
-
 ### **Distributed** version control systems
 
 <!-- slide-column -->
@@ -149,13 +139,9 @@ Clients **fully mirror** the repository, not just the latest snapshot.
 
 
 
-
-
 ## Git basics
 
 <!-- slide-front-matter class: center, middle -->
-
-
 
 
 
@@ -191,8 +177,6 @@ Git thinks about its data more like a stream of snapshots.
 
 
 
-
-
 ### Git has integrity
 
 All Git objects are identified by a [SHA-1][sha1] hash that looks like this:
@@ -210,8 +194,6 @@ Often you will only see a prefix (the first 6-7 characters):
 
 Because all content is hashed, it's impossible for files to be lost or corrupted without Git knowing about it.
 This functionality is built into Git at the lowest levels and is integral to its philosophy.
-
-
 
 
 
@@ -310,8 +292,6 @@ my-project:
 
 
 
-
-
 ### The basic Git workflow
 
 This is one of the **most important things to remember about Git**:
@@ -331,8 +311,6 @@ New snapshots of files **MUST go through the staging area** to be **committed** 
 
 
 
-
-
 ## Getting started
 
 The rest of this documentation is a tutorial where you will learn how to:
@@ -344,8 +322,6 @@ The rest of this documentation is a tutorial where you will learn how to:
 * Stage and commit modified files
 * Move and remove files
 * Ignore files
-
-
 
 
 
@@ -366,8 +342,6 @@ git version 2.11.0
 ```
 
 If you don't have it, follow these [installation instructions][install-git] to install Git on your machine.
-
-
 
 
 
@@ -397,8 +371,6 @@ You can also change them at any time by running the commands again.
 
 
 
-
-
 ### Creating a new repository
 
 Let's get started by creating a directory for our new project:
@@ -421,8 +393,6 @@ At this point, nothing in your project is tracked yet.
 
 
 
-
-
 ### Checking the status of your files
 
 The main tool you use to determine which files are in which state is the `git status` command.
@@ -440,8 +410,6 @@ nothing to commit (create/copy files and use "git add" to track)
 This means you have an empty repo with no commits, and a clean *working directory* – there is nothing there.
 
 As you can see, Git often helps you by telling you what you can do next: you need to start adding some files.
-
-
 
 
 
@@ -526,8 +494,6 @@ It shows you each staged file and the changes in those files.
 
 
 
-
-
 ### Committing your changes
 
 Now that your staging area is set up the way you want it, you can **commit** your changes:
@@ -547,8 +513,6 @@ $> git status
 On branch master
 nothing to commit, working tree clean
 ```
-
-
 
 
 
@@ -708,8 +672,6 @@ $> git commit -m "New lines in hello.txt and hi.txt"
 
 
 
-
-
 ### Moving and removing files
 
 Git has a `git mv` and `git rm` command, but nobody uses them for day-to-day work on files.
@@ -753,8 +715,6 @@ Many developers simply modify and manipulate files in their favorite editor or I
 
 
 
-
-
 ## Viewing the commit history
 
 Git has a very powerful `log` command:
@@ -779,8 +739,6 @@ Date:   Mon Jan 23 11:01:06 2017 +0100
 
     Add hello and hi files
 ```
-
-
 
 
 
@@ -815,8 +773,6 @@ index e5db1d9..f74a87a 100644
 
 
 
-
-
 ### Other log options
 
 The `git log` has many options to customize its output or limit what commits it shows you.
@@ -837,6 +793,46 @@ Use `git help log` or read [the documentation][git-log] to learn more.
 
 
 
+## Ignoring files
+
+Sometimes there are files you don't want to commit in your repository:
+
+* Log files
+* Dependencies
+* Build artifacts
+
+You can tell Git not to track them by adding a `.gitignore` file to your repository:
+
+```txt
+ *.log
+ node_modules
+```
+
+
+
+### Status of ignored files
+
+Ignored files are no longer shown when using `git status`:
+
+```bash
+$> echo data > app.log
+
+$> git status
+On branch master
+nothing to commit, working tree clean
+```
+
+
+
+### Committing the ignore file
+
+Do not forget to add and commit the `.gitignore` file:
+
+```bash
+$> git add .gitignore
+$> git commit -m "Ignore file"
+```
+
 
 
 ## Undoing things
@@ -845,8 +841,6 @@ There are several ways of undoing things with Git.
 We'll review a few of the tools available.
 
 **_Be careful:_** you can't always undo some of these operations.
-
-
 
 
 
@@ -882,8 +876,6 @@ Note that in this case, **the change is forever lost** as it was never committed
 
 
 
-
-
 ### Unstaging a staged file
 
 If you have staged a file but realize you don't want it in the next commit anymore, Git also tells you what to do:
@@ -912,8 +904,6 @@ If you want to completely get rid of them, you can use `git checkout` as shown b
 
 
 
-
-
 ### Changing the commit message
 
 Oops, you've used the wrong commit message and want to change it?
@@ -935,16 +925,6 @@ $> git commit --amend -m "Fix the problem"
 
 **Be careful:** this changes the commit and its SHA-1 hash.
 You should not do this if you have already shared this commit with others.
-
-
-
-
-
-## TODO
-
-* Ignoring files
-
-
 
 
 
