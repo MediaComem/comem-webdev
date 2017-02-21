@@ -368,7 +368,7 @@ console.log(lastNames); // [ "Doe", "Smith", "Smith" ]
 While seaching for example in the Web, you could stumble upon some strange syntax looking like this:
 
 ```js
-let result = compute(3, 4, (nb1, nb2) => nb1 / nb2);
+var result = compute(3, 4, (nb1, nb2) => nb1 / nb2);
 ```
 
 If it's the case, then you're facing a new **ES6** syntax for functions.
@@ -376,8 +376,8 @@ If it's the case, then you're facing a new **ES6** syntax for functions.
 The example above is completely equivalent to writing:
 
 ```js
-let result = compute(3, 4, function(nb1, nb2) {
-	return nb1 / nb2
+var result = compute(3, 4, function(nb1, nb2) {
+  return nb1 / nb2
 });
 ```
 
@@ -385,52 +385,52 @@ let result = compute(3, 4, function(nb1, nb2) {
 
 Let's see how an arrow function is written.
 ```js
-`(nb1, nb2)` => nb1 / nb2
+(nb1, nb2) => nb1 / nb2
 ```
 
-This part, before the `=>`, represents the function's arguments.
+The part left of the `=>` represents the **function's arguments**.
 
-If your function has only one argument, you can omit the parenthesis:
+If your function has **only one** argument, you can **omit** the parenthesis:
 
 ```js
-let squareroot = compute(16, `number` => sqrt(number));
+var squareroot = compute(16, number => sqrt(number));
 ```
 
-But if your function has no argument, you have to add empty parenthesis:
+But if your function has **no argument**, you **have to** add empty parenthesis:
 
 ```js
 // No argument
-setTimeout(`()` => console.log("Timeout finished"), 1000);
+setTimeout(() => console.log("Timeout finished"), 1000);
 ```
 
 #### Anatomy: body
 
 ```js
-(nb1, nb2) => `nb1 / nb2`
+(nb1, nb2) => nb1 / nb2
 ```
 
-This part, after the `=>`, is the body of the function; note the absence of brackets.
+The part right of the `=>` is **the body** of the function; note the absence of brackets.
 
-The `return` keywrods is implicit with one-line bodies that have no brackets:
+The `return` keyword is **implicit** with one-line bodies that have no brackets:
 
 ```js
 // This arrow function will return the square root of the number
-let squareroot = compute(16, `number => sqrt(number)`);
+var squareroot = compute(16, number => sqrt(number));
 ```
-If you want your one-line function to return nothing, add brackets anyway:
+If you want your one-line function to **return nothing**, add brackets:
 
 ```js
 // This arrow function will return "undefined"
-let squareroot = compute(16, `number => { sqrt(number) }`);
+var squareroot = compute(16, number => { sqrt(number) });
 ```
 
-If the body has more than one line, you have to add brackets `{}` around:
+If the body has **more than one line**, you **have to add** brackets `{}` around (_and use the `return` keyword if necessary_):
 
 ```js
-let square = compute(4, number => `{`
-*   let result = number * number;
-*   return number;
-`}`);
+var square = compute(4, number => {
+  let result = number * number;
+  return number;
+});
 ```
 
 ## Constructors
@@ -443,7 +443,7 @@ All you have to do is _"new-ing"_ the function, i.e. use the `new` keyword follo
 
 ```js
 function Starship() {
-	// ...
+  // ...
 }
 
 var discovery = new Starship();
@@ -454,14 +454,14 @@ var discovery = new Starship();
 
 These "constructor" functions that you can _"new"_ give you access to the `this` keyword in their body.
 
-With it, you can alter the object that is being created to add it properties, for example.
+With it, you can **alter the object** that is being created to add it properties, for example.
 
 You could assign to those properties the values passed as arguments:
 
 ```js
 function Starship(name, designation) {
-	this.name = name;
-	this.designation = designation;
+* this.name = name;
+* this.designation = designation;
 }
 
 var discovery = new Starship("Discovery", "NCC-1031");
@@ -641,7 +641,7 @@ var i = 42;
 // And a function that logs each thing in the passed array
 function logThings(things) {
   // Oops, we forgot the "var" or "let"
-  for (`i = 0`; i < things.length; i++) {
+* for (i = 0; i < things.length; i++) {
     console.log(things[i]);
   }
 }
@@ -702,7 +702,7 @@ Arrays in JavaScript are objects. Therefor, they provide you with a handful of p
 ```js
 var crew = ["Jonathan", "T'Pol", "Trip", "Malcolm", "Sato", "Travis"];
 crew.forEach(function(element, index) {
-		console.log("Hello, my name is " + element + ", and I'm n°" + index);
+  console.log("Hello, my name is " + element + ", and I'm n°" + index);
 });	
 ```
 
@@ -711,7 +711,7 @@ crew.forEach(function(element, index) {
 ```js
 var ages = [3, 10, 19, 25];
 var adult = ages.find(function(age) {
-	return age >= 18;
+  return age >= 18;
 });
 console.log(adult);
 // Output: 19
@@ -758,21 +758,21 @@ Here is an example of a **JavaScript object**, and it's **description in JSON**:
 
 ```js
 var starship = {
-	designation: "NX-01",
-	crew: 83,
-	captain: {
-		firstname: "Jonathan",
-		lastname: "Archer",
-		activeService: true
-	},
-	species: [
-		"human",
-		"dog",
-		"denobulan",
-		"vulcan"
-	],
-	warp: 5,
-	cloak: null,
+  designation: "NX-01",
+  crew: 83,
+  captain: {
+    firstname: "Jonathan",
+    lastname: "Archer",
+    activeService: true
+  },
+  species: [
+    "human",
+    "dog",
+    "denobulan",
+    "vulcan"
+  ],
+  warp: 5,
+  cloak: null,
 }
 
 ```
@@ -781,21 +781,21 @@ var starship = {
 
 ```json
 {
-	"designation": "NX-01",
-	"crew": 83,
-	"captain": {
-		"firstname": "Jonathan",
-		"lastname": "Archer",
-		"activeService": true
-	},
-	"species": [
-		"human",
-		"dog",
-		"denobulan",
-		"vulcan"
-	],
-	"warp": 5,
-	"cloak": null,
+  "designation": "NX-01",
+  "crew": 83,
+  "captain": {
+    "firstname": "Jonathan",
+    "lastname": "Archer",
+    "activeService": true
+  },
+  "species": [
+    "human",
+    "dog",
+    "denobulan",
+    "vulcan"
+  ],
+  "warp": 5,
+  "cloak": null,
 }
 ```
 
@@ -811,7 +811,7 @@ To transform a **JavaScript object to its JSON description**, use the `JSON.stri
 
 ```js
 var crew = {name: "T'Pol", species: "Vulcan", station: "Science Officer"};
-var crewJson = JSON.stringify(crew);
+*var crewJson = JSON.stringify(crew);
 console.log(crewJson);
 // Output: "{"name":"T'Pol","species":"Vulcan","station":"Science Officer"}"
 ```
@@ -820,7 +820,7 @@ To do the opposite, that is creating a JavaScript object from a JSON string, use
 
 ```js
 var crewJson = '{"name": "Travis", "species": "Human", "station": "Helm"}';
-var crew = JSON.parse(crewJson);
+*var crew = JSON.parse(crewJson);
 console.log(crew);
 // Output: Object {name: "Travis", species: "Human", station: "Helm"}
 ```
@@ -837,8 +837,6 @@ console.log(crew);
   http://javascriptissexy.com/javascript-objects-in-detail
 * Complete list of native Array methods
   https://www.w3schools.com/jsref/jsref_obj_array.asp
-
-
 
 [babel]: http://babeljs.io
 [es]: https://en.wikipedia.org/wiki/ECMAScript
