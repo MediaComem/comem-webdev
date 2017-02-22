@@ -769,7 +769,7 @@ server.on('request', function(message) {
 
 * [Core modules (6.x)][node-6-api]
 
-**More information**
+**Further reading**
 
 * [What is Node.js][mixu-node-book]
 * [Understanding the Node.js Event Loop][event-loop]

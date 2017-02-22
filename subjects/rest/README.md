@@ -788,7 +788,7 @@ Method   | Collection errors                                                    
 * [HTTP request methods][http-methods] ([RFC][http-methods-rfc], [PATCH RFC][http-methods-patch-rfc])
 * [HTTP status codes][http-status-codes] ([RFC][http-status-codes-rfc])
 
-**More information**
+**Further reading**
 
 * [A brief introduction to REST][rest-intro]
 * [Using HTTP Methods for RESTful Services][http-methods-rest]
