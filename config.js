@@ -6,6 +6,7 @@ const fs = require('fs');
 const fixedOptions = {
   root: __dirname,
   title: 'COMEM+ Web Dev',
+  version: '2017',
   repoUrl: 'https://github.com/MediaComem/comem-webdev',
   webfonts: true,
   remark: {
