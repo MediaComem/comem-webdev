@@ -6,26 +6,29 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [What is the Command Line Interface (CLI)](#what-is-the-command-line-interface-cli)
+- [What is a Command Line Interface (CLI)?](#what-is-a-command-line-interface-cli)
   - [Why use it](#why-use-it)
   - [Open a CLI](#open-a-cli)
   - [Install Git Bash (Windows users only)](#install-git-bash-windows-users-only)
 - [How to use the CLI](#how-to-use-the-cli)
   - [Writing commands](#writing-commands)
-  - [How and what](#how-and-what)
-  - [Command : `help`](#command--help)
-  - [Command : `pwd`](#command--pwd)
-  - [Command : `ls`](#command--ls)
-  - [Command : `cd`](#command--cd)
-  - [Command : `mkdir`](#command--mkdir)
-- [Naming things when using CLI](#naming-things-when-using-cli)
-- [For Windows Users](#for-windows-users)
-- [VIM](#vim)
-  - [Generalities](#generalities)
+  - [Options vs. arguments](#options-vs-arguments)
+  - [Naming things when using CLI](#naming-things-when-using-cli)
+  - [Auto-completion](#auto-completion)
+  - [Getting help](#getting-help)
+- [Using the filesystem](#using-the-filesystem)
+  - [The `pwd` command](#the-pwd-command)
+  - [The `ls` command](#the-ls-command)
+  - [The `cd` command](#the-cd-command)
+  - [The `mkdir` command](#the-mkdir-command)
+  - [Windows users](#windows-users)
+- [Vim](#vim)
+  - [WHY?!](#why)
+  - [How vim works](#how-vim-works)
   - [Normal mode](#normal-mode)
   - [Command mode](#command-mode)
 - [The `PATH` variable](#the-path-variable)
-  - [Using non-system command](#using-non-system-command)
+  - [Using non-system commands](#using-non-system-commands)
   - [Updating the `PATH` variable](#updating-the-path-variable)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -541,24 +544,42 @@ Instead, Git Bash has two custom shortcuts:
 
 
 
-## vim
+## Vim
 
 <!-- slide-front-matter class: center, middle -->
 
-Some tools or command could open the infamous **VIM**, which is a text-based text editor bundled into your CLI.
+**Vim** is an infamous CLI editor originally developed in 1976 (WHAT?!)
+
+
+
+### WHY?!
+
+Why would you need to learn it?
+Sometimes it's just the **only editor you have** (e.g. on a server).
+Also **some tools will open vim** for user input.
 
 If this happens (_and it will_), there's **one** imperative rule to follow:
 
 **DO NOT PANIC!**
 
+Open a file by running the `vim` command with the path to the file you want to create/edit:
+
+```bash
+vim test.txt
+```
 
 
-### Generalities
 
-VIM can be unsetteling at first, until you know how it works.
+### How vim works
 
-The first thing to understand whith VIM is that it has three modes :
-* **Normal** mode (the one you're in when VIM starts)
+Vim can be unsettling at first, until you know how it works.
+
+Let go of your mouse, it's mostly useless in Vim.
+You control Vim by **typing**.
+
+The first thing to understand whith Vim is that it has *3 modes*:
+
+* **Normal** mode (the one you're in when Vim starts)
 * **Command** mode (the one to use to save or quit)
 * **Insert** mode (the one to use to insert text)
 
@@ -574,18 +595,19 @@ To go into each mode use this keys :
 
 ### Normal mode
 
-The **Normal** mode of VIM is the one you'r in when VIM starts. In this mode, you can move the cursor around with the arrow keys.
+The **Normal** mode of Vim is the one you're in when it starts.
+In this mode, you can move the cursor around with the arrow keys.
 
 You can also use some commands to interact with the text:
 
 | Command | Effect                                                           |
 | :------ | :--------------------------------------------------------------- |
-| `:`     | Enter **Command** mode.                                          |
-| `i`     | Enter **Insert** mode.                                           |
-| `x`     | Delete the first character after the cursor position.            |
-| `dw`    | Delete a word, with the cursor standing before the first letter. |
-| `dd`    | Delete the complete line the cursor is on.                       |
-| `u`     | Undo the last command.                                           |
+| `:`     | Enter **Command** mode (to save and/or quit)                     |
+| `i`     | Enter **Insert** mode (to type text)                             |
+| `x`     | Delete the character under the cursor                            |
+| `dw`    | Delete a word, with the cursor standing before the first letter  |
+| `dd`    | Delete the complete line the cursor is on                        |
+| `u`     | Undo the last command                                            |
 
 > At anytime, you can hit the `Esc` key to go back to the **Normal** mode.
 
@@ -595,22 +617,21 @@ You can also use some commands to interact with the text:
 
 The **Command** mode, which you can only access from the **Normal** mode, is the one you'll use to manipulate the file you're in.
 
-To enter **Command** mode, hit the `:` key.
-
+To enter the **Command** mode, hit the `:` key.
 From there, you can use some commands:
 
 | Command     | Effect                                                     |
 | :---------- | :--------------------------------------------------------- |
-| `q`         | Quit VIM (will fail if you have unsaved modifications).    |
-| `w`         | Save the file and all its modifications.                   |
-| `q!`        | Force VIM to quit (any unsaved modification will be lost). |
-| `wq` or `x` | Save the file then quit VIM.                               |
+| `q`         | Quit Vim (will fail if you have unsaved modifications)     |
+| `w`         | Write (save) the file and all its modifications            |
+| `q!`        | Force Vim to quit (any unsaved modification will be lost)  |
+| `wq` or `x` | Save the file then quit Vim.                               |
 
 
 
 ## The `PATH` variable
 
-When you type a command in the CLI, it will try to see **if it knows this command**, by looking in some directories to see if there is an **executable file that matches the requested name**.
+When you type a command in the CLI, it will try to see **if it knows this command** by looking in some directories to see if there is an **executable file that matches the command name**.
 
 ```bash
 $> rubbish
@@ -618,7 +639,7 @@ bash: rubbish: command not found
 ```
 > This means that the CLI failed to found the executable named `rubbish` in any of the directories where it looked.
 
-The list of the directories (and their paths) in which the CLI searches is stored in the `PATH` variable, each of them being separated with a `:`.
+The list of the directories (and their paths) in which the CLI searches is stored in the `PATH` environment variable, each of them being separated with a `:`.
 
 You can print the content of your `PATH` variable to see this list:
 
@@ -629,24 +650,33 @@ $> echo $PATH
 
 
 
-### Using non-system command
+### Using non-system commands
 
-New installed tools usually come with at least one new command that you can execute from the CLI.
+Many development tools you install come with executables that you can run from the CLI (e.g. Git, Node.js, MongoDB).
 
-But, if you'd want to execute this command, you would have to **manually go to the directory** containing the executable and **run the command there**.
+Some of these tools will install their executable in a **standard directory** like `/usr/local/bin`, which is already in your `PATH`.
+Once you've installed them, you can simply run their new commands.
+Git and Node.js, for example, do this.
+
+However, sometimes you're downloading only an executable and saving it in a directory somewhere that is **not in the `PATH`**.
+
+#### Executing a command in a directory that's not in the `PATH`
+
+To run such a command, you can **manually go to the directory** containing the executable and **run the command there**:
 
 ```bash
-$> cd Applications/Batsignal
+$> cd ~/Applications/Batsignal
 $> ./batsignal
 ```
-You could also run the command from anywhere by writing **the path to the executable**:
+
+You could also run the command from anywhere by writing **the absolute path to the executable**:
 
 ```bash
 $> /Users/Batman/Application/Batsignal/batsignal
 ```
-But, ideally, you would want to **just type the name of the command**, and see it executed.
 
-For this, you need to **change the value** of your `PATH` variable.
+But, ideally, you want to be able to **just type the name of the command**, and have it be executed.
+For this, you need to **add the directory containing the executable** to your `PATH` variable.
 
 
 
@@ -654,24 +684,45 @@ For this, you need to **change the value** of your `PATH` variable.
 
 To add a new path in your `PATH` variable, you have to edit a special file, used by your CLI. This file depends upon the CLI you are using:
 
-| CLI                 | File to edit |
-| :------------------ | :----------- |
-| Terminal / Git Bash | `~/.bashrc`  |
-| [ZSH][zsh-site]     | `~/.zshrc`   |
+| CLI                 | File to edit                     |
+| :------------------ | :-----------                     |
+| Terminal / Git Bash | `~/.bashrc` or `~/.bash_profile` |
+| [ZSH][zsh-site]     | `~/.zshrc`                       |
 
-Open up the adequate file (here `.bashrc`) from the CLI with `vim`...
+Open the adequate file (`.bashrc` for this example) from the CLI with `vim` or your favorite editor if it can display hidden files:
 
 ```bash
 $> vim ~/.bashrc
 ```
-... and add this line at the bottom of your file (use `i` to enter _insert_ mode)
+Add this line at the bottom of your file (use `i` to enter _insert_ mode if you're in Vim):
 
 ```vim
-export PATH="path/to/directory:$PATH"
+export PATH="/Users/Batman/Application/Batsignal:$PATH"
 ```
-...with `path/to/directory` being **the path to the directory** that contains the command(s), **not the path to the command itself**.
 
-Save the file (`Esc` then `:wq`) and restart your CLI.
+If you're in Vim, press `Esc` when you're done typing, then `:wq` and `Enter` to save and quit.
+
+#### What have I done?
+
+You have **added a directory to the `PATH`**:
+
+```vim
+export PATH="/Users/Batman/Application/Batsignal:$PATH"
+```
+
+This line says:
+
+* Modify the `PATH` variable
+* In it, put the new directory `/Users/Batman/Application/Batsignal` and the previous value of the `PATH`, separated by `:`
+
+The next time you run a command, your CLI will **first look** in this directory for executables, then in the **rest of the `PATH`**.
+
+**Common mistakes**
+
+* What you must put in the `PATH` is **NOT** the path to the executable, but the path to the **directory containing the executable**
+
+* You must re-open your CLI for the change to take effect:
+  the CLI configuration file (e.g. `~/.bashrc`) is only applied when the CLI starts
 
 
 
