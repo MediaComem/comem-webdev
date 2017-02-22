@@ -30,47 +30,55 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## What is the Command Line Interface (CLI)
 
-The CLI is a tool that allows you to use your computer by writing what you want to do (i.e. **commands**), instead of clicking on things.
 
-It's installed on computers (almost) since the beginnings of time, but it has evolved a little since then. It usually looks something like this:
+## What is a Command Line Interface (CLI)?
+
+A CLI is a tool that allows you to use your computer by **writing** what you want to do (i.e. **commands**), instead of clicking on things.
+
+It's installed on computers (almost) since the beginning of time, but it has evolved "a little" since then. It usually looks something like this:
 
 <p class='center'><img src='images/cli.jpg' width='100%' /></p>
 
+
+
 ### Why use it
 
-CLI is not very user-friendly or visually appealing but it has several advantages:
+A CLI is not very user-friendly or visually appealing but it has several advantages:
 
-* Requires very **few resources**
-* Can be easily **automated** through scripting
-* Is ultimatly **more powerful and efficient** than any GUI
+* It requires very **few resources**
+* It can be easily **automated** through scripting
+* Is is ultimately **more powerful and efficient** than any GUI
 
 For these reasons, a lot of tools _(especially development tools)_ don't have any GUI and are only usable through a CLI.
 
-**Thus, the CLI is a required tool for any nowadays developer.**
+**Thus, using a CLI is a requirement for any developer today.**
+
+
 
 ### Open a CLI
 
-**CLI are available in every actual OS.**
+**CLIs are available on every operating system.**
 
 <!-- slide-column 50 -->
 
-On **UNIX-like** systems _(like MacOS or Linux)_, it's called the **Terminal**.
+On **UNIX-like** systems _(like macOS or Linux)_, it's called the **Terminal**.
 
 You can use it right away, as it's the _de-facto_ standard.
 
 <!-- slide-column -->
 
-On **Windows**, the default CLI is called **Invite de commandes** or **cmd**.
+On **Windows**, the default CLI is called **cmd** (or **Invite de commandes** in French)
 
-But it does not use the same syntax than UNIX-like CLI _(plus, it's bad)_.
+However, it does not use the same syntax as UNIX-like CLIs _(plus, it's bad)_.
 
 > **You'll need to install an alternative.**
 
+
+
 ### Install Git Bash (Windows users only)
 
-You're going to install **Git Bash**, an alternative CLI that emulates a UNIX-like terminal on Windows.
+You're going to install **Git Bash**, an alternative CLI that emulates a UNIX-like CLI on Windows.
 
 <!-- slide-column 30 -->
 
@@ -86,7 +94,9 @@ Then, search and open the **Git Bash** software.
 
 <!-- slide-container -->
 
-> Installing **Git Bash** will also install **Git** and **Git GUI** _(see [the slide-deck about Git][slide-git] for more information)_.
+> Installing **Git Bash** will also install **Git** and **Git GUI** _(see the [Git tutorial][slide-git] for more information)_.
+
+
 
 ## How to use the CLI
 
@@ -95,11 +105,23 @@ When you open the CLI you should find a blank screen with something like this:
 ```bash
 $>
 ```
+
 These symbols represent **the prompt** and are used to indicate that you have the lead, that is the computer is waiting for you to type something for it to execute.
 
-> At anytime, hit the `Ctrl + c` command to stop any running task and get the lead back.
+> At anytime, hit the `Ctrl-C` command to stop any running task and get the lead back.
 
-**For consistency, we will always use the `$>` symbols to represent the prompt.**
+<!-- slide-column -->
+
+The prompt is not always `$>`.
+For example, by default on macOS, the prompt is `bash-3.2$`.
+
+<!-- slide-column 30 -->
+
+<p class='center'><img src='images/bash-prompt.png' width='100%' /></p>
+
+<!-- slide-container -->
+
+**For consistency, we will always use `$>` to represent the prompt.**
 
 <!-- slide-notes -->
 
@@ -107,46 +129,47 @@ Please note that, depending on your OS and your CLI, **the prompt can be compose
 
 When the computer's working, the prompt disappear and you won't have the lead until the prompt reappear again.
 
+
+
 ### Writing commands
 
-A command is a word that you have to type on the CLI, that will tell the computer what it have to do.
+A command is a **word** that you have to type in the CLI that will **tell the computer what to do**.
 
-The syntax for using command could be resumed like this:
+The syntax for using commands looks like this:
 
 ```bash
 $> name arg1 arg2 arg3 ...
 ```
-**Note the use of space to separate the differents elements of a command.**
+Note the use of **spaces** to separate the differents **arguments** of a command.
 
-* `name` represents the name of the command you want to execute
-* `arg1 arg2 arg3 ...` represent additionnal information about the command, **each of them separeted by a space**.
+* `name` represents the **name of the command** you want to execute
+* `arg1 arg2 arg3 ...` represent the **arguments of the command**, each of them **separated by a space**
 
-### How and what
+
+
+### Options vs. arguments
 
 There are two types of arguments to use with a command (if needed):
 
 <!-- slide-column -->
 
-**Options** specify **how** the command will behave.
-
-They are identifiable by the `-` or `--` that precedes them.
+**Options** usually specify **how** the command will behave
+and are preceded by `-` or `--`:
 
 ```bash
-$> ls -l --all
+$> ls `-l` `--all`
 ```
 
 We use the `ls` command to list the content of the current directory. The options tell `ls` **how** it should do so:
-* `--all` tells it to print all elements
-* `-l` tells it to print elements in a list format, rather than on one line.
+* `--all` tells it to print all elements (including hidden ones)
+* `-l` tells it to print elements in a list format, rather than on one line
 
 <!-- slide-column -->
 
-**Arguments** specify **what** will be used by or is the subject of the command.
-
-They are preceded by nothing.
+**Other arguments** not preceded by anything usually specify **what** will be used by the command:
 
 ```bash
-$> cd /Users/Batman
+$> cd `/Users/Batman`
 ```
 Here, we use the `cd` command to move to another directory.
 
@@ -158,36 +181,115 @@ In the **first example**, we use the `ls` command to list elements in the curren
 * `--all` tells it to print all elements
 * `-l` tells it to print elements in a list format, rather than on one line.
 
-### Command : `help`
+#### Options with values
 
-The first command you'd like to type is the `help` command.
-
-As its name implies, it's designed to **give you some help** depending on the context.
-
-Executing the command alone will bring up a **list of available commands**.
+Sometimes, some options have **values**:
 
 ```bash
-$> help
+tar -c -v `-f compressed.tar.gz` file-to-compress
 ```
-Executing it with the name of a command will bring up **all you need to know about said command**:
+
+`tar` is a command to bundle and compress files.
+In this example, it takes **three options**:
+
+* `-c` tells it to compress (instead of uncompressing)
+* `-v` tells it to be verbose (print more information to the CLI)
+* `-f` tells it where to store the compressed file;
+  this is followed **immediately** by `compressed.tar.gz` which is the **value** of that option
+
+It then takes **one argument**:
+
+* `file-to-compress` is the file (or directory) to compress
+
+
+
+### Naming things when using CLI
+
+You should avoid the following characters in directories and file names you want to manipulate with the CLI:
+
+* **spaces** _(they're used to separate arguments in command)_
+* **accents** (e.g. `é`, `à`, `ç`, etc)
+
+They can cause **errors** in some scripts or tools, and will inevitably complicate using the CLI.
+If you have a `Why So Serious` directory, this **WILL NOT work**:
 
 ```bash
-$> help help
+$> ls Why So Serious
 ```
-This `help` command is only available for **system's commands**, but most of the tools that you'll install offer help through the `--help` argument:
+This command will be interpreted as a call to the `cd` command with **three arguments**: `Why`, `So` and `Serious`.
+
+You **can** use arguments containing spaces, but you have to **escape** them first, either with **quotation marks** or **backslashes**:
+
+<!-- slide-column -->
 
 ```bash
-$> [command-name] --help
+$> ls "Why So Serious"
 ```
+
+<!-- slide-column -->
+
+```bash
+$> ls Why\ So\ Serious
+```
+
+
+
+### Auto-completion
+
+It's not fun to type directory names, especially when they have spaces you must escape in them,
+so the CLI has **auto-completion**. Type the first few characters of the file or directory you
+need, then hit the `Tab` key:
+
+<!-- slide-column -->
+
+<img src='images/auto-complete.png' width='100%' />
+
+<!-- slide-column -->
+
+<img src='images/auto-complete-tab.png' width='100%' />
+
+<!-- slide-container -->
+
+If there are multiple files or directories that begin with the **same characters**,
+pressing `Tab` will not display anything.
+You need hit `Tab` **a second time** to display the list of available choices:
+
+<p class='center'><img src='images/auto-complete-multiple.png' width='50%' /></p>
+
+You can type just enough characters so that the CLI can determine which one you want (in this case `c` or `w`),
+then hit `Tab` again to get the full path.
+
+
+
+### Getting help
+
+You can get help on most advanced commands by executing them with the `--help` option.
+As the option's name implies, it's designed to **give you some help** on how to use the command:
+
+```bash
+tar --help
+```
+
+Some commands don't respond to the `--help` option.
+To try and get help, depending on what operating system you're on:
+
+* On Linux or macOS, use `man ls` to display the **manual** for the `ls` command
+* On Windows, use `help cd` to display help for the `cd` command;
+  you can also type `help` to list available commands (only system commands)
+
+<p class='center'><img src='images/tar-help.png' width='70%' /></p>
+
 #### Interactive helps
 
-Some helps or commands will print their result all over the screen, effectively hidding the prompt or previous interactions.
+Some helps or commands will take over the screen to display their content, hiding the prompt and previous interactions.
 
 Usually, it means that these helps or commands have content that takes more than one screen to be shown.
 
-You can "scroll" down  line-by-line using the `Enter` key, each stroke printing one more line at the bottom of the screen.
+You can "scroll" down line-by-line using the `Enter` key, each stroke printing one more line at the bottom of the screen.
 
 To quit these helps or commands, use the `q` key.
+
+<p class='center'><img src='images/interactive-help.png' width='80%' /></p>
 
 #### Unix Command Syntax
 
@@ -203,91 +305,133 @@ Here are some explanations:
 * `|`: You have to **chose between** options (ex: `-L|-P`).
 * `...`: Whatever's before can be **repeated** (ex: `[options ...]`).
 
-> Depending on the documentation, you could also found symbols like this:
-> 
-> * `<value>` = **Don't write that**. Replace it by a value that you should provide.
+Depending on the documentation, you will also see symbols like this:
+
+* `<value>`
+* `--option=VALUE`
+
+**DON'T WRITE `<value>` or `VALUE`**.
+Replace it by an appropriate value for that option or argument.
 
 
-### Command : `pwd`
 
-When the CLI starts, it places you in your **personnal directory**.
+## Using the filesystem
 
+<!-- slide-front-matter class: center, middle -->
+
+
+
+### The `pwd` command
+
+When you open a CLI, it places you in your **home directory**.
 From there you can navigate your filesystem to go to other directories _(more on that later)_.
 
 But first, you might want to check **where** you currently are.
-
-To do this, use the `pwd` command:
+Use the `pwd` command:
 
 ```bash
 $> pwd
 /Users/Batman
 ```
 
-> The `pwd` command, that means "print working directory", gives you the absolute path to the directory you're currently in.
+> `pwd` means "print working directory": it gives you the absolute path to the directory you're currently in.
 
-### Command : `ls`
+
+
+### The `ls` command
 
 Now that you know where you are, you might want to know **what your current directory is containing**.
 
-To do this, use the `ls` command:
+Use the `ls` command:
 
 ```bash
 $> ls
 (lots and lots of files)
 ```
-> The `ls` command, that means "local storage", lists the files and directories that the current directory contains.
+> `ls` means "list": it lists the files and directories that the current directory contains.
 
-By default, `ls` doesn't list **hidden elements**.
+By default, `ls` doesn't list **hidden elements** (i.e. elements that start with a `.`).
 
-If you want it to do that, you need to pass the argument `--all` (or `-a`):
+If you want it to do that, you need to pass the `--all` (or `-a`) option:
 
 ```bash
 $> ls -a
 (lots and lots of files, including the hidden ones)
 ```
 
-### Command : `cd`
+
+
+### The `cd` command
 
 It's time to go out a little and move to another directory.
 
-Suppose you have a _"Documents"_ directory in your personnal directory, that contains another directory, _"TopSecret"_, to which you want to go.
-
-To do this, use the `cd` command, passing it as argument **the path to the directory** you want to go to.
+Suppose you have a `Documents` directory in your home directory, that contains another directory `TopSecret` where you want to go.
+Use the `cd` command, passing it as argument **the path to the directory** you want to go to:
 
 ```bash
-(You can use relative path...)
 $> pwd
 /Users/Batman
 $> cd Documents/TopSecret
-
-(...or use absolute path)
-$> cd /Users/Batman/Documents/TopSecret
 ```
-> While you type the name of directories or files, hit the `Tab` key after having entered some letters and your CLI can try and autocomplete the name.
 
-<!-- slide-notes -->
+This is a **relative path**: it is relative to the current working directory.
+
+You can also go to a specific directory anywhere on your filesystem like this:
 
 ```bash
-$> cd /Us
-(Hit the Tab key and the CLI completes the name)
-$> cd /Users
+$> cd /Users/Batman/Documents
 ```
-If there is more than one possible name with this letters, the CLI will do nothing. Hitting the `Tab` key a second time will list all the possibilities matching the letters you typed.
+
+This is an **absolute path** because it starts with a `/` character.
+It is relative to the root of your filesystem.
+
+> You also have **auto-completion** with the `cd` command. Hit the `Tab` key after entering some letters.
+
+#### The `.` path
+
+The `.` path represents the current directory.
+The following sequences of commands are strictly equivalent:
+
+<!-- slide-column -->
 
 ```bash
 $> pwd
 /Users/Batman
-
-$> cd Do
-(Hitting the Tab key will fail)
-
-$> cd Do
-(Hitting it again list the possibilites)
-Documents/ Downloads/
+$> cd Documents/TopSecret
 ```
-#### `cd` shortcuts
 
-* To go back one directory at a time, use the `..` shortcut (**don't forget the space!**):
+<!-- slide-column -->
+
+```bash
+$> pwd
+/Users/Batman
+$> cd ./Documents/TopSecret
+```
+
+<!-- slide-container -->
+
+You can also *not go anywhere*:
+
+```bash
+$> pwd
+/Users/Batman
+$> `cd .`
+$> pwd
+/Users/Batman
+```
+
+Or compress the current directory:
+
+```bash
+tar -c -v -f /somewhere/compressed.tar.gz `.`
+```
+
+This does not seem very useful now, but it will be in further tutorials.
+
+#### The `..` path
+
+To go up into the parent directory, use the `..` path (**don't forget the space between `cd` and `..`**):
+
 ```bash
 $> pwd
 /Users/Batman/Documents
@@ -296,14 +440,16 @@ $> pwd
 /Users/Batman
 ```
 
-* You can also drag and drop a directory from your Explorer or your Finder to the CLI to see its absolute path automaticaly written.
+You can also drag and drop a directory from your Explorer or your Finder to the CLI to see its absolute path automaticaly written:
+
 ```bash
 $> cd
 (Drag and drop a directory from your Explorer/Finder, and...)
 $> cd /Users/Batman/Pictures/
 ```
 
-* At anytime and from anywhere, you can return to your **personnal directory** with the `cd` command, without any argument (or with the `~`):
+At anytime and from anywhere, you can return to your **home directory** with the `cd` command, without any argument (or with the `~`):
+
 ```bash
 $> cd
 $> pwd
@@ -311,100 +457,91 @@ $> pwd
 ```
 
 <!-- slide-notes -->
+
 > To type the `~` character, use this combination:
-> * `AltGr + ^` on **Windows**
-> * `Alt + n` on **Mac**
+> * `AltGr-^` on **Windows**
+> * `Alt-N` on **Mac**
 
-#### Special note
+#### Path reference
 
-Throughout this course, you will often found the following line of information (_or something resembling it_):
+Path        | Where
+:---        | :---
+`.`         | The current directory
+`..`        | The parent directory
+`foo/bar`   | The file/directory `bar` inside the directory `foo` in the current directory
+`/foo/bar`  | The file/directory `bar` inside the directory `foo` at the root of your filesystem
+`~`         | Your home directory
+`~/foo/bar` | The file/directory `bar` inside the directory `foo` in your home directory
+
+#### Your projects directory
+
+Throughout this course, you will often see the following command (_or something resembling it_):
 
 ```bash
-$> cd path/to/folder
+$> cd /path/to/projects
 ```
 
-This means that you should use **the path that leads to the directory in which you store your projects**.
+This means that you use **the path to the directory in which you store your projects**.
+For example, on John Doe's macOS system, it could be `/Users/jdoe/Projects`.
 
-> You shouldn't **actually write** `path/to/folder`.
-> 
-> It will obviously fail, unless you happen to have a `path` directory that contains a `to` directory that contains a `folder` directory...
+> You shouldn't **actually write** `/path/to/projects`.
+>
+> It will obviously fail, unless you happen to have a `path` directory that contains a `to` directory that contains a `projects` directory...
 
-### Command : `mkdir`
+**IMPORTANT:** if your Windows/Linux/macOS username contains **spaces** or **accents**, you should **NOT** store your projects under your home directory.
+You should find a path elsewhere on your filesystem.
+This will save you **a lot of suffering**.
+
+
+
+### The `mkdir` command
 
 You can create directories with the CLI.
 
-To do this, you need to use the `mkdir` command, passing it either...
-* the **name** of the directory to create, if you want to create it in the current directory
-* 
+Use the `mkdir` command to create a new directory in the current directory:
+
 ```bash
 $> mkdir BatmobileSchematics
 ```
-* the **path** to the directory, if you want to create it elsewhere
-* 
+
+You can also create a directory elsewhere:
+
 ```bash
 $> mkdir /Users/Batman/Documents/TopSecret/BatmobileSchematics
 ```
-> All directories but the last should be already existing.
 
-<!-- slide-notes -->
-
-If you want to create a directory that should be inside another directory that doesn't exist, `mkdir` will raise an error by default.
-
-But if you pass it the `-p` argument, `mkdir` will create all the non-existing directories
+This will only work if all directories down to `TopSecret` already exist.
+To automatically create all intermediate directories, add the `-p` option:
 
 ```bash
-$> ls
-Project/ Documents/ Files/
-
-$> mkdir Pictures/Vacation/Gotham/
-mkdir: Pictures: No such file or directory
-
-$> mkdir -p Pictures/Vacation/Gotham
+$> mkdir -p /Users/Batman/Documents/TopSecret/BatmobileSchematics
 ```
 
-## Naming things when using CLI
 
-You should avoid using (in directories et files name):
 
-* **spaces** _(they're used to separate arguments in command)_
-* **accentuated characters** 
+### Windows users
 
-They can cause **errors** in some scripts or tools, and will inevitably complicate using the CLI.
+This is how you reference or use your **drives** (`C:`, `D:`, etc) in Git Bash on Windows:
 
 ```bash
-(Will not work)
-$> cd ./Why So Serious/
+$> cd /c/foo/bar
+$> cd /d/foo
 ```
-> This command will be interpreted as a call to the `cd` command with three arguments : `./Why`, `So` and `Serious/`.
 
-You **can** use names with space, but you have to **escape** them first, using **quotation marks** around:
-
-```bash
-(This will work)
-$> cd ./"Why So Serious"/
-```
-## For Windows Users
-
-**Reference to drives**
-
-To reference or use your drives (`C:`, `D:`, etc), use the following notation:
-
-```bash
-$> cd /c
-$> cd /d
-```
-----
 **Copy/Paste**
 
-Since the `Ctrl + c` key ise used to stop the current process, it can't be used as a shortcut for copy things from the CLI.
+Since `Ctrl-C` is used to stop the current process, it **can't** be used as a shortcut to copy things from the CLI.
 
-Instead, Git Bash has two shortcuts custom shortcuts:
-* `Ctrl + Insert` to **copy** things from the CLI
-* `Shift + Insert` to **paste** things to the CLI
+Instead, Git Bash has two custom shortcuts:
 
-> You can still use the **Right-clik > Paste** manipulation if you don't have an `Insert` key.
+* `Ctrl-Insert` to **copy** things from the CLI
+* `Shift-Insert` to **paste** things to the CLI
 
-## VIM
+> You can also use **Right-click > Paste** if you don't have an `Insert` key.
+
+
+
+## vim
 
 <!-- slide-front-matter class: center, middle -->
 
@@ -413,6 +550,8 @@ Some tools or command could open the infamous **VIM**, which is a text-based tex
 If this happens (_and it will_), there's **one** imperative rule to follow:
 
 **DO NOT PANIC!**
+
+
 
 ### Generalities
 
@@ -431,6 +570,8 @@ To go into each mode use this keys :
 | Normal         | Insert  | `i`   |
 | Command/Insert | Normal  | `Esc` |
 
+
+
 ### Normal mode
 
 The **Normal** mode of VIM is the one you'r in when VIM starts. In this mode, you can move the cursor around with the arrow keys.
@@ -448,6 +589,8 @@ You can also use some commands to interact with the text:
 
 > At anytime, you can hit the `Esc` key to go back to the **Normal** mode.
 
+
+
 ### Command mode
 
 The **Command** mode, which you can only access from the **Normal** mode, is the one you'll use to manipulate the file you're in.
@@ -462,6 +605,8 @@ From there, you can use some commands:
 | `w`         | Save the file and all its modifications.                   |
 | `q!`        | Force VIM to quit (any unsaved modification will be lost). |
 | `wq` or `x` | Save the file then quit VIM.                               |
+
+
 
 ## The `PATH` variable
 
@@ -481,6 +626,9 @@ You can print the content of your `PATH` variable to see this list:
 $> echo $PATH
 /usr/local/bin:/bin:/usr/bin:Users/Batman/BatRadar/bin
 ```
+
+
+
 ### Using non-system command
 
 New installed tools usually come with at least one new command that you can execute from the CLI.
@@ -499,6 +647,8 @@ $> /Users/Batman/Application/Batsignal/batsignal
 But, ideally, you would want to **just type the name of the command**, and see it executed.
 
 For this, you need to **change the value** of your `PATH` variable.
+
+
 
 ### Updating the `PATH` variable
 
@@ -522,6 +672,8 @@ export PATH="path/to/directory:$PATH"
 ...with `path/to/directory` being **the path to the directory** that contains the command(s), **not the path to the command itself**.
 
 Save the file (`Esc` then `:wq`) and restart your CLI.
+
+
 
 [gitbash]: https://git-for-windows.github.io/
 [zsh-site]: http://zsh.sourceforge.net/

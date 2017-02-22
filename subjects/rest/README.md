@@ -791,6 +791,7 @@ Method   | Collection errors                                                    
 **Further reading**
 
 * [A brief introduction to REST][rest-intro]
+* [REST Cheat Sheet][rest-cheat-sheet]
 * [Using HTTP Methods for RESTful Services][http-methods-rest]
 * [Best Practices for Designing a Pragmatic RESTful API][rest-pragmatic]
 
@@ -812,6 +813,7 @@ Method   | Collection errors                                                    
 [osi-application]: https://en.wikipedia.org/wiki/Application_layer
 [postman]: https://www.getpostman.com
 [rest]: https://en.wikipedia.org/wiki/Representational_state_transfer
+[rest-cheat-sheet]: http://51elliot.blogspot.ch/2014/03/rest-api-best-practices-rest-cheat-sheet.html
 [rest-intro]: https://www.infoq.com/articles/rest-introduction
 [rest-pragmatic]: http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api
 [url]: https://en.wikipedia.org/wiki/Uniform_Resource_Locator
