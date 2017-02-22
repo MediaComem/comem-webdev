@@ -229,6 +229,10 @@ For Node.js, it assumes:
 
 Similar conventions exist for each language supported by Heroku (e.g. Java, PHP, Ruby).
 
+To automatically deploy when you push your code, Heroku uses [Git hooks][git-hooks].
+Basically, these are **scripts** that you can put in the **Git directory** of a Git repository.
+They are **triggered** when Git operations are made.
+
 
 
 ### When do I pay?
@@ -259,6 +263,107 @@ there are free versions available that are restricted, but more powerful version
 
 
 
+## Configuration
+
+Sometimes your app needs a few **configuration properties** (e.g. database URL, cookie signing secret).
+This information is often **sensitive**, so it's good practice **NOT to commit it to your Git repository**.
+
+Heroku provides configuration through **environment variables**.
+
+> "[Environment variables][env-vars] are a set of **dynamic named values** that can affect the way **running processes** will behave on a computer."
+
+One of the most often used environment variables is the `PATH`.
+
+#### Server listening port configuration
+
+On a **managed platform** like Heroku, you can't always run your app on the same port (port 3000 in our Express app),
+as that port **might not be available**.
+Why does our app work then?
+
+If you look at the `bin/www` file, you will see the following lines of code:
+
+```js
+var port = normalizePort(`process.env.PORT || '3000'`);
+app.set('port', port);
+```
+
+Basically, this piece of code says:
+
+* If the `PORT` environment variable is available, use that
+* Otherwise, use `3000` by default
+
+#### Accessing environment variables in Node.js
+
+`process.env` is an object provided by Node.js that contains **all available environment variables**.
+You can see it in your CLI:
+
+```bash
+$> node
+
+> process.env
+{ SHELL: '/bin/bash',
+  USER: 'foo',
+  PATH: '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin',
+  PWD: '/path/to/current/working/directory',
+  LANG: 'en_US.utf-8',
+  HOME: '/path/to/home' }
+
+> process.env.PATH
+/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+```
+
+#### Setting environment variables locally
+
+When you run the app locally, you have no `PORT` environment variable defined, so it will run on port `3000`:
+
+```bash
+$> DEBUG=express-demo* npm start
+
+> express-demo@0.0.0 start /Users/unknow/Downloads/express-demo
+> node ./bin/www
+
+  express-demo:server Listening on port `3000` +0ms
+```
+
+You can override an environment variable by prepending it to the command:
+
+```bash
+$> `PORT=4321` DEBUG=express-demo* npm start
+
+> express-demo@0.0.0 start /Users/unknow/Downloads/express-demo
+> node ./bin/www
+
+  express-demo:server Listening on port `4321` +0ms
+```
+
+You can also permanently override a variable by adding `export NAME=value` to your CLI configuration file (e.g. `~/.bash_profile`).
+
+#### Setting environment variables on Heroku
+
+Heroku will provide some variables to all apps, like `PORT`.
+You can also **add your own** with the `config:set` command:
+
+```bash
+$> heroku config:set HELLO=world
+Adding config vars and restarting myapp... done, v12
+HELLO: world
+
+$> heroku config
+HELLO: world
+OTHER_VAR: data
+
+$> heroku config:get HELLO
+world
+
+$> heroku config:unset HELLO
+Unsetting HELLO and restarting myapp... done, v13
+```
+
+Heroku add-ons can also add variables.
+Typically, **database add-ons** will add an environment variable with the **database URL** to connect to.
+
+
+
 ## Resources
 
 * [Heroku dev center][dev-center]
@@ -274,10 +379,12 @@ there are free versions available that are restricted, but more powerful version
 
 
 [dev-center]: https://devcenter.heroku.com
+[env-vars]: https://en.wikipedia.org/wiki/Environment_variable
 [faas]: https://en.wikipedia.org/wiki/Function_as_a_Service
 [free-dyno-hours]: https://devcenter.heroku.com/articles/free-dyno-hours
 [getting-started]: https://devcenter.heroku.com/articles/getting-started-with-nodejs#introduction
 [git]: https://git-scm.com
+[git-hooks]: https://git-scm.com/book/gr/v2/Customizing-Git-Git-Hooks
 [heroku]: https://www.heroku.com/home
 [heroku-cli]: https://devcenter.heroku.com/articles/heroku-cli
 [heroku-postgres]: https://devcenter.heroku.com/articles/heroku-postgresql
