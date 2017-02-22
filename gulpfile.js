@@ -315,10 +315,24 @@ function convertMarkdownFileToRemarkSlides(file, enc, callback) {
     const sourceUrl = `${config.repoUrl}/tree/${config.sourceVersion}/subjects/${subjectPath}/`;
     const title = `${subjectTitle} (${config.title})`;
 
+    // Get remark options from main configuration file
+    const remarkOptions = _.cloneDeep(config.remark);
+
+    // Override remark options per slide deck with subjects/*/remark.js configuration file (if present)
+    const remarkOptionsOverrideFile = './' + path.join('subjects', subjectPath, 'remark');
+    try {
+      _.merge(remarkOptions, require(remarkOptionsOverrideFile));
+    } catch(err) {
+      if (fs.existsSync(remarkOptionsOverrideFile + '.js')) {
+        throw err;
+      }
+    }
+
     // Insert the Remark Markdown into our HTML template
     const remarkPage = templateFunc({
       basePath: basePath,
       homeUrl: homeUrl,
+      remarkOptions: JSON.stringify(remarkOptions),
       source: remarkMarkdown,
       sourceUrl: sourceUrl,
       title: title,

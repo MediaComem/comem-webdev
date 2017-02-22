@@ -7,7 +7,12 @@ const fixedOptions = {
   root: __dirname,
   title: 'COMEM+ Web Dev',
   repoUrl: 'https://github.com/MediaComem/comem-webdev',
-  webfonts: true
+  webfonts: true,
+  remark: {
+    highlightLines: true,
+    highlightSpans: true,
+    countIncrementalSlides: false
+  }
 };
 
 // Options from environment variables
@@ -37,4 +42,4 @@ const defaultOptions = {
   webUrl: 'https://mediacomem.github.io/comem-webdev-docs'
 };
 
-module.exports = _.defaults({}, fixedOptions, envOptions, localFileOptions, defaultOptions);
+module.exports = _.merge({}, defaultOptions, localFileOptions, envOptions, fixedOptions);
