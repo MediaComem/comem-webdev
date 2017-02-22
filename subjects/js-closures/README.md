@@ -1,8 +1,8 @@
-# JS - Closure
+# JavaScript Closures
+
+What is a JavaScript closure, how to use them, and common pitfalls.
 
 <!-- slide-include ../../BANNER.md -->
-
-What's a Closure?
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -24,9 +24,9 @@ Consider this example:
 
 ```javascript
 function makeYeller() {
-	var city = "Sparta";
+  var city = 'Sparta';
 *   return function yell() {
-*       console.log("This is... " + city);
+*       console.log('This is... ' + city);
 *   };
 };
 
