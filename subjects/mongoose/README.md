@@ -13,10 +13,10 @@
 - [What is Mongoose?](#what-is-mongoose)
   - [Object-Document Mapper (ODM)](#object-document-mapper-odm)
   - [Mongoose validations](#mongoose-validations)
+  - [Unique constraints](#unique-constraints)
   - [Mongoose queries](#mongoose-queries)
   - [Debugging](#debugging)
   - [Should I use it?](#should-i-use-it-1)
-- [TODO](#todo)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -175,7 +175,7 @@ Simply call `mongoose.connect()`:
 
 ```js
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/myproject');
 ```
 
 Notice that you don't have to specify a callback.
@@ -368,6 +368,31 @@ var userSchema = new Schema({
 
 
 
+### Unique constraints
+
+Simply add the `unique: true` property to the schema property you want to be unique:
+
+```js
+var personSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+    minlength: [ 3, 'Name is too short' ],
+    maxlength: 20,
+    `unique`: true
+  },
+  // ...
+});
+```
+
+To create a unique index on **multiple fields**, use `index()` on the schema:
+
+```js
+`personSchema.index`({ name: 1, age: 1  }, { unique: true });
+```
+
+
+
 ### Mongoose queries
 
 You can make MongoDB queries with the `find()` or `findOne()` methods of Mongoose models:
@@ -485,12 +510,6 @@ Blog.collection.insertOne({ foo: 'bar' }, function(err, commandResult) {
   * [Getting started][mongoose-getting-started]
   * [Guide][mongoose-guide]
   * [API documentation][mongoose-api]
-
-
-
-## TODO
-
-* unique constraints
 
 
 
