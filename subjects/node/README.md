@@ -9,6 +9,15 @@
 - [What is [Node.js][node]?](#what-is-nodejsnode)
   - [Installation](#installation)
   - [Which Node.js version to choose?](#which-nodejs-version-to-choose)
+  - [Install Node.js and make sure it works](#install-nodejs-and-make-sure-it-works)
+  - [Create and execute a Node.js file](#create-and-execute-a-nodejs-file)
+  - [Node.js modules](#nodejs-modules)
+  - [Using modules](#using-modules)
+  - [Writing your own module](#writing-your-own-module)
+  - [Requiring local modules](#requiring-local-modules)
+  - [Export properties](#export-properties)
+  - [Function as the main export](#function-as-the-main-export)
+  - [Require paths](#require-paths)
 - [Synchronous vs. Asynchronous](#synchronous-vs-asynchronous)
   - [Synchronous code](#synchronous-code)
   - [Asynchronous code](#asynchronous-code)
@@ -18,14 +27,13 @@
   - [Other event-driven, non-blocking I/O architectures](#other-event-driven-non-blocking-io-architectures)
 - [Node.js callback convention](#nodejs-callback-convention)
   - [**Always** check for errors](#always-check-for-errors)
-- [Node.js core modules](#nodejs-core-modules)
-  - [Node.js has many modules out of the box](#nodejs-has-many-modules-out-of-the-box)
-  - [The HTTP module](#the-http-module)
+- [Spot the mistake](#spot-the-mistake)
+  - [Mistake 1](#mistake-1)
+  - [Mistake 2](#mistake-2)
+- [The HTTP module](#the-http-module)
+  - [Modern web language](#modern-web-language)
   - [Event emitters](#event-emitters)
-- [Modularizing](#modularizing)
-  - [Writing Node.js modules](#writing-nodejs-modules)
 - [Resources](#resources)
-- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -33,10 +41,14 @@
 
 ## What is [Node.js][node]?
 
-<!-- slide-front-matter class: center, middle -->
+<!-- slide-front-matter class: center, middle, image-header -->
+
+<p class='center'><img src='images/node.png' width='50%' /></p>
 
 > "Node.js is an **asynchronous JavaScript runtime** built on Chrome's V8 JavaScript engine.
 > Node.js uses an **event-driven**, **non-blocking I/O** model that makes it lightweight and efficient."
+
+> "Node.js is used on servers to develop fast, scalable web applications."
 
 
 
@@ -59,6 +71,241 @@
 
 
 
+### Install Node.js and make sure it works
+
+Download and install Node.js now.
+
+If the installation was successfull, you should be able to access Node.js in your CLI:
+
+```bash
+$> node --version
+v6.10.0
+
+$> node
+> 1 + 2
+3
+```
+
+Type `Ctrl-C` to exit.
+
+
+
+### Create and execute a Node.js file
+
+Create a `script.js` file in a new `node-demo` project directory:
+
+```js
+function hello(name) {
+  console.log('Hello ' + name + '!');
+}
+
+hello('World');
+```
+
+Execute it by running it with the `node` executable:
+
+```bash
+$> cd /path/to/projects/node-demo
+
+$> node script.js
+Hello World!
+```
+
+Originally, JavaScript was only executable in web browsers,
+but here you are running JavaScript code **locally with Node.js**, like you would other scripting languages (e.g. PHP, Ruby or Python).
+
+
+
+### Node.js modules
+
+Node.js code is organized in **modules**.
+These are the core modules available to you out of the box:
+
+<!-- slide-column 30 -->
+
+* Assertion Testing
+* Buffer
+* C/C++ Addons
+* **Child Processes**
+* Cluster
+* Command Line Options
+* Console
+* **Crypto**
+* Debugger
+* DNS
+* Domain
+* Errors
+
+<!-- slide-column 30 -->
+
+* **Events**
+* **File System**
+* Globals
+* **HTTP**
+* **HTTPS**
+* Modules
+* Net
+* OS
+* **Path**
+* **Process**
+* Punycode
+* Query Strings
+
+<!-- slide-column 30 -->
+
+* Readline
+* REPL
+* Stream
+* String Decoder
+* Timers
+* TLS/SSL
+* TTY
+* UDP/Datagram
+* URL
+* Utilities
+* V8
+* VM
+* ZLIB
+
+
+
+### Using modules
+
+You can use modules in your code with `require()`:
+
+```js
+// Require the operating system core module
+const os = require('os');
+
+function hello(name) {
+  console.log('Hello ' + name + '!');
+* console.log('I am running on ' + os.platform());
+}
+
+hello('World');
+```
+
+This will log the platform on which you are running:
+
+```bash
+$> node script.js
+Hello World!
+I am running on darwin
+```
+
+
+
+### Writing your own module
+
+Let's say we want to extract the `hello` function to another module.
+Create a `utils.js` file:
+
+```js
+const os = require('os');
+
+// Attach properties to exports so that you can use
+// them when requiring this file
+`exports`.hello = function(name) {
+  console.log('Hello ' + name + '!');
+  console.log('I am running on ' + os.platform());
+};
+```
+
+Attaching properties to the `exports` object how you expose the module's functionality.
+Code that uses `require()` on that file will receive the `exports` object.
+
+
+
+### Requiring local modules
+
+You also use `require()` for your own module, but instead of just a name you have to provide a **relative file path**.
+Modify `script.js` as follows:
+
+```js
+// Require the utils.js file in the current directory
+// (You can omit the .js extension)
+const utils = require(`'./utils'`);
+
+// Use the exported function
+utils.hello('World');
+```
+
+It should still work:
+
+```bash
+$> node script.js
+Hello World!
+I am running on darwin
+```
+
+
+
+### Export properties
+
+You can attach whatever you want to the `exports` object:
+
+```js
+`exports.theMeaningOfLife` = 42;
+```
+
+And use it where it is required:
+
+```js
+const utils = require('./utils');
+utils.hello('World');
+console.log('The meaning of life is ' + `utils.theMeaningOfLife`);
+```
+
+This will print:
+
+```bash
+$> node script.js
+Hello World!
+I am running on darwin
+*The meaning of life is 42
+```
+
+
+
+### Function as the main export
+
+Some modules only export a function instead of an object with properties.
+Add a `doIt.js` file:
+
+```js
+// Override module.exports to replace the whole exports object
+`module.exports =` function() {
+  console.log('Doing it');
+};
+```
+
+Modify `script.js`:
+
+```js
+*const doIt = require('./doIt');
+const utils = require('./utils');
+utils.hello('World');
+console.log('The meaning of life is ' + utils.theMeaningOfLife);
+*doIt();
+```
+
+The additional text `Doing it` will be logged as well.
+
+
+
+### Require paths
+
+A short summary on how to require files:
+
+Statement                     | Effect
+:---                          | :---
+`require('coreModule')`       | Require the core module (or npm package) named `coreModule`
+`require('./foo.js')`         | Require the `foo.js` file in the current directory (relative to the current file)
+`require('./foo/bar/baz.js')` | Require the `baz.js` file in the `foo/bar` directory (relative to the current file)
+`require('../../qux.js')`     | Require the `qux.js` file two directories above (relative to the current file)
+
+
+
 ## Synchronous vs. Asynchronous
 
 <!-- slide-front-matter class: center, middle -->
@@ -78,7 +325,7 @@ function getRandomNumber() {
 
 console.log('Hello');
 
-var result = getRandomNumber();
+const result = getRandomNumber();
 
 console.log('Result: ' + result);
 console.log('End of program');
@@ -98,10 +345,10 @@ The call to `getRandomNumber()` blocks the thread until its execution is complet
 
 ### Asynchronous code
 
-With asynchronous code, some operations are executed **in parallel**.
+With asynchronous code, some operations are executed **in parallel**:
 
 ```js
-var fs = require('fs');
+const fs = require('fs');
 
 console.log('Hello');
 
@@ -136,9 +383,9 @@ The signature of `fs.readFile` is:
 
 The third argument is a **callback function**:
 
-* With synchronous code, the call blocks the thread until it is done.
-* With asynchronous code, the rest of the code keeps executing, and `fs.readFile`
-  will **call you back** when it is done.
+* With synchronous code, the call blocks the thread until it is done
+* With asynchronous code, the rest of the code **keeps executing**;
+  you pass a function to `fs.readFile` and Node.js will **call you back** when it is done
 
 Under the hood, Node.js will read the file in a separate thread,
 then execute your callback function when it's ready.
@@ -150,17 +397,19 @@ then execute your callback function when it's ready.
 Although I/O operations are non-blocking, **your code always executes in a single thread**:
 
 ```js
-var value = 1;
+const fs = require('fs');
+let value = 1;
 
 fs.readFile('five.txt', 'utf-8', function(err, result) {
-  value = value + parseFloat(result);
+  `value = value + parseFloat(result)`;
+  console.log(value);
 });
 
-value = value * 2;
+`value = value * 2`;
 console.log(value);
 ```
 
-This will always log **7** (i.e. (1 * 2) + 5).
+This will always log **2** first, then **7** (i.e. first * 2, then + 5).
 
 Even if the file is read instantaneously and the contents of the file is ready immediately,
 Node.js **guarantees** that `value = value * 2` will be executed first.
@@ -221,10 +470,10 @@ There are two ways that the function can be called back:
 You should never forget to check for errors:
 
 ```js
+const fs = require('fs');
 fs.readFile('name.txt', 'utf-8', function(err, data) {
 * if (err) {
-*   console.warn('Oops, could not read the file because: ' + err.message);
-*   return;
+*   return console.warn('Could not read the file because: ' + err.message);
 * }
 
   console.log('Hello ' + data);
@@ -237,63 +486,230 @@ Do not forget the `return` either, or use `else`, to ensure that your "success" 
 
 
 
-## Node.js core modules
+## Spot the mistake
 
 <!-- slide-front-matter class: center, middle -->
 
 
 
-### Node.js has many modules out of the box
+### Mistake 1
 
-<!-- slide-column 30 -->
+What's wrong with this code?
 
-* Assertion Testing
-* Buffer
-* C/C++ Addons
-* **Child Processes**
-* Cluster
-* Command Line Options
-* Console
-* **Crypto**
-* Debugger
-* DNS
-* Domain
-* Errors
+```js
+const fs = require('fs');
 
-<!-- slide-column 30 -->
+// Read a name from name.txt
+const name = fs.readFile('name.txt', 'utf-8', function(err, nameInFile) {
+  if (err) {
+    return console.warn('Could not read file because: ' + err.message);
+  }
 
-* **Events**
-* **File System**
-* Globals
-* **HTTP**
-* **HTTPS**
-* Modules
-* Net
-* OS
-* **Path**
-* **Process**
-* Punycode
-* Query Strings
+  return nameInFile;
+});
 
-<!-- slide-column 30 -->
+// Save a salutation into hello.txt
+const salutation = 'Hello ' + name + '!';
+fs.writeFile('hello.txt', salutation, 'utf-8', function(err) {
+  if (err) {
+    console.warn('Could not write in file because: ' + err.message);
+  }
+});
+```
 
-* Readline
-* REPL
-* Stream
-* String Decoder
-* Timers
-* TLS/SSL
-* TTY
-* UDP/Datagram
-* URL
-* Utilities
-* V8
-* VM
-* ZLIB
+#### Mistake 1 result
+
+If you save this script in `bug1.js`, save a `name.txt` file containing a name and execute the script, this is what will happen:
+
+```bash
+$> echo World > name.txt
+
+$> node bug1.js
+
+$> cat hello.txt
+Hello undefined!
+```
+
+The script could not read the name from `name.txt`.
+
+#### Mistake 1 asynchronous issue
+
+There are two problems with this code. First, Node.js I/O functions (such as file operations) are **asynchronous**.
+
+When `fs.readFile()` is called, Node.js will start a thread and read the file in the background.
+Meanwhile, **your code will keep executing** and the call to `fs.writeFile` will occur **before the callback function of `fs.readFile` is called back**.
+
+```js
+const fs = require('fs');
+
+// Read a name from name.txt
+const name = `fs.readFile`('name.txt', 'utf-8', function(err, nameInFile) {
+  if (err) {
+    return console.warn('Could not read file because: ' + err.message);
+  }
+  return nameInFile;
+});
+
+// Save a salutation into hello.txt
+const salutation = 'Hello ' + name + '!';
+`fs.writeFile`('hello.txt', salutation, 'utf-8', function(err) {
+  if (err) {
+    console.warn('Could not write in file because: ' + err.message);
+  }
+});
+```
+
+#### Mistake 1 return issue
+
+Second, even if there was no asynchronous issue, the assignment of `const name` would still be `undefined`:
+
+* You are calling `fs.readFile()`, which returns `undefined`, and that is what is stored in the `name` variable
+* **When** Node.js is done reading the file in a separate thread, **it will call your callback function (later)**
+* The return value of your callback function is **not going anywhere**
+
+```js
+const fs = require('fs');
+
+// Read a name from name.txt
+`const name` = fs.readFile('name.txt', 'utf-8', function(err, nameInFile) {
+  `return nameInFile`;
+});
+
+// Save a salutation into hello.txt
+const salutation = 'Hello ' + name + '!';
+fs.writeFile('hello.txt', salutation, 'utf-8', function(err) {
+  if (err) {
+    console.warn('Could not write in file because: ' + err.message);
+  }
+});
+```
+
+#### Mistake 1 correct implementation
+
+The second asynchronous call must be performed **inside the callback function of the previous call**.
+That way, it will not be executed **until the first call is done** and Node.js has called your callback function.
+
+You will also have direct access to the **result** passed to the callback function:
+
+```js
+const fs = require('fs');
+
+// Read a name from name.txt
+fs.readFile('name.txt', 'utf-8', function(err, `nameInFile`) {
+  if (err) {
+    return console.warn('Could not read file because: ' + err.message);
+  }
+
+  // Save a salutation into hello.txt
+  const salutation = 'Hello ' + `nameInFile` + '!';
+  fs.writeFile('hello.txt', salutation, 'utf-8', function(err) {
+    if (err) {
+      console.warn('Could not write in file because: ' + err.message);
+    }
+  });
+});
+```
 
 
 
-### The HTTP module
+### Mistake 2
+
+What's wrong with this code?
+
+```js
+const fs = require('fs');
+
+// Read the contents of a file
+fs.readFile('foo.txt', 'utf-8', function(err, text) {
+  if (err) {
+    console.warn('Could not read file because: ' + err.message);
+  }
+
+  // Log the contents in upper case
+  console.log(text.toUpperCase());
+});
+```
+
+#### Mistake 2 result
+
+If you save this script in `bug2.js` and execute it, this is what will happen:
+
+```bash
+$> node bug2.js
+Could not read file because: ENOENT: no such file or directory, open 'foo.txt'
+/path/to/projects/node-demo/bug2.js:9
+  console.log(text.toUpperCase());
+                  ^
+
+TypeError: Cannot read property 'toUpperCase' of undefined
+    at ReadFileContext.callback (/path/to/projects/node-demo/bug2.js:9:19)
+    at FSReqWrap.readFileAfterOpen [as oncomplete] (fs.js:365:13)
+```
+
+As expected, we see the `Could not read file because: ...` log.
+But we also see another **unexpected error** and its stack trace.
+
+#### Mistake 2 issue
+
+There is an error check, but execution of the callback function is **not stopped**
+as there is no `return` and no `else`.
+
+If an error occurs, **both the `console.warn` and the `console.log` calls will be executed**.
+This will cause a "null pointer exception":
+
+```js
+const fs = require('fs');
+
+// Read the contents of a file
+fs.readFile('foo.txt', 'utf-8', function(err, text) {
+  if (err) {
+*   console.warn('Could not read file because: ' + err.message);
+  }
+
+  // Log the contents in upper case
+* console.log(text.toUpperCase());
+});
+```
+
+#### Mistake 2 correct implementation
+
+You can add a `return` to solve the issue:
+
+```js
+// Read the contents of a file
+fs.readFile('foo.txt', 'utf-8', function(err, text) {
+  if (err) {
+    `return` console.warn('Could not read file because: ' + err.message);
+  }
+
+  // Log the contents in upper case
+  console.log(text.toUpperCase());
+});
+```
+
+Or use an `if/else`:
+
+```js
+// Read the contents of a file
+fs.readFile('foo.txt', 'utf-8', function(err, text) {
+  `if (err) {`
+    console.warn('Could not read file because: ' + err.message);
+  `} else {`
+    // Log the contents in upper case
+    console.log(text.toUpperCase());
+  `}`
+});
+```
+
+
+
+## The HTTP module
+
+<!-- slide-front-matter class: center, middle -->
+
+
+
+### Modern web language
 
 Node.js provides a ready-to-use HTTP server.
 Thanks to the event loop, this one small server can handle many clients concurrently.
@@ -347,78 +763,26 @@ server.on('request', function(message) {
 
 
 
-## Modularizing
-
-<!-- slide-front-matter class: center, middle -->
-
-
-
-### Writing Node.js modules
-
-TODO: adapt (content copy-pasted from previous course's slides)
-
-m1.js
-
-```js
-module.exports.a = "b";
-
-module.exports.hello = function() {
-  console.log("Hello!");
-};
-```
-
-m2.js
-
-```js
-module.exports = function(name) {
-  console.log("Hello " + name + "!");
-};
-```
-
-myScript.js
-
-```js
-var module1 = require("./m1");
-
-console.log(module1.a);
-module1.hello();
-
-var module2 = require("./m2");
-
-module2("World");
-```
-
-Run it!
-
-```js
-$> node myScript.js
-b
-Hello!
-Hello World!
-```
-
-
-
 ## Resources
 
-* Understanding the Node.js Event Loop
-  http://strongloop.com/strongblog/node-js-event-loop/
-* Mixu's Node book: What is Node.js? (chapter 2)
-  http://book.mixu.net/node/ch2.html
-* Node.js Explained, video
-  http://kunkle.org/talks/
+**Documentation**
+
+* [Core modules (6.x)][node-6-api]
+
+**Further reading**
+
+* [What is Node.js][mixu-node-book]
+* [Understanding the Node.js Event Loop][event-loop]
+* [Node.js Explained (video)][node-explained-video]
 
 
 
-## TODO
-
-* Add nested callbacks example (in the form of a question?)
-* Return in callback example
-
-
-
+[event-loop]: http://strongloop.com/strongblog/node-js-event-loop/
 [event-machine]: http://rubyeventmachine.com
+[mixu-node-book]: http://book.mixu.net/node/ch2.html
 [nginx]: https://www.nginx.com
 [node]: https://nodejs.org/en/
+[node-6-api]: https://nodejs.org/dist/latest-v6.x/docs/api/
 [node-event-emitter]: https://nodejs.org/api/events.html
+[node-explained-video]: http://kunkle.org/talks/
 [twisted]: http://twistedmatrix.com/trac/

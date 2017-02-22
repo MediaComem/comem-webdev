@@ -21,6 +21,7 @@
   - [npm install with a package.json](#npm-install-with-a-packagejson)
   - [The --save-dev and --production option](#the---save-dev-and---production-option)
   - [The --global option](#the---global-option)
+  - [More complex packages](#more-complex-packages)
 - [npm scripts](#npm-scripts)
   - [The scripts property](#the-scripts-property)
   - [Lifecycle scripts](#lifecycle-scripts)
@@ -33,7 +34,6 @@
   - [Publishing](#publishing)
   - [Avoiding publication](#avoiding-publication)
 - [Resources](#resources)
-- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -306,7 +306,26 @@ Use the `--global` or `-g` option:
 $> npm install --global http-server
 ```
 
-If you get an `EACCES` error, you need to run `sudo npm install ...` or follow [this procedure][npm-fix-permissions].
+**If you get an `EACCES` error**, execute the following commands:
+
+```bash
+$> mkdir ~/.npm-global
+$> npm config set prefix '~/.npm-global'
+```
+
+And add this line to your CLI configuration file (e.g. `~/.bash_profile`):
+
+```bash
+export PATH=~/.npm-global/bin:$PATH
+```
+
+Then retry the installation, which should work this time:
+
+```bash
+$> npm install --global http-server
+```
+
+#### Global packages
 
 Global packages usually provide a **command-line tool**.
 In this case, the `http-server` package is a simple command-line HTTP server:
@@ -337,6 +356,45 @@ http-server
 
 
 
+### More complex packages
+
+The npm registry has many packages, some small, some big.
+Let's install [express][express], a web application framework:
+
+```js
+$> npm install --save express
+```
+
+Create a `server.js` file with the following content:
+
+```js
+const express = require('express');
+const app = express();
+
+app.get('/', function(req, res) {
+  res.send('Hello World!');
+});
+
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!');
+});
+```
+
+#### Run a web app
+
+Run the file:
+
+```bash
+$> node server.js
+Example app listening on port 3000!
+```
+
+Visit [http://localhost:3000/](http://localhost:3000) in your browser.
+
+You have a running web application server!
+
+
+
 ## npm scripts
 
 <!-- slide-front-matter class: center, middle -->
@@ -353,21 +411,21 @@ The `scripts` section of the `package.json` file defines scripts that can be run
 {
   "name": "npm-demo",
 * "scripts": {
-*   "start": "node script.js"
+*   "start": "node server.js"
 * },
   ...
 }
 ```
 
-Here we define that running `npm start` should execute our script with Node.js:
+Here we define that running `npm start` should launch our server with Node.js:
 
 ```bash
 $> npm start
 
 > npm-demo@1.0.0 start /path/to/projects/npm-demo
-> node script.js
+> node server.js
 
-[ 1, 2, 3 ]
+Example app listening on port 3000!
 ```
 
 
@@ -383,7 +441,7 @@ The following scripts are "standard" scripts:
 | restart | Restart your program                 | `npm restart`
 | test    | Run automated tests for your program | `npm test`
 
-Read the [documentation][npm-scripts] to see all the available lifecycle scripts.
+Read the [documentation][npm-scripts] to learn about all the available lifecycle scripts.
 
 
 
@@ -541,21 +599,16 @@ In these cases, you can set the `private` property of the `package.json` file:
 
 ## Resources
 
-* Command line usage
-  https://docs.npmjs.com/cli/npm
-* package.json format
-  https://docs.npmjs.com/files/package.json
+**Documentation**
+
+* [Command line usage][npm-cli]
+* [package.json][package.json]
 
 
 
-## TODO
-
-* https://docs.npmjs.com/getting-started/fixing-npm-permissions
-* Show more complex install example with Express
-
-
-
+[express]: https://expressjs.com
 [npm]: https://www.npmjs.com
+[npm-cli]: https://docs.npmjs.com/cli/npm
 [npm-fix-permissions]: https://docs.npmjs.com/getting-started/fixing-npm-permissions
 [npm-scripts]: https://docs.npmjs.com/misc/scripts
 [package.json]: https://docs.npmjs.com/files/package.json
