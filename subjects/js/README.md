@@ -14,6 +14,8 @@
   - [JavaScript has **dynamic** objects](#javascript-has-dynamic-objects)
   - [Array are **objects**](#array-are-objects)
   - [JavaScript is **untyped**](#javascript-is-untyped)
+  - [Comparing values with `==` or `===`](#comparing-values-with--or-)
+  - [Falsy values](#falsy-values)
 - [JavaScript supports [first-class functions][first-class-functions]](#javascript-supports-first-class-functionsfirst-class-functions)
   - [Storing functions in variables or data structures](#storing-functions-in-variables-or-data-structures)
   - [Returning functions from a function](#returning-functions-from-a-function)
@@ -214,6 +216,50 @@ console.log(typeof aVariable); // "object"
 ```
 
 The type can **change** over time.
+
+
+
+### Comparing values with `==` or `===`
+
+The `==` operator **loosely** compares values for equality:
+
+```js
+console.log(1 == true); // true
+console.log(2.3 == "2.3"); // true
+console.log(false == []); // true
+```
+
+The `===` operator **strictly** compares for equality:
+
+```js
+console.log(1 === true); // false
+console.log(2.3 === "2.3"); // false
+console.log(false === []); // false
+console.log(42 === 42); // true
+```
+
+
+
+### Falsy values
+
+The following values all **evaluate to false**: `false`, `0`, `""`, `null`, `undefined`, `NaN`.
+
+```js
+if (0) {
+  console.log('Zero is truthy');
+} else {
+  console.log('Zero is falsy'); // "Zero is falsy"
+}
+```
+
+This can cause weird bugs sometimes:
+
+```js
+var countdown = "";
+if (countdown == 0) {
+  console.log('We are done'); // "We are done"
+}
+```
 
 
 

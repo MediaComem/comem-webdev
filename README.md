@@ -34,7 +34,7 @@ Materials for the COMEM+ web development courses.
 **Languages & Frameworks**
 
 * [JavaScript](subjects/js/)
-  * [JavaScript closures](subjects/js-closure/)
+  * [JavaScript closures](subjects/js-closures/)
   * [JavaScript prototypes](subjects/js-prototypes/)
   * [Angular](subjects/angular/) (frontend web application framework)
 * [Node.js](subjects/node/)
@@ -54,6 +54,10 @@ Materials for the COMEM+ web development courses.
 **Cloud**
 
 * [Heroku](subjects/heroku/)
+
+**Course Introductions**
+
+* [Web Services](subjects/webserv-course/)
 
 
 
