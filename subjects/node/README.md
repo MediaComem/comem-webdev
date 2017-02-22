@@ -9,6 +9,15 @@
 - [What is [Node.js][node]?](#what-is-nodejsnode)
   - [Installation](#installation)
   - [Which Node.js version to choose?](#which-nodejs-version-to-choose)
+  - [Install Node.js and make sure it works](#install-nodejs-and-make-sure-it-works)
+  - [Create and execute a Node.js file](#create-and-execute-a-nodejs-file)
+  - [Node.js modules](#nodejs-modules)
+  - [Using modules](#using-modules)
+  - [Writing your own module](#writing-your-own-module)
+  - [Requiring local modules](#requiring-local-modules)
+  - [Export properties](#export-properties)
+  - [Function as the main export](#function-as-the-main-export)
+  - [Require paths](#require-paths)
 - [Synchronous vs. Asynchronous](#synchronous-vs-asynchronous)
   - [Synchronous code](#synchronous-code)
   - [Asynchronous code](#asynchronous-code)
@@ -18,14 +27,13 @@
   - [Other event-driven, non-blocking I/O architectures](#other-event-driven-non-blocking-io-architectures)
 - [Node.js callback convention](#nodejs-callback-convention)
   - [**Always** check for errors](#always-check-for-errors)
-- [Node.js core modules](#nodejs-core-modules)
-  - [Node.js has many modules out of the box](#nodejs-has-many-modules-out-of-the-box)
-  - [The HTTP module](#the-http-module)
+- [Spot the mistake](#spot-the-mistake)
+  - [Mistake 1](#mistake-1)
+  - [Mistake 2](#mistake-2)
+- [The HTTP module](#the-http-module)
+  - [Modern web language](#modern-web-language)
   - [Event emitters](#event-emitters)
-- [Modularizing](#modularizing)
-  - [Writing Node.js modules](#writing-nodejs-modules)
 - [Resources](#resources)
-- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -33,10 +41,14 @@
 
 ## What is [Node.js][node]?
 
-<!-- slide-front-matter class: center, middle -->
+<!-- slide-front-matter class: center, middle, image-header -->
+
+<p class='center'><img src='images/node.png' width='50%' /></p>
 
 > "Node.js is an **asynchronous JavaScript runtime** built on Chrome's V8 JavaScript engine.
 > Node.js uses an **event-driven**, **non-blocking I/O** model that makes it lightweight and efficient."
+
+> "Node.js is used on servers to develop fast, scalable web applications."
 
 
 
@@ -56,6 +68,241 @@
   They are supported for 18 months after that.
   They are still maintained (e.g. security fixes) for 12 months after that.
   So they are **supported for 36 months**.
+
+
+
+### Install Node.js and make sure it works
+
+Download and install Node.js now.
+
+If the installation was successfull, you should be able to access Node.js in your CLI:
+
+```bash
+$> node --version
+v6.10.0
+
+$> node
+> 1 + 2
+3
+```
+
+Type `Ctrl-C` to exit.
+
+
+
+### Create and execute a Node.js file
+
+Create a `script.js` file in a new `node-demo` project directory:
+
+```js
+function hello(name) {
+  console.log('Hello ' + name + '!');
+}
+
+hello('World');
+```
+
+Execute it by running it with the `node` executable:
+
+```bash
+$> cd /path/to/projects/node-demo
+
+$> node script.js
+Hello World!
+```
+
+Originally, JavaScript was only executable in web browsers,
+but here you are running JavaScript code **locally with Node.js**, like you would other scripting languages (e.g. PHP, Ruby or Python).
+
+
+
+### Node.js modules
+
+Node.js code is organized in **modules**.
+These are the core modules available to you out of the box:
+
+<!-- slide-column 30 -->
+
+* Assertion Testing
+* Buffer
+* C/C++ Addons
+* **Child Processes**
+* Cluster
+* Command Line Options
+* Console
+* **Crypto**
+* Debugger
+* DNS
+* Domain
+* Errors
+
+<!-- slide-column 30 -->
+
+* **Events**
+* **File System**
+* Globals
+* **HTTP**
+* **HTTPS**
+* Modules
+* Net
+* OS
+* **Path**
+* **Process**
+* Punycode
+* Query Strings
+
+<!-- slide-column 30 -->
+
+* Readline
+* REPL
+* Stream
+* String Decoder
+* Timers
+* TLS/SSL
+* TTY
+* UDP/Datagram
+* URL
+* Utilities
+* V8
+* VM
+* ZLIB
+
+
+
+### Using modules
+
+You can use modules in your code with `require()`:
+
+```js
+// Require the operating system core module
+const os = require('os');
+
+function hello(name) {
+  console.log('Hello ' + name + '!');
+* console.log('I am running on ' + os.platform());
+}
+
+hello('World');
+```
+
+This will log the platform on which you are running:
+
+```bash
+$> node script.js
+Hello World!
+I am running on darwin
+```
+
+
+
+### Writing your own module
+
+Let's say we want to extract the `hello` function to another module.
+Create a `utils.js` file:
+
+```js
+const os = require('os');
+
+// Attach properties to exports so that you can use
+// them when requiring this file
+`exports`.hello = function(name) {
+  console.log('Hello ' + name + '!');
+  console.log('I am running on ' + os.platform());
+};
+```
+
+Attaching properties to the `exports` object how you expose the module's functionality.
+Code that uses `require()` on that file will receive the `exports` object.
+
+
+
+### Requiring local modules
+
+You also use `require()` for your own module, but instead of just a name you have to provide a **relative file path**.
+Modify `script.js` as follows:
+
+```js
+// Require the utils.js file in the current directory
+// (You can omit the .js extension)
+const utils = require(`'./utils'`);
+
+// Use the exported function
+utils.hello('World');
+```
+
+It should still work:
+
+```bash
+$> node script.js
+Hello World!
+I am running on darwin
+```
+
+
+
+### Export properties
+
+You can attach whatever you want to the `exports` object:
+
+```js
+`exports.theMeaningOfLife` = 42;
+```
+
+And use it where it is required:
+
+```js
+const utils = require('./utils');
+utils.hello('World');
+console.log('The meaning of life is ' + `utils.theMeaningOfLife`);
+```
+
+This will print:
+
+```bash
+$> node script.js
+Hello World!
+I am running on darwin
+*The meaning of life is 42
+```
+
+
+
+### Function as the main export
+
+Some modules only export a function instead of an object with properties.
+Add a `doIt.js` file:
+
+```js
+// Override module.exports to replace the whole exports object
+`module.exports =` function() {
+  console.log('Doing it');
+};
+```
+
+Modify `script.js`:
+
+```js
+*const doIt = require('./doIt');
+const utils = require('./utils');
+utils.hello('World');
+console.log('The meaning of life is ' + utils.theMeaningOfLife);
+*doIt();
+```
+
+The additional text `Doing it` will be logged as well.
+
+
+
+### Require paths
+
+A short summary on how to require files:
+
+Statement                     | Effect
+:---                          | :---
+`require('coreModule')`       | Require the core module (or npm package) named `coreModule`
+`require('./foo.js')`         | Require the `foo.js` file in the current directory (relative to the current file)
+`require('./foo/bar/baz.js')` | Require the `baz.js` file in the `foo/bar` directory (relative to the current file)
+`require('../../qux.js')`     | Require the `qux.js` file two directories above (relative to the current file)
 
 
 
@@ -98,7 +345,7 @@ The call to `getRandomNumber()` blocks the thread until its execution is complet
 
 ### Asynchronous code
 
-With asynchronous code, some operations are executed **in parallel**.
+With asynchronous code, some operations are executed **in parallel**:
 
 ```js
 const fs = require('fs');
@@ -137,7 +384,7 @@ The signature of `fs.readFile` is:
 The third argument is a **callback function**:
 
 * With synchronous code, the call blocks the thread until it is done
-* With asynchronous code, the rest of the code keeps executing;
+* With asynchronous code, the rest of the code **keeps executing**;
   you pass a function to `fs.readFile` and Node.js will **call you back** when it is done
 
 Under the hood, Node.js will read the file in a separate thread,
@@ -150,17 +397,19 @@ then execute your callback function when it's ready.
 Although I/O operations are non-blocking, **your code always executes in a single thread**:
 
 ```js
-var value = 1;
+const fs = require('fs');
+let value = 1;
 
 fs.readFile('five.txt', 'utf-8', function(err, result) {
-  value = value + parseFloat(result);
+  `value = value + parseFloat(result)`;
+  console.log(value);
 });
 
-value = value * 2;
+`value = value * 2`;
 console.log(value);
 ```
 
-This will always log **7** (i.e. (1 * 2) + 5).
+This will always log **2** first, then **7** (i.e. first * 2, then + 5).
 
 Even if the file is read instantaneously and the contents of the file is ready immediately,
 Node.js **guarantees** that `value = value * 2` will be executed first.
@@ -454,147 +703,13 @@ fs.readFile('foo.txt', 'utf-8', function(err, text) {
 
 
 
-## Modularizing
-
-<!-- slide-front-matter class: center, middle -->
-
-Writing your own modules
-
-
-
-### Create and execute a Node.js file
-
-Create a `script.js` file in a new `node-demo` project directory:
-
-```js
-function hello(name) {
-  console.log('Hello ' + name + '!');
-}
-
-hello('World');
-```
-
-Execute it by running it with the `node` executable:
-
-```bash
-$> cd /path/to/projects/node-demo
-
-$> node script.js
-Hello World!
-```
-
-### Create a new module
-
-Let's say we want to extract the `hello` function to another file.
-Create a `utils.js` file:
-
-```js
-// Attach properties to exports so that you can use
-// them when requiring this file
-`exports`.hello = function(name) {
-  console.log('Hello ' + name + '!');
-};
-```
-
-Node.js provides the `require()` function to you so you can use functionality from other files.
-Update `hello.js` to use the exported function from `utils.js`:
-
-```js
-// Use require with a relative path to include your own modules
-const utils = `require('./utils')`;
-utils.hello('World');
-```
-
-It should still work:
-
-```bash
-$> node script.js
-Hello World!
-```
-
-### Export properties
-
-You can attach whatever you want to the `exports` object:
-
-```js
-exports.theMeaningOfLife = 42;
-```
-
-And use it where the file is required:
-
-```js
-const utils = require('./utils');
-utils.hello('World');
-console.log('The meaning of life is ' + utils.theMeaningOfLife);
-```
-
-This will print:
-
-```bash
-$> node script.js
-Hello World!
-The meaning of life is 42
-```
-
-
-
-## Node.js core modules
+## The HTTP module
 
 <!-- slide-front-matter class: center, middle -->
 
 
 
-### Node.js has many modules out of the box
-
-<!-- slide-column 30 -->
-
-* Assertion Testing
-* Buffer
-* C/C++ Addons
-* **Child Processes**
-* Cluster
-* Command Line Options
-* Console
-* **Crypto**
-* Debugger
-* DNS
-* Domain
-* Errors
-
-<!-- slide-column 30 -->
-
-* **Events**
-* **File System**
-* Globals
-* **HTTP**
-* **HTTPS**
-* Modules
-* Net
-* OS
-* **Path**
-* **Process**
-* Punycode
-* Query Strings
-
-<!-- slide-column 30 -->
-
-* Readline
-* REPL
-* Stream
-* String Decoder
-* Timers
-* TLS/SSL
-* TTY
-* UDP/Datagram
-* URL
-* Utilities
-* V8
-* VM
-* ZLIB
-
-
-
-### The HTTP module
+### Modern web language
 
 Node.js provides a ready-to-use HTTP server.
 Thanks to the event loop, this one small server can handle many clients concurrently.
@@ -650,23 +765,24 @@ server.on('request', function(message) {
 
 ## Resources
 
-* Understanding the Node.js Event Loop
-  http://strongloop.com/strongblog/node-js-event-loop/
-* Mixu's Node book: What is Node.js? (chapter 2)
-  http://book.mixu.net/node/ch2.html
-* Node.js Explained, video
-  http://kunkle.org/talks/
+**Documentation**
+
+* [Core modules (6.x)][node-6-api]
+
+**More information**
+
+* [What is Node.js][mixu-node-book]
+* [Understanding the Node.js Event Loop][event-loop]
+* [Node.js Explained (video)][node-explained-video]
 
 
 
-## TODO
-
-* Speak about Node.js modules and server-side at the very beginning
-
-
-
+[event-loop]: http://strongloop.com/strongblog/node-js-event-loop/
 [event-machine]: http://rubyeventmachine.com
+[mixu-node-book]: http://book.mixu.net/node/ch2.html
 [nginx]: https://www.nginx.com
 [node]: https://nodejs.org/en/
+[node-6-api]: https://nodejs.org/dist/latest-v6.x/docs/api/
 [node-event-emitter]: https://nodejs.org/api/events.html
+[node-explained-video]: http://kunkle.org/talks/
 [twisted]: http://twistedmatrix.com/trac/
