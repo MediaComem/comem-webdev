@@ -28,6 +28,7 @@ Requirements:
   - [Anatomy of an HTTP response](#anatomy-of-an-http-response)
   - [HTTP provides the [content negotiation][http-content-negotiation] mechanisms](#http-provides-the-content-negotiationhttp-content-negotiation-mechanisms)
 - [[Create, read, update, delete (CRUD)][crud]](#create-read-update-delete-crudcrud)
+  - [Postman](#postman)
   - [Create](#create)
   - [Read](#read)
   - [Update](#update)
@@ -787,7 +788,7 @@ Method   | Collection errors                                                    
 * [HTTP request methods][http-methods] ([RFC][http-methods-rfc], [PATCH RFC][http-methods-patch-rfc])
 * [HTTP status codes][http-status-codes] ([RFC][http-status-codes-rfc])
 
-**Articles**
+**More information**
 
 * [A brief introduction to REST][rest-intro]
 * [Using HTTP Methods for RESTful Services][http-methods-rest]
