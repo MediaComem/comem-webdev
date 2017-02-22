@@ -26,8 +26,12 @@ Requirements:
   - [How?](#how)
   - [When do I pay?](#when-do-i-pay)
   - [Databases](#databases)
+- [Configuration](#configuration)
+  - [Server listening port configuration](#server-listening-port-configuration)
+  - [Accessing environment variables in Node.js](#accessing-environment-variables-in-nodejs)
+  - [Setting environment variables locally](#setting-environment-variables-locally)
+  - [Setting environment variables on Heroku](#setting-environment-variables-on-heroku)
 - [Resources](#resources)
-- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -274,7 +278,7 @@ Heroku provides configuration through **environment variables**.
 
 One of the most often used environment variables is the `PATH`.
 
-#### Server listening port configuration
+### Server listening port configuration
 
 On a **managed platform** like Heroku, you can't always run your app on the same port (port 3000 in our Express app),
 as that port **might not be available**.
@@ -292,7 +296,7 @@ Basically, this piece of code says:
 * If the `PORT` environment variable is available, use that
 * Otherwise, use `3000` by default
 
-#### Accessing environment variables in Node.js
+### Accessing environment variables in Node.js
 
 `process.env` is an object provided by Node.js that contains **all available environment variables**.
 You can see it in your CLI:
@@ -312,7 +316,7 @@ $> node
 /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 ```
 
-#### Setting environment variables locally
+### Setting environment variables locally
 
 When you run the app locally, you have no `PORT` environment variable defined, so it will run on port `3000`:
 
@@ -338,7 +342,7 @@ $> `PORT=4321` DEBUG=express-demo* npm start
 
 You can also permanently override a variable by adding `export NAME=value` to your CLI configuration file (e.g. `~/.bash_profile`).
 
-#### Setting environment variables on Heroku
+### Setting environment variables on Heroku
 
 Heroku will provide some variables to all apps, like `PORT`.
 You can also **add your own** with the `config:set` command:
@@ -368,13 +372,6 @@ Typically, **database add-ons** will add an environment variable with the **data
 
 * [Heroku dev center][dev-center]
 * [Getting started on Heroku with Node.js][getting-started]
-
-
-
-## TODO
-
-* Configuration through environment variables
-* Add note on git hooks in "How?" slide
 
 
 
