@@ -334,7 +334,7 @@ If you know how to run the command line version, you can probably also figure ou
 So the **command line** is what we will use.
 
 Some of you may already have Git installed.
-Run the following command in a terminal to make sure:
+Run the following command in a CLI to make sure:
 
 ```bash
 $> git --version

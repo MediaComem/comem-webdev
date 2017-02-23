@@ -6,7 +6,7 @@ Requirements:
 
 * [Git][git]
 * A [GitHub][github] account
-* A Unix shell (Git Bash is installed with Git on Windows)
+* A Unix CLI (Git Bash is installed with Git on Windows)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -134,7 +134,7 @@ SHA256:ULmjUQDN4Snkh0s9u093mcva4cI94cDk name@host
 #### Copy the SSH key
 
 To authenticate using your SSH key on GitHub, you will need to copy your **public key**.
-You can display it on the terminal with this command:
+You can display it on the CLI with this command:
 
 ```bash
 $> cat ~/.ssh/id_rsa.pub

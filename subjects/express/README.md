@@ -184,7 +184,7 @@ Visit [http://localhost:3000](http://localhost:3000) in your browser and you sho
 
 <p class='center'><img src='images/express-running.png' width='60%' /></p>
 
-In the terminal where you're running the app, you should also see that your request was **logged**:
+In the CLI where you're running the app, you should also see that your request was **logged**:
 
 ```txt
   my-app:server Listening on port 3000 +0ms
@@ -353,7 +353,7 @@ app.use(function myMiddleware(req, res, next) {
 });
 ```
 
-In your terminal, stop the running application with Ctrl-C, restart it, and reload the page in your browser.
+In your CLI, stop the running application with Ctrl-C, restart it, and reload the page in your browser.
 You should see your middleware working:
 
 ```bash
