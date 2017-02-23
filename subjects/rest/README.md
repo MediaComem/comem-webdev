@@ -463,12 +463,12 @@ A JSON representation:
 
 ```http
 GET /shows/game-of-thrones HTTP/1.1
-Accept: application/json
+*Accept: application/json
 ```
 
 ```http
 HTTP/1.1 200 OK
-Content-Type: application/json
+*Content-Type: application/json
 
 {
   "title": "Game of Thrones",
@@ -484,12 +484,12 @@ An HTML representation:
 
 ```http
 GET /shows/game-of-thrones HTTP/1.1
-Accept: text/html,*/*
+*Accept: text/html,*/*
 ```
 
 ```http
 HTTP/1.1 200 OK
-Content-Type: text/html
+*Content-Type: text/html
 
 <html>
   <head>
