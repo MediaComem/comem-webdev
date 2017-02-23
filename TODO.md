@@ -9,9 +9,8 @@
 * Express: example about comments sub-router
 * Update tools in webserv repo
 * Standardize bash/shell/terminal/cli
-* Node: mistake 1: highlight outer callback function in solution
-* Node: mistake 2: add explanation that this is an error handling example
 * Update first slides (intro, you will need & recommended reading)
+* Git cheatsheet
 
 * JavaScript truthy/falsy values
 * Link to slide form from README

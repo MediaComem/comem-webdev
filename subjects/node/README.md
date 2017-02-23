@@ -595,32 +595,36 @@ You will also have direct access to the **result** passed to the callback functi
 const fs = require('fs');
 
 // Read a name from name.txt
-fs.readFile('name.txt', 'utf-8', function(err, `nameInFile`) {
+fs.readFile('name.txt', 'utf-8', `function(err, nameInFile) {`
   if (err) {
     return console.warn('Could not read file because: ' + err.message);
   }
 
   // Save a salutation into hello.txt
-  const salutation = 'Hello ' + `nameInFile` + '!';
+  const salutation = 'Hello ' + nameInFile + '!';
   fs.writeFile('hello.txt', salutation, 'utf-8', function(err) {
     if (err) {
       console.warn('Could not write in file because: ' + err.message);
     }
   });
-});
+`}`);
 ```
 
 
 
 ### Mistake 2
 
-What's wrong with this code?
+This is an example of **error handling**.
+
+The intended behavior is that if the file does not exist,
+the text `Could not read file because: some error` should be printed,
+otherwise it should print the contents of the file in upper case.
 
 ```js
 const fs = require('fs');
 
 // Read the contents of a file
-fs.readFile('foo.txt', 'utf-8', function(err, text) {
+fs.readFile('file-that-does-not-exist.txt', 'utf-8', function(err, text) {
   if (err) {
     console.warn('Could not read file because: ' + err.message);
   }
@@ -630,13 +634,15 @@ fs.readFile('foo.txt', 'utf-8', function(err, text) {
 });
 ```
 
+What's wrong with this code?
+
 #### Mistake 2 result
 
 If you save this script in `bug2.js` and execute it, this is what will happen:
 
 ```bash
 $> node bug2.js
-Could not read file because: ENOENT: no such file or directory, open 'foo.txt'
+Could not read file because: ENOENT: no such file or directory, open 'file-...'
 /path/to/projects/node-demo/bug2.js:9
   console.log(text.toUpperCase());
                   ^
@@ -661,7 +667,7 @@ This will cause a "null pointer exception":
 const fs = require('fs');
 
 // Read the contents of a file
-fs.readFile('foo.txt', 'utf-8', function(err, text) {
+fs.readFile('file-that-does-not-exist.txt', 'utf-8', function(err, text) {
   if (err) {
 *   console.warn('Could not read file because: ' + err.message);
   }
@@ -677,7 +683,7 @@ You can add a `return` to solve the issue:
 
 ```js
 // Read the contents of a file
-fs.readFile('foo.txt', 'utf-8', function(err, text) {
+fs.readFile('file-that-does-not-exist.txt', 'utf-8', function(err, text) {
   if (err) {
     `return` console.warn('Could not read file because: ' + err.message);
   }
@@ -691,7 +697,7 @@ Or use an `if/else`:
 
 ```js
 // Read the contents of a file
-fs.readFile('foo.txt', 'utf-8', function(err, text) {
+fs.readFile('file-that-does-not-exist.txt', 'utf-8', function(err, text) {
   `if (err) {`
     console.warn('Could not read file because: ' + err.message);
   `} else {`
