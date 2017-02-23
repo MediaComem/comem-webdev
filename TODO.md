@@ -6,6 +6,7 @@
 * Npm: express vs. express-generator
 * Express: example of error in middleware order
 * Express: res builder pattern
+* Express: example about comments sub-router
 * Update tools in webserv repo
 * Standardize bash/shell/terminal/cli
 * Node: mistake 1: highlight outer callback function in solution
