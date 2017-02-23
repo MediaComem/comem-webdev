@@ -85,7 +85,7 @@ You're going to install **Git Bash**, an alternative CLI that emulates a UNIX-li
 
 <!-- slide-column 30 -->
 
-<p class='gitbash'><img src='images/gitbashlogo.png' /></p>
+<p class='center'><img src='images/gitbashlogo.png' class='w80' /></p>
 
 <!-- slide-column -->
 
