@@ -1,6 +1,11 @@
 # TODO
 
-* Improve REST summary tables
+* Npm: illustrate npm install --save example with Github .gitignore push/pull
+* Npm: diagram for npm i vs. npm i --save
+* Npm: diagram for npm i vs. npm i -g
+* Npm: express vs. express-generator
+* Express: example of error in middleware order
+* Express: res builder pattern
 * Update tools in webserv repo
 * Standardize bash/shell/terminal/cli
 * Node: mistake 1: highlight outer callback function in solution
