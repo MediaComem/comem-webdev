@@ -143,6 +143,10 @@
       .gitbash > img {
         width: 80%;
       }
+
+      .compact-table table td {
+        font-size: 0.9em;
+      }
     </style>
   </head>
   <body>
@@ -168,11 +172,8 @@
     <script src='{{ basePath }}/assets/uri-1.18.7.js'></script>
 
     <script>
-      var slideshow = remark.create({
-        highlightLines: true,
-        highlightSpans: true,
-        countIncrementalSlides: false
-      });
+      var remarkOptions = {{{ remarkOptions }}};
+      var slideshow = remark.create(remarkOptions);
 
       $('#slide-links .home-link').each(function() {
         var $a = $(this);

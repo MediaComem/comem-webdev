@@ -1,7 +1,8 @@
 {
   "name": "comem-webdev",
+  "private": true,
   "version": "1.0.0",
-  "description": "Materials for the COMEM+ web development courses.",
+  "description": "Materials for COMEM+ web development courses",
   "scripts": {
     "build": "gulp build",
     "deploy": "./deploy.sh",

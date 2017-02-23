@@ -761,23 +761,27 @@ but `204 No Content` was chosen for this API implementation.
 
 ### CRUD summary
 
-Method   | Collection op                                                                                                 | Resource op
-:---     | :---                                                                                                          | :---
-`POST`   | **Create a new resource** in the collection, `201 Created` and `Location` header (and optional response body) | -
-`GET`    | **Read a list of resources** (with optional pagination, sorting and filtering), `200 OK`                      | **Read one resource**, `200 OK`
-`PUT`    | *(Batch update)*                                                                                              | **Fully update one resource**, `200 OK` (with body) or `204 No Content` (without body)
-`PATCH`  | *(Batch partial update)*                                                                                      | **Partially update one resource**, `200 OK` (with body) or `204 No Content` (without body)
-`DELETE` | *(Batch delete)*                                                                                              | **Delete one resource**, `200 OK` (with body) or `204 No Content` (without body)
+<!-- slide-front-matter class: compact-table -->
+
+Collection (`people` - plural name)                                                                                                  | Single resource (`/people/:id` - one person in the collection)
+:---                                                                                                                                 | :---
+`POST /api/people`<br/>**Create a new resource** in the collection, `201 Created` and `Location` header (and optional response body) | -
+`GET /api/people`<br/>**Read a list of resources** (with optional pagination, sorting and filtering), `200 OK`                       | `GET /api/people/:id`<br/>**Read one resource**, `200 OK`
+*(Batch update)*                                                                                                                     | `PUT /api/people/:id`<br/>**Fully update one resource**, `200 OK` (with body) or `204 No Content` (without body)
+*(Batch partial update)*                                                                                                             | `PATCH /api/people/:id`<br/>**Partially update one resource**, `200 OK` (with body) or `204 No Content` (without body)
+*(Batch delete)*                                                                                                                     | `DELETE /api/people/:id`<br/>**Delete one resource**, `200 OK` (with body) or `204 No Content` (without body)
 
 #### CRUD errors summary
 
-Method   | Collection errors                                                                              | Resource errors
-:---     | :---                                                                                           | :---
-`POST`   | `400 Bad Request` (JSON malformed), `404 Not Found`, `422 Unprocessable Entity` (Data invalid) | -
-`GET`    | `400 Bad Request` (Query parameters invalid)                                                   | `404 Not Found`
-`PUT`    | -                                                                                              | `400 Bad Request` (JSON malformed), `404 Not Found`, `422 Unprocessable Entity` (Data invalid)
-`PATCH`  | -                                                                                              | `400 Bad Request` (JSON malformed), `404 Not Found`, `422 Unprocessable Entity` (Data invalid)
-`DELETE` | -                                                                                              | `404 Not Found`, `409 Conflict` (Cannot be deleted)
+<!-- slide-front-matter class: compact-table -->
+
+Collection errors                                                                                                                  | Resource errors
+:---                                                                                                                               | :---
+`POST /api/people`<br/>`400 Bad Request` (JSON malformed), `404 Not Found`, `422 Unprocessable Entity` (Data semantically invalid) | -
+`POST /api/people`<br/>`400 Bad Request` (Query parameters invalid)                                                                | `GET /api/people/:id`<br/>`404 Not Found`
+-                                                                                                                                  | `PUT /api/people/:id`<br/>`400 Bad Request` (JSON malformed), `404 Not Found`, `422 Unprocessable Entity` (Data semantically invalid)
+-                                                                                                                                  | `PATCH /api/people/:id`<br/>`400 Bad Request` (JSON malformed), `404 Not Found`, `422 Unprocessable Entity` (Data semantically invalid)
+-                                                                                                                                  | `DELETE /api/people/:id`<br/>`404 Not Found`, `409 Conflict` (Cannot be deleted)
 
 
 
@@ -791,6 +795,7 @@ Method   | Collection errors                                                    
 **Further reading**
 
 * [A brief introduction to REST][rest-intro]
+* [REST Cheat Sheet][rest-cheat-sheet]
 * [Using HTTP Methods for RESTful Services][http-methods-rest]
 * [Best Practices for Designing a Pragmatic RESTful API][rest-pragmatic]
 
@@ -812,6 +817,7 @@ Method   | Collection errors                                                    
 [osi-application]: https://en.wikipedia.org/wiki/Application_layer
 [postman]: https://www.getpostman.com
 [rest]: https://en.wikipedia.org/wiki/Representational_state_transfer
+[rest-cheat-sheet]: http://51elliot.blogspot.ch/2014/03/rest-api-best-practices-rest-cheat-sheet.html
 [rest-intro]: https://www.infoq.com/articles/rest-introduction
 [rest-pragmatic]: http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api
 [url]: https://en.wikipedia.org/wiki/Uniform_Resource_Locator

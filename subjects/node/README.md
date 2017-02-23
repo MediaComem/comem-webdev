@@ -211,7 +211,7 @@ const os = require('os');
 };
 ```
 
-Attaching properties to the `exports` object how you expose the module's functionality.
+Attaching properties to the `exports` object is how you expose the module's functionality.
 Code that uses `require()` on that file will receive the `exports` object.
 
 
