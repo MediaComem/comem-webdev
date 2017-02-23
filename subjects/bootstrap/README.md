@@ -7,6 +7,7 @@ Introduction to [Bootstrap][bootstrap], a HTML/CSS framework, useful to quickly 
 Requirements:
 
 * [Google Chrome][chrome] (recommended, any browser with developer tools will do)
+* [Sublime Text][sublime] (recommended, any text editor will do... **except Notepad**)
 
 <!-- START doctoc -->
 <!-- END doctoc-->
@@ -76,15 +77,40 @@ bootstrap-3.3.7-dist/
 Copy the complete `css` directory and place it at the root of your project directory, then add this line at the bottom of your `<head>` tag in your `index.html` file
 
 ```html
-<link href="css/bootstrap.min.css" rel="stylesheet">
+<head>
+  ...
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
 ```
+### How do I know it's working?
+
+To be sure that Bootstrap is correctly included in your project, just open your `index.html` in a browser.
+
+With a simple "Hello World" example, your page **without Bootstrap** could look like this:
+
+<p class='center'><img src='images/without-bootstrap.jpg' width='100%' /></p>
+
+The same page, but **with Bootstrap correctly included** should look like this:
+
+<p class='center'><img src='images/with-bootstrap.jpg' width='100%' /></p>
+
+> Notice how the font has changed? That's a **good** sign.
+
+## What does it do?
+
+We already said that Bootstrap is a bunch of CSS styles already written for you.
+
+Thos styles could be devided in three categories:
+
+* **Tag styles**: overwrite the default style for some HTML tags
+* **New classes**: new CSS classes (obivously) that can be used in a s
 
 ## Resources
 
 * [Coffee][coffee]
 * [RTFM][rtfm]
 
-[coffee]: https://en.wikipedia.org/wiki/Coffee
+[sublime]: https://en.wikipedia.org/wiki/Coffee
 [git]: ../git/
 [chrome]: https://www.google.com/chrome/
 [rtfm]: https://en.wikipedia.org/wiki/RTFM

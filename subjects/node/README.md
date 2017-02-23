@@ -86,7 +86,7 @@ $> node
 3
 ```
 
-Type `Ctrl-C` to exit.
+Type `Ctrl-C` or `.exit` to exit.
 
 
 
