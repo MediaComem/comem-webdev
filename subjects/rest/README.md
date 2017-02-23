@@ -778,7 +778,7 @@ Collection (`people` - plural name)                                             
 Collection errors                                                                                                                  | Resource errors
 :---                                                                                                                               | :---
 `POST /api/people`<br/>`400 Bad Request` (JSON malformed), `404 Not Found`, `422 Unprocessable Entity` (Data semantically invalid) | -
-`POST /api/people`<br/>`400 Bad Request` (Query parameters invalid)                                                                | `GET /api/people/:id`<br/>`404 Not Found`
+`GET /api/people`<br/>`400 Bad Request` (Query parameters invalid)                                                                | `GET /api/people/:id`<br/>`404 Not Found`
 -                                                                                                                                  | `PUT /api/people/:id`<br/>`400 Bad Request` (JSON malformed), `404 Not Found`, `422 Unprocessable Entity` (Data semantically invalid)
 -                                                                                                                                  | `PATCH /api/people/:id`<br/>`400 Bad Request` (JSON malformed), `404 Not Found`, `422 Unprocessable Entity` (Data semantically invalid)
 -                                                                                                                                  | `DELETE /api/people/:id`<br/>`404 Not Found`, `409 Conflict` (Cannot be deleted)
