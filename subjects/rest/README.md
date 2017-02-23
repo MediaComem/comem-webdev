@@ -508,6 +508,23 @@ Content-Type: text/html
 
 
 
+### Common request headers
+
+<!-- slide-front-matter class: compact-table -->
+
+Example                              | Meaning
+:---                                 | :---
+`Accept: text/plain`                 | I want you to send me a response in **plain text**. If you **can't**, I expect you to respond with `406 Not Acceptable`.
+`Authorization: Basic 98aw=`         | Use the base64-encoded `user:password` string I am giving you as proof of my identity.
+`Authorization: Bearer 1y09`         | Use the [bearer token][auth0-tokens] I am giving you as proof of my identity.
+`Content-Type: application/json`     | I am sending you a request with JSON text in the body.
+`If-Modified-Since: Sun, 3 Jan 2017` | If the resource I am retrieving has not changed since January 3rd 2017, I expect you to respond with `304 Not Modified` and no response body (to save bandwidth).
+`If-Unmodified-Since: ...`           | If the resource I am updating has **changed** since ..., I expect you to **not update it** and respond with `412 Precondition Failed`.
+`Referer: google.com`                | I am coming to you from `google.com`.
+`User-Agent: Mobile Safari/534.30`   | I am sending you a request from a **mobile device**.
+
+
+
 ## [Create, read, update, delete (CRUD)][crud]
 
 Since REST deals primarily with **resources**, in a REST API you will (mostly):
@@ -802,6 +819,7 @@ Collection errors                                                               
 
 
 [api]: https://en.wikipedia.org/wiki/Application_programming_interface
+[auth0-tokens]: https://auth0.com/blog/ten-things-you-should-know-about-tokens-and-cookies/
 [chrome]: https://www.google.com/chrome/
 [crud]: https://en.wikipedia.org/wiki/Create,_read,_update_and_delete
 [http]: https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
