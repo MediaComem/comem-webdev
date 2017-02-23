@@ -397,7 +397,7 @@ var people = [
 
 // Define a function that takes a person and returns their last name
 function getName(person) {
-  return person.name;
+  return person.lastName;
 }
 
 // The "map" function of arrays returns an array of the same size,
