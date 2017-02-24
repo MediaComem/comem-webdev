@@ -702,27 +702,25 @@ var express = require('express');
 
 var booksRouter = express.Router();
 
+booksRouter.post('/', /*...*/);
+
 booksRouter.get('/', function(req, res, next) {
   var books = [ 'Catch-22', 'Fahrenheit 451' ];
   res.send(books);
 });
 
 booksRouter.get('/:id', function(req, res, next) {
-  fetchBookFromDatabase(req.params.id, function(err, book) {
-    if (err) {
-      return next(err);
-    }
+  var book = { title: 'Fahrenheit 451', year: 1953, author: 'Ray Bradburry' };
+  res.send(book);
+});
 
-    res.send(book);
-  });
-})
-
-// ...
+booksRouter.put('/:id', /*...*/);
+booksRouter.delete('/:id', /*...*/);
 
 module.exports = booksRouter;
 ```
 
-Note that we don't use `/books` and `/books/:id` as the path but `/` and `/:id`.
+Note that we don't use `/books` and `/books/:id` as paths but `/` and `/:id`.
 
 #### Plugging in a router
 
@@ -737,7 +735,12 @@ var booksRouter = require('./routes/books');
 app.use('/books', booksRouter);
 ```
 
-Any request where the path starts with `/books` will be handled by that router.
+Any request where the path starts with `/books` will be handled by that router,
+with that path as a **prefix**:
+
+<p class='center'><img src='images/routers.png' class='w80' /></p>
+
+<!-- slide-notes -->
 
 The path passed to `app.use()` is **prepended to your router's paths**,
 so your router's `/:id` route becomes `/books/:id` when plugged in like this.
@@ -960,8 +963,8 @@ Use `res.set()` to set headers:
 <!-- slide-column -->
 
 ```js
-res.set('Pagination-Page', 1);
-res.set('Pagination-PageSize', 50);
+res.set('Header-1', 'foo');
+res.set('Total-Books', 2);
 
 res.send([
   'Catch-22',
@@ -974,8 +977,8 @@ res.send([
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
-Pagination-Page: 1
-Pagination-PageSize: 50
+Header-1: foo
+Total-Books: 2
 
 [
   "Catch-22",
@@ -985,7 +988,7 @@ Pagination-PageSize: 50
 
 <!-- slide-container -->
 
-Setting headers does not send the response, so you can do this:
+Setting headers does not send the response, so you can do it in **multiple middlewares** as long as you do not call `res.send()`:
 
 <!-- slide-column -->
 
@@ -1056,7 +1059,6 @@ Express's `res` object is an application of the [builder][design-pattern-builder
 * Always send a response (e.g. 500 when error occurs)
 * Better explain routers (in separate files)
 * Slide 34 (creating a router): explain hardcoded vs database call
-* Slide 44 (Sending HTTP response headers): replace Pagination header examples with something more generic
 
 
 
