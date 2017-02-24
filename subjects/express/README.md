@@ -240,9 +240,9 @@ public
     style.css
 ```
 
-* `views` contains the page templates (written in [Jade][jade] by default)
-  that will be rendered to HTML by the server and served to the browser
-* `public` contains **static files** that will be served to the browser
+* `views` contains the **page templates** (written in [Jade][jade] by default)
+  that will be rendered to HTML by the server and **served to the browser**
+* `public` contains **static files** that will be **served to the browser**
 
 ### The package.json file
 
@@ -308,7 +308,9 @@ Whenever a request is made to the Express application, it will receive:
 
 * The current **request** object (HTTP method, path, headers, etc)
 * The **response** object (can be used to configure and send the response)
-* A **next** function that calls the next middleware in the stack
+* A `next()` function that **calls the next middleware**
+
+So, middlewares form a **chain** and are executed **in order, one by one**.
 
 
 
@@ -335,7 +337,7 @@ app.use('/', index);
 app.use('/users', users);
 ```
 
-Middleware functions are plugged into your application by passing them to `app.use()`.
+Middleware functions are **plugged into your application** by passing them to `app.use()`.
 As you can see, several middlewares are already plugged in.
 
 
@@ -383,6 +385,8 @@ app.post('/ping', function ping(req, res, next) {
   res.send('pong');
 });
 ```
+
+As you can see, you can use `res.send()` to send a response to the client.
 
 
 
@@ -460,7 +464,7 @@ Remember that each middleware function can either:
 * Modify the request/response and pass them along to the **next middleware** in the stack
 * **OR send the response** to the client and interrupt the stack
 
-This is an application of the **chain of responsibility** design pattern.
+This is an application of the [chain of responsibility][design-pattern-cor] design pattern.
 Each middleware decides whether to handle the request and stop the chain, or pass it along.
 
 #### Serving the index page
@@ -533,10 +537,14 @@ You can do it after some asynchronous calls:
 
 ```js
 app.use(function(req, res, next) {
-  getSomeDataAsynchronously(function(data) {
+  `fs.readFile`('data.txt', 'utf-8', `function(err, data) {`
+    if (err) {
+      return next(err);
+    }
+
     req.myData = data;
-    next();
-  });
+    `next();`
+  `}`);
 });
 ```
 
@@ -557,11 +565,11 @@ In that case, the proper thing to do with Express is to give the error to `next(
 app.use(function(req, res, next) {
   fs.readFile('data.txt', { encoding: 'utf-8' }, function(err, data) {
     if (err) {
-*     next(err);
-    } else {
-      req.myData = data;
-      next();
+*     return next(err);
     }
+
+    req.myData = data;
+    next();
   });
 });
 ```
@@ -694,27 +702,25 @@ var express = require('express');
 
 var booksRouter = express.Router();
 
+booksRouter.post('/', /*...*/);
+
 booksRouter.get('/', function(req, res, next) {
   var books = [ 'Catch-22', 'Fahrenheit 451' ];
   res.send(books);
 });
 
 booksRouter.get('/:id', function(req, res, next) {
-  fetchBookFromDatabase(req.params.id, function(err, book) {
-    if (err) {
-      next(err);
-    } else {
-      res.send(book);
-    }
-  });
-})
+  var book = { title: 'Fahrenheit 451', year: 1953, author: 'Ray Bradburry' };
+  res.send(book);
+});
 
-// ...
+booksRouter.put('/:id', /*...*/);
+booksRouter.delete('/:id', /*...*/);
 
 module.exports = booksRouter;
 ```
 
-Note that we don't use `/books` and `/books/:id` as the path but `/` and `/:id`.
+Note that we don't use `/books` and `/books/:id` as paths but `/` and `/:id`.
 
 #### Plugging in a router
 
@@ -729,7 +735,12 @@ var booksRouter = require('./routes/books');
 app.use('/books', booksRouter);
 ```
 
-Any request where the path starts with `/books` will be handled by that router.
+Any request where the path starts with `/books` will be handled by that router,
+with that path as a **prefix**:
+
+<p class='center'><img src='images/routers.png' class='w80' /></p>
+
+<!-- slide-notes -->
 
 The path passed to `app.use()` is **prepended to your router's paths**,
 so your router's `/:id` route becomes `/books/:id` when plugged in like this.
@@ -952,8 +963,8 @@ Use `res.set()` to set headers:
 <!-- slide-column -->
 
 ```js
-res.set('Pagination-Page', 1);
-res.set('Pagination-PageSize', 50);
+res.set('Header-1', 'foo');
+res.set('Total-Books', 2);
 
 res.send([
   'Catch-22',
@@ -966,8 +977,8 @@ res.send([
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
-Pagination-Page: 1
-Pagination-PageSize: 50
+Header-1: foo
+Total-Books: 2
 
 [
   "Catch-22",
@@ -977,7 +988,7 @@ Pagination-PageSize: 50
 
 <!-- slide-container -->
 
-Setting headers does not send the response, so you can do this:
+Setting headers does not send the response, so you can do it in **multiple middlewares** as long as you do not call `res.send()`:
 
 <!-- slide-column -->
 
@@ -1029,6 +1040,10 @@ Header-1: foo
 Some text
 ```
 
+<!-- slide-container -->
+
+Express's `res` object is an application of the [builder][design-pattern-builder] design pattern.
+
 
 
 ## Resources
@@ -1044,12 +1059,13 @@ Some text
 * Always send a response (e.g. 500 when error occurs)
 * Better explain routers (in separate files)
 * Slide 34 (creating a router): explain hardcoded vs database call
-* Slide 44 (Sending HTTP response headers): replace Pagination header examples with something more generic
 
 
 
 [api]: http://expressjs.com/en/4x/api.html
 [chrome]: https://www.google.com/chrome/
+[design-pattern-builder]: https://sourcemaking.com/design_patterns/builder
+[design-pattern-cor]: https://sourcemaking.com/design_patterns/chain_of_responsibility
 [jade]: https://www.npmjs.com/package/jade
 [using-middleware]: http://expressjs.com/en/guide/using-middleware.html
 [node]: https://nodejs.org/en/

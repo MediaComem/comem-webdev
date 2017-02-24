@@ -682,12 +682,12 @@ fs.readFile('file-that-does-not-exist.txt', 'utf-8', function(err, text) {
 You can add a `return` to solve the issue:
 
 ```js
+const fs = require('fs');
 // Read the contents of a file
 fs.readFile('file-that-does-not-exist.txt', 'utf-8', function(err, text) {
   if (err) {
     `return` console.warn('Could not read file because: ' + err.message);
   }
-
   // Log the contents in upper case
   console.log(text.toUpperCase());
 });
@@ -696,6 +696,7 @@ fs.readFile('file-that-does-not-exist.txt', 'utf-8', function(err, text) {
 Or use an `if/else`:
 
 ```js
+const fs = require('fs');
 // Read the contents of a file
 fs.readFile('file-that-does-not-exist.txt', 'utf-8', function(err, text) {
   `if (err) {`
