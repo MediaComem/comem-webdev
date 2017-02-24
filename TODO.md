@@ -2,8 +2,8 @@
 
 * Express: express vs. express-generator
 * Express: example of error in middleware order
-* Express: res builder pattern
 * Express: example about comments sub-router
+* Nodemon
 * Rest (conventions?): is there a composition relationship or need to list all?
 * Update tools in webserv repo
 * Update first slides (intro, you will need & recommended reading)

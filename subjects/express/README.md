@@ -240,9 +240,9 @@ public
     style.css
 ```
 
-* `views` contains the page templates (written in [Jade][jade] by default)
-  that will be rendered to HTML by the server and served to the browser
-* `public` contains **static files** that will be served to the browser
+* `views` contains the **page templates** (written in [Jade][jade] by default)
+  that will be rendered to HTML by the server and **served to the browser**
+* `public` contains **static files** that will be **served to the browser**
 
 ### The package.json file
 
@@ -308,7 +308,9 @@ Whenever a request is made to the Express application, it will receive:
 
 * The current **request** object (HTTP method, path, headers, etc)
 * The **response** object (can be used to configure and send the response)
-* A **next** function that calls the next middleware in the stack
+* A `next()` function that **calls the next middleware**
+
+So, middlewares form a **chain** and are executed **in order, one by one**.
 
 
 
@@ -335,7 +337,7 @@ app.use('/', index);
 app.use('/users', users);
 ```
 
-Middleware functions are plugged into your application by passing them to `app.use()`.
+Middleware functions are **plugged into your application** by passing them to `app.use()`.
 As you can see, several middlewares are already plugged in.
 
 
@@ -383,6 +385,8 @@ app.post('/ping', function ping(req, res, next) {
   res.send('pong');
 });
 ```
+
+As you can see, you can use `res.send()` to send a response to the client.
 
 
 
@@ -460,7 +464,7 @@ Remember that each middleware function can either:
 * Modify the request/response and pass them along to the **next middleware** in the stack
 * **OR send the response** to the client and interrupt the stack
 
-This is an application of the **chain of responsibility** design pattern.
+This is an application of the [chain of responsibility][design-pattern-cor] design pattern.
 Each middleware decides whether to handle the request and stop the chain, or pass it along.
 
 #### Serving the index page
@@ -533,10 +537,14 @@ You can do it after some asynchronous calls:
 
 ```js
 app.use(function(req, res, next) {
-  getSomeDataAsynchronously(function(data) {
+  `fs.readFile`('data.txt', 'utf-8', `function(err, data) {`
+    if (err) {
+      return next(err);
+    }
+
     req.myData = data;
-    next();
-  });
+    `next();`
+  `}`);
 });
 ```
 
@@ -557,11 +565,11 @@ In that case, the proper thing to do with Express is to give the error to `next(
 app.use(function(req, res, next) {
   fs.readFile('data.txt', { encoding: 'utf-8' }, function(err, data) {
     if (err) {
-*     next(err);
-    } else {
-      req.myData = data;
-      next();
+*     return next(err);
     }
+
+    req.myData = data;
+    next();
   });
 });
 ```
@@ -702,10 +710,10 @@ booksRouter.get('/', function(req, res, next) {
 booksRouter.get('/:id', function(req, res, next) {
   fetchBookFromDatabase(req.params.id, function(err, book) {
     if (err) {
-      next(err);
-    } else {
-      res.send(book);
+      return next(err);
     }
+
+    res.send(book);
   });
 })
 
@@ -1029,6 +1037,10 @@ Header-1: foo
 Some text
 ```
 
+<!-- slide-container -->
+
+Express's `res` object is an application of the [builder][design-pattern-builder] design pattern.
+
 
 
 ## Resources
@@ -1050,6 +1062,8 @@ Some text
 
 [api]: http://expressjs.com/en/4x/api.html
 [chrome]: https://www.google.com/chrome/
+[design-pattern-builder]: https://sourcemaking.com/design_patterns/builder
+[design-pattern-cor]: https://sourcemaking.com/design_patterns/chain_of_responsibility
 [jade]: https://www.npmjs.com/package/jade
 [using-middleware]: http://expressjs.com/en/guide/using-middleware.html
 [node]: https://nodejs.org/en/
