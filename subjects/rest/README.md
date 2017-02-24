@@ -27,6 +27,14 @@ Requirements:
   - [Anatomy of an HTTP request](#anatomy-of-an-http-request)
   - [Anatomy of an HTTP response](#anatomy-of-an-http-response)
   - [HTTP provides the [content negotiation][http-content-negotiation] mechanisms](#http-provides-the-content-negotiationhttp-content-negotiation-mechanisms)
+- [But can't I just use GET and POST?](#but-cant-i-just-use-get-and-post)
+  - [Standards](#standards)
+  - [Common methods](#common-methods)
+  - [Common request headers](#common-request-headers)
+  - [Common response headers](#common-response-headers)
+  - [Common successful response status codes](#common-successful-response-status-codes)
+  - [Common error response status codes](#common-error-response-status-codes)
+  - [Conditional update example](#conditional-update-example)
 - [[Create, read, update, delete (CRUD)][crud]](#create-read-update-delete-crudcrud)
   - [Postman](#postman)
   - [Create](#create)
@@ -508,7 +516,7 @@ HTTP/1.1 200 OK
 
 
 
-### But can't I just use GET and POST?
+## But can't I just use GET and POST?
 
 <!-- slide-front-matter class: center, middle -->
 
@@ -516,18 +524,18 @@ I'm lazy that way.
 
 
 
-#### Standards
+### Standards
 
-A lot of people have encountered **the same problems you have** over the years.
+A lot of smart people have encountered **the same problems you have** over the years.
 They have come together and defined **standard solutions** to deal with some of those problems.
 
-HTTP has a very rich vocabulary of *methods*, *headers* and *status codes* that are here to **help you** implement rich client-server interaction.
+HTTP has a **very rich** vocabulary of *methods*, *headers* and *status codes* that are here to **help you** implement rich client-server interaction.
 
 It's up to you to decide whether you want to **reinvent the wheel**, or **stand on the shoulders of giants**.
 
 
 
-#### Common methods
+### Common methods
 
 | Method    | Purpose                                                       |
 | :---      | :---                                                          |
@@ -541,7 +549,7 @@ It's up to you to decide whether you want to **reinvent the wheel**, or **stand 
 
 
 
-#### Common request headers
+### Common request headers
 
 <!-- slide-front-matter class: compact-table -->
 
@@ -558,7 +566,7 @@ Example                              | What the client is asking
 
 
 
-#### Common response headers
+### Common response headers
 
 <!-- slide-front-matter class: compact-table -->
 
@@ -574,7 +582,7 @@ Example                                  | What the server is telling you
 
 
 
-#### Common successful response status codes
+### Common successful response status codes
 
 <!-- slide-front-matter class: compact-table -->
 
@@ -590,7 +598,7 @@ Code                    | What the server is telling you
 
 
 
-#### Common error response status codes
+### Common error response status codes
 
 <!-- slide-front-matter class: compact-table -->
 
@@ -612,7 +620,7 @@ Code                         | What the server is telling you
 
 
 
-#### Conditional update example
+### Conditional update example
 
 If **two users** save a form on a website at the same time,
 there is a possible *race condition* where one user's changes can be **silently overwritten** by the other's:
