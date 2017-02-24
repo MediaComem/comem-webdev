@@ -74,7 +74,7 @@ For operating systems:
 | Package manager                   | OS                   |
 | :---                              | :---                 |
 | Advanced Package Tool (apt)       | Debian, Ubuntu       |
-| Homebrew                          | Mac OS X             |
+| Homebrew (brew)                   | Mac OS X             |
 | Yellowdog Updater, Modified (yum) | RHEL, Fedora, CentOS |
 
 
@@ -434,8 +434,12 @@ They are installed in a **system directory** and are **global to your machine**
 
 <p class='center'><img src='images/npm-install-global.png' class='w70' /></p>
 
+<!-- slide-column -->
+
 Global packages provide **new commands** that you can use in your CLI.
 In this case, the `http-server` package is a simple command-line HTTP server:
+
+<!-- slide-column -->
 
 ```bash
 $> http-server
@@ -458,9 +462,21 @@ $> ls /usr/local/lib/node_modules
 http-server
 ```
 
+You *cannot* use `--save` with global packages.
+You **do not need to** since they are global to your machine and available anywhere in the CLI.
+However, if you **reset** your machine or Node.js installation, you will have to **reinstall** manually.
 
 
-### Common pitfall
+
+## Common mistakes
+
+<!-- slide-front-matter class: center, middle -->
+
+It happens.
+
+
+
+### Missing `package.json` file
 
 If you **forgot to add a `package.json` file** to your project,
 npm will still install your dependencies and log a warning that is **easy to miss**:
@@ -473,9 +489,80 @@ npm WARN `saveError` ENOENT: no such file or directory,
 └── lodash@4.17.4
 ```
 
+<p class='center'><img src='images/npm-missing-package.png' class='w80'></p>
 
 
-### More complex packages
+
+### Wrong directory
+
+Npm will not know if you are in the **wrong directory**.
+It will simply **install packages there**.
+Of course, you will **NOT** be able to `require()` them from your project:
+
+<p class='center'><img src='images/npm-install-wrong-dir.png' class='w80'></p>
+
+
+
+## The behavior of `require()`
+
+<!-- slide-front-matter class: center, middle -->
+
+
+
+### Requiring your own modules
+
+You can require your own Node.js scripts with **relative file paths**:
+
+<!-- slide-column -->
+
+<p class='center'><img src='images/require-relative-module.png' class='w100' /></p>
+
+<!-- slide-column -->
+
+<p class='center'><img src='images/require-parent-module.png' class='w100' /></p>
+
+<!-- slide-container -->
+
+Beware of **circular dependencies**.
+In this example, you should do one or the other, **not both**.
+
+
+
+### Requiring packages installed with npm
+
+You can require packages you installed with npm **by their name**:
+
+<p class='center'><img src='images/require-local-package.png' class='w60' /></p>
+
+#### Global packages installed with npm
+
+You **CANNOT** require packages you installed **globally** with npm.
+They provide **new commands** but cannot be used in code:
+
+<p class='center'><img src='images/require-global-package.png' class='w80' /></p>
+
+
+
+### Requiring core Node.js modules
+
+When you give **a name** to `require()`, it will also look for a **core Node.js modules** with that name:
+
+<p class='center'><img src='images/require-core-module.png' class='w70' /></p>
+
+
+
+### Require summary
+
+Statement                 | What is required
+:---                      | :---
+`require('./script')`     | The `script.js` file in the current directory (relative to the file using `require()`)
+`require('./dir/script')` | The `script.js` file in the `dir` directory (relative to the file using `require()`)
+`require('../script')`    | The `script.js` file in the parent directory (relative to the file using `require()`)
+`require('my-module')`    | The `my-module` npm package (if found in `node_modules` in the same directory *or any parent directory*)<br/>**OR**<br/>The core Node.js module with that name (if there is one)
+
+
+
+## More complex packages
 
 The npm registry has many packages, some small, some big.
 Let's install [express][express], a web application framework:
