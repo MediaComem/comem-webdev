@@ -49,10 +49,13 @@ CDN, that stands for **C**ontent **D**elivering **N**etwork, allows you **to ref
 
 This way, each time a page with a CDN URL is requested by a user, the file is **retrieved through Internet** and stored in the user's computer memory.
 
-To include Bootstrap with a CDN, add this line at the bottom of your `<head>` tag in your `index.html` file:
+To include Bootstrap with a CDN, add this `<link>` tag at the bottom of your `<head>` tag in your `index.html` file:
 
 ```html
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<head>
+  ...
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
 ```
 > This will include in your site the 3.3.7 version of the minified CSS file
 
@@ -74,7 +77,7 @@ bootstrap-3.3.7-dist/
       └─ [some files]
 ```
 
-Copy the complete `css` directory and place it at the root of your project directory, then add this line at the bottom of your `<head>` tag in your `index.html` file
+Copy the complete `css` directory and place it at the root of your project directory, then add this `<link>` tag at the bottom of your `<head>` tag in your `index.html` file
 
 ```html
 <head>
@@ -100,18 +103,26 @@ The same page, but **with Bootstrap correctly included** should look like this:
 
 We already said that Bootstrap is a bunch of CSS styles already written for you.
 
-Thos styles could be devided in three categories:
+Those styles could be divided in three categories:
 
 * **Tag styles**: overwrite the default style for some HTML tags
-* **New classes**: new CSS classes (obivously) that can be used in a s
+* **New classes**: new CSS classes (obivously) that can be used when needed
+* **Component**: a set of classes that needs to be used with a **strictly defined** HTML structure.
+
+Let's see some illustrations of these types...
+
+### Tag styles
+
+Bootstrap comes with CSS styles that are applied to HTML tags, without adding classes to said tags.
+
+> Why these tag styles: normalisation (Edge VS Chrome)
 
 ## Resources
 
-* [Coffee][coffee]
-* [RTFM][rtfm]
+* [Bootstrap CSS Documentation][bootstrap-css]
 
 [sublime]: https://en.wikipedia.org/wiki/Coffee
-[git]: ../git/
+[bootstrap-css]: http://getbootstrap.com/css/
 [chrome]: https://www.google.com/chrome/
 [rtfm]: https://en.wikipedia.org/wiki/RTFM
 [bootstrap]: http://getbootstrap.com/
