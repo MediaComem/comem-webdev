@@ -269,7 +269,7 @@ The first line of an HTTP request is the **request line**:
   `GET` /movies/best?page=3&pageSize=50&orderBy=title HTTP/1.1
 ```
 
-The **request method** is the *desired action* to perform.
+The **request method** is the *desired action* to perform:
 
 | Method | Purpose                               |
 | :---   | :---                                  |
@@ -508,20 +508,126 @@ HTTP/1.1 200 OK
 
 
 
-### Common request headers
+### But can't I just use GET and POST?
+
+<!-- slide-front-matter class: center, middle -->
+
+I'm lazy that way.
+
+
+
+#### Standards
+
+A lot of people have encountered **the same problems you have** over the years.
+They have come together and defined **standard solutions** to deal with some of those problems.
+
+HTTP has a very rich vocabulary of *methods*, *headers* and *status codes* that are here to **help you** implement rich client-server interaction.
+
+It's up to you to decide whether you want to **reinvent the wheel**, or **stand on the shoulders of giants**.
+
+
+
+#### Common methods
+
+| Method    | Purpose                                                       |
+| :---      | :---                                                          |
+| `GET`     | Retrieve data                                                 |
+| `HEAD`    | Retrieve the response headers but no data (to save bandwidth) |
+| `POST`    | Create a new resource                                         |
+| `PUT`     | Replace an existing resource                                  |
+| `PATCH`   | Partially modify an existing resource                         |
+| `DELETE`  | Delete a resource                                             |
+| `OPTIONS` | Ask the server what you can do with a resource                |
+
+
+
+#### Common request headers
 
 <!-- slide-front-matter class: compact-table -->
 
-Example                              | Meaning
+Example                              | What the client is asking
 :---                                 | :---
-`Accept: text/plain`                 | I want you to send me a response in **plain text**. If you **can't**, I expect you to respond with `406 Not Acceptable`.
-`Authorization: Basic 98aw=`         | Use the base64-encoded `user:password` string I am giving you as proof of my identity.
-`Authorization: Bearer 1y09`         | Use the [bearer token][auth0-tokens] I am giving you as proof of my identity.
-`Content-Type: application/json`     | I am sending you a request with JSON text in the body.
-`If-Modified-Since: Sun, 3 Jan 2017` | If the resource I am retrieving has not changed since January 3rd 2017, I expect you to respond with `304 Not Modified` and no response body (to save bandwidth).
-`If-Unmodified-Since: ...`           | If the resource I am updating has **changed** since ..., I expect you to **not update it** and respond with `412 Precondition Failed`.
-`Referer: google.com`                | I am coming to you from `google.com`.
-`User-Agent: Mobile Safari/534.30`   | I am sending you a request from a **mobile device**.
+`Accept: text/plain`                 | I want you to send me a response in **plain text**. If you **can't**, I expect you to respond with `406 Not Acceptable`
+`Authorization: Basic 98aw=`         | Use the base64-encoded `user:password` string I am giving you as proof of my identity
+`Authorization: Bearer 1y09`         | Use the [bearer token][auth0-tokens] I am giving you as proof of my identity
+`Content-Type: application/json`     | I am sending you a request with JSON text in the body
+`If-Modified-Since: Sun, 3 Jan 2017` | If the resource I am retrieving has **not changed** since January 3rd 2017, I expect you to respond with `304 Not Modified` and no response body (to save bandwidth). ([Conditional GET][http-conditional-requests])
+`If-Unmodified-Since: ...`           | If the resource I am updating has **changed**, I expect you to **not update it** and respond with `412 Precondition Failed` ([Conditional update][http-conditional-requests])
+`Referer: google.com`                | I am coming to you from `google.com`
+`User-Agent: Mobile Safari/534.30`   | I am sending you a request from a **mobile device**
+
+
+
+#### Common response headers
+
+<!-- slide-front-matter class: compact-table -->
+
+Example                                  | What the server is telling you
+:---                                     | :---
+`Access-Control-Allow-Origin: *`         | I am allowing you to make a [cross-origin request][http-cors] from anywhere
+`Set-Cookie: UserID=JohnDoe`             | I am giving you a cookie: please send it back to me for all further requests on this domain
+`Content-Type: text/html`                | I am sending you an HTML page
+`Expires: Sun, 31 Dec 2017`              | The content I am sending you will not change until December 31st 2017
+`Last-Modified: Sun, 3 Jan 2017`         | The content I am sending you was last modified on January 3rd 2017
+`Location: http://example.com/somewhere` | The resource you requested has moved and I am telling you where, **or** the resource you just created is available at that address
+`WWW-Authenticate: Basic`                | I do not know you, please re-send your request with [Basic HTTP authentication][http-auth]
+
+
+
+#### Common successful response status codes
+
+<!-- slide-front-matter class: compact-table -->
+
+Code                    | What the server is telling you
+:---                    | :---
+`200 OK`                | Your request was successful
+`201 Created`           | I have created a **new resource** and telling you where it is in the `Location` header
+`202 Accepted`          | I have received your request but will process it later
+`204 No Content`        | I have processed your request but have no content to send you
+`301 Moved Permanently` | The resource you are requesting has **moved permanently** and I am telling you where in the `Location` header
+`302 Found`             | The resource you are requesting has **moved temporarily** and I am telling you where in the `Location` header
+`304 Not Modified`      | The resource you are requesting has **not changed**, so I am not sending you its data again
+
+
+
+#### Common error response status codes
+
+<!-- slide-front-matter class: compact-table -->
+
+Code                         | What the server is telling you
+:---                         | :---
+`400 Bad Request`            | I cannot parse the request body (e.g. invalid JSON)
+`401 Unauthorized`           | I do now know you, please [authenticate][http-auth]
+`403 Forbidden`              | I know you, but you aren't allowed to do that
+`404 Not Found`              | The resource you are requesting does not exist
+`405 Method Not Allowed`     | You can't make a `GET/POST/...` on this resource
+`406 Not Acceptable`         | I can't answer in the format you asked for in the `Accept` header
+`409 Conflict`               | Your request is not consistent with the resource's state
+`410 Gone`                   | The resource was here but no longer is
+`412 Precondition Failed`    | I am denying your [conditional request][http-conditional-requests]
+`415 Unsupported Media Type` | You are sending me XML/JSON/... but the resource cannot be represented in that format
+`418 I'm a teapot`           | [I don't make coffee][http-teapot]
+`422 Unprocessable Entity`   | The request body is syntactically correct but semantically invalid (e.g. validation error)
+`429 Too Many Requests`      | Stop spamming me
+
+
+
+#### Conditional update example
+
+If **two users** save a form on a website at the same time,
+there is a possible *race condition* where one user's changes can be **silently overwritten** by the other's:
+
+<p class='center'><img src='images/conditional-update-1.png' class='w100' /></p>
+
+
+
+#### Conditional update solution
+
+The `If-Match` and `If-Unmodified-Since` headers allow the client to **conditionally update** a resource.
+If the resource **has changed** compared to the specified identifier or since the specified date,
+the server should **refuse** the request and respond with `412 Precondition Failed`:
+
+<p class='center'><img src='images/conditional-update-2.png' class='w100' /></p>
 
 
 
@@ -807,6 +913,7 @@ Collection errors                                                               
 **Documentation**
 
 * [HTTP request methods][http-methods] ([RFC][http-methods-rfc], [PATCH RFC][http-methods-patch-rfc])
+* [HTTP headers (request/response)][http-headers]
 * [HTTP status codes][http-status-codes] ([RFC][http-status-codes-rfc])
 
 **Further reading**
@@ -824,13 +931,18 @@ Collection errors                                                               
 [crud]: https://en.wikipedia.org/wiki/Create,_read,_update_and_delete
 [http]: https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
 [headers]: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Request_fields
+[http-auth]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication
+[http-conditional-requests]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests
 [http-content-negotiation]: https://en.wikipedia.org/wiki/Content_negotiation
+[http-cors]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+[http-headers]: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
 [http-methods]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 [http-methods-patch-rfc]: https://tools.ietf.org/html/rfc5789
 [http-methods-rfc]: https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
 [http-methods-rest]: http://www.restapitutorial.com/lessons/httpmethods.html
 [http-status-codes]: https://httpstatuses.com
 [http-status-codes-rfc]: https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+[http-teapot]: https://tools.ietf.org/html/rfc2324
 [hypermedia]: https://en.wikipedia.org/wiki/Hypermedia
 [osi-application]: https://en.wikipedia.org/wiki/Application_layer
 [postman]: https://www.getpostman.com
