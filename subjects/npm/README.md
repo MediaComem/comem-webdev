@@ -310,7 +310,7 @@ When **cloning** your project, your colleagues **won't** get the `node_modules` 
 You could reinstall all these packages manually, but imagine that you have **dozens** of dependencies.
 Do you want each team member to **re-type** the same `npm install` commands all the time?
 
-This is the typical list of dependencies for a **barebones** express web application:
+This is the typical list of dependencies for a **barebones** Express web application:
 
 <!-- slide-column 20 -->
 
@@ -574,7 +574,7 @@ Statement                 | What is required
 ## More complex packages
 
 The npm registry has many packages, some small, some big.
-Let's install [express][express], a web application framework:
+Let's install [Express][express], a web application framework:
 
 ```js
 $> npm install --save express

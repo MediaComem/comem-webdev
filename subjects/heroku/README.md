@@ -19,7 +19,7 @@ Requirements:
   - [Platform as a Service (PaaS)](#platform-as-a-service-paas)
   - [How does Heroku work?](#how-does-heroku-work)
 - [Getting started on Heroku with Node.js](#getting-started-on-heroku-with-nodejs)
-  - [Create an express app](#create-an-express-app)
+  - [Create an Express app](#create-an-express-app)
   - [Make it a Git repository](#make-it-a-git-repository)
   - [Create the app on Heroku](#create-the-app-on-heroku)
   - [Deploy it](#deploy-it)
@@ -98,11 +98,11 @@ The goal of PaaS platforms is to get **straight to building applications**.
 
 <!-- slide-front-matter class: center, middle -->
 
-Deploy an express web app on Heroku
+Deploy an Express web app on Heroku
 
 
 
-### Create an express app
+### Create an Express app
 
 Install **express-generator** if you haven't already:
 

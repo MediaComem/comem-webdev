@@ -12,9 +12,9 @@ Requirements:
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [What is express?](#what-is-express)
+- [What is Express?](#what-is-express)
   - [Core functionality](#core-functionality)
-  - [Install the express generator](#install-the-express-generator)
+  - [Install the Express generator](#install-the-express-generator)
   - [Generate a skeleton application](#generate-a-skeleton-application)
   - [Install dependencies and run it](#install-dependencies-and-run-it)
   - [Browse the landing page](#browse-the-landing-page)
@@ -52,7 +52,7 @@ Requirements:
 
 
 
-## What is express?
+## What is Express?
 
 <!-- slide-front-matter class: center, middle -->
 
@@ -87,9 +87,9 @@ Use the many **middleware** packages at your disposal to build more complex appl
 
 
 
-### Install the express generator
+### Install the Express generator
 
-You can create an express app from scratch, but we'll use **express-generator** to quickly create an application skeleton:
+You can create an Express app from scratch, but we'll use **express-generator** to quickly create an application skeleton:
 
 ```bash
 $> npm install -g express-generator
@@ -215,7 +215,7 @@ bin
 ```
 
 * `package.json` is used to track **dependencies** with npm
-* `app.js` is the **main script** that will create and configure the express app
+* `app.js` is the **main script** that will create and configure the Express app
 * `routes` contains files that define the app's **routes and controllers**
 * `bin/www` is the **entrypoint** (the script you execute to launch the app)
 
