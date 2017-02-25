@@ -41,10 +41,11 @@ Materials for the COMEM+ web development courses.
 * [Node.js](subjects/node/)
   * [npm (package manager)](subjects/npm/)
   * [Express (Node.js web framework)](subjects/express/)
+    * [Using Mongoose](subjects/express-mongoose/)
 
 **Web Services**
 
-* [REST APIs](subjects/rest/)
+* [RESTful APIs](subjects/rest/)
   * [REST Conventions](subjects/rest-conventions/)
 
 **Databases**
