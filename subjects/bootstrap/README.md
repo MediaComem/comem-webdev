@@ -110,7 +110,7 @@ To be sure that Bootstrap is correctly included in your project, just open your 
 
 With a simple "Hello World" example, your page **without Bootstrap** could look like this:
 
-<p class='center'><img src='images/without-bootstrap.jpg' width='100%' /></p>
+<p class='center'><img src='images/without-bootstrap-css.jpg' width='100%' /></p>
 
 The same page, but **with Bootstrap correctly included** should look like this:
 
@@ -339,7 +339,7 @@ Let's add some buttons to the `index.html` page. Add the following snippet after
 ```
 > Right now, this should give you this:
 
-<p><img src='images/new-buttons.jpg' width='40%' /></p>
+<p><img src='images/new-buttons-btn.jpg' width='40%' /></p>
 
 > It's doesn't look like much. Let's remedy that.
 
@@ -357,7 +357,7 @@ To properly use any of the button styles, you **must** add the special class `.b
 ```
 The result should be:
 
-<p><img src='images/button-btn.jpg' width='40%' /></p>
+<p><img src='images/buttons-btn.jpg' width='40%' /></p>
 
 As you can see, the `.btn` class doesn't add much; this is by design: the `.btn` class is used to *initialize* the tag as a button and, as such, is **mandatory**.
 
