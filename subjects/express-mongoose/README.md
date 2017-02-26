@@ -1,3 +1,29 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Using Mongoose with Express](#using-mongoose-with-express)
+  - [Demonstration RESTful API](#demonstration-restful-api)
+  - [Filtering](#filtering)
+    - [Limiting collections](#limiting-collections)
+    - [Simple filters](#simple-filters)
+    - [Dynamic filters](#dynamic-filters)
+  - [Pagination](#pagination)
+    - [Paginating collections](#paginating-collections)
+    - [Using query parameters to select a page](#using-query-parameters-to-select-a-page)
+    - [Telling the client how to get more elements](#telling-the-client-how-to-get-more-elements)
+    - [Using the `Link` header (solution 1)](#using-the-link-header-solution-1)
+    - [Using custom pagination headers (solution 2)](#using-custom-pagination-headers-solution-2)
+    - [Using a JSON envelope (solution 3)](#using-a-json-envelope-solution-3)
+  - [Aggregation](#aggregation)
+    - [Aggregation example](#aggregation-example)
+    - [Aggregation pipeline](#aggregation-pipeline)
+    - [Aggregation pipeline example](#aggregation-pipeline-example)
+    - [Aggregation pipeline operators](#aggregation-pipeline-operators)
+  - [Resources](#resources)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Using Mongoose with Express
 
 Learn how to implement advanced RESTful API operations in [Express][express] with [Mongoose][mongoose] (a [MongoDB][mongodb] Object-Document Mapper).

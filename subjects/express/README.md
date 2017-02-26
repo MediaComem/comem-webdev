@@ -32,9 +32,6 @@ Requirements:
   - [Attaching data to the request in a middleware](#attaching-data-to-the-request-in-a-middleware)
   - [Asynchronous middleware](#asynchronous-middleware)
   - [How to deal with errors in middlewares](#how-to-deal-with-errors-in-middlewares)
-- [Routing](#routing)
-  - [Basic routing](#basic-routing)
-  - [Routers](#routers)
 - [The request object](#the-request-object)
   - [Request example](#request-example)
   - [Getting the HTTP method, URL path and query parameters](#getting-the-http-method-url-path-and-query-parameters)
@@ -45,8 +42,14 @@ Requirements:
   - [Setting the HTTP status code](#setting-the-http-status-code)
   - [Sending HTTP response headers](#sending-http-response-headers)
   - [Chain response methods](#chain-response-methods)
+- [Routing](#routing)
+  - [Basic routing](#basic-routing)
+  - [Routing middlewares](#routing-middlewares)
+  - [Routers](#routers)
+- [Not having to restart manually](#not-having-to-restart-manually)
+  - [Configuring nodemon properly](#configuring-nodemon-properly)
+  - [Making nodemon faster](#making-nodemon-faster)
 - [Resources](#resources)
-- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

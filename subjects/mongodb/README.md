@@ -14,6 +14,7 @@
   - [Connecting](#connecting)
   - [Inserting documents](#inserting-documents)
   - [Finding documents](#finding-documents)
+  - [Counting documents](#counting-documents)
   - [Updating documents](#updating-documents)
   - [Removing documents](#removing-documents)
 - [Indexes](#indexes)

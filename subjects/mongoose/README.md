@@ -30,6 +30,11 @@ and how it differs from the [official Node.js MongoDB driver][mongodb-node-drive
   - [Mongoose queries](#mongoose-queries)
   - [Debugging](#debugging)
   - [Should I use it?](#should-i-use-it-1)
+- [Integrating Mongoose into Express](#integrating-mongoose-into-express)
+  - [Install and connect Mongoose](#install-and-connect-mongoose)
+  - [Create a schema and model](#create-a-schema-and-model)
+  - [Implement the `GET /users` route](#implement-the-get-users-route)
+  - [Implement the `POST /users` route](#implement-the-post-users-route)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
