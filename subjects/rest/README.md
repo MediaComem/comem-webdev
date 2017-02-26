@@ -1,8 +1,10 @@
 # REST APIs Introduction
 
+Learn the core architectural principles of RESTful APIs are and how they compare to big web services.
+
 <!-- slide-include ../../BANNER.md -->
 
-Requirements:
+**You will need**
 
 * [Google Chrome][chrome] (recommended, any browser with developer tools will do)
 * [Postman][postman] (recommended, any tool that makes raw HTTP requests will do)
@@ -598,7 +600,7 @@ Code                    | What the server is telling you
 
 
 
-### Common error response status codes
+### Common client error response status codes
 
 <!-- slide-front-matter class: compact-table -->
 
@@ -617,6 +619,23 @@ Code                         | What the server is telling you
 `418 I'm a teapot`           | [I don't make coffee][http-teapot]
 `422 Unprocessable Entity`   | The request body is syntactically correct but semantically invalid (e.g. validation error)
 `429 Too Many Requests`      | Stop spamming me
+
+
+
+### Common server error response status codes
+
+<!-- slide-front-matter class: compact-table -->
+
+Unlike the errors from the previous table,
+these errors indicate that there is a **problem on the server**, not with the client's request:
+
+Code                        | What the server is telling you
+:---                        | :---
+`500 Internal Server Error` | Oops, I crashed and can't fulfill this request
+`501 Not Implemented`       | You made a `HEAD/PATCH/...` request but I don't support that method for any resource
+`502 Bad Gateway`           | I tried using a third-party service to fulfill your request, but couldn't reach it
+`503 Service Unavailable`   | I'm busy or being fixed, please try again later
+`508 Loop Detected`         | *To understand recursion, you must first understand recursion...*
 
 
 

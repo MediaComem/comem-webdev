@@ -12,7 +12,6 @@
 * Express conventions: use environment variables for configuration
 * Express mongoose: ID virtual, transform
 * Express mongoose: add links to implementations in demo API
-* Rest: add 5xx codes
 * Heroku: explain normal procedure vs. custom procedure
 * Heroku: slide about devops
 * Heroku: explain how to plug in database with environment variables

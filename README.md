@@ -46,7 +46,7 @@ Materials for the COMEM+ web development courses.
 **Web Services**
 
 * [RESTful APIs](subjects/rest/)
-  * [REST Conventions](subjects/rest-conventions/)
+  * [RESTful API Conventions](subjects/rest-conventions/)
 
 **Databases**
 
