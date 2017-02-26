@@ -89,7 +89,7 @@ Use the many **middleware** packages at your disposal to build more complex appl
 
 ### Install the Express generator
 
-You can create an Express app from scratch, but we'll use **express-generator** to quickly create an application skeleton:
+You can create an Express app from scratch, but we'll use [express-generator][express-generator] to quickly create an application skeleton:
 
 ```bash
 $> npm install -g express-generator
@@ -1066,6 +1066,7 @@ Express's `res` object is an application of the [builder][design-pattern-builder
 [chrome]: https://www.google.com/chrome/
 [design-pattern-builder]: https://sourcemaking.com/design_patterns/builder
 [design-pattern-cor]: https://sourcemaking.com/design_patterns/chain_of_responsibility
+[express-generator]: https://www.npmjs.com/package/express-generator
 [jade]: https://www.npmjs.com/package/jade
 [using-middleware]: http://expressjs.com/en/guide/using-middleware.html
 [node]: https://nodejs.org/en/
