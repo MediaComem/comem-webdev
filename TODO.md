@@ -5,13 +5,11 @@
 * Express on npmjs and github
 
 * Mongo: installation instructions
-* Express: nodemon
 
-* Express: express vs. express-generator
-* Express: example of error in middleware order
-* Express: example about comments sub-router
+* Express conventions: not everything in app.js
 * Express conventions: avoiding repetition with middleware
 * Express conventions: use environment variables for configuration
+* Express conventions: debug with prefix
 * Express mongoose: ID virtual, transform
 * Express mongoose: add links to implementations in demo API
 * Update tools in webserv repo
@@ -38,6 +36,8 @@
 * Index and readme for generated docs repo
 * JavaScript dates
 * Clean up links at end of slides
+* Express: express vs. express-generator
+* Express: example of error in middleware order
 
 * Rev assets
 * Slide-specific css

@@ -629,125 +629,6 @@ It will render any error in a "pretty" error page.
 
 
 
-## Routing
-
-<!-- slide-front-matter class: center, middle -->
-
-Mapping HTTP methods and URLs to handler functions
-
-
-
-### Basic routing
-
-As we've seen, basic routing can be applied to middleware by using `.get`, `.post`, etc and passing a path:
-
-```js
-app.get('/hello', function() {
-  res.send('World');
-});
-```
-
-You can also have dynamic parameters in your URLs:
-
-```js
-app.get('/authors/`:authorId`/books/`:bookId`', function(req, res, next) {
-  res.send('Getting book ' + `req.params.bookId` + ' by ' + `req.params.authorId`);
-});
-```
-
-Calling `http://localhost:3000/authors/24/books/33` will produce the following response:
-
-```txt
-Getting book 33 by 24
-```
-
-
-
-### Routers
-
-An Express [router][router] is an **isolated instance of middleware and routes**.
-It's basically a **mini-app**.
-
-Imagine that you have the following API routes:
-
-<!-- slide-column -->
-
-```
-GET /authors
-POST /authors
-GET /authors/:id
-PATCH /authors/:id
-DELETE /authors/:id
-```
-
-<!-- slide-column -->
-
-```
-GET /books
-POST /books
-GET /books/:id
-PATCH /books/:id
-DELETE /books/:id
-```
-
-<!-- slide-container -->
-
-You can define a **router** in a separate file for each of the two sets of routes,
-that way you don't have one monolithic file with all your code in it.
-
-#### Creating a router
-
-```js
-var express = require('express');
-
-var booksRouter = express.Router();
-
-booksRouter.post('/', /*...*/);
-
-booksRouter.get('/', function(req, res, next) {
-  var books = [ 'Catch-22', 'Fahrenheit 451' ];
-  res.send(books);
-});
-
-booksRouter.get('/:id', function(req, res, next) {
-  var book = { title: 'Fahrenheit 451', year: 1953, author: 'Ray Bradburry' };
-  res.send(book);
-});
-
-booksRouter.put('/:id', /*...*/);
-booksRouter.delete('/:id', /*...*/);
-
-module.exports = booksRouter;
-```
-
-Note that we don't use `/books` and `/books/:id` as paths but `/` and `/:id`.
-
-#### Plugging in a router
-
-A router behaves like a middleware function, so you can simply plug it into your application with `app.use()`:
-
-```js
-var app = express();
-
-// Require the books router from the routes directory
-var booksRouter = require('./routes/books');
-
-app.use('/books', booksRouter);
-```
-
-Any request where the path starts with `/books` will be handled by that router,
-with that path as a **prefix**:
-
-<p class='center'><img src='images/routers.png' class='w80' /></p>
-
-<!-- slide-notes -->
-
-The path passed to `app.use()` is **prepended to your router's paths**,
-so your router's `/:id` route becomes `/books/:id` when plugged in like this.
-It will handle HTTP requests to `/books/42`, for example.
-
-
-
 ## The request object
 
 <!-- slide-front-matter class: center, middle -->
@@ -1046,19 +927,299 @@ Express's `res` object is an application of the [builder][design-pattern-builder
 
 
 
+## Routing
+
+<!-- slide-front-matter class: center, middle -->
+
+Mapping HTTP methods and URLs to handler functions
+
+
+
+### Basic routing
+
+As we've seen, basic routing can be applied to middleware by using `.get`, `.post`, etc and passing a path:
+
+```js
+app.get('/hello', function() {
+  res.send('World');
+});
+```
+
+You can also have dynamic parameters in your URLs:
+
+```js
+app.get('/authors/`:authorId`/books/`:bookId`', function(req, res, next) {
+  res.send('Getting book ' + `req.params.bookId` + ' by ' + `req.params.authorId`);
+});
+```
+
+Calling `http://localhost:3000/authors/24/books/33` will produce the following response:
+
+```txt
+Getting book 33 by 24
+```
+
+
+
+### Routing middlewares
+
+A route can also contain **its own chain of successive middlewares**:
+
+```js
+function `getNameFromQuery`(req, res, next) {
+  req.nameToSalute = req.query.name;
+  next();
+}
+
+function `prepareSalutation`(req, res, next) {
+  req.salutation = 'Hello ' + req.nameToSalute;
+  next();
+}
+
+app.get('/hello', `getNameFromQuery`, `prepareSalutation`, function(req, res, next) {
+  res.send(req.salutation);
+});
+```
+
+These middleware functions are **only executed for that route** (`GET /hello` in this case).
+
+
+
+### Routers
+
+An Express [router][router] is an **isolated instance of middleware and routes**.
+It's basically a **mini-app**.
+
+Imagine that you have the following API routes:
+
+<!-- slide-column -->
+
+```
+GET /authors
+POST /authors
+GET /authors/:id
+PATCH /authors/:id
+DELETE /authors/:id
+```
+
+<!-- slide-column -->
+
+```
+GET /books
+POST /books
+GET /books/:id
+PATCH /books/:id
+DELETE /books/:id
+```
+
+<!-- slide-container -->
+
+You can define a **router** in a separate file for each of the two sets of routes,
+that way you don't have one monolithic file with all your code in it.
+
+#### Creating a router
+
+```js
+var express = require('express');
+
+var booksRouter = express.Router();
+
+booksRouter.`post('/'`, /*...*/);
+
+booksRouter.`get('/'`, function(req, res, next) {
+  var books = [ 'Catch-22', 'Fahrenheit 451' ];
+  res.send(books);
+});
+
+booksRouter.`get('/:id'`, function(req, res, next) {
+  var book = { title: 'Fahrenheit 451', year: 1953, author: 'Ray Bradburry' };
+  res.send(book);
+});
+
+booksRouter.`put('/:id'`, /*...*/);
+booksRouter.`delete('/:id'`, /*...*/);
+
+module.exports = booksRouter;
+```
+
+Note that we don't use `/books` and `/books/:id` as paths but `/` and `/:id`.
+
+#### Plugging in a router
+
+A router behaves like a middleware function, so you can simply plug it into your application with `app.use()`:
+
+```js
+var app = express();
+
+// Require the books router from the routes directory
+var booksRouter = require('./routes/books');
+
+app.use('/books', booksRouter);
+```
+
+Any request where the path starts with `/books` will be handled by that router,
+with that path as a **prefix**:
+
+<p class='center'><img src='images/routers.png' class='w80' /></p>
+
+<!-- slide-notes -->
+
+The path passed to `app.use()` is **prepended to your router's paths**,
+so your router's `/:id` route becomes `/books/:id` when plugged in like this.
+It will handle HTTP requests to `/books/42`, for example.
+
+#### What's it for?
+
+Imagine a more complex API where **comments** can be attached to **multiple other resources**:
+
+<!-- slide-column -->
+
+**Comments on books**
+
+```
+POST /books/:id`/comments`
+GET /books/:id`/comments`
+PATCH /books/:id`/comments/:cid`
+DELETE /books/:id`/comments/:cid`
+```
+
+<!-- slide-column -->
+
+**Comments on movies**
+
+```
+POST /movies/:id`/comments`
+GET /movies/:id`/comments`
+PATCH /movies/:id`/comments/:cid`
+DELETE /movies/:id`/comments/:cid`
+```
+
+<!-- slide-container -->
+
+If you didn't have routers, you would have to define these 4 routes in **both** the **books' and movies' routers**:
+
+```js
+// In routes/books.js
+booksRouter.`post('/:id/comments'`, /*...*/);
+booksRouter.`get('/:id/comments'`, /*...*/);
+booksRouter.`patch('/:id/comments/:cid'`, /*...*/);
+booksRouter.`delete('/:id/comments/:cid'`, /*...*/);
+
+// In routes/movies.js
+moviesRouter.`post('/:id/comments'`, /*...*/);
+moviesRouter.`get('/:id/comments'`, /*...*/);
+moviesRouter.`patch('/:id/comments/:cid'`, /*...*/);
+moviesRouter.`delete('/:id/comments/:cid'`, /*...*/);
+```
+
+#### Plugging routers on routers
+
+With a router, you could **define these sub-paths once**:
+
+```js
+// Create a comments router to attach comments to
+// the parent found by the specified middleware
+module.exports = function `makeCommentsRouter`(findParentMiddleware) {
+  const commentsRouter = express.Router();
+  commentsRouter.`post('/'`, findParentMiddleware, /*...*/);
+  commentsRouter.`get('/'`, findParentMiddleware, /*...*/);
+  commentsRouter.`patch('/:cid'`, findParentMiddleware, /*...*/);
+  commentsRouter.`delete('/:cid'`, findParentMiddleware, /*...*/);
+  return commentsRouter;
+};
+```
+
+Then plug the whole URL sub-structure onto both the **books' and movies' routers**:
+
+```js
+// In routes/books.js
+const makeCommentsRouter = require('./comments');
+booksRouter.`use('/books/:id/comments', makeCommentsRouter(findBook))`;
+
+// In routes/movies.js
+const makeCommentsRouter = require('./comments');
+moviesRouter.`use('/movies/:id/comments', makeCommentsRouter(findMovie)`);
+```
+
+
+
+## Not having to restart manually
+
+[Nodemon][nodemon] is a **monitoring script** that can launch any Node.js app for you,
+and **automatically restart it** when you make changes.
+
+It's an npm package you can install globally:
+
+```bash
+$> npm install -g nodemon
+$> cd /path/to/projects/my-app
+$> DEBUG=my-app:* nodemon
+[nodemon] 1.11.0
+[nodemon] to restart at any time, enter rs
+[nodemon] `watching: *.*`
+[nodemon] `starting node ./bin/www`
+  express-demo:server Listening on port 3000 +0ms
+```
+
+It will execute the `npm start` script defined in your `package.json` by default,
+and restart the app if **any file changes**.
+
+
+
+### Configuring nodemon properly
+
+Instead of installing it globally, it's good practice to install nodemon as a **development dependency** so that your whole team can use it without having to re-install it globally on their machine:
+
+```bash
+$> cd /path/to/projects/my-app
+$> npm install --save-dev nodemon
+```
+
+Add an npm run script called `dev`:
+
+```json
+{
+  "name": "my-app",
+  "scripts": {
+*   "dev": "DEBUG=my-app:* nodemon",
+    "start": "node ./bin/www"
+  },
+  ...
+}
+```
+
+If you commit this change, anyone cloning your repository can run nodemon (after running `npm install`):
+
+```bash
+$> npm run dev
+```
+
+
+
+### Making nodemon faster
+
+Nodemon watches **all file changes** by default; this consumes extra CPU time and memory.
+You can make it watch only **relevant files** by adding a `nodemon.json` configuration file in your project's directory:
+
+```json
+{
+  "watch": [
+    "app.js",
+    "bin/www",
+    "routes/**/*.js"
+  ]
+}
+```
+
+If you add **new directories** to your project, **do not forget** to add them to this configuration file for nodemon to watch them as well.
+
+
+
 ## Resources
 
 * [API reference][api] (documentation for `app`, `req`, `res` and `Router`)
 * [Routing][routing]
 * [Using middleware][using-middleware]
-
-
-
-## TODO
-
-* Always send a response (e.g. 500 when error occurs)
-* Better explain routers (in separate files)
-* Slide 34 (creating a router): explain hardcoded vs database call
 
 
 
@@ -1070,6 +1231,7 @@ Express's `res` object is an application of the [builder][design-pattern-builder
 [jade]: https://www.npmjs.com/package/jade
 [using-middleware]: http://expressjs.com/en/guide/using-middleware.html
 [node]: https://nodejs.org/en/
+[nodemon]: https://www.npmjs.com/package/nodemon
 [router]: http://expressjs.com/en/4x/api.html#router
 [routing]: http://expressjs.com/en/guide/routing.html
 [postman]: https://www.getpostman.com
