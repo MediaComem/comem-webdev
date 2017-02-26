@@ -1,5 +1,7 @@
 # Express
 
+Learn the basics of [Express][express], a fast, unopinionated, minimalistic web framework for [Node.js][node].
+
 <!-- slide-include ../../BANNER.md -->
 
 **You will need**
@@ -1235,6 +1237,7 @@ If you add **new directories** to your project, **do not forget** to add them to
 [chrome]: https://www.google.com/chrome/
 [design-pattern-builder]: https://sourcemaking.com/design_patterns/builder
 [design-pattern-cor]: https://sourcemaking.com/design_patterns/chain_of_responsibility
+[express]: https://expressjs.com
 [express-generator]: https://www.npmjs.com/package/express-generator
 [jade]: https://www.npmjs.com/package/jade
 [using-middleware]: http://expressjs.com/en/guide/using-middleware.html
