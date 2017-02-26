@@ -5,10 +5,8 @@
 * Express on npmjs and github
 
 * Mongo: installation instructions
-
 * Express mongoose: ID virtual, transform
 * Express mongoose: add links to implementations in demo API
-* Update tools in webserv repo
 * Git cheatsheet
   * How to create a new project and push it to github
   * Do not git init or git clone inside an existing git repo
@@ -23,6 +21,7 @@
   * MongoDB shell
 * Glossary
 
+* Update tools in webserv repo
 * You will need: code editor on all slides
 * Template: auto-replace relative links with full URLs (test in generated PDF)
 * Replace width='x%' by class='wx'
