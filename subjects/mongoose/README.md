@@ -565,10 +565,11 @@ express-demo@0.0.0 /path/to/projects/express-demo
 ...
 ```
 
-Open `app.js` and add these two lines:
+Open `app.js` and add these three lines below the first calls to `require()`:
 
 ```js
 const mongoose = require('mongoose');
+mongoose.Promise = Promise;
 mongoose.connect('mongodb://localhost/express-demo');
 ```
 
