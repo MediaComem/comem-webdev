@@ -1,3 +1,21 @@
+# Using Mongoose with Express
+
+Learn how to implement advanced RESTful API operations in [Express][express] with [Mongoose][mongoose] (a [MongoDB][mongodb] Object-Document Mapper).
+
+<!-- slide-include ../../BANNER.md -->
+
+**You will need**
+
+* A running [MongoDB][mongodb] database
+* A running [Express][express] application with [Mongoose][mongoose] plugged in
+
+**Recommended reading**
+
+* [RESTful APIs](../rest/)
+* [RESTful API Conventions](../rest-conventions/)
+* [Express](../express/)
+* [Mongoose](../mongoose/)
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
@@ -23,24 +41,6 @@
   - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# Using Mongoose with Express
-
-Learn how to implement advanced RESTful API operations in [Express][express] with [Mongoose][mongoose] (a [MongoDB][mongodb] Object-Document Mapper).
-
-<!-- slide-include ../../BANNER.md -->
-
-**You will need**
-
-* A running [MongoDB][mongodb] database
-* A running [Express][express] application with [Mongoose][mongoose] plugged in
-
-**Recommended reading**
-
-* [RESTful APIs](../rest/)
-* [RESTful API Conventions](../rest-conventions/)
-* [Express](../express/)
-* [Mongoose](../mongoose/)
 
 
 

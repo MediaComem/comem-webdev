@@ -12,7 +12,6 @@ and how it differs from the [official Node.js MongoDB driver][mongodb-node-drive
 **Recommended reading**
 
 * [MongoDB](../mongodb/)
-* [Node.js](../node/)
 * [npm](../npm/) and [Express](../express/) (for the integration example)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->

@@ -4,10 +4,10 @@
 
 Introduction to [Bootstrap][bootstrap], a HTML/CSS framework, useful to quickly build HTML templates and views.
 
-Requirements:
+**You will need**
 
 * [Google Chrome][chrome] (recommended, any browser with developer tools will do)
-* [Sublime Text][sublime] (recommended, any text editor will do... **except Notepad**)
+* [Sublime Text][sublime] (recommended, any code editor will do... **except Notepad**)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

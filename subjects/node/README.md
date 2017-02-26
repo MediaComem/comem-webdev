@@ -1,6 +1,17 @@
 # Node.js Introduction
 
+Learn how to use [Node.js][node], an asynchronous JavaScript runtime that can run on your local machine or server.
+
 <!-- slide-include ../../BANNER.md -->
+
+**You will need**
+
+* A Unix CLI
+
+**Recommended reading**
+
+* [Command line](../cli/)
+* [JavaScript](../js/)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

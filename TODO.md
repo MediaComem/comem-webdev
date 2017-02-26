@@ -6,14 +6,9 @@
 
 * Mongo: installation instructions
 
-* Express conventions: not everything in app.js
-* Express conventions: avoiding repetition with middleware
-* Express conventions: use environment variables for configuration
-* Express conventions: debug with prefix
 * Express mongoose: ID virtual, transform
 * Express mongoose: add links to implementations in demo API
 * Update tools in webserv repo
-* Update first slides (intro, you will need & recommended reading)
 * Git cheatsheet
   * How to create a new project and push it to github
   * Do not git init or git clone inside an existing git repo
@@ -28,6 +23,7 @@
   * MongoDB shell
 * Glossary
 
+* You will need: code editor on all slides
 * Template: auto-replace relative links with full URLs (test in generated PDF)
 * Replace width='x%' by class='wx'
 * JavaScript truthy/falsy values

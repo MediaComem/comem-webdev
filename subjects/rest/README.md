@@ -7,7 +7,7 @@ Learn the core architectural principles of RESTful APIs are and how they compare
 **You will need**
 
 * [Google Chrome][chrome] (recommended, any browser with developer tools will do)
-* [Postman][postman] (recommended, any tool that makes raw HTTP requests will do)
+* [Postman][postman]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

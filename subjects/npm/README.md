@@ -1,6 +1,17 @@
 # npm
 
+Learn how to use [npm][npm], the most popular [Node.js][node] package manager, and the largest code registry in the world with over a quarter million packages.
+
 <!-- slide-include ../../BANNER.md -->
+
+**You will need**
+
+* A Unix CLI
+
+**Recommended reading**
+
+* [Command line](../cli/)
+* [Node.js](../node/)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -761,6 +772,7 @@ In these cases, you can set the `private` property of the `package.json` file:
 
 
 [express]: https://expressjs.com
+[node]: https://nodejs.org
 [npm]: https://www.npmjs.com
 [npm-cli]: https://docs.npmjs.com/cli/npm
 [npm-fix-permissions]: https://docs.npmjs.com/getting-started/fixing-npm-permissions

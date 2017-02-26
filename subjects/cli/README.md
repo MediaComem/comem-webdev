@@ -1,5 +1,7 @@
 # Command Line Introduction
 
+Learn the basics of navigating your filesystem in a Unix command line interface.
+
 <!-- slide-include ../../BANNER.md -->
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->

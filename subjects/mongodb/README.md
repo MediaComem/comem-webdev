@@ -1,6 +1,16 @@
 # MongoDB
 
+Learn the basics of [MongoDB][mongodb], one of the most populars document-oriented databases.
+
 <!-- slide-include ../../BANNER.md -->
+
+**You will need**
+
+* A Unix CLI
+
+**Recommended reading**
+
+* [Command line](../cli/)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -595,6 +605,7 @@ db.people.find({}).sort({ "birthDate": 1, "name": 1 })
 [getting-started]: https://docs.mongodb.com/getting-started/shell/
 [indexes]: https://docs.mongodb.com/manual/indexes/
 [query-operators]: https://docs.mongodb.com/manual/reference/operator/query/
+[mongodb]: https://www.mongodb.com
 [remove]: https://docs.mongodb.com/manual/reference/method/db.collection.remove/
 [sql-comparison]: https://docs.mongodb.com/manual/reference/sql-comparison/
 [update]: https://docs.mongodb.com/manual/reference/method/db.collection.update/
