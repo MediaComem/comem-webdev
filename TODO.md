@@ -4,17 +4,16 @@
 * Architecture up to now (postman/express)
 * Express on npmjs and github
 
-* Express: express vs. express-generator
+* Mongo: installation instructions
 * Express: nodemon
+
+* Express: express vs. express-generator
 * Express: example of error in middleware order
 * Express: example about comments sub-router
 * Express conventions: avoiding repetition with middleware
 * Express conventions: use environment variables for configuration
 * Express mongoose: ID virtual, transform
 * Express mongoose: add links to implementations in demo API
-* Heroku: explain normal procedure vs. custom procedure
-* Heroku: slide about devops
-* Heroku: explain how to plug in database with environment variables
 * Update tools in webserv repo
 * Update first slides (intro, you will need & recommended reading)
 * Git cheatsheet
@@ -30,8 +29,8 @@
   * Node environment
   * MongoDB shell
 * Glossary
-* Template: auto-replace relative links with full URLs
 
+* Template: auto-replace relative links with full URLs (test in generated PDF)
 * Replace width='x%' by class='wx'
 * JavaScript truthy/falsy values
 * Link to slide form from README
