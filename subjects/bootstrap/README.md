@@ -384,7 +384,7 @@ Add a:
 * `.btn-default` class to the `<a>` tag
 * `.btn-info` class to the `<button>` tag
 * `.btn-success` class to the `<input type="submit">` tag
-* `.btn-link` class to the `<input type="button">` tag
+* `.btn-danger` class to the `<input type="button">` tag
 
 ----
 
@@ -398,6 +398,23 @@ The result should look like this:
 </div>
 
 #### Sizes management
+
+You can also change the overall size of your button, using three additionnal classes.
+
+Add the `.btn-lg` class to the `<a>` tag to see it **larger**:
+```html
+<a href="#" `class`="btn btn-default `btn-lg`">Link</a>
+```
+
+Add the `.btn-sm` class to the `<input type="submit">` tag to see it **a bit smaller**:
+```html
+<input type="submit" value='Input Submit' `class`="btn btn-success `btn-sm`">
+```
+
+Add the `.btn-xs` class to the `<input type="button">` tag to see it **extra smaller**:
+```html
+<input type="button" value='Input Button' `class`="btn btn-danger `btn-xs`">
+```
 
 ## Resources
 
