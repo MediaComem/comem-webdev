@@ -121,13 +121,13 @@ Deploy an Express web app on Heroku
 ```bash
 $> npm install -g express-generator
 $> cd /path/to/projects
-$> express heroku-demo
+$> express express-demo
 ```
 
 Make sure it works:
 
 ```bash
-$> cd heroku-demo
+$> cd express-demo
 $> npm install
 $> npm start
 ```
@@ -278,7 +278,7 @@ For other add-ons, it's often `$DATABASE_URL`.
 For example, if you're using Mongoose, change the call to `connect` to take the environment variable into account if present:
 
 ```js
-mongoose.connect(`process.env.MONGODB_URI` || 'mongodb://localhost/heroku-demo');
+mongoose.connect(`process.env.MONGODB_URI` || 'mongodb://localhost/express-demo');
 ```
 
 You're now **ready to deploy**.
@@ -303,7 +303,7 @@ remote: -----> `Node.js app detected`
 remote: -----> Creating runtime environment
 remote: -----> `Building dependencies`
 remote:        Installing node modules (package.json)
-remote:        heroku-demo@0.0.0 /tmp/build_c9758807eb8979e9eb8af687447e5985
+remote:        express-demo@0.0.0 /tmp/build_c9758807eb8979e9eb8af687447e5985
 remote:        ├─┬ body-parser@1.16.1
 remote: -----> Launching...
 remote:        `https://salty-inlet-82680.herokuapp.com/` deployed to Heroku
@@ -369,7 +369,7 @@ For example, you will see something similar to this if your database configurati
 
 ```bash
 $> heroku logs
-2017-02-26T17:08 app[web.1]: > heroku-demo@0.0.0 start /app
+2017-02-26T17:08 app[web.1]: > express-demo@0.0.0 start /app
 2017-02-26T17:08 app[web.1]: > node ./bin/www
 2017-02-26T17:08 app[web.1]:
 2017-02-26T17:08 app[web.1]: events.js:160
@@ -446,7 +446,7 @@ When you run the app locally, you have no `PORT` environment variable defined, s
 ```bash
 $> DEBUG=express-demo* npm start
 
-> express-demo@0.0.0 start /path/to/projects/heroku-demo
+> express-demo@0.0.0 start /path/to/projects/express-demo
 > node ./bin/www
 
   express-demo:server Listening on port `3000` +0ms
@@ -457,7 +457,7 @@ You can override an environment variable by prepending it to the command:
 ```bash
 $> `PORT=4321` DEBUG=express-demo* npm start
 
-> express-demo@0.0.0 start /path/to/projects/heroku-demo
+> express-demo@0.0.0 start /path/to/projects/express-demo
 > node ./bin/www
 
   express-demo:server Listening on port `4321` +0ms
