@@ -42,10 +42,10 @@ $> npm install mongodb --save
 You can then connect to your MongoDB database:
 
 ```js
-var MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('mongodb').MongoClient;
 
 // Connection URL
-var url = 'mongodb://localhost:27017/myproject';
+const url = 'mongodb://localhost:27017/myproject';
 
 // Use connect method to connect to the Server
 MongoClient.connect(url, function(err, db) {
@@ -78,7 +78,7 @@ collection.createIndex(fields, options, callback)
 For example, to insert a document:
 
 ```js
-var person = {
+const person = {
   name: 'John Doe',
   age: 42
 };
@@ -159,11 +159,11 @@ Mongoose **maps JavaScript objects to MongoDB documents**, much like an Object-R
 
 <p class='center'><img src='images/schema-model-document.png' width='60%' /></p>
 
-* Everything in Mongoose starts with a [Schema][mongoose-guide].
-  Each schema maps to a MongoDB collection and defines the **shape of the documents** within that collection.
-* [Models][mongoose-model] are fancy **constructors** compiled from our Schema definitions.
-* Mongoose [Documents][mongoose-document] represent a one-to-one mapping to documents as stored in MongoDB.
-  Each document is an instance of its Model.
+* Everything in Mongoose starts with a [Schema][mongoose-guide]:
+  each schema maps to a MongoDB collection and defines the **shape of the documents** within that collection
+* [Models][mongoose-model] are fancy **constructors** compiled from our Schema definitions
+* Mongoose [Documents][mongoose-document] represent a one-to-one mapping to **documents** as stored in MongoDB:
+  each document is an instance of its Model
 
 <!-- slide-notes -->
 
@@ -174,7 +174,7 @@ ORM examples: Hibernate (Java), Active Record (Ruby), SQLAlchemy (Python).
 Simply call `mongoose.connect()`:
 
 ```js
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/myproject');
 ```
 
@@ -187,11 +187,11 @@ It will also automatically create and manage a **connection pool** for you.
 The schema defines the shape of the documents you want to save:
 
 ```js
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const `Schema` = mongoose.Schema;
 
 // Define a schema
-*var blogSchema = new Schema({
+const blogSchema = `new Schema`({
   title: String,
   body: String,
   date: { type: Date, default: Date.now  }, // Default value
@@ -213,11 +213,11 @@ var Schema = mongoose.Schema;
 Once you have your schema, you can create a model to link that schema to a MongoDB collection:
 
 ```js
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 // Define a schema
-var blogSchema = new Schema({
+const blogSchema = new Schema({
   // ...
 });
 
@@ -240,10 +240,10 @@ The model is a **constructor** that you can use to create documents:
 
 ```js
 // Retrieve the model from another file
-var Blog = mongoose.model('Blog');
+const `Blog` = mongoose.model('Blog');
 
 // Create a document with it
-*var blog = new Blog({
+let blog = `new Blog`({
   title: 'Teaching Mongoose',
   body: 'So cool',
   comments: [
@@ -262,19 +262,19 @@ var Blog = mongoose.model('Blog');
 Once you have your document, you can insert or update it with `save()`:
 
 ```js
-var blog = new Blog({
+let blog = new Blog({
   // ...
 });
 
-`blog.save`(function(err) {
+`blog.save`(function(err) { // This will insert a new document
   if (err) {
     return console.warn('Could not save blog because: ' + err.message);
   }
-
   console.log('Saved blog');
 
-  blog.meta.votes = 5;
-  `blog.save`(function(err, updatedBlog) {
+  blog.meta.votes = 5; // Update something
+
+  `blog.save`(function(err, updatedBlog) { // This will update the document
     if (err) {
       return console.warn('Could not save blog because: ' + err.message);
     }
@@ -295,22 +295,29 @@ knows that it exists and should be **updated** instead.
 Mongoose schemas have build-in validations:
 
 ```js
-var personSchema = new Schema({
+const personSchema = new Schema({
   name: {
-    type: String,
-    required: true,
-    minlength: [ 3, 'Name is too short' ],
-    maxlength: 20
+    type: String, // Type validation
+    required: true, // Mandatory
+    minlength: [ 3, 'Name is too short' ], // Minimum length
+    maxlength: 20 // Maximum length
+  },
+  address {
+    city: {
+      type: String,
+      required: true
+    }
   },
   honorific: {
     type: String,
-    enum: [ 'Mr', 'Mrs', 'Ms', 'Dr' ]
+    enum: [ 'Mr', 'Mrs', 'Ms', 'Dr' ] // Limit valid values
   },
   age: {
     type: Number,
-    min: 0,
-    max: 122
-  }
+    min: 0, // Minimum value
+    max: 122 // Maximum value
+  },
+  interests: [{ type: String, maxlength: 10 }]
 });
 ```
 
@@ -319,7 +326,7 @@ var personSchema = new Schema({
 The callback passed to `save()` will receive an error if validations fail:
 
 ```js
-var person = new Person({
+let person = new Person({
   name: 'Bo',
   age: -4,
   honorific: 'Great'
@@ -351,7 +358,7 @@ You can also write your own validators.
 For example, this validates that the `name` property of users is in lower case:
 
 ```js
-var userSchema = new Schema({
+const userSchema = new Schema({
   name: {
     type: String,
 *   validate: {
@@ -373,7 +380,7 @@ var userSchema = new Schema({
 Simply add the `unique: true` property to the schema property you want to be unique:
 
 ```js
-var personSchema = new Schema({
+const personSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -400,14 +407,14 @@ You can make MongoDB queries with the `find()` or `findOne()` methods of Mongoos
 ```js
 Person
 * .find({
-*   occupation: /host/,
-*   'name.last': 'Ghost',
-*   age: { $gt: 17, $lt: 66 },
-*   likes: { $in: ['vaporizing', 'talking'] }
+*   name: /arnold/i,
+*   'address.city': 'Los Angeles',
+*   age: { $gt: 17, $lt: 80 },
+*   interests: { $in: ['shooting', 'talking'] }
 * })
   .limit(10)
-  .sort({ occupation: -1 })
-  .select({ name: 1, occupation: 1 })
+  .sort({ name: -1 })
+  .select({ name: 1, address: 1 })
   .exec(function(err, people) {
     if (err) {
       return console.warn('Could not find people because: ' + err.message);
@@ -423,13 +430,14 @@ You can also use chainable query methods:
 
 ```js
 Person
-  .find({ occupation: /host/ })
-* .where('name.last').equals('Ghost')
-* .where('age').gt(17).lt(66)
-* .where('likes').in(['vaporizing', 'talking'])
+  .find()
+* .where('name', /arnold/i)
+* .where('address.city').equals('Los Angeles')
+* .where('age').gt(17).lt(80)
+* .where('interests').in(['shooting', 'talking'])
   .limit(10)
-  .sort('-occupation')
-  .select('name occupation')
+  .sort('-name')
+  .select('name address')
   .exec(function(err, people) {
     if (err) {
       return console.warn('Could not find people because: ' + err.message);
@@ -449,14 +457,14 @@ Sometimes you want to see the queries Mongoose is sending to the database:
 mongoose.set('debug', true);
 ```
 
-You will them in your log:
+You will then see them in your CLI log:
 
 ```txt
 Mongoose: people.find({
-  occupation: /host/,
-  'name.last': 'Ghost',
+  name: /arnold/,
+  'city.address': 'Los Angeles',
   age: { '$gt': 17, '$lt': 66 },
-  likes: { '$in': [ 'vaporizing', 'talking' ] }
+  interests: { '$in': [ 'shooting', 'talking' ] }
 }, {
   limit: 10,
   sort: { occupation: -1 },
@@ -488,7 +496,7 @@ Mongoose: people.find({
 Mongoose uses the **native Node.js client** under the hood, and you can even access it **directly** if need be:
 
 ```js
-var Blog = mongoose.model('Blog');
+const Blog = mongoose.model('Blog');
 
 Blog.collection.insertOne({ foo: 'bar' }, function(err, commandResult) {
   if (err) {

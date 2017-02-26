@@ -30,11 +30,11 @@
 
 ## What is MongoDB?
 
-<!-- slide-front-matter class: center, middle -->
-
-> "MongoDB is a free and open-source cross-platform **document-oriented database** program."
+<!-- slide-front-matter class: center, middle, image-header -->
 
 <p class='center'><img src='images/mongodb.png' width='60%' /></p>
+
+> "MongoDB is a free and open-source cross-platform **document-oriented database** program."
 
 
 
@@ -46,7 +46,7 @@
 * **Rich query language**
   * **Data aggregation**
   * Full text search
-  * **Geospatial queries**
+  * Geospatial queries
 * High availability
   * Replica sets with automatic failover and data redundancy
 * Horizontal scalability
@@ -123,13 +123,14 @@ Inserting, querying, updating and removing documents.
 
 ### Connecting
 
-Connect to the MongoDB shell.
+Connect to the MongoDB shell from your CLI and you should have a **new prompt**, indicating that you can now type MongoDB commands and queries:
 
 ```bash
 $> mongo
 MongoDB shell version v3.4.1
 connecting to: mongodb://127.0.0.1:27017
 MongoDB server version: 3.4.1
+*>
 ```
 
 You can switch databases with `use <name>`. Let's do that now:
@@ -157,7 +158,6 @@ Insert a couple of documents into a collection named **people** (again, it is au
   "interests": [ "Pastry", "Kung fu" ],
   "phones": []
 })
-WriteResult({ "nInserted" : 1  })
 
 > db.people.insert({
   "name": "John Smith",
@@ -169,8 +169,9 @@ WriteResult({ "nInserted" : 1  })
     { "type": "home", "number": "+1-202-555-0186" }
   ]
 })
-WriteResult({ "nInserted" : 1  })
 ```
+
+After each query, MongoDB should tell you that it has inserted a new document (`WriteResult({ "nInserted" : 1  })`).
 
 
 

@@ -8,7 +8,10 @@
 * Express: nodemon
 * Express: example of error in middleware order
 * Express: example about comments sub-router
-* MongoDB: separate request from response (WriteResult)
+* Express conventions: avoiding repetition with middleware
+* Express conventions: use environment variables for configuration
+* Express mongoose: ID virtual, transform
+* Rest: add 5xx codes
 * Mongoose: add integration with express example
 * Mongoose: count query
 * Heroku: explain normal procedure vs. custom procedure
