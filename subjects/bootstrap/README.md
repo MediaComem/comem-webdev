@@ -124,29 +124,29 @@ We already said that Bootstrap is a bunch of CSS styles already written for you.
 
 Those styles could be divided in three categories:
 
-* **Tag styles**: overwrite the default style for some HTML tags
+* **Element styles**: overwrite the default style for some HTML elements
 * **New classes**: new CSS classes (obivously) that can be used when needed
 * **Component**: a set of classes that needs to be used with a **strictly defined** HTML structure.
 
 Let's see some illustrations of these types...
 
-## Tag styles
+## Element styles
 
-Bootstrap comes with CSS styles that are applied to **HTML tags**, without **adding classes** to said tags.
+Bootstrap comes with CSS styles that are applied to **HTML elements**, without **adding classes** to said elements.
 
-Some of the tags that are impacted are:
+Some of the elements that are impacted are:
 
 * `<h1>` to `<h6>`
-* `<small>` (a tag that display smaller text)
-* `<mark>` (a tag that highlights its content)
-* `<abbr>` (a tag to explain an abbreviation)
-* `<code>` (a tag that define its content as code)
+* `<small>` (an element that display smaller text)
+* `<mark>` (an element that highlights its content)
+* `<abbr>` (an element to explain an abbreviation)
+* `<code>` (an element that define its content as code)
 
 > More information in the [Bootstrap documentation][bootstrap-css]
 
 ### Examples
 
-To see for yourself how Bootstrap stylizes those tags, let's **add some of them** in your project.
+To see for yourself how Bootstrap stylizes those elements, let's **add some of them** in your project.
 
 Open the `index.html` file and **replace** the content between the `body` tags with this:
 
@@ -159,7 +159,7 @@ Open the `index.html` file and **replace** the content between the `body` tags w
 <p>Do you want to write some <code>function()</code>?</p>
 ```
 
-To **compare** the same tags without Bootstrap, create a new file called `compare.html`, and **copy-paste all the content** of `index.html` inside it.
+To **compare** the same elements without Bootstrap, create a new file called `compare.html`, and **copy-paste all the content** of `index.html` inside it.
 
 Now, in the `compare.html` file, **remove** the line with the `<link>` that **includes** Bootstrap, and save it.
 
@@ -167,9 +167,9 @@ Finally, open both `index.html` and `compare.html` in your browser.
 
 > What differences do you see?
 
-### Why put styles on tag?
+### Why put styles on element?
 
-As you can see, HTML tags already **have** default styles, even without CSS.
+As you can see, HTML elements already **have** default styles, even without CSS.
 
 But these styles are **browser dependant**, i.e. your page could be rendered differently on **Chrome**, **Firefox**, **Edge** and/or **Safari**.
 
@@ -185,17 +185,17 @@ See, for example, the rendering of an `<abbr>` tag on **Chrome** VS **Firefox**.
 
 To avoid this rendering problem, developers use a technique called **CSS Normalization**.
 
-Normalizing the CSS means creating styles for **HTML tag** to **cancel** default styles that are **not consistent among browsers**.
+Normalizing the CSS means creating styles for **HTML element** to **cancel** default styles that are **not consistent among browsers**.
 
 Bootstrap uses the [Normalize.css][normalize] library, that do just that.
 
-By using a normalizer and adding its own style for basic HTML tags, Bootstrap ensures that your page will be **consistently rendered** on each browser.
+By using a normalizer and adding its own style for basic HTML elements, Bootstrap ensures that your page will be **consistently rendered** on each browser.
 
 ## New classes
 
-Bootstrap also comes with a **ton of new classes** that can be applied to HTML tags.
+Bootstrap also comes with a **ton of new classes** that can be applied to HTML elements.
 
-Some of these classes need to be applied to **specific tags**, while others can be applied to **almost any tag**.
+Some of these classes need to be applied to **specific elements**, while others can be applied to **almost any element**.
 
 To try this, let's start anew with our `index.html` file.
 
@@ -203,8 +203,8 @@ Delete everything that's between your `<body>` tag and add:
 
 ```html
 <div>
-    <h1>Bootstrap Initiation</h1>
-    <div>Here will go the content.</div>
+  <h1>Bootstrap Initiation</h1>
+  <div>Here will go the content.</div>
 </div>
 ```
 
@@ -218,8 +218,8 @@ You can change that by adding a `.container-fluid` class to a `<div>`.
 
 ```html
 <div `class='container-fluid'`>
-    <h1>Bootstrap Initiation</h1>
-    <div>Here will go the content.</div>
+  <h1>Bootstrap Initiation</h1>
+  <div>Here will go the content.</div>
 </div>
 ```
 > The content will have a padding of `15px` from both edges, and your container will be as wide as possible.
@@ -230,8 +230,8 @@ If you want your container to be more centered, use the `.container` instead.
 
 ```html
 <div `class='container'`>
-    <h1>Bootstrap Initiation</h1>
-    <div>Here will go the content.</div>
+  <h1>Bootstrap Initiation</h1>
+  <div>Here will go the content.</div>
 </div>
 ```
 > Your container is now more centered on the screen.
@@ -267,32 +267,32 @@ Replace this line...
 
 ```html
 <table `class="table"`>
-    <thead>
-        <th>#</th>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>Starship</th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>1</td>
-            <td>Jean-Luc</td>
-            <td>Picard</td>
-            <td>Enterprise D</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Benjamin</td>
-            <td>Sisko</td>
-            <td>Defiant</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Kathryn</td>
-            <td>Janeway</td>
-            <td>Voyager</td>
-        </tr>
-    </tbody>
+  <thead>
+    <th>#</th>
+    <th>First name</th>
+    <th>Last name</th>
+    <th>Starship</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Jean-Luc</td>
+      <td>Picard</td>
+      <td>Enterprise D</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Benjamin</td>
+      <td>Sisko</td>
+      <td>Defiant</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Kathryn</td>
+      <td>Janeway</td>
+      <td>Voyager</td>
+    </tr>
+  </tbody>
 </table>
 ```
 #### More table classes
@@ -339,15 +339,15 @@ Let's add some buttons to the `index.html` page. Add the following snippet after
 ```
 > Right now, this should give you this:
 
-<p><img src='images/new-buttons-btn.jpg' width='40%' /></p>
+<p class="shadow"><img src='images/new-buttons-btn.jpg' width='40%' /></p>
 
 > It's doesn't look like much. Let's remedy that.
 
 #### The `.btn` class
 
-To properly use any of the button styles, you **must** add the special class `.btn` to the tag you want to sylize.
+To properly use any of the button styles, you **must** add the special class `.btn` to the element you want to sylize.
 
-> You can add a button style to any `<a>`, `<button>` or `<input>` tags.
+> You can add a button style to any `<a>`, `<button>` or `<input>` elements.
 
 ```html
 <a href="#" `class='btn'`>Link</a>
@@ -357,11 +357,13 @@ To properly use any of the button styles, you **must** add the special class `.b
 ```
 The result should be:
 
-<p><img src='images/buttons-btn.jpg' width='40%' /></p>
+<p class="shadow"><img src='images/buttons-btn.jpg' width='40%' /></p>
 
-As you can see, the `.btn` class doesn't add much; this is by design: the `.btn` class is used to *initialize* the tag as a button and, as such, is **mandatory**.
+As you can see, the `.btn` class doesn't add very much.
 
-> It only defines the **skeleton** that additionnal classes will customize.
+In fact, the `.btn` class is used to add to the element all the styles that are **common** among the button styles.
+
+> Each of the additionnal button class will add the styles that are specific to the style.
 
 #### Additionnal classes
 
@@ -381,40 +383,156 @@ Bootstrap defines **seven button styles**, each with its own class to add to an 
 
 Add a:
 
-* `.btn-default` class to the `<a>` tag
-* `.btn-info` class to the `<button>` tag
-* `.btn-success` class to the `<input type="submit">` tag
-* `.btn-danger` class to the `<input type="button">` tag
+* `.btn-default` class to the `<a>` element
+* `.btn-info` class to the `<button>` element
+* `.btn-success` class to the `<input type="submit">` element
+* `.btn-danger` class to the `<input type="button">` element
 
 ----
 
 The result should look like this:
 
-<div>
-    <a href="#" class="btn btn-default">Link</a>
-    <button class="btn btn-info">Button</button>
-    <input type="submit" value='Input Submit' class="btn btn-success">
-    <input type="button" value='Input Button' class="btn btn-link">
-</div>
+<p class="shadow"><img src='images/final-buttons.jpg' width='40%' /></p>
 
-#### Sizes management
+#### Size control
 
 You can also change the overall size of your button, using three additionnal classes.
 
-Add the `.btn-lg` class to the `<a>` tag to see it **larger**:
+Add the `.btn-lg` class to the `<a>` element to see it **larger**:
 ```html
 <a href="#" `class`="btn btn-default `btn-lg`">Link</a>
 ```
 
-Add the `.btn-sm` class to the `<input type="submit">` tag to see it **a bit smaller**:
+Add the `.btn-sm` class to the `<input type="submit">` element to see it **a bit smaller**:
 ```html
 <input type="submit" value='Input Submit' `class`="btn btn-success `btn-sm`">
 ```
 
-Add the `.btn-xs` class to the `<input type="button">` tag to see it **extra smaller**:
+Add the `.btn-xs` class to the `<input type="button">` element to see it **extra smaller**:
 ```html
 <input type="button" value='Input Button' `class`="btn btn-danger `btn-xs`">
 ```
+
+<p class="shadow"><img src='images/buttons-size.jpg' width='40%' /></p>
+
+### Icons
+
+Bootstrap comes along a special font called Glyphicons, that provides you with over 250 icons to use in your design.
+
+The list of available icons can be found here: [Bootstrap Glyphicons][bootstrap-glyphicons]
+
+To use these icons, just add an empty `<span>` element with the class for the icon you want.
+
+For example, to add three buttons for alignement control, write:
+
+```html
+<h2>Icons</h2>
+<div>
+  <button class="btn btn-default">
+*   <span class="glyphicon glyphicon-align-left"></span>
+  </button>
+  <button class="btn btn-default">
+*   <span class="glyphicon glyphicon-align-center"></span>
+  </button>
+  <button class="btn btn-default">
+*   <span class="glyphicon glyphicon-align-right"></span>
+  </button>
+</div>
+```
+
+> Never put anything between the `<span>` tags, and always use the `.glyphicon` classes on `<span>` elements only.
+
+### Forms
+
+Creating forms in HTML is a big part of constructing website or webapplication, and this is yet another subject that Bootstrap can handle for you.
+
+Add these lines at the end of your `index.html` page, right before the closing `</div>` tag:
+
+```html
+<h2>Forms</h2>
+<form>
+  <input type="submit" class="btn btn-success">
+</form>
+```
+> We'll build more in this `<form>` element in the following slides.
+
+#### `.form-control`
+
+Add the `.form-control` class to an `<input>` element to make it **full-width and stlyized**.
+
+> This class can be added to any type of input.
+
+Let's add an text input that's to receive the **username** of an hypothetic sign up form.
+
+Add these lines at the beginning of the `<form>` element:
+
+```html
+<label for="username">Username</label>
+<input type="text" id="username" `class="form-control"`>
+```
+> The input is correctly displayed, but there's a spacing problem with the following button.
+
+#### `.form-group`
+
+To resolve any spacing problem that could be present in your form, be sure to wrap your form element in a `<div>` with the `.form-group` class.
+
+> Do this with the preceding **username** input.
+
+Let's complete our form by adding a password input that's to receive the **password** of our new user.
+
+Add these lines before the `<input type="submit">`:
+
+```html
+*<div class="form-group">
+  <label for="password">Password</label>
+  <input type="password" id="password" class="form-control">
+*</div>
+```
+
+#### `.form-inline`
+
+By default, all elements with a `.form-control` class will be as wide as possible, and will be presented in a stack, that is on element in top of another.
+
+If you'd rather prefer to have you form displayed inline, juste add the `.form-inline` class to your top `<form>` element.
+
+```html
+<form `class="form-inline"`>
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input type="text" id="username" class="form-control">
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" id="password" class="form-control">
+  </div>
+  <input type="submit" class="btn btn-success">
+</form>
+```
+> The `<label>` are optional. You could delete them and use the `placeholder` attribute  on `<input>` instead.
+```html
+<div class="form-group">
+  <input type="password" id="..." class="..." `placeholder="Password"`>
+</div>
+```
+
+### Color classes
+
+Remember the button styles (*Primary*, *Success*, *Info*, *Warning* and *Danger*)?
+
+You can use these same color style to almost any element in your page, wether it be on the text or on the background.
+
+> Using this classes with other pre-defined Bootstrap classes could cancel their effects.
+
+```html
+<h2>Color classes</h2>
+<p `class="text-primary"`>This text uses the primary color scheme.</p>
+<p `class="text-success"`>This text uses the success color scheme.</p>
+<p `class="bg-warning"`>This paragraph has a warning colored background.</p>
+<p `class="bg-info"`>This paragraph has an info colored background.</p>
+<p `class="bg-danger text-danger"`>Full danger!</p>
+```
+
+<p class='shadow'><img src='images/color-schemes.jpg' width='60%' /></p>
 
 ## Resources
 
@@ -428,3 +546,4 @@ Add the `.btn-xs` class to the `<input type="button">` tag to see it **extra sma
 [bootstrap]: http://getbootstrap.com/
 [dl-bootstrap]: https://github.com/twbs/bootstrap/releases/download/v3.3.7/bootstrap-3.3.7-dist.zip
 [normalize]: https://necolas.github.io/normalize.css/
+[bootstrap-glyphicons]: http://getbootstrap.com/components/#glyphicons-glyphs
