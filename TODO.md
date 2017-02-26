@@ -9,6 +9,7 @@
 * Express: example of error in middleware order
 * Express: example about comments sub-router
 * Mongoose: add integration with express example
+* Mongoose: count query
 * Heroku: explain normal procedure vs. custom procedure
 * Heroku: slide about devops
 * Heroku: explain how to plug in database with environment variables
