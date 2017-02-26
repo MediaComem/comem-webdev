@@ -12,6 +12,7 @@ Learn how to implement advanced RESTful API operations in [Express][express] wit
 **Recommended reading**
 
 * [RESTful APIs](../rest/)
+* [RESTful API Conventions](../rest-conventions/)
 * [Express](../express/)
 * [Mongoose](../mongoose/)
 
@@ -125,16 +126,13 @@ Some collections are just **too large to send** to the client in their entirety.
 The following examples will demonstrate two ways implement **pagination**
 to retrieve only one "page" of a collection at a time.
 
-To implement pagination:
-
-* The client must tell the server **which elements** of the collection it wants
-* The server must give the client enough information to be able to **access the other elements**
+The following examples assume that you have read [RESTful API Conventions](../rest-conventions/) which explains different ways to expose pagination in a RESTful API.
 
 
 
-### Sending a page of the collection
+### Using query parameters to select a page
 
-In principle, pagination is a **specialized filter**, so we'll use **URL query parameters** to let the client tell the server which elements of the collection it wants.
+In principle, pagination is a **specialized filter**. The client uses **URL query parameters** to tell the server which chunk of the collection it wants.
 Implementing a `page` and `pageSize` parameters with Express and Mongoose is quite straightforward:
 
 ```js
@@ -162,23 +160,13 @@ router.get('/', function(req, res, next) {
 
 
 
-### What about the rest?
+### Telling the client how to get more elements
 
-The client can now get only a specific page, but it still doesn't know **how many other elements** there are.
-Retrieving the entire collection to count the total of elements would be defeat the purpose of pagination,
-so the server needs to **tell the client**.
+To include information about getting more elements in the response,
+you will need to know **how many elements there are in total**,
+either to give that information directly to the client or to build hyperlinks.
 
-There are many ways of doing that.
-Here are a few:
-
-* Using the `Link` header
-* Using custom headers
-* Using a JSON *envelope* or *wrapper*
-
-#### Retrieving the total number of elements
-
-In all these cases, you will need to know **how many elements there are in total**,
-either to give that information to the client or determine what links to build:
+You can do that easily using a Mongoose model's `count()` function:
 
 ```js
 router.get('/', function(req, res, next) {
@@ -198,74 +186,9 @@ router.get('/', function(req, res, next) {
 
 
 
-### The `Link` header (solution 1)
+### Using the `Link` header (solution 1)
 
-There have been many ways developers have implemented pagination over the years.
-It's only recently that a [standard header][link-header-rfc] has been defined and started becoming popular.
-
-The `Link` header allows the server to **tell the client where to find other pages** of the collection,
-**without the client having to build new URLs**.
-
-It essentially allows the server to tell the client where to find:
-
-* The first page
-* The previous page
-* The next page
-* The last page
-* *(Other variants if necessary)*
-
-#### What's in the header?
-
-Consider the following request where the client requests the second page of 50 elements in a collection:
-
-```http
-GET /api/movies?`page=2`&`pageSize=50` HTTP/1.1
-```
-
-In the response, in addition to the 50 movies on that page, the server can send a `Link` header with references to **the URLs of other pages** in the collection:
-
-```http
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-Link: <https://example.com/api/movies?`page=1`&pageSize=50>; rel="`first prev`",
-      <https://example.com/api/movies?`page=3`&pageSize=50>; rel="`next`",
-      <https://example.com/api/movies?`page=5`&pageSize=50>; rel="`last`"
-
-[
-  ...
-]
-```
-
-*(**Note**: the `Link` header is shown on 3 lines here for readability, but it would be on 1 line in the actual HTTP response.)*
-
-#### What's the link format?
-
-Multiple links in the `Link` header are comma-separated.
-Each link looks like this:
-
-```txt
-<https://example.com/api/movies?page=1&pageSize=50>; rel="first prev"
-```
-
-It contains:
-
-* The **target URL** between `<>`
-* One or more **parameters** preceded by `;`:
-  * The `rel` (or "relation") parameter is mandatory, as it indicates **what kind of link it is**
-
-There is a [registry of official relation types][link-header-rels] (such as `first`, `prev`, `next` and `last`).
-
-<!-- slide-notes -->
-
-You can use your own custom relations but instead of single words, they should be URIs:
-
-```txt
-<.../movies?page=3&pageSize=50>; rel="https://example.com/my-rels/plus2"
-```
-
-#### How to send these links
-
-Other developers have already gone through the trouble of **formatting these headers** correctly for you.
+The format is a bit convoluted, but other developers have already gone through the trouble for you.
 Use the [format-link-header][format-link-header] npm package:
 
 ```js
@@ -278,14 +201,14 @@ function buildLinkUrl(url, page, pageSize) {
 
 // Add "first" and "prev" links unless it's the first page
 if (page > 1) {
-  `links.first` = { rel: 'first', url: buildLinkUrl(1, pageSize) };
-  `links.prev` = { rel: 'prev', url: buildLinkUrl(page - 1, pageSize) };
+  `links.first` = { rel: 'first', url: buildLinkUrl(url, 1, pageSize) };
+  `links.prev` = { rel: 'prev', url: buildLinkUrl(url, page - 1, pageSize) };
 }
 
 // Add "next" and "last" links unless it's the last page
 if (page < maxPage) {
-  `links.next` = { rel: 'next', url: buildLinkUrl(page + 1, pageSize) };
-  `links.last` = { rel: 'last', url: buildLinkUrl(maxPage, pageSize) };
+  `links.next` = { rel: 'next', url: buildLinkUrl(url, page + 1, pageSize) };
+  `links.last` = { rel: 'last', url: buildLinkUrl(url, maxPage, pageSize) };
 }
 
 if (Object.keys(links).length >= 1) {
@@ -295,45 +218,7 @@ if (Object.keys(links).length >= 1) {
 
 
 
-### Custom headers (solution 2)
-
-The `Link` header has the advantage of being a standard,
-but it's hard to build a **pager** from it:
-
-<p class='center'><img src='images/pagination.png' /></p>
-
-The server would need to send pre-built **links for each page**, which is not very flexible and consumes bandwidth.
-
-HTTP does not forbid you from using non-standard headers,
-so you could decide to use these **custom headers** (for example) to send the client the additional information it needs:
-
-* A `Pagination-Page` header to tell the client which page it has requested
-* A `Pagination-PageSize` header to tell the client what is the current page size
-* A `Pagination-Total` header to tell the client how many elements there are in the collection
-
-#### Custom headers in the response
-
-Consider the following request where the client requests the second page of 50 elements in a collection:
-
-```http
-GET /api/movies?`page=2`&`pageSize=50` HTTP/1.1
-```
-
-In the response, in addition to the 50 movies on that page, the server can send the custom pagination headers:
-
-```http
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-*Pagination-Page: 2
-*Pagination-PageSize: 50
-*Pagination-Total: 231
-
-[
-  ...
-]
-```
-
-#### Implementing custom pagination headers
+### Using custom pagination headers (solution 2)
 
 To implement this solution, you simply have to set the headers before sending the response:
 
@@ -365,50 +250,7 @@ router.get('/', function(req, res, next) {
 
 
 
-### JSON envelope (solution 3)
-
-In some rare circumstances, there is a proxy between client and server that **strips non-standard headers** from all requests.
-In this case, you would have to send the pagination information in the **response body** instead of headers.
-
-Instead of using a **JSON array** as the response body,
-you would use a **JSON object** that contains additional metadata as well as the array of elements:
-
-```http
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-
-{
-  `"page": 2`,
-  `"pageSize": 50`,
-  `"total": 231`,
-  `"data": [`
-    ...
-  `]`
-}
-```
-
-#### Links in the JSON envelope
-
-You can also use **link relations** in a JSON envelope (like with the `Link` header) if you prefer that solution:
-
-```http
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-
-{
-  `"data": [`
-    ...
-  `]`,
-* "links": [
-*   "first": "https://example.com/api/movies?page=1&pageSize=50",
-*   "prev": "https://example.com/api/movies?page=1&pageSize=50",
-*   "next": "https://example.com/api/movies?page=3&pageSize=50",
-*   "last": "https://example.com/api/movies?page=5&pageSize=50"
-* ]
-}
-```
-
-#### Implementing a JSON envelope
+### Using a JSON envelope (solution 3)
 
 Instead of setting headers, you simply have to build and pass your envelope to `res.send()`:
 
@@ -416,11 +258,12 @@ Instead of setting headers, you simply have to build and pass your envelope to `
 router.get('/', function(req, res, next) {
   Movie.find().count(function(err, `total`) {
     if (err) { return next(err); };
+
     let query = Movie.find();
 
     // Parse query parameters and apply pagination here...
 
-    query.exec(function(err, movies) {
+    query.exec(function(err, `movies`) {
       if (err) { return next(err); }
 
       // Send JSON envelope with data
@@ -596,6 +439,8 @@ Operator   | Description
 
 
 ## Resources
+
+**Documentation**
 
 * [MongoDB aggregation][mongodb-aggregation]
 

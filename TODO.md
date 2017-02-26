@@ -8,13 +8,13 @@
 * Express: nodemon
 * Express: example of error in middleware order
 * Express: example about comments sub-router
+* MongoDB: separate request from response (WriteResult)
 * Mongoose: add integration with express example
 * Mongoose: count query
 * Heroku: explain normal procedure vs. custom procedure
 * Heroku: slide about devops
 * Heroku: explain how to plug in database with environment variables
-* Rest: representations with the same content type should not be inconsistent
-* Rest (conventions?): is there a composition relationship or need to list all?
+* Mongoose express: add links to implementations in demo API
 * Update tools in webserv repo
 * Update first slides (intro, you will need & recommended reading)
 * Git cheatsheet
