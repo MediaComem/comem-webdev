@@ -4,7 +4,7 @@
 
 Requirements:
 
-* [Node.js][node] 4+
+* [Node.js][node] 6+
 * [Google Chrome][chrome] (recommended, any browser with developer tools will do)
 * [Postman][postman] (recommended, any tool that makes raw HTTP requests will do)
 
