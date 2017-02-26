@@ -264,6 +264,37 @@ db.people.find({}).sort({ "name": 1 }).skip(1).limit(1)
 
 
 
+### Counting documents
+
+Counting documents works basically the same way as finding them:
+
+```js
+// Count all people
+db.people.count({})
+
+// Count all people named John Doe
+db.people.count({ "name": "John Doe" })
+
+// Count all people that have a home phone number
+db.people.count({ "phones.type": "home" })
+
+// Count all people named John Smith AND living in Livingston
+db.people.count({ "name": "John Smith", "address.city": "Livingston" })
+
+// Count all people born after 1980
+db.people.count({ "birthDate": { "$gt": ISODate("1980-01-01")  }  })
+
+// Count all people named John Smith OR living in Livingston
+db.people.count({
+  $or: [
+    { "name": "John Smith" },
+    { "address.city": "Livingston" }
+  ]
+})
+```
+
+
+
 ### Updating documents
 
 Here's an update example:

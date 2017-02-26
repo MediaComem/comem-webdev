@@ -447,6 +447,26 @@ Person
   });
 ```
 
+#### Counting documents
+
+Use `count()` instead of `exec()` at the end of your query builder to count the matching documents:
+
+```js
+Person
+  .find()
+  .where('name', /arnold/i)
+  .where('address.city').equals('Los Angeles')
+  .where('age').gt(17).lt(80)
+  .where('interests').in(['shooting', 'talking'])
+  .count(function(err, total) {
+    if (err) {
+      return console.warn('Could not count people because: ' + err.message);
+    }
+
+    console.log('There are ' + total + ' people matching the criteria');
+  });
+```
+
 
 
 ### Debugging
