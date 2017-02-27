@@ -1185,7 +1185,7 @@ $> cd /path/to/projects/my-app
 $> npm install --save-dev nodemon
 ```
 
-Add an npm run script called `dev`:
+Add an npm run script called `dev` in your `package.json` file:
 
 ```json
 {
