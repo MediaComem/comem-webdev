@@ -7,6 +7,7 @@ Learn the basics of [MongoDB][mongodb], one of the most populars document-orient
 **You will need**
 
 * A Unix CLI
+* A running MongoDB server ([installation instructions](./install/))
 
 **Recommended reading**
 
