@@ -7,6 +7,7 @@ Learn the basics of [MongoDB][mongodb], one of the most populars document-orient
 **You will need**
 
 * A Unix CLI
+* A running MongoDB server ([installation instructions](./install/))
 
 **Recommended reading**
 
@@ -161,7 +162,7 @@ It is **automatically created** as you first access it.
 Insert a couple of documents into a collection named **people** (again, it is automtically created if it doesn't exist):
 
 ```bash
-> db.people.insert({
+db.people.insert({
   "name": "John Doe",
   "birthDate": ISODate("1970-10-01T00:00:00Z"),
   "children": 2,
@@ -170,7 +171,7 @@ Insert a couple of documents into a collection named **people** (again, it is au
   "phones": []
 })
 
-> db.people.insert({
+db.people.insert({
   "name": "John Smith",
   "birthDate": ISODate("1990-12-24T00:00:00Z"),
   "address" : { "city": "Newport", "street" : "85 Bay Drive" },
@@ -215,7 +216,7 @@ db.people.find({ "name": "John Smith", "address.city": "Livingston" })
 You can write more complex queries with query operators:
 
 ```js
-// Find all people living in Newport
+// Find all people living in Newport or Livingston
 db.people.find({ "address.city": { "$in": [ "Newport", "Livingston" ] } })
 
 // Find all people born after 1980
@@ -315,7 +316,7 @@ Here's an update example:
 db.people.update(
   { "name": "John Smith" },
   {
-    "$set": { "John A. Smith" },
+    "$set": { "name": "John A. Smith" },
     "$push": { "interests": "Movies" }
   }
 )
@@ -383,7 +384,8 @@ WriteResult({
 Note that the query was merged with the update (the new person also has the `name` field):
 
 ```js
-> db.people.find({ "name": "Ned Stark" })
+db.people.find({ "name": "Ned Stark" })
+
 {
   "_id" : ObjectId("589f24f1f0bb4e1d9fedf1eb"),
   "name" : "Ned Stark",
@@ -418,11 +420,11 @@ This means that:
 **Be careful:** if you do not use update operators, MongoDB will replace the entire document with the second parameter passed to `update`:
 
 ```js
-> db.people.update({ "name": "Ned Stark"  }, { "children": 5  })
+db.people.update({ "name": "Ned Stark"  }, { "children": 5  })
 
-> db.people.find({ "name": "Ned Stark" })
+db.people.find({ "name": "Ned Stark" })
 
-> db.people.find({ "children": 5  })
+db.people.find({ "children": 5  })
 { "_id" : ObjectId("589f24f1f0bb4e1d9fedf1eb"), "children" : 5  }
 ```
 
@@ -486,7 +488,8 @@ Use `explain` to find out how a query will be executed.
 The `COLLSCAN` value in the `winningPlan` object tells us that a collection scan will be performed when executing that query:
 
 ```bash
-> db.people.find({ name: "John A. Smith" }).explain()
+db.people.find({ name: "John A. Smith" }).explain()
+
 {
   "queryPlanner" : {
     "plannerVersion" : 1,
@@ -516,7 +519,8 @@ Use [createIndex][create-index] to add an index:
 
 ```js
 // Add a simple index for queries on the "name" field
-> db.people.createIndex( { "name": 1 } )
+db.people.createIndex( { "name": 1 } )
+
 {
   "createdCollectionAutomatically" : false,
   "numIndexesBefore" : 1,
@@ -530,7 +534,8 @@ Use [createIndex][create-index] to add an index:
 Run `explain` again to confirm that your index will be applied (you should see `IXSCAN` in the `winningPlan` object):
 
 ```bash
-> db.people.find({ name: "John A. Smith" }).explain()
+db.people.find({ name: "John A. Smith" }).explain()
+
 {
   "queryPlanner" : {
     "plannerVersion" : 1,

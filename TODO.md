@@ -4,7 +4,6 @@
 * Architecture up to now (postman/express)
 * Express on npmjs and github
 
-* Mongo: installation instructions
 * Express mongoose: ID virtual, transform
 * Express mongoose: add links to implementations in demo API
 * Git cheatsheet

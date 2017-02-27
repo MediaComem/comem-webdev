@@ -51,7 +51,7 @@ Materials for the COMEM+ web development courses.
 
 **Databases**
 
-* [MongoDB](subjects/mongodb/)
+* [MongoDB](subjects/mongodb/) ([installation instructions](subjects/mongodb/install/))
   * [Mongoose (Node.js client)](subjects/mongoose/)
 
 **Cloud**

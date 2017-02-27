@@ -592,7 +592,7 @@ Only special **error-handling middleware functions** are called.
 Compared to normal middleware functions, an error-handling middleware takes a fourth argument (the error):
 
 ```js
-app.use(function(req, res, next, err) {
+app.use(function(err, req, res, next) {
   res.send('Your request failed because: ' + err.message);
 });
 ```
@@ -1185,13 +1185,13 @@ $> cd /path/to/projects/my-app
 $> npm install --save-dev nodemon
 ```
 
-Add an npm run script called `dev`:
+Add an npm run script called `dev` in your `package.json` file:
 
 ```json
 {
   "name": "my-app",
   "scripts": {
-*   "dev": "DEBUG=my-app:* nodemon",
+*   "dev": "nodemon",
     "start": "node ./bin/www"
   },
   ...
