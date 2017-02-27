@@ -7,9 +7,19 @@ You will find detailed installation instructions for all platforms [in the docum
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Installing MongoDB](#installing-mongodb)
-  - [Test MongoDB on Linux/OS X](#test-mongodb-on-linuxos-x)
-  - [Test MongoDB on Windows](#test-mongodb-on-windows)
+- [MongoDB on macOS](#mongodb-on-macos)
+  - [Create the MongoDB data directory on macOS](#create-the-mongodb-data-directory-on-macos)
+  - [Run the MongoDB server on macOS](#run-the-mongodb-server-on-macos)
+  - [Run the MongoDB shell on macOS](#run-the-mongodb-shell-on-macos)
+- [MongoDB on Windows](#mongodb-on-windows)
+  - [Run the MongoDB server on Windows](#run-the-mongodb-server-on-windows)
+  - [Run the MongoDB shell on Windows](#run-the-mongodb-shell-on-windows)
+- [Test the MongoDB shell on macOS or Windows](#test-the-mongodb-shell-on-macos-or-windows)
+- [Troubleshooting](#troubleshooting)
+  - [`Data directory not found` error in the MongoDB server](#data-directory-not-found-error-in-the-mongodb-server)
+  - [`Attempted to create a lock file` error in the MongoDB server](#attempted-to-create-a-lock-file-error-in-the-mongodb-server)
+  - [`Connection refused` error in the MongoDB shell](#connection-refused-error-in-the-mongodb-shell)
+  - [`Access control` warning in the MongoDB server or shell](#access-control-warning-in-the-mongodb-server-or-shell)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -144,12 +154,6 @@ Run the following command in the Windows CLI to **create the data directory**:
 $> md \data\db
 ```
 
-MongoDB looks for a /data/db directory by default. You can create it in Babun with the following command:
-
-```bash
-$> mkdir -p /c/data/db
-```
-
 
 
 ### Run the MongoDB server on Windows
@@ -224,78 +228,55 @@ WriteResult({ "nInserted" : 1 })
 
 
 
-### There's an error when I try to launch the MongoDB server
-
-<!-- slide-front-matter class: center, middle -->
-
-
-
-#### Data directory not found
+### `Data directory not found` error in the MongoDB server
 
 If you see an error like this:
 
 ```bash
 mongod
-2017-02-27T10:00 I CONTROL  [initandlisten] MongoDB starting : pid=2975 port=27017 dbpath=/data/db 64-bit host=haven.einet.ad.eivd.ch
-2017-02-27T10:00 I CONTROL  [initandlisten] db version v3.4.2
-2017-02-27T10:00 I CONTROL  [initandlisten] git version: 3f76e40c105fc223b3e5aac3e20dcd026b83b38b
-2017-02-27T10:00 I CONTROL  [initandlisten] allocator: system
-2017-02-27T10:00 I CONTROL  [initandlisten] modules: none
-2017-02-27T10:00 I CONTROL  [initandlisten] build environment:
-2017-02-27T10:00 I CONTROL  [initandlisten]     distarch: x86_64
-2017-02-27T10:00 I CONTROL  [initandlisten]     target_arch: x86_64
-2017-02-27T10:00 I CONTROL  [initandlisten] options: {}
-2017-02-27T10:00 I STORAGE  [initandlisten] exception in initAndListen: 29 Data directory /data/db not found., terminating
-2017-02-27T10:00 I NETWORK  [initandlisten] shutdown: going to close listening sockets...
-2017-02-27T10:00 I NETWORK  [initandlisten] shutdown: going to flush diaglog...
-2017-02-27T10:00 I CONTROL  [initandlisten] now exiting
-2017-02-27T10:00 I CONTROL  [initandlisten] shutting down with code:100
+2017-02-27T10:00 I CONTROL  [init...] MongoDB starting :
+2017-02-27T10:00 I CONTROL  [init...]   pid=2975 port=27017 dbpath=/data/db ...
+2017-02-27T10:00 I CONTROL  [init...] db version v3.4.2
+2017-02-27T10:00 I CONTROL  [init...] ...
+2017-02-27T10:00 I STORAGE  [init...] exception in initAndListen:
+2017-02-27T10:00 I STORAGE  [init...]   29 `Data directory /data/db not found.`,
+2017-02-27T10:00 I STORAGE  [init...]   terminating
+2017-02-27T10:00 I NETWORK  [init...] shutdown: going to close listening sockets
+2017-02-27T10:00 I NETWORK  [init...] shutdown: going to flush diaglog
+2017-02-27T10:00 I CONTROL  [init...] now exiting
+2017-02-27T10:00 I CONTROL  [init...] shutting down with code:100
 ```
 
-It means that you have **not created MongoDB's data directory**, which by 
+It means that you have **not created MongoDB's data directory** at `/data/db` on macOS or `C:\data\db` on Windows.
+Follow the installation instructions.
 
-#### Attempted to create a lock file on a read-only directory
+
+
+### `Attempted to create a lock file` error in the MongoDB server
 
 If you see an error like this:
 
 ```bash
-2017-02-27T10:01:55.449+0100 I CONTROL  [initandlisten] MongoDB starting : pid=3017 port=27017 dbpath=/data/db 64-bit host=haven.einet.ad.eivd.ch
-2017-02-27T10:01:55.449+0100 I CONTROL  [initandlisten] db version v3.4.2
-2017-02-27T10:01:55.449+0100 I CONTROL  [initandlisten] git version: 3f76e40c105fc223b3e5aac3e20dcd026b83b38b
-2017-02-27T10:01:55.449+0100 I CONTROL  [initandlisten] allocator: system
-2017-02-27T10:01:55.449+0100 I CONTROL  [initandlisten] modules: none
-2017-02-27T10:01:55.449+0100 I CONTROL  [initandlisten] build environment:
-2017-02-27T10:01:55.449+0100 I CONTROL  [initandlisten]     distarch: x86_64
-2017-02-27T10:01:55.449+0100 I CONTROL  [initandlisten]     target_arch: x86_64
-2017-02-27T10:01:55.449+0100 I CONTROL  [initandlisten] options: {}
-2017-02-27T10:01:55.450+0100 I STORAGE  [initandlisten] exception in initAndListen: 20 Attempted to create a lock file on a read-only directory: /data/db, terminating
-2017-02-27T10:01:55.450+0100 I NETWORK  [initandlisten] shutdown: going to close listening sockets...
-2017-02-27T10:01:55.450+0100 I NETWORK  [initandlisten] shutdown: going to flush diaglog...
-2017-02-27T10:01:55.450+0100 I CONTROL  [initandlisten] now exiting
-2017-02-27T10:01:55.450+0100 I CONTROL  [initandlisten] shutting down with code:100
+2017-02-27T10:01 I CONTROL  [init...] MongoDB starting :
+2017-02-27T10:01 I CONTROL  [init...]   pid=3017 port=27017 dbpath=/data/db ...
+2017-02-27T10:01 I CONTROL  [init...] db version v3.4.2
+2017-02-27T10:01 I CONTROL  [init...] ...
+2017-02-27T10:01 I STORAGE  [init...] exception in initAndListen:
+2017-02-27T10:01 I STORAGE  [init...]   20 `Attempted to create a lock file`
+2017-02-27T10:01 I STORAGE  [init...]   on a read-only directory: /data/db,
+2017-02-27T10:01 I STORAGE  [init...]   terminating
+2017-02-27T10:01 I NETWORK  [init...] shutdown: going to close listening sockets
+2017-02-27T10:01 I NETWORK  [init...] shutdown: going to flush diaglog
+2017-02-27T10:01 I CONTROL  [init...] now exiting
+2017-02-27T10:01 I CONTROL  [init...] shutting down with code:100
 ```
 
-
-
-### There's warning when I launch the MongoDB server or open the MongoDB shell
-
-If you see this warning either when running `mongod` or `mongo`:
-
-```bash
-2017-02-27T10:02 I CONTROL  [init...] ** WARNING: Access control is not enabled
-2017-02-27T10:02 I CONTROL  [init...] **          for the database. Read and
-2017-02-27T10:02 I CONTROL  [init...] **          write access to data and
-2017-02-27T10:02 I CONTROL  [init...] **          configuration is unrestricted.
-```
-
-It's because MongoDB tells you that access to your databases is unrestricted as there is **no username/password** configured by default.
-
-This is a bad thing in production, but it acceptable during development when you are running the database on your local machine and external access is probably blocked by your firewall anyway.
-So you can **ignore** this warning **as long as you're only running MongoDB for development**.
+It means that you **have not given ownership of the `/data/db` directory to your user on macOS**.
+Follow the installation instructions.
 
 
 
-### There's an error when I try to open the MongoDB shell
+### `Connection refused` error in the MongoDB shell
 
 If you see an error like this:
 
@@ -316,6 +297,24 @@ exception: connect failed
 
 It means that **your MongoDB server is not running**.
 You need to open another CLI, run it, and keep it running so that you can use the client.
+
+
+
+### `Access control` warning in the MongoDB server or shell
+
+If you see this warning either when running `mongod` or `mongo`:
+
+```bash
+2017-02-27T10:02 I CONTROL  [init...] ** WARNING: Access control is not enabled
+2017-02-27T10:02 I CONTROL  [init...] **          for the database. Read and
+2017-02-27T10:02 I CONTROL  [init...] **          write access to data and
+2017-02-27T10:02 I CONTROL  [init...] **          configuration is unrestricted.
+```
+
+It's because MongoDB tells you that access to your databases is unrestricted as there is **no username/password** configured by default.
+
+This is a bad thing in production, but is acceptable during development when you are running the database on your local machine and external access is probably blocked by your firewall anyway.
+So you can **ignore** this warning **as long as you're only running MongoDB for development**.
 
 
 
