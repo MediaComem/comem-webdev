@@ -132,7 +132,7 @@ But this time, you should see this:
 
 <p class='shadow'><img src='images/without-bootstrap.jpg' width='100%' /></p>
 
-### What `live-server` do
+### What does `live-server` do
 
 `live-server` is two things.
 
