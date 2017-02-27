@@ -1,8 +1,5 @@
 # TODO
 
-* Create heroku accounts for students
-
-* Mongoose: explain database name in mongodb url
 * Heroku: do not forget to commit after adding database url
 * Rest conventions: split slide on hyperlink/url references
 * Express mongoose: ID virtual, transform

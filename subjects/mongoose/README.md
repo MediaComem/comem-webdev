@@ -561,10 +561,10 @@ Assuming you have generated an Express application with [express-generator][expr
 go into its directory and install Mongoose:
 
 ```bash
-$> cd /path/to/projects/express-demo
+$> cd /path/to/projects/my-app
 
 $> npm install --save mongoose
-express-demo@0.0.0 /path/to/projects/express-demo
+my-app@0.0.0 /path/to/projects/my-app
 └─┬ mongoose@4.8.5
 ...
 ```
@@ -574,10 +574,10 @@ Open `app.js` and add these three lines below the first calls to `require()`:
 ```js
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
-mongoose.connect('mongodb://localhost/express-demo');
+mongoose.connect('mongodb://localhost/my-database-name');
 ```
 
-Your Express application is now connected to MongoDB (to the `express-demo` database)!
+Your Express application is now connected to MongoDB (to the `my-database-name` database)!
 
 The default generated application includes a `GET /users` resource that is not implemented in `routes/users.js`.
 Let's do that!
