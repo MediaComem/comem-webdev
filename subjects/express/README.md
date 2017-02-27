@@ -1191,7 +1191,7 @@ Add an npm run script called `dev`:
 {
   "name": "my-app",
   "scripts": {
-*   "dev": "DEBUG=my-app:* nodemon",
+*   "dev": "nodemon",
     "start": "node ./bin/www"
   },
   ...
