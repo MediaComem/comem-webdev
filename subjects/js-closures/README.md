@@ -1,8 +1,16 @@
 # JavaScript Closures
 
-What is a JavaScript closure, how to use them, and common pitfalls.
+Learn what's a JavaScript closure, how to use them, and common pitfalls.
 
 <!-- slide-include ../../BANNER.md -->
+
+**You will need**
+
+* [Google Chrome][chrome] (recommended, any browser with developer tools will do)
+
+**Recommended reading**
+
+* [JavaScript](../js/)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -222,5 +230,6 @@ So each `rank()` function will keep a reference to its own `nbValue` variable, w
 
 
 
+[chrome]: https://www.google.com/chrome/
 [closure]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures
 [closure-loop-bug-codepen]: http://codepen.io/AlphaHydrae/pen/gmYQpN?editors=0010#0

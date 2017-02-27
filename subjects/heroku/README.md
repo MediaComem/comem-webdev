@@ -1,13 +1,21 @@
 # Heroku
 
+Learn to deploy an [Express][express] web application on the [Heroku][heroku] cloud application platform.
+
 <!-- slide-include ../../BANNER.md -->
 
-Requirements:
+**You will need**
 
 * [Git][git]
 * A free [Heroku][heroku] account
 * The [Heroku CLI][heroku-cli]
-* [Node.js][node] 4+
+* [Node.js][node] 6+
+
+**Recommended reading**
+
+* [Command line](../cli/)
+* [Express](../express/)
+* [Mongoose](../mongoose/)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -21,11 +29,18 @@ Requirements:
 - [Getting started on Heroku with Node.js](#getting-started-on-heroku-with-nodejs)
   - [Create an Express app](#create-an-express-app)
   - [Make it a Git repository](#make-it-a-git-repository)
-  - [Create the app on Heroku](#create-the-app-on-heroku)
+  - [Do you have a credit card?](#do-you-have-a-credit-card)
+  - [Create the app on Heroku (**with credit card** or **without database**)](#create-the-app-on-heroku-with-credit-card-or-without-database)
+  - [Go to your dashboard (**with credit card** and **with database**)](#go-to-your-dashboard-with-credit-card-and-with-database)
+  - [Provision a database add-on (**with credit card** and **with database**)](#provision-a-database-add-on-with-credit-card-and-with-database)
+  - [Add the mLab add-on (**with credit card** and **with database**)](#add-the-mlab-add-on-with-credit-card-and-with-database)
+  - [Use an existing Heroku app (**without credit card** and **with database**)](#use-an-existing-heroku-app-without-credit-card-and-with-database)
+  - [Configure your database URL from the environment (**with database**)](#configure-your-database-url-from-the-environment-with-database)
   - [Deploy it](#deploy-it)
   - [How?](#how)
   - [When do I pay?](#when-do-i-pay)
   - [Databases](#databases)
+- [Troubleshooting](#troubleshooting)
 - [Configuration](#configuration)
   - [Server listening port configuration](#server-listening-port-configuration)
   - [Accessing environment variables in Node.js](#accessing-environment-variables-in-nodejs)
@@ -64,9 +79,11 @@ Cloud-computing providers offer their services according to **different models**
 
 ### Infrastructure as a Service (IaaS)
 
-With traditional cloud providers, you have to **set up, maintain and operate** the **infrastructure** on which your applications are run.
+With traditional cloud providers, you have to **set up, maintain and operate** the **infrastructure** on which your applications are run:
 
 <p class='center'><img src='images/iaas.png' width='70%' /></p>
+
+You'll often need a professional **system administrator** to do that for sizable projects.
 
 
 
@@ -81,6 +98,8 @@ The goal of PaaS platforms is to get **straight to building applications**.
 * Effective deployment with built-in infrastructure
 * Easier maintenance
 * Scaling
+
+It's also a part of the [DevOps][devops] movement where software **dev**elopers increasingly step into the world of **op**eration**s** and vice-versa.
 
 
 
@@ -104,23 +123,18 @@ Deploy an Express web app on Heroku
 
 ### Create an Express app
 
-Install **express-generator** if you haven't already:
+**If you haven't already**, generate a new [Express][express] app with [express-generator][express-generator]:
 
 ```bash
-npm install -g express-generator
-```
-
-Generate an app:
-
-```bash
+$> npm install -g express-generator
 $> cd /path/to/projects
-$> express heroku-demo
+$> express express-demo
 ```
 
 Make sure it works:
 
 ```bash
-$> cd heroku-demo
+$> cd express-demo
 $> npm install
 $> npm start
 ```
@@ -132,7 +146,7 @@ Once you're sure it works, you can stop it with `Ctrl-C`.
 
 ### Make it a Git repository
 
-Code is deployed on Heroku via Git.
+Code is **deployed** on Heroku **via Git**.
 Initialize a Git repository in the app's directory:
 
 ```bash
@@ -161,7 +175,23 @@ $> git commit -m "Initial commit"
 
 
 
-### Create the app on Heroku
+### Do you have a credit card?
+
+Some of the following steps **are different depending on whether or not you have a credit card** and **whether your app needs a database**:
+
+* **If you have a credit card** and your app needs a database,
+  you will need to enter your credit card details to provision a **free database add-on**
+  (Heroku will not debit your card unless you explicitly choose a paying plan)
+* **If you DO NOT have a credit card** and your app needs a database,
+  you will need someone who has a credit card to give you the name of an **existing Heroku application** with the database add-on already provisioned,
+  and to which you have been given access
+
+This tutorial assumes that if you are using a database, it is a [MongoDB][mongodb] database.
+If not, adjust the instructions as appropriate for you database (i.e. when provisioning an add-on).
+
+
+
+### Create the app on Heroku (**with credit card** or **without database**)
 
 Heroku needs to know about your app:
 
@@ -171,9 +201,9 @@ Enter your Heroku credentials.
 Email: john.doe@example.com
 Password (typing will be hidden):
 Logged in as john.doe@example.com
-Creating app... done, ⬢ nameless-depths-16198
-https://nameless-depths-16198.herokuapp.com/
-| https://git.heroku.com/nameless-depths-16198.git
+Creating app... done, ⬢ salty-inlet-82680
+https://salty-inlet-82680.herokuapp.com/
+| https://git.heroku.com/salty-inlet-82680.git
 ```
 
 Heroku has given a random name to your app.
@@ -182,17 +212,89 @@ Also notice that Heroku has added a **remote** named `heroku` to your Git reposi
 
 ```bash
 $> git remote -v
-heroku  https://git.heroku.com/nameless-depths-16198.git (fetch)
-heroku  https://git.heroku.com/nameless-depths-16198.git (push)
+heroku  https://git.heroku.com/salty-inlet-82680.git (fetch)
+heroku  https://git.heroku.com/salty-inlet-82680.git (push)
 ```
 
-Your app is now ready to deploy!
+Your app is **almost ready** to deploy.
+
+
+
+### Go to your dashboard (**with credit card** and **with database**)
+
+Go to [heroku.com][heroku-dashboard], sign in, and find your new application in the dashboard:
+
+<p class='center'><img src='images/heroku-dashboard.png' /></p>
+
+
+
+### Provision a database add-on (**with credit card** and **with database**)
+
+Go to your app's **Resources** tab and add the [mLab MongoDB][mlab-mongodb] add-on:
+
+<p class='center'><img src='images/heroku-mlab.png' class='w80' /></p>
+
+
+
+### Add the mLab add-on (**with credit card** and **with database**)
+
+Choose the free sandbox version of the add-on (which should be selected by default) and click **Provision**:
+Heroku will probably **ask for your credit card details at this point**:
+
+<!-- slide-column -->
+
+<p class='center'><img src='images/heroku-mlab-provision.png' class='w90' /></p>
+
+<!-- slide-column -->
+
+<p class='center'><img src='images/heroku-verify.png' class='w90' /></p>
+
+<!-- slide-container -->
+
+If that is the case, click the **verify link**, fill and submit the form, **come back to this screen** and try again.
+It should work this time.
+
+
+
+### Use an existing Heroku app (**without credit card** and **with database**)
+
+Assuming someone has created a Heroku app and provisioned the correct database add-on for you,
+they will have given you the application name, e.g. `salty-inlet-82680`.
+
+Add it to your Git repository with the Heroku CLI:
+
+```bash
+$> heroku git:remote -a salty-inlet-82680
+Enter your Heroku credentials.
+Email: john.doe@example.com
+Password (typing will be hidden):
+Logged in as john.doe@example.com
+set git remote heroku to https://git.heroku.com/salty-inlet-82680.git
+```
+
+
+
+### Configure your database URL from the environment (**with database**)
+
+Make sure your database URL is not hardcoded, but taken from the environment (we'll see more about this later).
+
+Heroku database add-ons provide the database URL in an **environment variable**.
+For **mLab**, the variable is `$MONGODB_URI`.
+For other add-ons, it's often `$DATABASE_URL`.
+
+For example, if you're using Mongoose, change the call to `connect` to take the environment variable into account if present:
+
+```js
+mongoose.connect(`process.env.MONGODB_URI` || 'mongodb://localhost/express-demo');
+```
+
+You're now **ready to deploy**.
 
 
 
 ### Deploy it
 
-Simply push to the new remote.
+To deploy, simply push to the new `heroku` remote.
 Notice that **as you push**, Heroku **automatically deploys** your app:
 
 ```bash
@@ -208,12 +310,12 @@ remote: -----> `Node.js app detected`
 remote: -----> Creating runtime environment
 remote: -----> `Building dependencies`
 remote:        Installing node modules (package.json)
-remote:        heroku-demo@0.0.0 /tmp/build_c9758807eb8979e9eb8af687447e5985
+remote:        express-demo@0.0.0 /tmp/build_c9758807eb8979e9eb8af687447e5985
 remote:        ├─┬ body-parser@1.16.1
 remote: -----> Launching...
-remote:        `https://nameless-depths-16198.herokuapp.com/` deployed to Heroku
+remote:        `https://salty-inlet-82680.herokuapp.com/` deployed to Heroku
 remote: Verifying deploy... done.
-To https://git.heroku.com/nameless-depths-16198.git
+To https://git.heroku.com/salty-inlet-82680.git
  * [new branch]      master -> master
 ```
 
@@ -264,6 +366,34 @@ Heroku provides several databases as addons, for example:
 
 The pricing model is usually similar to Heroku dynos:
 there are free versions available that are restricted, but more powerful versions can be purchased.
+
+
+
+## Troubleshooting
+
+Type `heroku logs` while in the directory of your Heroku app to see the **server logs**.
+For example, you will see something similar to this if your database configuration is not correct (here it is trying to connect to `localhost` instead of `$MONGODB_URI`):
+
+```bash
+$> heroku logs
+2017-02-26T17:08 app[web.1]: > express-demo@0.0.0 start /app
+2017-02-26T17:08 app[web.1]: > node ./bin/www
+2017-02-26T17:08 app[web.1]:
+2017-02-26T17:08 app[web.1]: events.js:160
+2017-02-26T17:08 app[web.1]:       throw er; // Unhandled 'error' event
+2017-02-26T17:08 app[web.1]:       ^
+2017-02-26T17:08 app[web.1]: MongoError: failed to connect to server
+2017-02-26T17:08 app[web.1]:   [localhost:27017] on first connect
+2017-02-26T17:08 app[web.1]:     at Pool.<anonymous> (/.../server.js:326:35)
+2017-02-26T17:08 app[web.1]:     ...
+2017-02-26T17:08 app[web.1]:
+2017-02-26T17:08 app[web.1]: ...
+2017-02-26T17:08 heroku[web.1]: State changed from starting to crashed
+2017-02-26T17:08 heroku[web.1]: `Process exited with status 1`
+```
+
+You can also stream logs to your CLI (keep them open) with `heroku logs -t`
+to identify issues while making requests.
 
 
 
@@ -323,7 +453,7 @@ When you run the app locally, you have no `PORT` environment variable defined, s
 ```bash
 $> DEBUG=express-demo* npm start
 
-> express-demo@0.0.0 start /Users/unknow/Downloads/express-demo
+> express-demo@0.0.0 start /path/to/projects/express-demo
 > node ./bin/www
 
   express-demo:server Listening on port `3000` +0ms
@@ -334,7 +464,7 @@ You can override an environment variable by prepending it to the command:
 ```bash
 $> `PORT=4321` DEBUG=express-demo* npm start
 
-> express-demo@0.0.0 start /Users/unknow/Downloads/express-demo
+> express-demo@0.0.0 start /path/to/projects/express-demo
 > node ./bin/www
 
   express-demo:server Listening on port `4321` +0ms
@@ -376,7 +506,10 @@ Typically, **database add-ons** will add an environment variable with the **data
 
 
 [dev-center]: https://devcenter.heroku.com
+[devops]: https://en.wikipedia.org/wiki/DevOps
 [env-vars]: https://en.wikipedia.org/wiki/Environment_variable
+[express]: https://expressjs.com
+[express-generator]: https://www.npmjs.com/package/express-generator
 [faas]: https://en.wikipedia.org/wiki/Function_as_a_Service
 [free-dyno-hours]: https://devcenter.heroku.com/articles/free-dyno-hours
 [getting-started]: https://devcenter.heroku.com/articles/getting-started-with-nodejs#introduction
@@ -384,10 +517,12 @@ Typically, **database add-ons** will add an environment variable with the **data
 [git-hooks]: https://git-scm.com/book/gr/v2/Customizing-Git-Git-Hooks
 [heroku]: https://www.heroku.com/home
 [heroku-cli]: https://devcenter.heroku.com/articles/heroku-cli
+[heroku-dashboard]: https://dashboard.heroku.com
 [heroku-postgres]: https://devcenter.heroku.com/articles/heroku-postgresql
 [heroku-redis]: https://devcenter.heroku.com/articles/heroku-redis
 [iaas]: https://en.wikipedia.org/wiki/Cloud_computing
 [mlab-mongodb]: https://devcenter.heroku.com/articles/mongolab
+[mongodb]: https://www.mongodb.com
 [node]: https://nodejs.org/en/
 [paas]: https://en.wikipedia.org/wiki/Platform_as_a_service
 [pricing]: https://www.heroku.com/pricing

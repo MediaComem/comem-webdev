@@ -4,10 +4,10 @@
 
 Introduction to [Bootstrap][bootstrap], a HTML/CSS framework, useful to quickly build HTML templates and views.
 
-Requirements:
+**You will need**
 
 * [Google Chrome][chrome] (recommended, any browser with developer tools will do)
-* [Sublime Text][sublime] (recommended, any text editor will do... **except Notepad**)
+* [Sublime Text][sublime] (recommended, any code editor will do... **except Notepad**)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -19,14 +19,17 @@ Requirements:
   - [Download locally](#download-locally)
   - [How do I know it's working?](#how-do-i-know-its-working)
 - [What does it do?](#what-does-it-do)
-- [Tag styles](#tag-styles)
+- [Element styles](#element-styles)
   - [Examples](#examples)
-  - [Why put styles on tag?](#why-put-styles-on-tag)
+  - [Why put styles on element?](#why-put-styles-on-element)
   - [Normalization](#normalization)
 - [New classes](#new-classes)
   - [Container](#container)
   - [Tables](#tables)
   - [Buttons](#buttons)
+  - [Icons](#icons)
+  - [Forms](#forms)
+  - [Color classes](#color-classes)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

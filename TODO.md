@@ -4,22 +4,9 @@
 * Architecture up to now (postman/express)
 * Express on npmjs and github
 
-* Express: express vs. express-generator
-* Express: nodemon
-* Express: example of error in middleware order
-* Express: example about comments sub-router
-* Express conventions: avoiding repetition with middleware
-* Express conventions: use environment variables for configuration
+* Mongo: installation instructions
 * Express mongoose: ID virtual, transform
-* Rest: add 5xx codes
-* Mongoose: add integration with express example
-* Mongoose: count query
-* Heroku: explain normal procedure vs. custom procedure
-* Heroku: slide about devops
-* Heroku: explain how to plug in database with environment variables
-* Mongoose express: add links to implementations in demo API
-* Update tools in webserv repo
-* Update first slides (intro, you will need & recommended reading)
+* Express mongoose: add links to implementations in demo API
 * Git cheatsheet
   * How to create a new project and push it to github
   * Do not git init or git clone inside an existing git repo
@@ -33,8 +20,10 @@
   * Node environment
   * MongoDB shell
 * Glossary
-* Template: auto-replace relative links with full URLs
 
+* Update tools in webserv repo
+* You will need: code editor on all slides
+* Template: auto-replace relative links with full URLs (test in generated PDF)
 * Replace width='x%' by class='wx'
 * JavaScript truthy/falsy values
 * Link to slide form from README
@@ -42,6 +31,8 @@
 * Index and readme for generated docs repo
 * JavaScript dates
 * Clean up links at end of slides
+* Express: express vs. express-generator
+* Express: example of error in middleware order
 
 * Rev assets
 * Slide-specific css

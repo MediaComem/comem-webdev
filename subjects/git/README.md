@@ -1,8 +1,17 @@
 # Git Introduction
 
+Learn the basics of [Git][git], one of the most popular distributed version control systems.
+This is a condensed version of the first chapters of the [Git Book](https://git-scm.com/book/en/v2), which you should read if you want more detailed information on the subject.
+
 <!-- slide-include ../../BANNER.md -->
 
-This is a condensed version of the first chapters of the [Git Book](https://git-scm.com/book/en/v2), which you should read if you want more detailed information on the subject.
+**You will need**
+
+* A Unix CLI
+
+**Recommended reading**
+
+* [Command line](../cli/)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

@@ -1,6 +1,16 @@
 # MongoDB
 
+Learn the basics of [MongoDB][mongodb], one of the most populars document-oriented databases.
+
 <!-- slide-include ../../BANNER.md -->
+
+**You will need**
+
+* A Unix CLI
+
+**Recommended reading**
+
+* [Command line](../cli/)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -14,6 +24,7 @@
   - [Connecting](#connecting)
   - [Inserting documents](#inserting-documents)
   - [Finding documents](#finding-documents)
+  - [Counting documents](#counting-documents)
   - [Updating documents](#updating-documents)
   - [Removing documents](#removing-documents)
 - [Indexes](#indexes)
@@ -260,6 +271,37 @@ db.people.find({}).limit(1)
 // Find one person among people sorted by name, starting at the second person
 // ("SELECT * FROM people ORDER BY name OFFSET 1 LIMIT 1" in SQL)
 db.people.find({}).sort({ "name": 1 }).skip(1).limit(1)
+```
+
+
+
+### Counting documents
+
+Counting documents works basically the same way as finding them:
+
+```js
+// Count all people
+db.people.count({})
+
+// Count all people named John Doe
+db.people.count({ "name": "John Doe" })
+
+// Count all people that have a home phone number
+db.people.count({ "phones.type": "home" })
+
+// Count all people named John Smith AND living in Livingston
+db.people.count({ "name": "John Smith", "address.city": "Livingston" })
+
+// Count all people born after 1980
+db.people.count({ "birthDate": { "$gt": ISODate("1980-01-01")  }  })
+
+// Count all people named John Smith OR living in Livingston
+db.people.count({
+  $or: [
+    { "name": "John Smith" },
+    { "address.city": "Livingston" }
+  ]
+})
 ```
 
 
@@ -563,6 +605,7 @@ db.people.find({}).sort({ "birthDate": 1, "name": 1 })
 [getting-started]: https://docs.mongodb.com/getting-started/shell/
 [indexes]: https://docs.mongodb.com/manual/indexes/
 [query-operators]: https://docs.mongodb.com/manual/reference/operator/query/
+[mongodb]: https://www.mongodb.com
 [remove]: https://docs.mongodb.com/manual/reference/method/db.collection.remove/
 [sql-comparison]: https://docs.mongodb.com/manual/reference/sql-comparison/
 [update]: https://docs.mongodb.com/manual/reference/method/db.collection.update/

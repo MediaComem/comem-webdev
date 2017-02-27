@@ -1,10 +1,22 @@
 # Web Development Glossary
 
+## Express
+
+* Middleware
+* Route
+* Router
+
 ## HTTP
 
 * HTTP body (a.k.a. message body or entity)
 * HTTP header
 * HTTP method (a.k.a. verb)
+
+## Mongoose
+
+* Document
+* Model
+* Schema
 
 ## REST
 

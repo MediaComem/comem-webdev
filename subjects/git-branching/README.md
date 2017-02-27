@@ -1,6 +1,17 @@
 # Git Branching
 
+Learn how to work on isolated, parallel lines of development with [Git][git] branches.
+
 <!-- slide-include ../../BANNER.md -->
+
+**You will need**
+
+* A Unix CLI
+* [Git][git]
+
+**Recommended reading**
+
+* [Git introduction](../git/)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -690,3 +701,4 @@ $> git commit -m "Merge cleanup (kept implemented subtraction.js)"
 
 [advanced-merging]: https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging
 [branching]: https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell
+[git]: https://git-scm.com

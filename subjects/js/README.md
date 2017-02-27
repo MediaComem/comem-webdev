@@ -1,6 +1,13 @@
 # JavaScript
 
+Learn the basics of JavaScript, a high-level, dynamic, untyped and interpreted programming language,
+and one of the three core technologies of the web.
+
 <!-- slide-include ../../BANNER.md -->
+
+**You will need**
+
+* [Google Chrome][chrome] (recommended, any browser with developer tools will do)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -906,6 +913,7 @@ console.log(crew);
 
 [array-functions]: https://www.w3schools.com/jsref/jsref_obj_array.asp
 [babel]: http://babeljs.io
+[chrome]: https://www.google.com/chrome/
 [es]: https://en.wikipedia.org/wiki/ECMAScript
 [ex-function-as-argument]: http://codepen.io/AlphaHydrae/pen/dNBpPv?editors=0010
 [first-class-functions]: https://en.wikipedia.org/wiki/First-class_function

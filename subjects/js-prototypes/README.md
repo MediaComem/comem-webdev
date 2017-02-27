@@ -1,6 +1,16 @@
 # JavaScript Prototypes
 
+Learn how JavaScript prototypal inheritance works, how to make class-like structures from it, and the basics of the new classes added in ES6.
+
 <!-- slide-include ../../BANNER.md -->
+
+**You will need**
+
+* [Google Chrome][chrome] (recommended, any browser with developer tools will do)
+
+**Recommended reading**
+
+* [JavaScript](../js/)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -68,3 +78,7 @@ console.log(child.lastName);
 
   The data type "symbol" is a primitive data type having the quality that values of this type can be used to make object properties that are anonymous.
   Every symbol value returned from Symbol() is unique.  A symbol value may be used as an identifier for object properties; this is the data type's only purpose.
+
+
+
+[chrome]: https://www.google.com/chrome/

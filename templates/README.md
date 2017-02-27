@@ -1,16 +1,16 @@
-# A subject
-
-<!-- slide-include ../../BANNER.md -->
+# Subject Name
 
 Briefly explain the subject here.
 
-Recommended reading:
+<!-- slide-include ../../BANNER.md -->
 
-* [Git][git]
-
-Requirements:
+**You will need**
 
 * [Hammer][hammer] (recommended, to kill bugs)
+
+**Recommended reading**
+
+* [Git][git]
 
 <!-- START doctoc -->
 <!-- END doctoc-->
@@ -39,8 +39,13 @@ Maecenas at commodo mi, in rutrum turpis. Lorem ipsum dolor sit amet, consectetu
 
 ## Resources
 
-* [Coffee][coffee]
+**Documentation**
+
 * [RTFM][rtfm]
+
+**Further reading**
+
+* [Coffee][coffee]
 
 
 

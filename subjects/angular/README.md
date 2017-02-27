@@ -4,15 +4,15 @@ Getting started with and understanding the basics of [AngularJS][angular] (versi
 
 <!-- slide-include ../../BANNER.md -->
 
+**You will need**
+
+* [Google Chrome][chrome] (recommended, any browser with developer tools will do)
+
 **Recommended reading**
 
 * [JavaScript](../js/)
 * [JavaScript closures](../js-closures/)
 * [JavaScript prototypes](../js-prototypes/)
-
-**Requirements**
-
-* [Google Chrome][chrome] (recommended, any browser with developer tools will do)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

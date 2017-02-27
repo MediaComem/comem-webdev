@@ -1,6 +1,18 @@
 # Mongoose
 
+Learn how to use [Mongoose][mongoose], a Document-Object Mapper for [MongoDB][mongodb],
+and how it differs from the [official Node.js MongoDB driver][mongodb-node-driver].
+
 <!-- slide-include ../../BANNER.md -->
+
+**You will need**
+
+* A running [MongoDB][mongodb] database
+
+**Recommended reading**
+
+* [MongoDB](../mongodb/)
+* [npm](../npm/) and [Express](../express/) (for the integration example)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -17,6 +29,11 @@
   - [Mongoose queries](#mongoose-queries)
   - [Debugging](#debugging)
   - [Should I use it?](#should-i-use-it-1)
+- [Integrating Mongoose into Express](#integrating-mongoose-into-express)
+  - [Install and connect Mongoose](#install-and-connect-mongoose)
+  - [Create a schema and model](#create-a-schema-and-model)
+  - [Implement the `GET /users` route](#implement-the-get-users-route)
+  - [Implement the `POST /users` route](#implement-the-post-users-route)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -27,7 +44,7 @@
 
 <!-- slide-front-matter class: center, middle -->
 
-The official MongoDB driver for Node.js
+The [official MongoDB driver][mongodb-node-driver] for Node.js
 
 
 
@@ -447,6 +464,26 @@ Person
   });
 ```
 
+#### Counting documents
+
+Use `count()` instead of `exec()` at the end of your query builder to count the matching documents:
+
+```js
+Person
+  .find()
+  .where('name', /arnold/i)
+  .where('address.city').equals('Los Angeles')
+  .where('age').gt(17).lt(80)
+  .where('interests').in(['shooting', 'talking'])
+  .count(function(err, total) {
+    if (err) {
+      return console.warn('Could not count people because: ' + err.message);
+    }
+
+    console.log('There are ' + total + ' people matching the criteria');
+  });
+```
+
 
 
 ### Debugging
@@ -509,12 +546,195 @@ Blog.collection.insertOne({ foo: 'bar' }, function(err, commandResult) {
 
 
 
+## Integrating Mongoose into Express
+
+<!-- slide-front-matter class: center, middle -->
+
+A typical Mongoose usage example with Express,
+one of the most popular Node.js web framework.
+
+
+
+### Install and connect Mongoose
+
+Assuming you have generated an Express application with [express-generator][express-generator],
+go into its directory and install Mongoose:
+
+```bash
+$> cd /path/to/projects/express-demo
+
+$> npm install --save mongoose
+express-demo@0.0.0 /path/to/projects/express-demo
+└─┬ mongoose@4.8.5
+...
+```
+
+Open `app.js` and add these three lines below the first calls to `require()`:
+
+```js
+const mongoose = require('mongoose');
+mongoose.Promise = Promise;
+mongoose.connect('mongodb://localhost/express-demo');
+```
+
+Your Express application is now connected to MongoDB (to the `express-demo` database)!
+
+The default generated application includes a `GET /users` resource that is not implemented in `routes/users.js`.
+Let's do that!
+
+
+
+### Create a schema and model
+
+We'll need a Mongoose model for users.
+Create a new `models` directory with a `user.js` file inside it:
+
+```js
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+// Define the schema for users
+const userSchema = new Schema({
+  name: String
+});
+
+// Create the model from the schema and export it
+module.exports = mongoose.model('User', userSchema);
+```
+
+
+
+### Implement the `GET /users` route
+
+Add the following code to `routes/users.js`:
+
+```js
+var express = require('express');
+var router = express.Router();
+*const User = require('../models/user');
+
+/* GET users listing. */
+router.get('/', function(req, res, next) {
+* User.find().sort('name').exec(function(err, users) {
+*   if (err) {
+*     return next(err);
+*   }
+*
+*   res.send(users);
+* });
+});
+
+module.exports = router;
+```
+
+#### Retrieve users
+
+**Start or restart** your app (if need be) and try your new implementation of the route
+by making a `GET` request on `http://localhost:3000/users`:
+
+```http
+GET /users HTTP/1.1
+Host: localhost:3000
+```
+
+You should get a response with no users:
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+[]
+```
+
+Great!
+Now how about we create some users?
+
+
+
+### Implement the `POST /users` route
+
+Add this route to `routes/users.js` (above or below the existing route):
+
+```js
+/* POST new user */
+router.post('/', function(req, res, next) {
+
+  // Create a new document from the JSON in the request body
+  const newUser = new User(req.body);
+
+  // Save that document
+  newUser.save(function(err, savedUser) {
+    if (err) {
+      return next(err);
+    }
+
+    // Send the saved document in the response
+    res.send(savedUser);
+  });
+});
+```
+
+#### Create a user
+
+**Restart** your app (if need be) and try your new route
+by making a `POST` request on `http://localhost:3000/users` with some JSON:
+
+```http
+POST /users HTTP/1.1
+Content-Type: application/json
+Host: localhost:3000
+
+{
+  "name": "John Doe"
+}
+```
+
+You should get your new user with additional data from MongoDB:
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "__v": 0,
+  "_id": "58b2ff04e4fbe52b3a2feb0b",
+  "name": "John Doe"
+}
+```
+
+#### Retrieve users again
+
+Try making another `GET` request:
+
+```http
+GET /users HTTP/1.1
+Host: localhost:3000
+```
+
+You should retrieve the user(s) you created:
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+[
+  {
+    "__v": 0,
+    "_id": "58b2ff04e4fbe52b3a2feb0b",
+    "name": "John Doe"
+  }
+]
+```
+
+
+
 ## Resources
 
-* MongoDB Node.js client
-  * [Collection API][collection-api]
+**Documentation**
 
-* Mongoose
+* [Official MongoDB Node.js driver][mongodb-node-driver]
+  * [Collection API][collection-api]
+* [Mongoose][mongoose]
   * [Getting started][mongoose-getting-started]
   * [Guide][mongoose-guide]
   * [API documentation][mongoose-api]
@@ -524,6 +744,9 @@ Blog.collection.insertOne({ foo: 'bar' }, function(err, commandResult) {
 [alt-camo]: https://www.npmjs.com/package/camo
 [alt-waterline]: https://github.com/balderdashy/waterline
 [collection-api]: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html
+[express-generator]: https://www.npmjs.com/package/express-generator
+[mongodb]: https://www.mongodb.com
+[mongodb-node-driver]: http://mongodb.github.io/node-mongodb-native/
 [mongoose]: http://mongoosejs.com
 [mongoose-api]: http://mongoosejs.com/docs/api.html
 [mongoose-document]: http://mongoosejs.com/docs/documents.html

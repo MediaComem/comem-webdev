@@ -1,12 +1,19 @@
 # Collaborating with Git
 
+Learn how to collaborate on [GitHub][github] with [Git][git].
+
 <!-- slide-include ../../BANNER.md -->
 
-Requirements:
+**You will need**
 
 * [Git][git]
-* A [GitHub][github] account
-* A Unix CLI (Git Bash is installed with Git on Windows)
+* A free [GitHub][github] account
+* A Unix CLI
+
+**Recommended reading**
+
+* [Git introduction](../git/)
+* [Git branching](../git-branching/)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
