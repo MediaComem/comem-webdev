@@ -189,18 +189,23 @@ To save bandwidth, only a unique identifier for the director could be included:
 
 ### Resource reference via URL or hyperlink
 
-Instead of just the ID, you could include a hyperlink reference (`href`) or URL pointing to the director's resource:
+Instead of just the ID, you could include a hyperlink or URL pointing to the director's resource:
 
 ```json
 {
   "title": "The Two Towers",
   "rating": 7.1,
 * "directorHref": "/api/people/la09sld",
-* "directorUrl": "http://example.com/api/people/la09sld"
 }
 ```
 
-*(**Note**: you would use either `directorHref` or `directorUrl`, **not both**.)*
+```json
+{
+  "title": "The Two Towers",
+  "rating": 7.1,
+* "directorUrl": "http://example.com/api/people/la09sld"
+}
+```
 
 * *Advantage:* **decouples** the client from your API through **hypermedia**:
   the client can perform many operations without knowing how to build your URLs
