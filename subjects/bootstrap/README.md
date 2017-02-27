@@ -19,17 +19,23 @@ Introduction to [Bootstrap][bootstrap], a HTML/CSS framework, useful to quickly 
   - [Download locally](#download-locally)
   - [How do I know it's working?](#how-do-i-know-its-working)
 - [What does it do?](#what-does-it-do)
+- [Bootstrap documentation](#bootstrap-documentation)
+  - [The `aria` attribute](#the-aria-attribute)
 - [Element styles](#element-styles)
+  - [Which elements?](#which-elements)
   - [Examples](#examples)
   - [Why put styles on element?](#why-put-styles-on-element)
   - [Normalization](#normalization)
 - [New classes](#new-classes)
+  - [Start again](#start-again)
   - [Container](#container)
   - [Tables](#tables)
   - [Buttons](#buttons)
   - [Icons](#icons)
   - [Forms](#forms)
   - [Color classes](#color-classes)
+- [Components](#components)
+  - [What are those?](#what-are-those)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -56,7 +62,7 @@ Thus, using Bootstrap (or any other HTML/CSS framework) gives you:
   * All your pages will look the same
 * **Responsivness**:
   * Bootstrap behave well on desktop, tablet or smartphone
-* **Customizable**:
+* **Customizability**:
   * Every components can be modified to suit your needs
 * **Support**:
   * Bootstrap is heavily used, tested and documented
@@ -581,10 +587,12 @@ You can use these same color style to almost any element in your page, wether it
 
 ## Resources
 
+**Documentation**
+
 * [Bootstrap CSS Documentation][bootstrap-css]
 * [Normalize CSS][normalize]
 
-[sublime]: https://en.wikipedia.org/wiki/Coffee
+[sublime]: https://www.sublimetext.com/
 [bootstrap-css]: http://getbootstrap.com/css/
 [chrome]: https://www.google.com/chrome/
 [rtfm]: https://en.wikipedia.org/wiki/RTFM

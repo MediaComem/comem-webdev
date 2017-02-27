@@ -18,8 +18,14 @@ We will see what we need to do to setup our development environment.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [What is this subject?](#what-is-this-subject)
-  - [What?](#what)
+- [Install Node.js](#install-nodejs)
+  - [Check](#check)
+- [Install `live-server`](#install-live-server)
+  - [Check](#check-1)
+- [Create project directory](#create-project-directory)
+  - [Create `index.html`](#create-indexhtml)
+- [Access your project](#access-your-project)
+  - [What `live-server` do](#what-live-server-do)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
