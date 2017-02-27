@@ -1,6 +1,5 @@
 # TODO
 
-* Heroku: do not forget to commit after adding database url
 * Rest conventions: split slide on hyperlink/url references
 * Express mongoose: ID virtual, transform
 * Express mongoose: add links to implementations in demo API

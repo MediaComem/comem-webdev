@@ -177,21 +177,21 @@ $> git commit -m "Initial commit"
 
 ### Do you have a credit card?
 
-Some of the following steps **are different depending on whether or not you have a credit card** and **whether your app needs a database**:
+Some of the following steps **are different depending on whether or not you have a credit card**:
 
-* **If you have a credit card** and your app needs a database,
+* **If you have a credit card**,
   you will need to enter your credit card details to provision a **free database add-on**
   (Heroku will not debit your card unless you explicitly choose a paying plan)
-* **If you DO NOT have a credit card** and your app needs a database,
+* **If you DO NOT have a credit card**,
   you will need someone who has a credit card to give you the name of an **existing Heroku application** with the database add-on already provisioned,
   and to which you have been given access
 
-This tutorial assumes that if you are using a database, it is a [MongoDB][mongodb] database.
+This tutorial assumes that you are using a [MongoDB][mongodb] database.
 If not, adjust the instructions as appropriate for you database (i.e. when provisioning an add-on).
 
 
 
-### Create the app on Heroku (**with credit card** or **without database**)
+### Create the app on Heroku (**with credit card**)
 
 Heroku needs to know about your app:
 
@@ -220,7 +220,7 @@ Your app is **almost ready** to deploy.
 
 
 
-### Go to your dashboard (**with credit card** and **with database**)
+### Go to your dashboard (**with credit card**)
 
 Go to [heroku.com][heroku-dashboard], sign in, and find your new application in the dashboard:
 
@@ -228,7 +228,7 @@ Go to [heroku.com][heroku-dashboard], sign in, and find your new application in 
 
 
 
-### Provision a database add-on (**with credit card** and **with database**)
+### Provision a database add-on (**with credit card**)
 
 Go to your app's **Resources** tab and add the [mLab MongoDB][mlab-mongodb] add-on:
 
@@ -236,7 +236,7 @@ Go to your app's **Resources** tab and add the [mLab MongoDB][mlab-mongodb] add-
 
 
 
-### Add the mLab add-on (**with credit card** and **with database**)
+### Add the mLab add-on (**with credit card**)
 
 Choose the free sandbox version of the add-on (which should be selected by default) and click **Provision**:
 Heroku will probably **ask for your credit card details at this point**:
@@ -256,7 +256,7 @@ It should work this time.
 
 
 
-### Use an existing Heroku app (**without credit card** and **with database**)
+### Use an existing Heroku app (**without credit card**)
 
 Assuming someone has created a Heroku app and provisioned the correct database add-on for you,
 they will have given you the application name, e.g. `salty-inlet-82680`.
@@ -274,18 +274,27 @@ set git remote heroku to https://git.heroku.com/salty-inlet-82680.git
 
 
 
-### Configure your database URL from the environment (**with database**)
+### Configure your database URL from the environment
 
-Make sure your database URL is not hardcoded, but taken from the environment (we'll see more about this later).
+Make sure your database URL is **not hardcoded**, but **taken from the environment** (we'll see more about this later).
 
 Heroku database add-ons provide the database URL in an **environment variable**.
 For **mLab**, the variable is `$MONGODB_URI`.
 For other add-ons, it's often `$DATABASE_URL`.
 
-For example, if you're using Mongoose, change the call to `connect` to take the environment variable into account if present:
+For example, if you're using Mongoose,
+change the call to `connect` to take the environment variable into account if present
+(it's probably in `app.js`):
 
 ```js
-mongoose.connect(`process.env.MONGODB_URI` || 'mongodb://localhost/express-demo');
+mongoose.connect(`process.env.MONGODB_URI ||` 'mongodb://localhost/my-db-name');
+```
+
+Do not forget to stage and commit this change:
+
+```bash
+$> git add app.js
+$> git commit -m "Use $MONGODB_URI as the database connection URL if available"
 ```
 
 You're now **ready to deploy**.
