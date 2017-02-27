@@ -1,8 +1,6 @@
 # TODO
 
-* Citizen engagement & project reminder
-* Architecture up to now (postman/express)
-* Express on npmjs and github
+* Create heroku accounts for students
 
 * Mongoose: explain database name in mongodb url
 * Heroku: do not forget to commit after adding database url
