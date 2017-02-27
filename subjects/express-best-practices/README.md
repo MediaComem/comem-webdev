@@ -11,8 +11,17 @@ Learn best development practices for [Express][express] web applications.
 * [Express](../express/)
 * [Mongoose](../mongoose/)
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Use routers](#use-routers)
+- [Avoiding repetition with middleware](#avoiding-repetition-with-middleware)
+  - [Writing middleware functions for common tasks](#writing-middleware-functions-for-common-tasks)
+  - [Plugging your middleware function into routes](#plugging-your-middleware-function-into-routes)
+- [TODO](#todo)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 
