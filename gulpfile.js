@@ -22,7 +22,7 @@ const generatePdfFromSlides = require('./pdf');
 const src = {
   assets: [ 'assets/**/*.*' ],
   content: [ 'subjects/**/*.*', '!**/*.md', '!**/*.odg', '!**/*.odg#', '!**/node_modules/**' ],
-  doctoc: [ 'README.md', 'CONTRIBUTING.md', 'subjects/**/*.md', '!subjects/**/node_modules/**/*.md' ],
+  doctoc: [ 'README.md', 'CONTRIBUTING.md', 'GIT-CHEATSHEET.md', 'subjects/**/*.md', '!subjects/**/node_modules/**/*.md' ],
   indexTemplate: 'templates/index.html',
   mainReadme: 'README.md',
   pdfSource: 'tmp/pdf/subjects/*/**/index.html',

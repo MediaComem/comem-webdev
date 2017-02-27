@@ -1,9 +1,17 @@
 # Git Cheatsheet
 
-In case you forget how to:
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+
+- [Best practices](#best-practices)
+- [Frequent operations](#frequent-operations)
+  - [Create a new empty repository](#create-a-new-empty-repository)
+  - [Put an existing project on GitHub](#put-an-existing-project-on-github)
+  - [Push my latest changes to the GitHub repository](#push-my-latest-changes-to-the-github-repository)
+  - [Pull the latest changes from the GitHub repository](#pull-the-latest-changes-from-the-github-repository)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 
