@@ -592,7 +592,7 @@ Only special **error-handling middleware functions** are called.
 Compared to normal middleware functions, an error-handling middleware takes a fourth argument (the error):
 
 ```js
-app.use(function(req, res, next, err) {
+app.use(function(err, req, res, next) {
   res.send('Your request failed because: ' + err.message);
 });
 ```
