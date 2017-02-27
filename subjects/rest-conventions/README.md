@@ -529,12 +529,12 @@ Content-Type: application/json; charset=utf-8
   `"data": [`
     ...
   `]`,
-* "links": [
+* "links": {
 *   "first": "https://example.com/api/movies?page=1&pageSize=50",
 *   "prev": "https://example.com/api/movies?page=1&pageSize=50",
 *   "next": "https://example.com/api/movies?page=3&pageSize=50",
 *   "last": "https://example.com/api/movies?page=5&pageSize=50"
-* ]
+* }
 }
 ```
 
