@@ -126,11 +126,41 @@ Those styles could be divided in three categories:
 
 * **Element styles**: overwrite the default style for some HTML elements
 * **New classes**: new CSS classes (obivously) that can be used when needed
-* **Component**: a set of classes that needs to be used with a **strictly defined** HTML structure.
+* **Components**: a set of classes that needs to be used with a **strictly defined** HTML structure.
 
-Let's see some illustrations of these types...
+This slide-deck will present you this three categories, and how to use some interesting styles in each one.
+
+## Bootstrap documentation
+
+Everything that is presented in this slide-deck can also be found in **the very well done Bootstrap documentation**, along with lot of **examples** and **information**.
+
+We highly recommend that you check it out.
+
+[Bootstrap Documentation][bootstrap-css]
+
+<!-- slide-front-matter class: center, middle -->
+
+### The `aria` attribute
+
+When browswing the Bootstrap documentation, you'll inevitably found some examples with that:
+
+```html
+<button type="button" class="close" `aria-label`="Close">
+  <span `aria-hidden`="true">&times;</span>
+</button>
+```
+
+All these `aria-` attribute are used only for **accessibility**: they are interpreted by screen-reader or software that help disabled people browsing the Web.
+
+**They don't alter in any ways neither the design of the page nor the behavior of its elements.**
+
+> You can delete them **without any hesitation**, if you don't want to use them.
 
 ## Element styles
+
+<!-- slide-front-matter class: center, middle -->
+
+### Which elements?
 
 Bootstrap comes with CSS styles that are applied to **HTML elements**, without **adding classes** to said elements.
 
@@ -192,6 +222,10 @@ Bootstrap uses the [Normalize.css][normalize] library, that do just that.
 By using a normalizer and adding its own style for basic HTML elements, Bootstrap ensures that your page will be **consistently rendered** on each browser.
 
 ## New classes
+
+<!-- slide-front-matter class: center, middle -->
+
+### Start again
 
 Bootstrap also comes with a **ton of new classes** that can be applied to HTML elements.
 
@@ -379,7 +413,7 @@ Bootstrap defines **seven button styles**, each with its own class to add to an 
 | Danger  | `.btn-danger`  | <button class="btn btn-danger">Click me!</button> |
 | Link    | `.btn-link`    | <button class="btn btn-link">Click me!</button> |
 
-##### Try it!
+#### Try it!
 
 Add a:
 
@@ -417,7 +451,7 @@ Add the `.btn-xs` class to the `<input type="button">` element to see it **extra
 
 ### Icons
 
-Bootstrap comes along a special font called Glyphicons, that provides you with over 250 icons to use in your design.
+Bootstrap uses the Glyphicons font, that provides you with over 250 icons to use in your design.
 
 The list of available icons can be found here: [Bootstrap Glyphicons][bootstrap-glyphicons]
 
@@ -533,6 +567,14 @@ You can use these same color style to almost any element in your page, wether it
 ```
 
 <p class='shadow'><img src='images/color-schemes.jpg' width='60%' /></p>
+
+## Components
+
+<!-- slide-front-matter class: center, middle -->
+
+### What are those?
+
+
 
 ## Resources
 
