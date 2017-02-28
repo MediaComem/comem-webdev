@@ -6,9 +6,6 @@
   * How to create a new project and push it to github
   * Do not git init or git clone inside an existing git repo
   * Custom SSH key: http://stackoverflow.com/questions/4565700/specify-private-ssh-key-to-use-when-executing-shell-command-with-or-without-ruby
-  * Best practices:
-    * https://sethrobertson.github.io/GitBestPractices/
-    * http://nvie.com/posts/a-successful-git-branching-model/
 * CLI environment cheatsheet
   * Command line
   * Interactive help
@@ -26,8 +23,6 @@
 * Index and readme for generated docs repo
 * JavaScript dates
 * Clean up links at end of slides
-* Express: express vs. express-generator
-* Express: example of error in middleware order
 
 * Rev assets
 * Slide-specific css
