@@ -11,8 +11,23 @@ Learn to generate HTML documentation for your RESTful API from annotations in yo
 * [RESTful APIs](../rest/)
 * [npm](../npm/)
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [What to do](#what-to-do)
+  - [Install and run apiDoc](#install-and-run-apidoc)
+  - [The generated documentation](#the-generated-documentation)
+  - [Using a configuration file](#using-a-configuration-file)
+  - [Using apiDoc as a development dependency](#using-apidoc-as-a-development-dependency)
+- [How it works](#how-it-works)
+  - [Structural annotations](#structural-annotations)
+  - [Descriptive annotations](#descriptive-annotations)
+  - [Documenting request parameters](#documenting-request-parameters)
+  - [Reusing annotations](#reusing-annotations)
+- [Resources](#resources)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 
