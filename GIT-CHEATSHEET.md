@@ -81,6 +81,7 @@ Commit and push your changes:
 ```bash
 $> git add --all
 $> git commit -m "My changes"
+$> git push origin master
 ```
 
 **If GitHub rejects your push**, you should **pull the latest changes** first.
