@@ -1,5 +1,7 @@
 # Git Cheatsheet
 
+If you want to learn more about Git, read the [Pro Git book](https://git-scm.com/book/en/v2) (online & free).
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
@@ -21,6 +23,13 @@
   Git only takes full responsibility for your data when you commit.
   If you fail to commit and then do something poorly thought out, you can run into trouble.
   Additionally, having periodic checkpoints means that you can understand how you broke something.
+
+* Choose a **branching workflow**:
+
+  * [Create a short-lived branch for each feature](http://dymitruk.com/blog/2012/02/05/branch-per-feature/)
+  * [A successful branching model](http://nvie.com/posts/a-successful-git-branching-model/) (for large teams)
+
+* Use a [Git-aware prompt](https://github.com/magicmonty/bash-git-prompt)
 
 
 
