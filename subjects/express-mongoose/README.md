@@ -439,7 +439,7 @@ results.forEach(function(result) {
   // Find the corresponding person...
   const correspondingPerson = peopleJson.find(person => person.id == resultId);
   // And attach the new property
-  personJson.directedMoviesCount = result.moviesCount;
+  correspondingPerson.directedMoviesCount = result.moviesCount;
 });
 
 // Send the enriched response
