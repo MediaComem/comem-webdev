@@ -63,7 +63,7 @@ Materials for the COMEM+ web development courses.
 
 * [Web Services](subjects/webserv-course/)
 * [Advanced Frontend Development](subjects/masrad-dfa)
-  * [Project Setup](subjects/project-setup)
+  * [Project Setup](subjects/masrad-project-setup)
 
 
 
