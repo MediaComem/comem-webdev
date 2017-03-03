@@ -18,31 +18,9 @@ Learn how Bootstrap helps you structure your HTML layouts, using both its grid s
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [What is Bootstrap?](#what-is-bootstrap)
-- [Why Bootstrap?](#why-bootstrap)
-- [Use Bootstrap](#use-bootstrap)
-  - [Download locally](#download-locally)
-  - [How do I know it's working?](#how-do-i-know-its-working)
-- [What does it do?](#what-does-it-do)
-- [Bootstrap documentation](#bootstrap-documentation)
-  - [Screen-readers helpers](#screen-readers-helpers)
-- [Element styles](#element-styles)
-  - [Which elements?](#which-elements)
-  - [Examples](#examples)
-  - [Why put styles on element?](#why-put-styles-on-element)
-  - [Normalization](#normalization)
-- [New classes](#new-classes)
-  - [Start again](#start-again)
-  - [Container](#container)
-  - [Tables](#tables)
-  - [Buttons](#buttons)
-  - [Icons](#icons)
-  - [Forms](#forms)
-  - [Color classes](#color-classes)
-- [Components](#components)
-  - [Navbar](#navbar)
-  - [Lists](#lists)
-- [Resources](#resources)
+- [Example file](#example-file)
+- [Default HTML layout](#default-html-layout)
+  - [Altering the default layout](#altering-the-default-layout)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
