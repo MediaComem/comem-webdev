@@ -1,4 +1,4 @@
-# Bootstrap
+# Bootstrap - Basics
 
 <!-- slide-include ../../BANNER.md -->
 
@@ -8,6 +8,10 @@ Introduction to [Bootstrap][bootstrap], a HTML/CSS framework, useful to quickly 
 
 * [Google Chrome][chrome] (recommended, any browser with developer tools will do)
 * [Sublime Text][sublime] (recommended, any code editor will do... **except Notepad**)
+
+**Recommended reading**
+
+* [Project setup][projset]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -137,7 +141,6 @@ Those styles could be divided in three categories:
 * **Element styles**: overwrite the default style for some HTML elements
 * **New classes**: new CSS classes (obivously) that can be used when needed
 * **Components**: a set of classes that needs to be used with a **strictly defined** HTML structure.
-* **Structure**: classes that are related to the structure of your page (grid, responsivness)
 
 This slide-deck will present you this three categories, and how to use some interesting styles in each one.
 
@@ -904,10 +907,16 @@ Use a `.list-group-item-*` class for the color to properly apply:
 
 ## Resources
 
+You will find the final HTML file for this course [here][final-file].
+
 **Documentation**
 
 * [Bootstrap CSS Documentation][bootstrap-css]
 * [Normalize CSS][normalize]
+
+**Further reading**
+
+* [Bootstrap - Layout management][bsm]
 
 [sublime]: https://www.sublimetext.com/
 [bootstrap-css]: http://getbootstrap.com/css/
@@ -917,3 +926,6 @@ Use a `.list-group-item-*` class for the color to properly apply:
 [dl-bootstrap]: https://github.com/twbs/bootstrap/releases/download/v3.3.7/bootstrap-3.3.7-dist.zip
 [normalize]: https://necolas.github.io/normalize.css/
 [bootstrap-glyphicons]: http://getbootstrap.com/components/#glyphicons-glyphs
+[final-file]: https://gist.githubusercontent.com/Tazaf/18732ef01164f7b6348443c4c4748f42/raw/9f1dec778546a4d9741f1d17b08212c5606c26ca/index.html
+[bsm]: ../bootstrap-layout-management
+[projset]: ../masrad-project-setup
