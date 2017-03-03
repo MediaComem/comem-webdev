@@ -20,7 +20,7 @@ Introduction to [Bootstrap][bootstrap], a HTML/CSS framework, useful to quickly 
   - [How do I know it's working?](#how-do-i-know-its-working)
 - [What does it do?](#what-does-it-do)
 - [Bootstrap documentation](#bootstrap-documentation)
-  - [The `aria` attribute](#the-aria-attribute)
+  - [Screen-readers helpers](#screen-readers-helpers)
 - [Element styles](#element-styles)
   - [Which elements?](#which-elements)
   - [Examples](#examples)
@@ -35,7 +35,8 @@ Introduction to [Bootstrap][bootstrap], a HTML/CSS framework, useful to quickly 
   - [Forms](#forms)
   - [Color classes](#color-classes)
 - [Components](#components)
-  - [What are those?](#what-are-those)
+  - [Navbar](#navbar)
+  - [Lists](#lists)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -383,7 +384,7 @@ For example, if you'd want to have a table that has **all the preceding styles**
 
 Bootstrap adds many new classes regarding buttons, that allows you to create a wide variety of possible usage.
 
-Let's add some buttons to the `index.html` page. Add the following snippet after the `</table>` tag:
+Let's add some buttons to the `index.html` page. Add the following snippet right before the `<h2>Tables</h2>` element:
 
 ```html
 <h2>Buttons</h2>
@@ -416,9 +417,7 @@ The result should be:
 
 <p class="shadow"><img src='images/buttons-btn.jpg' width='40%' /></p>
 
-As you can see, the `.btn` class doesn't add very much.
-
-In fact, the `.btn` class is used to add to the element all the styles that are **common** among the button styles.
+The `.btn` class is used to add to the element all the styles that are **common** among all button styles.
 
 > Each of the additionnal button class will add the styles that are specific to the style.
 
@@ -474,25 +473,23 @@ Add the `.btn-xs` class to the `<input type="button">` element to see it **extra
 
 ### Icons
 
-Bootstrap uses the Glyphicons font, that provides you with over 250 icons to use in your design.
+Bootstrap uses the Glyphicons font, that provides you with [over 250 icons][bootstrap-glyphicons] to use in your design.
 
-The list of available icons can be found here: [Bootstrap Glyphicons][bootstrap-glyphicons]
+To use these icons, just add an empty `<span>` element with `.glyphcion` class **plus the class for the icon you want**.
 
-To use these icons, just add an empty `<span>` element with the class for the icon you want.
-
-For example, to add three buttons for alignement control, write:
+Add this before the `<h2>Buttons</h2>` element:
 
 ```html
 <h2>Icons</h2>
 <div>
   <button class="btn btn-default">
-*   <span class="glyphicon glyphicon-align-left"></span>
+    <span class="`glyphicon` `glyphicon-align-left`"></span>
   </button>
   <button class="btn btn-default">
-*   <span class="glyphicon glyphicon-align-center"></span>
+    <span class="`glyphicon` `glyphicon-align-center`"></span>
   </button>
   <button class="btn btn-default">
-*   <span class="glyphicon glyphicon-align-right"></span>
+    <span class="`glyphicon` `glyphicon-align-right`"></span>
   </button>
 </div>
 ```
@@ -503,7 +500,7 @@ For example, to add three buttons for alignement control, write:
 
 Creating forms in HTML is a big part of constructing website or webapplication, and this is yet another subject that Bootstrap can handle for you.
 
-Add these lines at the end of your `index.html` page, right before the closing `</div>` tag:
+Add these lines right before the `<h2>Icons</h2>` element:
 
 ```html
 <h2>Forms</h2>
@@ -533,7 +530,7 @@ Add these lines at the beginning of the `<form>` element:
 
 To resolve any spacing problem that could be present in your form, be sure to wrap your form element in a `<div>` with the `.form-group` class.
 
-> Do this with the preceding **username** input.
+> Do this with the preceding **username** input **and** label.
 
 Let's complete our form by adding a password input that's to receive the **password** of our new user.
 
@@ -546,9 +543,11 @@ Add these lines before the `<input type="submit">`:
 *</div>
 ```
 
+> Notice how the `<label>` **and** the `<input>` are grouped together inside the `div.form-group` element.
+
 #### `.form-inline`
 
-By default, all elements with a `.form-control` class will be as wide as possible, and will be presented in a stack, that is on element in top of another.
+By default, all elements with the `.form-control` class will be as wide as possible, and will be presented in a stack, i.e. one element in top of another.
 
 If you'd rather prefer to have you form displayed inline, juste add the `.form-inline` class to your top `<form>` element.
 
@@ -571,22 +570,26 @@ If you'd rather prefer to have you form displayed inline, juste add the `.form-i
   <input type="password" id="..." class="..." `placeholder="Password"`>
 </div>
 ```
+<!-- slide-notes -->
+Be aware that not all forms can be put inline. If your form is too big, it won't render correctly.
 
 ### Color classes
 
 Remember the button styles (*Primary*, *Success*, *Info*, *Warning* and *Danger*)?
 
-You can use these same color style to almost any element in your page, wether it be on the text or on the background.
+You can use these same color style on almost any element in your page, wether it be on the text or on the background.
 
-> Using this classes with other pre-defined Bootstrap classes could cancel their effects.
+> Using this classes along with other pre-defined Bootstrap classes could have no effect.
+
+Add this before the `<h2>Forms</h2>` element:
 
 ```html
 <h2>Color classes</h2>
-<p `class="text-primary"`>This text uses the primary color scheme.</p>
-<p `class="text-success"`>This text uses the success color scheme.</p>
-<p `class="bg-warning"`>This paragraph has a warning colored background.</p>
-<p `class="bg-info"`>This paragraph has an info colored background.</p>
-<p `class="bg-danger text-danger"`>Full danger!</p>
+<p class="`text-primary`">This text uses the primary color scheme.</p>
+<p class="`text-success`">This text uses the success color scheme.</p>
+<p class="`bg-warning`">This paragraph has a warning colored background.</p>
+<p class="`bg-info`">This paragraph has an info colored background.</p>
+<p class="`bg-danger` `text-danger`">Full danger!</p>
 ```
 
 <p class='shadow'><img src='images/color-schemes.jpg' width='60%' /></p>
@@ -613,13 +616,13 @@ Add these lines right after your opening `<body>` tag:
 
 This code adds a blank navbar, that takes up all the screen space available.
 
-> If you'd prefer a navbar that is as wide as the main content, simply move the code inside the `<div>`.
+> If you'd prefer a navbar that is as wide as the main content, simply move the code inside the `<div class="container">`.
 
 #### Navbar content
 
 Let's move our main title from the content of the page to the content of the navbar.
 
-Delete the `<h1>` from your code, and add the text inside the `<nav>` tag:
+Delete the `<h1>` from your code, and add its text inside the `<nav>` tag:
 
 ```html
 <nav class="navbar navbar-default">
@@ -630,13 +633,13 @@ Delete the `<h1>` from your code, and add the text inside the `<nav>` tag:
 > 
 > The **navbar** component needs a container to properly space its content.
 
-Wrap your inner navbar text with a `<div>` with the `.container` or `.container-fluid` class, as you see fit:
+Wrap the text inside the navbar with a `<div>` having the `.container` or `.container-fluid` class, as you see fit:
 
 ```html
 <nav class="navbar navbar-default">
-  <div class='container'>
+* <div class='container'>
     Bootstrap Initiation
-  </div>
+* </div>
 </nav>
 ```
 
@@ -650,7 +653,7 @@ To tell the navbar what element is the brand, use the `.navbar-brand` class on a
 
 ```html
 <div class='container'>
-  <a class="navbar-brand" href="#">Bootstrap Initiation</a>
+  <a class="`navbar-brand`" href="#">Bootstrap Initiation</a>
 </div>
 ```
 > Making the brand element a link to the homepage is a good practice, hence the use of an `<a>` element here.
@@ -661,7 +664,7 @@ This will fit our title nicely inside the Navbar.
 
 If you scroll in your `index.html` page, you'll see that the navbar **scrolls with it**, thus disappearing from the screen at one point.
 
-You could want a navbar that's **constantly fixed** to the top of the screen.
+You may want to have a navbar that's **constantly fixed** to the top of the screen.
 
 To do this, add the `.navbar-fixed-top` class to your `<navbar>` element.
 
@@ -768,7 +771,7 @@ Add the proper class to the *Go to top* button:
 
 ### Lists
 
-As we said, simple list using the classics `<ul>` and `<li>` elements without any classes are already stylized by Bootstrap.
+As we said before, simple lists using the classics `<ul>` and `<li>` elements without any classes are already stylized by Bootstrap.
 
 However, the framework also supports more advanced list options.
 
@@ -776,7 +779,7 @@ To create a "stack-style" list, add :
 * a `.list-group` class to the `<ul>` element
 * a `.list-group-item` to the `<li>` elements.
 
-Add this code right before your closing `</main>` tag:
+Add this code right before the `<h2>Color classes<h2>` element:
 ```html
 <h2>Lists</h2>
 <ul class="`list-group`">
@@ -791,7 +794,7 @@ Add this code right before your closing `</main>` tag:
 
 #### Badges
 
-If you think about social applications like Whatsapp or ToDo applications like Wunderlist, you probably have already seen little numbers (called **badges**) at the right-end of a list element:
+If you think about social applications like Whatsapp or ToDo applications like Wunderlist, you probably remember little numbers (called **badges**) at the right-end of a list element:
 
 <p class='center'><img class='shadow' src='images/badges-examples.jpg' width='60%' /></p>
 
@@ -805,13 +808,13 @@ You can add them in your list (or anywhere) by adding a `<span>` element with th
 <li class="list-group-item">Enterprise `<span class="badge">4</span>`</li>
 <li class="list-group-item">Discovery `<span class="badge"></span>`</li>
 ```
-> Notice how the last **doesn't show up**? That's because empty badges will be automatically hidden from the view.
+> Notice how the last one **doesn't show up**? That's because empty badges will be automatically hidden from the view.
 
 #### Link elements
 
 If you'd like your list elements to be links, you need to tweek a little your HTML structure:
 * the `<ul>` become a `<div>`
-* the `<li>` become `<a>`
+* the `<li>`s become `<a>`s
 
 ```html
 <`div` class="list-group">
@@ -824,6 +827,80 @@ If you'd like your list elements to be links, you need to tweek a little your HT
 </`div`>
 ```
 > The classes stay the same.
+
+You can now add a `href` attribute to any list item:
+
+```html
+<a class="list-group-item" `href="https://en.wikipedia.org/wiki/Star_Trek:_The_Original_Series" `>The Original Series <span class="badge">3</span></a>
+```
+
+#### I want more!
+
+Just putting a single line of text inside a list item is sometimes not enough.
+
+Again, think of any instant messaging app on smartphone/tablet or desktop, where you could have, in each list item:
+* The name of your contact
+* Its profile picture
+* The last exchanged message
+* The date at which this last message was exchange
+* etc
+
+Let's create a second list right below the `<h2>Lists</h2>` element:
+
+```html
+<div class="list-group">
+  <a class="list-group-item"></a>
+  <a class="list-group-item"></a>
+  <a class="list-group-item"></a>
+</div>
+```
+
+#### Custom list item
+
+You can add some HTML elements within the `<a>` list-items to enrich them.
+
+Add a title by using the `.list-group-item-heading` class on an element:
+
+```html
+<a class="list-group-item">
+* <h4 class="list-group-item-heading">James T. Kirk</h4>
+</a>
+```
+Add some text by using the `.list-group-item-text` class on a `<p>`:
+
+```html
+<a class="list-group-item">
+  <h4 class="list-group-item-heading">James T. Kirk</h4>
+* <p class="list-group-item-text">Beam me up, Scotty!</p>
+</a>
+```
+> Custom list item can also be used with `<li>` elements.
+
+You are free to add almost any kind of custom HTML inside a list item.
+
+> You'll obvisouly need to add some custom CSS to this custom HTML.
+
+#### Contextual list item colors
+
+Any element within a `.list-group` list can be added one of the [Bootstrap color classes](./#32).
+
+> But using the `.text-*` or the `.bg-*` classes won't work here!
+
+Use a `.list-group-item-*` class for the color to properly apply:
+
+```html
+<div class="list-group">
+  <a class="list-group-item list-group-item-success"><!-- content --></a>
+  <a class="list-group-item list-group-item-info"><!-- content --></a>
+  <a class="list-group-item list-group-item-danger"><!-- content --></a>
+</div>
+```
+> As a reminder, here are the color suffixes available:
+> * `primary` (strong navy blue)
+> * `success` (pale green)
+> * `info` (pale sky blue)
+> * `warning` (pale orange)
+> * `danger` (pale red)
 
 ## Resources
 

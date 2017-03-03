@@ -24,7 +24,7 @@ We will see what we need to do to setup our development environment.
 - [Create project directory](#create-project-directory)
   - [Create `index.html`](#create-indexhtml)
 - [Access your project](#access-your-project)
-  - [What `live-server` do](#what-live-server-do)
+  - [What does `live-server` do](#what-does-live-server-do)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
