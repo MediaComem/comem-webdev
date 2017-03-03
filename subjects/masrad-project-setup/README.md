@@ -11,7 +11,6 @@ We will see what we need to do to setup our development environment.
 
 **Recommended reading**
 
-* [Git][git]
 * [Command Line][cli]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->

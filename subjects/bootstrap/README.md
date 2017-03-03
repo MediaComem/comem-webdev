@@ -136,6 +136,7 @@ Those styles could be divided in three categories:
 * **Element styles**: overwrite the default style for some HTML elements
 * **New classes**: new CSS classes (obivously) that can be used when needed
 * **Components**: a set of classes that needs to be used with a **strictly defined** HTML structure.
+* **Structure**: classes that are related to the structure of your page (grid, responsivness)
 
 This slide-deck will present you this three categories, and how to use some interesting styles in each one.
 
@@ -149,7 +150,7 @@ We highly recommend that you check it out.
 
 <!-- slide-front-matter class: center, middle -->
 
-### The `aria` attribute
+### Screen-readers helpers
 
 When browswing the Bootstrap documentation, you'll inevitably found some examples with that:
 
@@ -164,6 +165,14 @@ All these `aria-` attribute are used only for **accessibility**: they are interp
 **They don't alter in any ways neither the design of the page nor the behavior of its elements.**
 
 > You can delete them **without any hesitation**, if you don't want to use them.
+
+You could also find elements with the `.sr-only` class or the `role` attribute:
+
+```html
+<span class="sr-only" role="error">Error:</span>
+```
+
+These elements are invisible to human reader and only usefule for assistive technologies. **Remove them without fear for your design.**
 
 ## Element styles
 
@@ -646,11 +655,11 @@ To tell the navbar what element is the brand, use the `.navbar-brand` class on a
 ```
 > Making the brand element a link to the homepage is a good practice, hence the use of an `<a>` element here.
 
-This will make our title fit nicely inside the Navbar.
+This will fit our title nicely inside the Navbar.
 
 #### Fixed navbar
 
-If you scroll in your `index.html` page, you'll see that the navbar **scrolls with it**.
+If you scroll in your `index.html` page, you'll see that the navbar **scrolls with it**, thus disappearing from the screen at one point.
 
 You could want a navbar that's **constantly fixed** to the top of the screen.
 
@@ -669,7 +678,7 @@ To fix this, we need to **add some padding** to the element that encloses our co
 
 #### Fix the fixed navbar
 
-To do this, let's change our content element from a `<div>` to a `<main>`:
+Let's change our content element from a `<div>` to a `<main>`:
 
 ```html
 <body>
@@ -683,14 +692,14 @@ To do this, let's change our content element from a `<div>` to a `<main>`:
 ```
 To add it padding, we need to define a custom style.
 
-1. In your project directory, create a `css` directory if it doesn't exist yet;
-2. In this `css` directory, create a new `style.css`, and open it;
+1. In your project directory, create a `css` directory if it doesn't exist yet
+2. In this `css` directory, create a new `style.css`, and open it
 3. Add this line, and save the file:
 ```css
-main { padding: 70px; }
+main { padding: 60px; }
 ```
 
-1. Include the new CSS file in your `index.html`:
+1. Include the new CSS file in your `index.html`, between the `<head>` tags:
 ```html
 <link rel="stylesheet" type="text/css" href="css/style.css">
 ```
@@ -703,7 +712,7 @@ To add links inside your navbar, you need to use an `<ul>` element with the `.na
 
 > The `<li>`s inside this `<ul>` doesn't need any particulier class.
 
-In our case, the navigation could be going the `compare.html` page (*assuming you still have it*).
+In our case, the navigation could be going to the `compare.html` page (*assuming you still have it*).
 
 Let's add this right after our `<a class="navbar-brand">` element:
 
@@ -715,9 +724,9 @@ Let's add this right after our `<a class="navbar-brand">` element:
 
 #### Navbar buttons
 
-Let's say we'd like a *button* in our navbar that scrolls down to the top of the page.
+Now, let's say we'd like a kind of *button* in our navbar that scrolls up to the top of the page.
 
-Simply adding a *button* to the navbar will not do the trick:
+Simply adding a *button* to the navbar will not quite do the trick:
 
 ```html
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -757,7 +766,64 @@ Add the proper class to the *Go to top* button:
 ...
 ```
 
-### 
+### Lists
+
+As we said, simple list using the classics `<ul>` and `<li>` elements without any classes are already stylized by Bootstrap.
+
+However, the framework also supports more advanced list options.
+
+To create a "stack-style" list, add :
+* a `.list-group` class to the `<ul>` element
+* a `.list-group-item` to the `<li>` elements.
+
+Add this code right before your closing `</main>` tag:
+```html
+<h2>Lists</h2>
+<ul class="`list-group`">
+  <li class="`list-group-item`">The Original Series</li>
+  <li class="`list-group-item`">The Next Generation</li>
+  <li class="`list-group-item`">Deep Space Nine</li>
+  <li class="`list-group-item`">Voyager</li>
+  <li class="`list-group-item`">Enterprise</li>
+  <li class="`list-group-item`">Discovery</li>
+</ul>
+```
+
+#### Badges
+
+If you think about social applications like Whatsapp or ToDo applications like Wunderlist, you probably have already seen little numbers (called **badges**) at the right-end of a list element:
+
+<p class='center'><img class='shadow' src='images/badges-examples.jpg' width='60%' /></p>
+
+You can add them in your list (or anywhere) by adding a `<span>` element with the `.badge` class:
+
+```html
+<li class="list-group-item">The Original Series `<span class="badge">3</span>`</li>
+<li class="list-group-item">The Next Generation `<span class="badge">7</span>`</li>
+<li class="list-group-item">Deep Space Nine `<span class="badge">7</span>`/li>
+<li class="list-group-item">Voyager `<span class="badge">7</span>`</li>
+<li class="list-group-item">Enterprise `<span class="badge">4</span>`</li>
+<li class="list-group-item">Discovery `<span class="badge"></span>`</li>
+```
+> Notice how the last **doesn't show up**? That's because empty badges will be automatically hidden from the view.
+
+#### Link elements
+
+If you'd like your list elements to be links, you need to tweek a little your HTML structure:
+* the `<ul>` become a `<div>`
+* the `<li>` become `<a>`
+
+```html
+<`div` class="list-group">
+  <`a` class="list-group-item"><!-- content --></`a`>
+  <`a` class="list-group-item"><!-- content --></`a`>
+  <`a` class="list-group-item"><!-- content --></`a`>
+  <`a` class="list-group-item"><!-- content --></`a`>
+  <`a` class="list-group-item"><!-- content --></`a`>
+  <`a` class="list-group-item"><!-- content --></`a`>
+</`div`>
+```
+> The classes stay the same.
 
 ## Resources
 
