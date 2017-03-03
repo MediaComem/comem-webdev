@@ -21,6 +21,10 @@ Learn how Bootstrap helps you structure your HTML layouts, using both its grid s
 - [Example file](#example-file)
 - [Default HTML layout](#default-html-layout)
   - [Altering the default layout](#altering-the-default-layout)
+- [Grid systems](#grid-systems)
+- [Bootstrap Grid System](#bootstrap-grid-system)
+  - [Creating `.row`](#creating-row)
+  - [Adding columns](#adding-columns)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
