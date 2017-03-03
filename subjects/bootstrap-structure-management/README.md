@@ -55,9 +55,26 @@ CSS offers a bunch of properties to alter this default behavior, allowing for mo
 * `float`: you can force-push an element to either the left-side or the right-side of the page. This pull the element out of the flow.
 * `position`: you can force an element to a special position (*`fixed`, `absolute`, `relative`*), that can pull it out of the flow.
 
-Using these properties can be quite tedious, if you want something stable and compatible with all browsers.
+Using these properties can be quite tedious, especially if you want something **stable and compatible** with all browsers.
 
-> A new layout paradigm
+> A new layout paradigm, called **FlexBox** has been introduce with CSS3.
+> 
+> It offers a very flexible and powerful way to create layouts, and a great consistency regarding the positionning of elements.
+
+## Grid systems
+
+<!-- slide-column -->
+
+A Grid System is a way of creating layouts that's been inherited from graphic designers.
+
+The idea is quite simple: you divide the space at your disposal in **columns** (usually an even number), separated by a **gutter**.
+
+When you place your elements on the layout, they **must** be as wide as one or more columns.
+> An element mustn't stop in the **middle of a column**. That would completely defeat the purpose of having a grid system in place.
+
+<!--slide-column -->
+
+<p><img src="images/grid-example.jpg" width="100%" /></p>
 
 [bootstrap]: ../bootstrap
 [projset]: ../masrad-project-setup
