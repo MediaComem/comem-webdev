@@ -1,4 +1,4 @@
-# MAS-RAD -- Module Développement Frontend Avancé (DFA)
+# MAS-RAD -- Advanced Front-end Development (DFA)
 
 The goal of this course is to discover concepts and tools to organize the front-end side of a web application and enrich the user interface/experience according to current good practices.
 
@@ -11,7 +11,7 @@ You will:
 
 ## Citizen engagement
 
-The final delivrable of this course is a complete web application allowing a citizen to report problems encountered in the streets of a city.
+The final deliverable of this course is a complete web application allowing a citizen to report problems encountered in the streets of a city.
 
 This idea is inspired from the [FixMyStreet platform](https://www.fixmystreet.com/) you may know.
 
