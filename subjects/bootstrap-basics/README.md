@@ -738,6 +738,8 @@ You may want to have a navbar that's **constantly fixed** to the top of the scre
 
 To do this, add the `.navbar-fixed-top` class to your `<navbar>` element.
 
+> Using the `.navbar-fixed-bottom` class allows you to create footer.
+
 ```html
 <nav class="navbar navbar-default `navbar-fixed-top`">
   <!-- navbar content -->
@@ -831,11 +833,20 @@ There's two classes to use when you want to align things in your navbar:
 * `.navbar-left` will align elements to the left of the navbar
 * `.navbar-right` will align elements to the right of the navbar
 
-Add the proper class to the *Go to top* button:
+> However, due to a [bug in Bootstrap's v3 navbar][bug-nav], you can't just use it on the button.
+
+> Doing so will result in **an error in the left margin**.
+
+To add proper positionning:
+
+1. Wrap your content around a new `<div>` with a `.collapse` and `.navbar-collapse` classes
+2. Add the `.navbar-right` to the `<div>`
 
 ```html
 ...
-    <a class="btn btn-link navbar-btn `navbar-right`" href="#">Go to top</a>   
+  <div class="`collapse navbar-collapse` `navbar-right`">
+    <a class="btn btn-link navbar-btn" href="#">Go to top</a>
+  </div>   
 ...
 ```
 
@@ -997,3 +1008,4 @@ You will find the final HTML file for this course [here][final-file].
 [bsm]: ../bootstrap-layout-management
 [projset]: ../masrad-project-setup
 [aria]: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA
+[bug-nav]: https://github.com/twbs/bootstrap/issues/17598#issuecomment-160248326
