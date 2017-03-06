@@ -39,6 +39,7 @@ Introduction to [Bootstrap][bootstrap], a HTML/CSS framework, useful to quickly 
   - [Forms](#forms)
   - [Color classes](#color-classes)
 - [Components](#components)
+  - [Forms... again](#forms-again)
   - [Navbar](#navbar)
   - [Lists](#lists)
 - [Resources](#resources)
@@ -139,7 +140,7 @@ We already said that Bootstrap is a bunch of CSS styles already written for you.
 Those styles could be divided in three categories:
 
 * **Element styles**: overwrite the default style for some HTML elements
-* **New classes**: new CSS classes (obivously) that can be used when needed
+* **New classes**: new CSS classes (obviously) that can be used when needed
 * **Components**: a set of classes that needs to be used with a **strictly defined** HTML structure.
 
 This slide-deck will present you this three categories, and how to use some interesting styles in each one.
@@ -156,27 +157,25 @@ We highly recommend that you check it out.
 
 ### Screen-readers helpers
 
-When browswing the Bootstrap documentation, you'll inevitably found some examples with that:
+When browswing the Bootstrap documentation, you'll inevitably found some examples with `.aria-*` attributes:
 
 ```html
 <button type="button" class="close" `aria-label`="Close">
   <span `aria-hidden`="true">&times;</span>
 </button>
 ```
-
-All these `aria-` attribute are used only for **accessibility**: they are interpreted by screen-reader or software that help disabled people browsing the Web.
-
-**They don't alter in any ways neither the design of the page nor the behavior of its elements.**
-
-> You can delete them **without any hesitation**, if you don't want to use them.
-
 You could also find elements with the `.sr-only` class or the `role` attribute:
 
 ```html
-<span class="sr-only" role="error">Error:</span>
+<span `class="sr-only"` `role="error"`>Error:</span>
 ```
+All these [ARIA][aria] attribute, class or `role` are used only for **accessibility**.
 
-These elements are invisible to human reader and only usefule for assistive technologies. **Remove them without fear for your design.**
+They are invisible to human reader and only interpreted by assistive technologies or software that help disabled people browsing the Web.
+
+> They **don't alter** in any ways neither **the design of the page** nor **the behavior of its elements**.
+> 
+> **Remove them without fear for your design**, if you don't want them polluting your HTML.
 
 ## Element styles
 
@@ -515,7 +514,7 @@ Add these lines right before the `<h2>Icons</h2>` element:
 
 #### `.form-control`
 
-Add the `.form-control` class to an `<input>` element to make it **full-width and stlyized**.
+Add the `.form-control` class to an `<input>` element to make it **full-width and stylized**.
 
 > This class can be added to any type of input.
 
@@ -604,6 +603,74 @@ Components are specific HTML structure used on combination with specific classes
 This allows more advances behavior and design.
 
 <!-- slide-front-matter class: center, middle -->
+
+### Forms... again
+
+There's two components that are related to forms, that we didn't see before:
+* Checkboxes
+* Radio buttons
+
+Both these components need **specific HTML markup** to function correctly in Bootstrap forms. In both case, the markup is **similar**:
+
+<!-- slide-column -->
+
+**Checkbox**
+
+```html
+<div class="checkbox">
+  <label>
+    <input type="checkbox">
+    Remember me
+  </label>
+</div>
+``` 
+
+<!-- slide-column -->
+
+**Radio button**
+
+```html
+<div class="radio">
+  <label>
+    <input type="radio" name="gender">
+    Female
+  </label>
+</div>
+```
+
+<!-- slide-container -->
+
+> With this markup, checkboxes and radio button **spacing is optimal**, and clicking on the label is considered **clicking on the checkbox or radio button**.
+
+<!-- slide-notes -->
+
+Let's update our first form by adding a checkbox and some radio buttons:
+
+```html
+<h2>Forms</h2>
+<form>
+  <!-- other form elements -->
+* <div class="checkbox">
+    <label>
+      <input type="checkbox" name="remember" id="remember">
+      Remember me!
+    </label>
+  </div>
+* <div class="radio">
+    <label>
+      <input type="radio" name="gender" id="male" value="male">
+      Male
+    </label>
+  </div>
+* <div class="radio">
+    <label>
+      <input type="radio" name="gender" id="female" value="female">
+      Female
+    </label>
+  </div>
+  <input type="submit" name="send" class="btn btn-success">
+</form>
+```
 
 ### Navbar
 
@@ -741,7 +808,7 @@ Simply adding a *button* to the navbar will not quite do the trick:
     <ul class="nav navbar-nav">
       <li><a href="compare.html">Compare</a></li>
     </ul>
-*   <a class="btn btn-link" href="#">Go to top</a>   
+*   <a class="btn btn-default" href="#">Go to top</a>   
   </div>
 </nav>
 ```
@@ -751,7 +818,7 @@ To add proper spacing, you need to add the `.navbar-btn` class:
 
 ```html
 ...
-    <a class="btn btn-link `navbar-btn`" href="#">Go to top</a>   
+    <a class="btn btn-default `navbar-btn`" href="#">Go to top</a>   
 ...
 ```
 
@@ -929,3 +996,4 @@ You will find the final HTML file for this course [here][final-file].
 [final-file]: https://gist.githubusercontent.com/Tazaf/18732ef01164f7b6348443c4c4748f42/raw/9f1dec778546a4d9741f1d17b08212c5606c26ca/index.html
 [bsm]: ../bootstrap-layout-management
 [projset]: ../masrad-project-setup
+[aria]: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA

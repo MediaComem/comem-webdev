@@ -33,7 +33,8 @@ Materials for the COMEM+ web development courses.
 
 **Languages & Frameworks**
 
-* [Bootstrap](subjects/bootstrap)
+* [Bootstrap](subjects/bootstrap-basics)
+  * [Bootstrap Layout management](subjects/bootstrap-layout-management)
 * [JavaScript](subjects/js/)
   * [JavaScript closures](subjects/js-closures/)
   * [JavaScript prototypes](subjects/js-prototypes/)
