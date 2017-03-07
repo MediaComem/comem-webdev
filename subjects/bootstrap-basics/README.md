@@ -983,6 +983,162 @@ Use a `.list-group-item-*` class for the color to properly apply:
 > * `warning` (pale orange)
 > * `danger` (pale red)
 
+## Panel
+
+Panels are component designed for structuring content, and as such appear as visible blocks on the page (think Facebook's statuses).
+
+To create a panel, the markup is quite simple: just create a `<div>` with the `.panel` class (and the `.panel-default` class for now).
+
+Put this right before the `<h2>Lists</h2>?`:
+
+```html
+<h2>Panels</h2>
+<div class="`panel panel-default`">
+  Today, I ate an apple. It was tasty
+</div>
+```
+> You see that the content is placed inside some kind of round-cornered block.
+
+> But the spacing is quite not right...
+
+### Panel's content
+
+For correct spacing, the content of a panel **must be** placed inside a `<div>` with the `.panel-body` class:
+
+```html
+<div class="panel panel-default">
+  <div class="`panel-body`">
+    Today, I ate an apple. It was tasty
+  </div>
+</div>
+```
+> You can see that the title is highlighted by a different color than the content.
+
+### Panel's title
+
+Panels being block of content, you might want to indicate what is its actual content.
+
+For doing so, you can use a **panel heading**.
+
+Create a new `<div>` witht the `.panel-heading` class, and place your text inside:
+
+> The new `div.panel-heading` must be placed before the `div.panel-body`.
+
+```html
+<div class="panel panel-default">
+* <div class="panel-heading">
+*   John Doe commented on that:
+* </div>
+  <div class="panel-body">
+    Today, I ate an apple. It was tasty
+  </div>
+</div>
+```
+### Panel's footer
+
+With certain use-case, you could want a special zone at the bottom of your panel to put, for example, action button or less important information.
+
+To do that, add after the `div.panel-body` a new `<div>` with the `.panel-footer` class:
+
+```html
+<div class="panel panel-default">
+  <div class="panel-heading">
+    John Doe commented on that:
+  </div>
+  <div class="panel-body">
+    Today, I ate an apple. It was tasty
+  </div>
+* <div class="panel-footer">
+*   <button class="btn btn-default">
+*    <span class="glyphicon glyphicon-thumbs-up"></span> Like
+*   </button>
+*   <button class="btn btn-default">
+*     <span class="glyphicon glyphicon-pencil"></span> Comment
+*   </button>
+*   <button class="btn btn-default">
+*    <span class="glyphicon glyphicon-share"></span> Share
+*   </button>
+* </div>
+</div>
+```
+### Panel's color
+
+One more time, Bootstrap allows you to add color to your component, using the same color schemes than usual.
+
+Replace the `.panel-default` with one of the available classes to use these color schemes:
+
+* `.panel-default`
+* `.panel-primary`
+* `.panel-success`
+* `.panel-info`
+* `.panel-warning`
+* `.panel-danger`
+
+
+```html
+<div class="panel `panel-info`">
+  <!-- panel-content -->
+</div>
+```
+> Note that this will only change the color of **the title and the border**. The footer will stay grey-ish.
+
+### Expand panel's body
+
+Adding a **table** or a **list group** inside a panel render it in a seamless fashion, perfectly intergrating this table or list group to the panel's design.
+
+Simply add a `<table>` with the `.table` class **after** your `div.panel-body`:
+
+```html
+<div class="panel panel-default">
+  <div class="panel-heading">
+    John Doe commented on that:
+  </div>
+  <div class="panel-body">
+    Today, I ate an apple. It was tasty
+  </div>
+* <table class="table">
+*   <thead>
+*     <tr><th>First Name</th><th>Last Name</th></tr>
+*   </thead>
+*   <tbody>
+*     <tr><td>Mark</td><td>Otto</td></tr>
+*     <tr><td>Jacob</td><td>Thornton</td></tr>
+*     <tr><td>Larry</td><td>the Bird</td></tr>
+*   </tbody>
+* </table>
+  <div class="panel-footer">
+    <!-- foter-content -->
+  </div>
+</div>
+```
+
+#### List group in body
+
+For a list group, its the same idea.
+
+> Remove the table from the panel.
+
+Add your new `<ul>` witht the `.list-group` class directly after the `div.panel-body`:
+
+```html
+<div class="panel panel-default">
+  <div class="panel-heading">
+    John Doe commented on that:
+  </div>
+  <div class="panel-body">
+    Today, I ate an apple. It was tasty
+  </div>
+* <div class="list-group">
+*   <a class="list-group-item">Golden</a>
+*   <a class="list-group-item">Grany</a>
+*   <a class="list-group-item">Williams</a>
+* </div>
+  <div class="panel-footer">
+    <!-- foter-content -->
+  </div>
+</div>
+```
+
 ## Resources
 
 You will find the final HTML file for this course [here][final-file].
