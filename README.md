@@ -40,7 +40,8 @@ Materials for the COMEM+ web development courses.
   * [JavaScript closures](subjects/js-closures/)
   * [JavaScript prototypes](subjects/js-prototypes/)
 * jQuery
-  * AJAX with jQuery
+  * [jQuery - DOM basics](subjects/jquery-dom-basics)
+  * jQuery - AJAX
 * [Angular](subjects/angular/)
   * Angular UI router
   * Angular with Bootstrap
