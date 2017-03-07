@@ -76,7 +76,6 @@ This exercice will require you to use:
 
 > To complete this exercise, you'll need to look up in the documentation how to use:
 * [Labels][labels]
-* [Panels][panel]
 * [Alerts][alert]
 * [Button groups][btn-group]
 * [Simple text in navbar][nav-text]
@@ -93,7 +92,6 @@ This exercice will require you to use:
 
 [bht]: https://gist.githubusercontent.com/Tazaf/420a368389367a83fcfb96ab3a51bf8a/raw/1c5af02f1dd3248189b8e6869a02c5133232db7b/index.html
 [labels]: http://getbootstrap.com/components/#labels
-[panel]: http://getbootstrap.com/components/#panels
 [alert]: http://getbootstrap.com/components/#alerts
 [btn-group]: http://getbootstrap.com/components/#btn-groups
 [nav-text]: http://getbootstrap.com/components/#navbar-text
