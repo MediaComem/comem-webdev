@@ -36,9 +36,14 @@ Materials for the COMEM+ web development courses.
 * [Bootstrap](subjects/bootstrap-basics)
   * [Bootstrap Layout management](subjects/bootstrap-layout-management)
 * [JavaScript](subjects/js/)
+  * JavaScript DOM API
   * [JavaScript closures](subjects/js-closures/)
   * [JavaScript prototypes](subjects/js-prototypes/)
-  * [Angular](subjects/angular/) (frontend web application framework)
+* jQuery basics
+  * AJAX with jQuery
+* [Angular](subjects/angular/)
+  * Angular UI router
+  * Angular with Bootstrap
 * [Node.js](subjects/node/)
   * [npm (package manager)](subjects/npm/)
   * [Express (Node.js web framework)](subjects/express/)
@@ -60,7 +65,7 @@ Materials for the COMEM+ web development courses.
 
 * [Heroku](subjects/heroku/)
 
-**Course Introductions**
+**Course Introductions and Exercices**
 
 * [Web Services](subjects/webserv-course/)
 * [Advanced Frontend Development](subjects/masrad-intro)
