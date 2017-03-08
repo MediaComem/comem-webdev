@@ -159,18 +159,59 @@ To select DOM elements and receive jQuery objects matching the selected elements
 
 ### Storing jQuery object
 
-You can obviously store in a variable any jQuery array returned from a call to the `$()` function:
+You can obviously store in a variable any jQuery array returned from a call to the `$()` function, for future reference:
 
 ```js
 var paragraphs = $("p");
 console.log(paragraph); // Will print an array with all the "p" in the page.
 ```
+This has **two** main advantages:
+* If you selected very specific elements using a **particularly complex selector**, you won't have to type this selector again.
+```js
+var eles = $("div.theCycle:visible input[type=text].required");
+```
+* Navigating the DOM is an **expensive operation**; limiting them is always a good thing. Storing the result of a jQuery selection in a variable helps you to do just that.
+```js
+var parag = $("p");
+parag.css("color", "white");
+parag.html("Hello World");
+parag.hide();
+```
+
+## Modifying things
+
+After selecting HTML elements, you will probably want to modify them.
+
+With jQuery, you can do every DOM modification that you can do with pure JS.
+
+That is:
+
+* Create element(s)
+* Create new attribute(s) for an element
+* Change the content of an element (either text or HTML)
+* Add new class(es) to element(s)
+* Remove class(es) from element(s)
+* Insert element(s) before or after others
+
+### The `text()` method
+
+To change the textual content of an HTML element, that is what's between the opening and the closing tag, you can use the `text()` method, and pass it the new content as parameter.
+
+Let's change all the content of the **badges** in the page.
+
+Remove all the code from your `script.js` file and add this instead:
+
+```js
+$(".badge").text("12");
+```
+> All the badges in the left list should now have the value `12`.
 
 ## Resources
 
 **Documentation**
 
 * [jQuery Documentation][jq-doc]
+* [List of CSS selectors][css-select]
 
 **Further reading**
 
@@ -182,3 +223,19 @@ console.log(paragraph); // Will print an array with all the "p" in the page.
 [jq-doc]: http://api.jquery.com/
 [ls]: https://www.npmjs.com/package/live-server
 [local-bs]: ../bootstrap-basics/#5
+[css-select]: https://www.w3schools.com/cssref/css_selectors.asp
+
+## TODO
+
+* Add `#align-buttons` line 126
+* Add `#dialog` line 74
+
+## TOADD
+
+* click()
+* $(this)
+* children()
+* hasClass()
+* e.preventDefault()
+* blur()
+* Select element in sub-scope
