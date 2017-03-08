@@ -30,6 +30,8 @@ This subject will use [this `index.html` file][ex-file] as illustration.
 
 Be sure to download it and place it in a new project directory (e.g. `jquery-course`), if you want to try and follow with the examples.
 
+<p class="center"><img src="images/template.jpg" class="shadow" width="70%" /></p>
+
 > Note that this example file includes Bootstrap through a CDN. Feel free to change that to a local link if you'd prefer ([see here][local-bs]).
 
 <!-- slide-front-matter class: center, middle -->
@@ -111,7 +113,7 @@ Start your project with `live-server` and access your browser console. You shoul
 Live reload enabled.
 ```
 > If it's the case, you're good to go. jQuery and your custom script are both correctly include in your project.
- 
+
 ## jQuery documentation
 
 Everything that is presented in this slide-deck can also be found in **the jQuery documentation**, along with lot of **examples** and **information**.
@@ -121,6 +123,48 @@ We highly recommend that you check it out.
 [jQuery Documentation][jq-doc]
 
 <!-- slide-front-matter class: center, middle -->
+
+## The `$` object
+
+The complete jQuery library is accessible in your JS code through the use of the global `$` variable.
+
+> Some other libraries also offers a `$` variable as there main entry-point. That could be the cause for conflict between jQuery and those librairies.
+
+If it's the case, you can use the global `jQuery` variable instead.
+
+To be sure to remove all possible conflicts, you can use the special `.noConflict()` jQuery method at the top of your JS file:
+
+```js
+$.noConflict();
+// Code that uses other library's $ can follow here.
+// But use the jQuery variable to access jQuery's method.
+```
+> This shouldn't be the case in this course.
+
+## Selecting things
+
+Being a library designed to easily handle DOM manipulation, jQuery allows you to select DOM elements.
+
+The selection functionnality are **quite broad and powerful**, and are based on the **same syntax as CSS selectors**.
+
+To select DOM elements and receive jQuery objects matching the selected elements, use the `$()` function, passing it a selector as parameter
+
+| Selector | CSS example | jQuery | Result |
+| :------- | :----- | :---------- | :----- |
+| Element  | `p` | `$("p")` | **All** `<p>` elements in the page |
+| Id       | `#logo` | `$("#logo")` | **Unique** element with the `logo` id |
+| Class    | `.active` | `$(".active")` | **All** elements with a `active` class |
+
+> Using a jQuery selector will always return you an `array` of jQuery objects, event with an Id selector.
+
+### Storing jQuery object
+
+You can obviously store in a variable any jQuery array returned from a call to the `$()` function:
+
+```js
+var paragraphs = $("p");
+console.log(paragraph); // Will print an array with all the "p" in the page.
+```
 
 ## Resources
 
