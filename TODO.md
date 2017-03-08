@@ -1,5 +1,7 @@
 # TODO
 
+* Make home link go back to year
+
 * Express mongoose: ID virtual, transform
 * Express mongoose: add links to implementations in demo API
 * Git cheatsheet
@@ -13,7 +15,6 @@
   * MongoDB shell
 * Glossary
 
-* Update tools in webserv repo
 * You will need: code editor on all slides
 * Template: auto-replace relative links with full URLs (test in generated PDF)
 * Replace width='x%' by class='wx'
