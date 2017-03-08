@@ -12,7 +12,6 @@ Getting started with and understanding the basics of [AngularJS][angular] (versi
 
 * [JavaScript](../js/)
 * [JavaScript closures](../js-closures/)
-* [JavaScript prototypes](../js-prototypes/)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -29,8 +28,44 @@ Getting started with and understanding the basics of [AngularJS][angular] (versi
   - [Overview](#overview)
   - [Modules](#modules)
   - [Controllers](#controllers)
+    - [Creating a controller](#creating-a-controller)
+    - [The scope](#the-scope)
+    - [Named controllers](#named-controllers)
+    - [Using functions in the view](#using-functions-in-the-view)
+    - [Using `ng-model`](#using-ng-model)
+    - [Data binding](#data-binding)
+    - [Two-way data binding](#two-way-data-binding)
   - [Services](#services)
+    - [Dependency injection](#dependency-injection)
+    - [Why dependency injection?](#why-dependency-injection)
+    - [The $http service](#the-http-service)
+    - [Making HTTP requests through a service](#making-http-requests-through-a-service)
+    - [Using `service()`](#using-service)
   - [Filters](#filters)
+    - [Built-in filters](#built-in-filters)
+    - [A few filter examples](#a-few-filter-examples)
+  - [Directives](#directives)
+    - [Making your own directive](#making-your-own-directive)
+    - [DOM manipulation in directives](#dom-manipulation-in-directives)
+    - [Built-in directives](#built-in-directives)
+  - [Components](#components)
+    - [Component HTML template](#component-html-template)
+    - [Component definition](#component-definition)
+    - [Using a component](#using-a-component)
+    - [Component inputs](#component-inputs)
+    - [Component outputs](#component-outputs)
+    - [Output callbacks](#output-callbacks)
+    - [Using a component output](#using-a-component-output)
+  - [Application configuration and runtime](#application-configuration-and-runtime)
+    - [Constants](#constants)
+    - [Config functions](#config-functions)
+    - [Run functions](#run-functions)
+- [Going further](#going-further)
+  - [Scope hierarchy](#scope-hierarchy)
+    - [Scopes and components](#scopes-and-components)
+  - [Dependency injection and minification](#dependency-injection-and-minification)
+    - [Dependency injection is broken by minification](#dependency-injection-is-broken-by-minification)
+    - [Inline array annotation](#inline-array-annotation)
 - [TODO](#todo)
 - [Resources](#resources)
 
@@ -125,6 +160,8 @@ src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js'>
   </body>
 </html>
 ```
+
+You should keep your [developer console][chrome-dev] open throughout this tutorial to detect errors in your code.
 
 
 
@@ -248,11 +285,12 @@ Properties you attach to the scope can be interpolated into HTML templates with 
 #### Named controllers
 
 You can also access the scope by using **named controllers**.
-Instead of using the `$scope`, you attach properties directly to the controller using `this`:
+**Instead** of using the `$scope`, you attach properties directly to the controller using `this`:
 
 ```js
 angular.module('starter').controller('HelloController', function() {
-  `this.name` = 'World';
+  `var ctrl = this;`
+  `ctrl.name` = 'World';
 });
 ```
 
@@ -275,8 +313,9 @@ You can also attach functions to the scope or controller:
 
 ```js
 angular.module('starter').controller('HelloController', function() {
-  this.name = 'World';
-* this.double = function(n) {
+  var ctrl = this;
+  ctrl.name = 'World';
+* ctrl.double = function(n) {
 *   return n * 2;
 * };
 });
@@ -287,31 +326,44 @@ These functions can be called in the view:
 ```html
 <div ng-controller='HelloController as ctrl'>
   <p>Hello {{ ctrl.name }}!</p>
-* <p>Two times two equals {{ double(2) }}</p>
+* <p>Two times two equals {{ ctrl.double(2) }}</p>
 </div>
 ```
 
-#### Data binding
+#### Using `ng-model`
 
-Using `ng-model`, you can bind data from the view to the scope:
-
-```html
-<p>Two times <input `ng-model='ctrl.value'` /> equals {{ double(`ctrl.value`) }}</p>
-```
-
-What's interesting is that it goes both ways with Angular:
+You can bind the **view model** and **view** together:
 
 ```js
 angular.module('starter').controller('HelloController', function() {
   var ctrl = this;
   // ...
-* this.reset = function() {
+  `ctrl.value = 2;`
+});
+```
+
+Reference this new `ctrl.value` variable in the view with `ng-model`:
+
+```html
+<p>Two times <input `ng-model='ctrl.value'` /> equals {{ double(`ctrl.value`) }}</p>
+```
+
+#### Data binding
+
+What's interesting about `ng-model` is that it goes both ways.
+Add a function that modifies the value of your scope variable:
+
+```js
+angular.module('starter').controller('HelloController', function() {
+  var ctrl = this;
+  // ...
+* ctrl.reset = function() {
 *   ctrl.value = 2;
 * };
 });
 ```
 
-Add a button below the previous HTML:
+Then add a button that calls this new function below the previous HTML:
 
 ```html
 <p>Two times <input ng-model='ctrl.value' /> equals {{ double(ctrl.value) }}</p>
@@ -371,8 +423,9 @@ Using the service is as simple as adding it as an argument to our controller:
 
 ```js
 angular.module('starter').controller('HelloController', function(`HelloService`) {
-  this.name = 'World';
-  this.double = `HelloService.double`;
+  var ctrl = this;
+  ctrl.name = 'World';
+  ctrl.double = `HelloService.double`;
 });
 ```
 
@@ -454,9 +507,9 @@ angular.module('starter').controller('HelloController', function(HelloService) {
   this.name = 'World';
   this.double = HelloService.double;
 
-  HelloService.retrieveJoke().then(function(joke) {
-    ctrl.joke = joke;
-  });
+* HelloService.retrieveJoke().then(function(joke) {
+*   ctrl.joke = joke;
+* });
 });
 ```
 
@@ -468,6 +521,35 @@ You can now display the joke in the HTML template:
   <p>Two times two equals {{ double(2) }}</p>
 * <p>Did you hear? {{ joke }}</p>
 </div>
+```
+
+#### Using `service()`
+
+Services can also be defined with Angular's `service()` function instead of `factory()`.
+They **both create services**; the only difference is how your **factory function** is invoked to create the service.
+
+When using `factory()`, Angular will simply call your factory function to create the service:
+
+```js
+function MyServiceFactory() {
+  var service = {};      // Create the service yourself
+  service.foo = 'bar';   // Attach stuff to it
+  return service;        // Return it
+}
+
+// Angular will execute "MyServiceFactory()" to create the service
+angular.module('starter').factory('MyService', MyServiceFactory);
+```
+
+When using `service()`, Angular calls your factory function as a **constructor**:
+
+```js
+function MyServiceFactory() {
+  this.foo = 'bar'; // Attach stuff to "this", which will be the service
+}
+
+// Angular will execute "new MyServiceFactory()" to create the service
+angular.module('starter').service('MyService', MyServiceFactory);
 ```
 
 
@@ -500,15 +582,15 @@ Angular has a number of useful [built-in filters][angular-built-in-filters]:
 
 Filter    | Purpose
 :---      | :---
-filter    | Filter an array
-currency  | Format a number as currency
-number    | Format a number as text (e.g. with thousands separator)
-date      | Format date a string with a custom format
-json      | Converts a JavaScript object into a JSON string
-lowercase | Converts a string to lower case
-uppercase | Converts a string to upper case
-limitTo   | Select a subset from an array
-orderBy   | Order an array's elements
+`filter`    | Filter an array
+`currency`  | Format a number as currency
+`number`    | Format a number as text (e.g. with thousands separator)
+`date`      | Format date a string with a custom format
+`json`      | Converts a JavaScript object into a JSON string
+`lowercase` | Converts a string to lower case
+`uppercase` | Converts a string to upper case
+`limitTo`   | Select a subset from an array
+`orderBy`   | Order an array's elements
 
 #### A few filter examples
 
@@ -518,34 +600,505 @@ Several filters can be "piped" together:
 <p>{{ ctrl.name | uppercase | hello }}</p>
 ```
 
-Let's try the `date` filter:
+Let's try the `date` filter.
+Create a date in your controller first:
+
+```js
+angular.module('starter').controller('HelloController', function(HelloService) {
+  var ctrl = this;
+  // ...
+  `ctrl.now = new Date();`
+});
+```
+
+Then filter it in the view:
 
 ```html
-<p>It's {{ new Date() | date: 'HH:mm:ss' }}</p>
+<p>It's {{ `ctrl.now | date: 'HH:mm:ss'` }}</p>
 ```
+
+
+
+### Directives
+
+[Directives][angular-directives] are **markers on a DOM element** that tell Angular's **HTML compiler** to attach a **specified behavior** to that DOM element, or to **transform** the DOM element and its children.
+
+You've already used them: `ng-controller` and `ng-model` are directives.
+
+A directive can be an **HTML attribute**:
+
+```html
+<input `ng-model='ctrl.value'` />
+```
+
+An **HTML class**:
+
+```html
+<p `class='my-directive'`>Hello</p>
+```
+
+Or a custom **HTML tag**:
+
+```html
+*<person-name person='person'></person-name>
+```
+
+#### Making your own directive
+
+A directive is not magic, you can create your own using Angular's `directive` function.
+This function must return a **directive definition object**:
+
+```js
+angular.module('starter')`.directive('redAlert', function() {`
+  return `{`
+*   link: function(scope, element, attributes) {
+*     element.css('background-color', '#ff7777');
+*   }
+  `}`;
+`}`);
+```
+
+You can then use this directive in the view:
+
+```html
+<div ng-controller='HelloController as ctrl'>
+  <!-- ... -->
+  <p `class='red-alert'`>Did you hear? {{ joke }}</p>
+  <!-- ... -->
+</div>
+```
+
+Note that you use **dash-delimited names in the view**,
+but Angular looks for a directive with a corresponding **camel-case name**.
+
+#### DOM manipulation in directives
+
+The **main goal** of directives is to perform **DOM manipulation instead of controllers**,
+so that controllers only have to deal with the view model.
+
+A directive's link function has the following signature:
+
+```
+  function(scope, element, attributes)
+```
+
+* The `scope` is the Angular scope object corresponding to the HTML DOM element to which the directive is attached
+* The `element` is a [jQuery][jquery] wrapper around the HTML DOM element
+* The `attributes` are an object representing the HTML DOM element's attributes and values
+
+If you have not included jQuery in your project, the `element` is actually a [jqLite wrapper][angular-element].
+
+jqLite is a tiny, API-compatible **subset of jQuery** that allows Angular to manipulate the DOM in a cross-browser compatible way.
+It implements only the **most commonly needed** functionality with the goal of having a **very small footprint**.
+
+#### Built-in directives
+
+Directive             | Description
+:---                  | :---
+`ng-app`              | Designate the root HTML element of an Angular application
+`ng-class`            | Set CSS classes on an HTML element based on an expression
+`ng-controller`       | Attach an Angular controller to an HTML element
+`ng-click`            | Specify custom behavior when an HTML element is clicked
+`ng-disabled`         | Sets the `disabled` attribute on an HTML element (e.g. `<input>`, `<button>`, `<select>`) based on an expression
+`ng-if`               | Removes or recreates an HTML element based on an expression
+`ng-model`            | Bind a form input (e.g. `<input>`, `<select>`, `<textarea>`) to a property of the Angular scope
+`ng-repeat`           | Repeat an HTML element once per item from a list
+`ng-show` / `ng-hide` | Shows or hides an HTML element based on an expression
+`ng-switch`           | Conditionally swap HTML elements based on an expression
+
+Read the [documentation][angular-directives-list] to learn more.
+
+
+
+### Components
+
+Components are a **special kind of directive** with simpler configuration and which is suitable for a **component-based application structure**.
+They're a first step towards making applications with [web components][a-guide-to-web-components], an approach which has been taken further in Angular 2.
+
+A component is basically:
+
+* A **reusable view** (an HTML template)
+* Some **logic** attached to this template (a controller)
+* Clearly defined **inputs** and **outputs**
+
+For this example, we'll create a `<person-name>` component to display a person.
+
+#### Component HTML template
+
+Let's define the HTML template for our component:
+
+```html
+{{ personNameCtrl.person.firstName }} {{ personNameCtrl.person.lastName }}
+```
+
+You can register a template in `index.html` by adding this somewhere in the `<body>`:
+
+```html
+<script type='text/ng-template' id='personName.html'>
+  {{ personNameCtrl.person.firstName }} {{ personNameCtrl.person.lastName }}
+</script>
+```
+
+**If** you are serving the content with a web server,
+you can also save it to a `personName.html` file next to `index.html` (just the contents without the `<script>` tag around it).
+Angular will make an AJAX request to load it dynamically.
+
+The two solutions are **equivalent**.
+
+#### Component definition
+
+Call Angular's `component()` function to define a component.
+The second argument is a **component definition object** with various properties that configure your component:
+
+```js
+angular.module('starter').component('personName', `{`
+* templateUrl: 'personName.html',
+* bindings: {
+*   person: '<'
+* },
+* controller: function() {
+*   var personNameCtrl = this;
+* },
+* controllerAs: 'personNameCtrl'
+`}`);
+```
+
+* `templateUrl` tells Angular what **HTML template** to use
+  (it can be a relative or absolute URL)
+* `bindings` defines the component's **inputs** and **outputs**
+* `controller` is the component's **controller** that will be applied to the template
+  (just like if we used `ng-controller`)
+* `controllerAs` is the **name of the controller** in the template
+  (just like if we used `as personNameCtrl` in `ng-controller`)
+
+#### Using a component
+
+Let's add a list of people to our `HelloController`:
+
+```js
+angular.module('starter').controller('HelloController', function(HelloService) {
+  var ctrl = this;
+  // ...
+* ctrl.people = [
+*   { firstName: 'John', lastName: 'Doe' },
+*   { firstName: 'Jane', lastName: 'Doe' },
+*   { firstName: 'Richard', lastName: 'Doe' }
+* ];
+});
+```
+
+Now we can use our new component in the main view.
+Let's also use `ng-repeat` to display all the people in a list:
+
+```html
+<p>
+  <ul>
+    <li `ng-repeat='person in ctrl.people'`>
+      `<person-name person='person'></person-name>`
+    </li>
+  </ul>
+</p>
+```
+
+It's good practice to structure your application into **reusable components**.
+
+#### Component inputs
+
+Components should only control **their own view and data**.
+You can define the behavior of inputs with the values in the `bindings` object:
+
+Binding | Description
+:---    | :---
+`<`     | Input with one-way binding: changes to the value will not be reflected in the parent (although if it's an object or array, changes to its contents will be reflected)
+`=`     | Input with two-way binding (changes to the value will be reflected in the parent)
+`@`     | String input (when the input is simply a string that doesn't change, i.e. not a variable)
+
+When writing components, it's good practice to use `<` and `@` instead of `=`,
+to make it clearer who controls what data.
+Here's an example of the difference between using `<` and `@`:
+
+```html
+<!-- Input with '<': takes a variable -->
+<hello name='person.name'></hello>
+
+<!-- Input with '@': takes a string -->
+<hello name='John Doe'></hello>
+```
+
+#### Component outputs
+
+Outputs allow your component to **communicate with the parent component** (or view).
+Let's modify our `personName.html` template and add a button to say hello to each person:
+
+```html
+{{ personNameCtrl.person.firstName }} {{ personNameCtrl.person.lastName }}
+*<button type='button' ng-click='personNameCtrl.sayHello()'>Say hello</button>
+```
+
+Add the `sayHello` function to the component's controller.
+Just log the name for now and make sure it works:
+
+```js
+angular.module('starter').component('personName', {
+  templateUrl: 'personName.html',
+  bindings: {
+    person: '<'
+  },
+  controller: function() {
+    var personNameCtrl = this;
+*   personNameCtrl.sayHello = function() {
+*     console.log(personNameCtrl.person);
+*   };
+  },
+  controllerAs: 'personNameCtrl'
+});
+```
+
+#### Output callbacks
+
+Component outputs allow you to define **callbacks to component events**.
+
+You define an output by adding a `&` binding.
+This kind of binding is a **function** that is added to the scope and **which you can call**:
+
+```js
+angular.module('starter').component('personName', {
+  templateUrl: 'personName.html',
+  bindings: {
+    person: '<',
+*   onSayHello: '&'
+  },
+  controller: function() {
+    var personNameCtrl = this;
+    personNameCtrl.sayHello = function() {
+*     personNameCtrl.onSayHello({ personToSalute: personNameCtrl.person });
+    };
+  },
+  controllerAs: 'personNameCtrl'
+});
+```
+
+#### Using a component output
+
+The **parent component** (or view) can plug a **callback function** into our new component output:
+
+```html
+<person-name
+  person='person'
+  `on-say-hello='ctrl.sayHelloToPerson(personToSalute)'`>
+</person-name>
+```
+
+We can use the property names of the object passed to the output as variables in the parent
+(the `personToSalute` variable name is defined by the component when it uses the output).
+
+Define the `sayHelloToPerson` function in `HelloController` to react to the output:
+
+```js
+angular.module('starter').controller('HelloController', function(HelloService) {
+  var ctrl = this;
+  // ...
+* ctrl.sayHelloToPerson = function(person) {
+*   ctrl.name = person.firstName;
+* };
+});
+```
+
+
+
+### Application configuration and runtime
+
+The remaining Angular elements are simple but useful:
+
+* **Constants** allow to define constant values that can serve as configuration
+* **Config functions** are run when configuring the Angular application,
+  and allow you to customize services and other elements
+* **Run functions** are run after configuration is complete,
+  before your controllers, directives and components are applied
+
+#### Constants
+
+A constant is simply a **value that can be injected** into other Angular elements.
+You define it by calling Angular's `constant()` function:
+
+```js
+angular.module('starter')`.constant('theMeaningOfLife', 42)`;
+```
+
+Simply inject it where you need it:
+
+```js
+angular.module('starter')
+  .controller('HelloController', function(HelloService, `theMeaningOfLife`) {
+    // ...
+  });
+```
+
+#### Config functions
+
+A **config function** is called while the Angular application is being configured:
+
+```js
+angular.module('starter').config(function() {
+  // Do some stuff...
+});
+```
+
+You **cannot** inject services into a config function, as they have not been instantiated yet.
+You can however inject constants and **providers**, which can be used to customize services:
+
+```js
+angular.module('starter').config(function(`$httpProvider`, `theMeaningOfLife`) {
+  // Get the object of default headers send by $http on every request
+  var commonHeaders = `$httpProvider`.defaults.headers.common;
+  // Tell $http to always request XML from the server
+  commonHeaders.Accept = 'application/xml';
+  // Tell $http to always send the MeaningOfLife header to the server
+  commonHeaders.MeaningOfLife = `theMeaningOfLife`;
+});
+```
+
+#### Run functions
+
+A **run function** is called after the Angular application is configured but **before** your controllers, directives and components are applied:
+
+```js
+angular.module('starter').run(function(HelloService) {
+  console.log('2 times 2 equals ' + HelloService.double(2));
+});
+```
+
+You can use it to perform tasks that should be run once when your application starts.
+
+
+
+## Going further
+
+<!-- slide-front-matter class: center, middle -->
+
+
+
+### Scope hierarchy
+
+Many directives in Angular create a **new scope**, like `ng-controller` or `ng-repeat`.
+Child scopes **inherit properties from their parent scope**.
+
+<p class='center'><img src='images/scope-hierarchy.png' /></p>
+
+You can see it in action [here][angular-codepen-scope-hierarchy].
+
+#### Scopes and components
+
+When you define a component, you create an **isolated scope** which **does not inherit** from the parent scope.
+Your component can only communicate with the parent view through **inputs** and **outputs**.
+
+You can see it in action [here][angular-codepen-scope-components].
+
+
+
+### Dependency injection and minification
+
+**Minification** is the process of **removing all unnecessary characters** from source code **without changing its functionality**.
+Take the following code as an example:
+
+```js
+var numbers = [];
+for (var i = 0; i < 20; i++) {
+  numbers[i] = i;
+}
+```
+
+It can be rewritten like this:
+
+```js
+for(var a=[i=0];++i<20;a[i]=i);
+```
+
+Although much less readable, minified code can be much smaller.
+Minification tools are often used to **reduce file size**, especially when downloading a rich Internet application's **JavaScript files**.
+
+#### Dependency injection is broken by minification
+
+Angular relies on **variable names** to perform dependency injection by default:
+
+```js
+.controller('HelloController', function(`HelloService`) {
+  var helloCtrl = this;
+  helloCtrl.double = `HelloService`.double;
+});
+```
+
+This code **will not work if variable names are minified**:
+
+```js
+.controller('HelloController',function(`a`){
+var b=this;b.double=`a`.double;
+});
+```
+
+How would Angular know that variable `a` should be your `HelloService`?
+
+#### Inline array annotation
+
+When you know your code is going to be minified, you should use the **inline array annotation** to declare your injected parameters:
+
+```js
+.controller('HelloController', `[ 'HelloService', function(HelloService) {`
+  var helloCtrl = this;
+  helloCtrl.double = HelloService.double;
+`}]`);
+```
+
+That way, even when your variables are minified, the **names in the inline array** will tell Angular what you need to inject:
+
+```js
+.controller('HelloController',[`'HelloService'`,function(`a`){
+var b=this;b.double=`a`.double;
+}]);
+```
+
+You will often find the inline array annotation in examples as it is the recommended dependency injection syntax.
 
 
 
 ## TODO
 
-* Directives & components
-* Constants
-* Config functions
-* Run functions
-* Scope hierarchy
 * Form validation
-* Angular gotchas (dom manipulation in controllers, injection syntaxes for minification)
 
 
 
 ## Resources
 
-* [Angular][angular]
+**Documentation**
+
+* [Angular developer guide][angular-guide]
+* [Angular API reference][angular-api]
+  * [Angular Components][angular-components]
+  * [Angular Directives][angular-directives] ([built-in][angular-directives-list])
+
+**Further reading**
+
+* [A guide to web components][a-guide-to-web-components]
+* [Angular 2 Components][angular-2-series-components]
 
 
 
+[a-guide-to-web-components]: https://css-tricks.com/modular-future-web-components/
 [angular]: https://angularjs.org/
-[angular-codepen]: http://codepen.io/AlphaHydrae/pen/LxoRze?editors=1010#0
+[angular-api]: https://docs.angularjs.org/api
 [angular-built-in-filters]: https://docs.angularjs.org/api/ng/filter
+[angular-codepen]: http://codepen.io/AlphaHydrae/pen/LxoRze?editors=1010#0
+[angular-codepen-scope-hierarchy]: http://codepen.io/AlphaHydrae/pen/ryjaXN?editors=1010#0
+[angular-codepen-scope-components]: http://codepen.io/AlphaHydrae/pen/LWxVzj?editors=1010#0
+[angular-components]: https://docs.angularjs.org/guide/component
+[angular-directives]: https://docs.angularjs.org/guide/directive
+[angular-directives-list]: https://docs.angularjs.org/api/ng/directive
+[angular-element]: https://docs.angularjs.org/api/ng/function/angular.element
+[angular-guide]: https://docs.angularjs.org/guide
+[angular-2-series-components]: http://blog.ionic.io/angular-2-series-components/
 [chrome]: https://www.google.com/chrome/
+[chrome-dev]: https://developers.google.com/web/tools/chrome-devtools/console/
 [html-history-api]: https://developer.mozilla.org/en-US/docs/Web/API/History_API
+[jquery]: http://jquery.com
+[minification]: https://en.wikipedia.org/wiki/Minification_(programming)
+[web-components]: https://developer.mozilla.org/en-US/docs/Web/Web_Components
