@@ -137,4 +137,4 @@ We highly recommend that you check it out.
 [ex-file]: https://gist.githubusercontent.com/Tazaf/2ca35d60688eec1281fd9546abe1f76a/raw/70c767db08e1e57b7db78df17258739d3ebeea2e/index.html
 [jq-doc]: http://api.jquery.com/
 [ls]: https://www.npmjs.com/package/live-server
-[local-bs]: /bootstrap-basics/#5
+[local-bs]: ../bootstrap-basics/#5
