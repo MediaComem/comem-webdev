@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [MAS-RAD -- Advanced Front-end Development (DFA)](#mas-rad----advanced-front-end-development-dfa)
+  - [Citizen engagement](#citizen-engagement)
+  - [Report a problem](#report-a-problem)
+  - [Front-end](#front-end)
+  - [Back-end](#back-end)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # MAS-RAD -- Advanced Front-end Development (DFA)
 
 The goal of this course is to discover concepts and tools to organize the front-end side of a web application and enrich the user interface/experience according to current good practices. You will:

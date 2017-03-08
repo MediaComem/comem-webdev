@@ -42,6 +42,12 @@ Introduction to [Bootstrap][bootstrap], a HTML/CSS framework, useful to quickly 
   - [Forms... again](#forms-again)
   - [Navbar](#navbar)
   - [Lists](#lists)
+- [Panel](#panel)
+  - [Panel's content](#panels-content)
+  - [Panel's title](#panels-title)
+  - [Panel's footer](#panels-footer)
+  - [Panel's color](#panels-color)
+  - [Expand panel's body](#expand-panels-body)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

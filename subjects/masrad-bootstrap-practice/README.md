@@ -71,6 +71,7 @@ This exercice will require you to use:
 
 * Navbar
 * List
+* Panel
 * Form
 * Grid System
 
