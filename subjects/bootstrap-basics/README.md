@@ -111,7 +111,7 @@ bootstrap-3.3.7-dist/
       └─ [some files]
 ```
 
-Copy the complete `css` directory and place it at the root of your project directory, then add this `<link>` tag at the bottom of your `<head>` tag in your `index.html` file
+Copy the complete `css` and `font` directories and place them at the root of your project directory, then add this `<link>` tag at the bottom of your `<head>` tag in your `index.html` file:
 
 ```html
 <head>
