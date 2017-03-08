@@ -1,8 +1,8 @@
-# Bootstrap Exercise
+# Bootstrap Practice
 
 <!-- slide-include ../../BANNER.md -->
 
-Hands-on exercise on the use of Bootstrap to create a WebPage.
+Hands-on practice on the use of Bootstrap to create a WebPage.
 
 **You will need**
 
@@ -30,7 +30,7 @@ Hands-on exercise on the use of Bootstrap to create a WebPage.
 
 ## What to do?
 
-1. Create a new project directory in your file system (`bootstrap-exercise`)
+1. Create a new project directory in your file system (`bootstrap-practice`)
 2. Download the [basic HTML template][bht] and save it as `index.html`
 3. **Using only Bootstrap classes, recreate the following page:**
 
@@ -53,7 +53,7 @@ The steps could be:
 
 **You don't have to add any additionnal CSS!**
 
-This exercise was only realised using Bootstrap classes.
+This practice was only realised using Bootstrap classes.
 
 Try to do the same.
 
@@ -74,7 +74,7 @@ This exercice will require you to use:
 * Form
 * Grid System
 
-> To complete this exercise, you'll need to look up in the documentation how to use:
+> To complete this practice, you'll need to look up in the documentation how to use:
 * [Labels][labels]
 * [Alerts][alert]
 * [Button groups][btn-group]
