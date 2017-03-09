@@ -10,6 +10,24 @@ Learn about [Ionic][ionic], an open source framework to build hybrid mobile appl
 
 * [Angular](../angular/)
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [What is Ionic?](#what-is-ionic)
+  - [Which OS should you support?](#which-os-should-you-support)
+  - [How can you deal with OS fragmentation?](#how-can-you-deal-with-os-fragmentation)
+  - [Cordova](#cordova)
+  - [What about Ionic?](#what-about-ionic)
+- [Demo](#demo)
+  - [Install Ionic](#install-ionic)
+- [Basics of Ionic](#basics-of-ionic)
+  - [CSS components](#css-components)
+  - [JavaScript components](#javascript-components)
+- [Resources](#resources)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 
 ## What is Ionic?
