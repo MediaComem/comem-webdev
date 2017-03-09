@@ -43,7 +43,7 @@ Materials for the COMEM+ web development courses.
   * [jQuery - DOM basics](subjects/jquery-dom-basics)
   * jQuery - AJAX
 * [Angular](subjects/angular/)
-  * Angular UI router
+  * [Angular UI Router](subjects/angular-ui-router/)
   * Angular with Bootstrap
 * [Node.js](subjects/node/)
   * [npm (package manager)](subjects/npm/)
