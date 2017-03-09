@@ -185,7 +185,10 @@ src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js'>
     </script>
   </head>
   <body>
-    <!-- Page content -->
+    <!-- Your HTML goes here -->
+    <script>
+      <!-- Your JavaScript goes here -->
+    </script>
   </body>
 </html>
 ```
