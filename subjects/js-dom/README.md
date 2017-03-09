@@ -13,7 +13,7 @@ Learn or rediscover how to use the DOM API to manipulate the underlying HTML obj
 
 * [Project setup][projset]
 * [Bootstrap - Basics][bootstrap]
-* [JavaScript basics and more][]
+* [JavaScript basics and more][js-bas]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
