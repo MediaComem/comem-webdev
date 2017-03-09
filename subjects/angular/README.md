@@ -22,7 +22,7 @@ Getting started with and understanding the basics of [AngularJS][angular] (versi
   - [DOM manipulation and AJAX requests](#dom-manipulation-and-ajax-requests)
   - [Single-page applications](#single-page-applications)
   - [Dynamic HTML](#dynamic-html)
-  - [Angular 2](#angular-2)
+  - [Evolution of Angular](#evolution-of-angular)
 - [Getting started](#getting-started)
   - [Starter template](#starter-template)
   - [Overview](#overview)
@@ -33,10 +33,10 @@ Getting started with and understanding the basics of [AngularJS][angular] (versi
   - [Directives](#directives)
   - [Components](#components)
   - [Application configuration and runtime](#application-configuration-and-runtime)
-- [Going further](#going-further)
+- [Advanced concepts](#advanced-concepts)
   - [Scope hierarchy](#scope-hierarchy)
   - [Dependency injection and minification](#dependency-injection-and-minification)
-- [TODO](#todo)
+  - [Forms](#forms)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -65,7 +65,24 @@ and respond by generating HTML **Views** from the **Model**.
 
 ### DOM manipulation and AJAX requests
 
-TODO: jQuery for simple apps
+<!-- slide-column -->
+
+Serving dynamic HTML from the server works, but each user action requires that a **complete page be loaded** from the server.
+
+To improve user experience:
+
+* [AJAX][ajax] was developed in 1999 to retrieve data from the server asynchronously in the background
+* [jQuery][jquery] was released in 2006 to simplify DOM manipulation and AJAX requests
+
+<!-- slide-column 40 -->
+
+<img src='images/jquery-ajax.gif' class='w100' />
+
+<!-- slide-container -->
+
+This allows you to load data from the server in the background and **dynamically update the page** without reloading.
+
+Initially, these technologies were used to **enrich** existing HTML pages that were still built and served by a traditional MVC framework.
 
 
 
@@ -73,10 +90,10 @@ TODO: jQuery for simple apps
 
 <!-- slide-column -->
 
-A single-page application (SPA) is a web application that **fits on a single web page** but provides a user experience similar to that of a **desktop application**.
+A single-page application (SPA) is a web application that **fits on a single web page** but provides a user experience similar to that of a **desktop application**:
 
 * All content is retrieved with a **single page load or loaded dynamically**
-* The page **does not reload** (location hash or HTML5 History API to navigate between logical pages)
+* The page **does not reload** (location hash or [HTML 5 History API][html-history-api] to navigate between logical pages)
 * Dynamic **communication with the web server** behind the scenes
 
 <!-- slide-column -->
@@ -98,9 +115,15 @@ With Angular, you can:
 
 
 
-### Angular 2
+### Evolution of Angular
 
-TODO: evolution of Angular (TypeScript)
+Angular is one of the most popular client-side frameworks, and it is still evolving.
+[Angular 2][angular-2] has been released recently (June 2016) to take advantage of:
+
+* [TypeScript][typescript]: a superset of JavaScript with optional typing and the latest ECMAScript features
+* [Web components][web-components]: a way to create reusable user interface widgets
+
+This tutorial will cover Angular 1, but many concepts are useful to understand Angular 2 as well.
 
 
 
@@ -126,7 +149,10 @@ src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js'>
     </script>
   </head>
   <body>
-    <!-- Page content -->
+    <!-- Your HTML goes here -->
+    <script>
+      <!-- Your JavaScript goes here -->
+    </script>
   </body>
 </html>
 ```
@@ -942,7 +968,7 @@ You can use it to perform tasks that should be run once when your application st
 
 
 
-## Going further
+## Advanced concepts
 
 <!-- slide-front-matter class: center, middle -->
 
@@ -1031,9 +1057,148 @@ You will often find the inline array annotation in examples as it is the recomme
 
 
 
-## TODO
+### Forms
 
-* Form validation
+Angular provides **validation** services for forms and controls.
+These validations are performed **client-side** for a better user experience: the user gets **instant feedback**.
+
+However, keep in mind that although this provides a good user experience, it can easily be circumvented and thus **cannot be trusted**.
+**Server-side validation is still necessary** for a secure application.
+
+#### HTML validations
+
+HTML 5 has built-in validation attributes to define validations on your form inputs (e.g. `<input>`, `<textarea>`, etc):
+
+Attribute   | Description
+:---        | :---
+`min`       | Minimum value for a number
+`max`       | Maximum value for a number
+`minlength` | Minimum length for a string
+`maxlength` | Maximum length for a string
+`pattern`   | Regular expression for a string
+`required`  | Required field
+
+You simply add them to the HTML tag to ask the **browser** to validate user input:
+
+```html
+<input type='text' `required minlength=2` />
+```
+
+Read the [documentation][html-input] to learn more.
+
+#### Using `novalidate`
+
+In Angular, you don't want the browser to perform the validations as it's not flexible.
+By adding the `novalidate` attribute to your form, it will **disable browser validation**:
+
+```html
+<form `novalidate`>
+  <!-- ... -->
+</form>
+```
+
+Angular **will validate** your inputs for you instead of the browser.
+This enables **more complex validations and interaction**.
+Another advantage is that Angular **polyfills** HTML 5 validations in older browsers that don't support them.
+
+#### Binding to form state
+
+Any form in an Angular application is an instance of [FormController][angular-form-controller].
+Any input with the `ng-model` directive is an instance of [NgModelController][angular-ng-model-controller].
+By adding a `name` attribute to these elements, you can **bind form state to the scope**:
+
+```html
+<form `name='userForm'` ng-submit='submit()' novalidate>
+  <input type='text' ng-model='user.name' `name='name'` `required` />
+  <div ng-if='`userForm.name.$error.required`'>Tell us your name.</div>
+</form>
+```
+
+In this example, adding `name='userForm'` to the form **puts the `userForm` variable in the scope**:
+this is the `FormController` instance.
+
+Adding `name='name'` to the form field **puts the `userForm.name` variable in the scope**:
+this is the `NgModelController` instance.
+
+#### Form and `ng-model` controllers
+
+Form and `ng-model` controllers have the following useful properties:
+
+Ctrl       | Property     | Description
+:---       | :---         | :---
+Form       | `$pristine`  | True if the user has not interacted with the form
+Form       | `$dirty`     | True if the user has interacted with the form
+Form       | `$valid`     | True if all inputs are valid
+Form       | `$invalid`   | True if at least one input is invalid
+Form       | `$pending`   | True if an asynchronous validation is pending
+Form       | `$submitted` | True if the form has been submitted (even if invalid)
+`ng-model` | `$error`     | An object with all failing validations as keys
+`ng-model` | `$untouched` | True if the input has not lost focus yet
+`ng-model` | `$touched`   | True if the input has lost focus
+`ng-model` | `$pristine`  | True if the user has not interacted with the input
+`ng-model` | `$dirty`     | True if the user has interacted with the input
+`ng-model` | `$valid`     | True if the input has no errors
+`ng-model` | `$invalid`   | True if there is at least one error for the input
+
+#### Complete validation example
+
+```html
+<form `name='userForm'` ng-submit='submit()' novalidate>
+  <label>
+    Name:
+    <input type='text' ng-model='user.name' `name='name'` required minlength=2 />
+  </label>
+  <div ng-if='`userForm.name.$dirty`'>
+    <div ng-if='`userForm.name.$error.required`'>Tell us your name.</div>
+    <div ng-if='`userForm.name.$error.minlength`'>Your name is too short.</div>
+  </div>
+
+  <label>
+    E-mail:
+    <input type='email' ng-model='user.email' `name='email'` required />
+  </label>
+  <div ng-if='`userForm.email.$dirty`'>
+    <span ng-if='`userForm.email.$error.required`'>Tell us your e-mail.</span>
+    <span ng-if='`userForm.email.$error.email`'>This is not a valid e-mail.</span>
+  </div>
+
+  <input type='submit' ng-disabled='`userForm.$invalid`' value='Save' />
+</div>
+```
+
+See it in action [here][angular-codepen-form-validation].
+Read the [documentation][angular-forms] to learn more.
+
+#### Custom synchronous validators
+
+AngularJS provides basic implementation for most common HTML 5 validations,
+but sometimes you need to add your own.
+You can do that by defining a **validation directive**:
+
+```js
+var INTEGER_REGEXP = /^-?\d+$/;
+app.directive('integer', function() {
+  return {
+    `require: 'ngModel',` // Gives access to the ng-model controller
+    link: function(scope, element, attrs, `ngModelCtrl`) {
+      `ngModelCtrl.$validators.integer` = function(modelValue, viewValue) {
+        if (ngModelCtrl.$isEmpty(modelValue)) {
+          return true; // Consider an empty value to be valid
+        }
+
+        // Return true if the string value is an integer
+        `return INTEGER_REGEXP.test(viewValue);`
+      };
+    }
+  };
+});
+```
+
+Using it is as simple as applying the directive as an attribute:
+
+```html
+<input type='number' ng-model='size' name='size' min='0' max='10' `integer` />
+```
 
 
 
@@ -1042,9 +1207,12 @@ You will often find the inline array annotation in examples as it is the recomme
 **Documentation**
 
 * [Angular developer guide][angular-guide]
+  * [Angular Forms][angular-forms]
 * [Angular API reference][angular-api]
   * [Angular Components][angular-components]
   * [Angular Directives][angular-directives] ([built-in][angular-directives-list])
+  * [Angular input][angular-input]
+* [HTML input tag][html-input]
 
 **Further reading**
 
@@ -1054,21 +1222,30 @@ You will often find the inline array annotation in examples as it is the recomme
 
 
 [a-guide-to-web-components]: https://css-tricks.com/modular-future-web-components/
+[ajax]: https://developer.mozilla.org/en-US/docs/AJAX/Getting_Started
 [angular]: https://angularjs.org/
 [angular-api]: https://docs.angularjs.org/api
 [angular-built-in-filters]: https://docs.angularjs.org/api/ng/filter
 [angular-codepen]: http://codepen.io/AlphaHydrae/pen/LxoRze?editors=1010#0
+[angular-codepen-form-validation]: http://codepen.io/AlphaHydrae/pen/EWZOOR?editors=1011
 [angular-codepen-scope-hierarchy]: http://codepen.io/AlphaHydrae/pen/ryjaXN?editors=1010#0
 [angular-codepen-scope-components]: http://codepen.io/AlphaHydrae/pen/LWxVzj?editors=1010#0
 [angular-components]: https://docs.angularjs.org/guide/component
 [angular-directives]: https://docs.angularjs.org/guide/directive
 [angular-directives-list]: https://docs.angularjs.org/api/ng/directive
 [angular-element]: https://docs.angularjs.org/api/ng/function/angular.element
+[angular-form-controller]: https://docs.angularjs.org/api/ng/type/form.FormController
+[angular-forms]: https://docs.angularjs.org/guide/forms
 [angular-guide]: https://docs.angularjs.org/guide
+[angular-input]: https://docs.angularjs.org/api/ng/directive/input
+[angular-ng-model-controller]: https://docs.angularjs.org/api/ng/type/ngModel.NgModelController
+[angular-2]: https://angular.io
 [angular-2-series-components]: http://blog.ionic.io/angular-2-series-components/
 [chrome]: https://www.google.com/chrome/
 [chrome-dev]: https://developers.google.com/web/tools/chrome-devtools/console/
 [html-history-api]: https://developer.mozilla.org/en-US/docs/Web/API/History_API
+[html-input]: https://www.w3schools.com/tags/tag_input.asp
 [jquery]: http://jquery.com
 [minification]: https://en.wikipedia.org/wiki/Minification_(programming)
+[typescript]: https://www.typescriptlang.org
 [web-components]: https://developer.mozilla.org/en-US/docs/Web/Web_Components
