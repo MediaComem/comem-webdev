@@ -832,6 +832,72 @@ function changeAlignment(event) {
 
 <!-- slide-front-matter class: center, middle -->
 
+### Template update N°3
+
+For the next feature, we will need to **add some `id`** in our `index.html` page.
+
+At the **line 83**, add this `id` to the `<div>` element:
+
+```html
+<div class="panel-body" id="`dialog`">
+```
+
+At the **line 138**, add this `id` to the `<button>` element:
+
+```html
+<button class="btn btn-success pull-right btn-sm" id="`send-btn`">
+```
+
+<!-- slide-front-matter class: middle -->
+
+### The basics
+
+The "Send" button is **also situated inside the form**. So we need to **cancel** its default behavior when it's clicked:
+
+```js
+$("#send-btn").click(function(event) {
+  // Do the thing!
+
+  event.preventDefault();
+});
+```
+Now... we'll have to..:
+
+1. Get the value inside `#message`
+2. No value ?
+  1. Notify the user
+  2. Reject the creation
+3. Value ?
+  1. Get the value
+  2. Reset the textearea (error and content)
+  3. Get the alignment for the new message
+  4. Create the new message DOM
+  5. Append the new message to the discussion
+
+### Get the value inside `#message`
+
+To get the value of a form `<input>` or `<textarea>`, you can use the `val()` method in one of those elements:
+
+```js
+// Will return 'null' when the textearea is empty
+$("#message").val();
+```
+But since we will refer to the `#message` element several time in our code, we might as well cache it in a variable:
+
+```js
+$("#send-btn").click(function(event) {
+  var message = $("#message");
+
+  event.preventDefault();
+});
+```
+
+The first thing we need to do, before actually inserting a new message, is **some error checking**.
+
+In this case, we want to **reject** the creation of the new message if there is no new message to create, i.e. when the "New message" text-area is **empty**.
+
+
+
 ## Resources
 
 **Documentation**
@@ -858,7 +924,6 @@ function changeAlignment(event) {
 ## TODO
 
 * Add `#send-btn` line 138
-* Add `#dialog` line 74
 * Add after line 162 :
 ```html
 <!-- Templates -->
