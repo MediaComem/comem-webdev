@@ -36,7 +36,7 @@ Materials for the COMEM+ web development courses.
 * [Bootstrap](subjects/bootstrap-basics)
   * [Bootstrap Layout management](subjects/bootstrap-layout-management)
 * [JavaScript](subjects/js/)
-  * JavaScript DOM API
+  * [JavaScript DOM API](subjects/js-dom/)
   * [JavaScript closures](subjects/js-closures/)
   * [JavaScript prototypes](subjects/js-prototypes/)
 * jQuery
@@ -50,6 +50,9 @@ Materials for the COMEM+ web development courses.
   * [Express (Node.js web framework)](subjects/express/)
     * [Express Best Practices](subjects/express-best-practices/)
     * [Using Mongoose](subjects/express-mongoose/)
+* [Ionic](subjects/ionic/)
+  * Running Ionic apps on a mobile phone
+  * Developing Ionic apps with live reload
 
 **Web Services**
 
