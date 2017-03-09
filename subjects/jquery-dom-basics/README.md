@@ -24,18 +24,6 @@ Learn how to use the jQuery library for manipulating the DOM of a WebPage and, t
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Example file
-
-This subject will use [this `index.html` file][ex-file] as illustration.
-
-Be sure to download it and place it in a new project directory (e.g. `jquery-course`), if you want to try and follow with the examples.
-
-<p class="center"><img src="images/template.jpg" class="shadow" width="70%" /></p>
-
-> Note that this example file includes Bootstrap through a CDN. Feel free to change that to a local link if you'd prefer ([see here][local-bs]).
-
-<!-- slide-front-matter class: center, middle -->
-
 ## What is jQuery
 
 <!-- slide-front-matter class: center, middle, image-header -->
@@ -59,7 +47,7 @@ To add jQuery in your project, you can include it via a CDN link, in your `index
 </body>
 ```
 
-You can also [download the latest version][dl-jquery], and save the file in a `js` directory in your project directory. Then, include the file in your `index.html`:
+You can also [download the complete file][dl-jquery], and save the file in a `js` directory in your project directory. Then, include the file in your `index.html`:
 
 ```html
 <body>
@@ -87,9 +75,9 @@ Plus, loading JS files while the DOM is not forces you to start all your JS scri
 
 ### Add custom script
 
-We will write our JS code in a custom script file.
+We will write our own JS code in a custom script file.
 
-In the `js` directory insode your project directory, create a new `script.js` and include it at the bottom of your `index.html` page:
+In the `js` directory inside your project directory, create a new file `script.js` and include it at the bottom of your `index.html` page:
 
 ```html
 <body>
@@ -143,68 +131,527 @@ $.noConflict();
 
 ## Selecting things
 
-Being a library designed to easily handle DOM manipulation, jQuery allows you to select DOM elements.
+Being a library designed to easily handle DOM manipulation, jQuery allows you to... easily select DOM elements.
 
-The selection functionnality are **quite broad and powerful**, and are based on the **same syntax as CSS selectors**.
+The selection functionnality is **quite broad and powerful**, and is based on the **same syntax as CSS selectors**.
 
-To select DOM elements and receive jQuery objects matching the selected elements, use the `$()` function, passing it a selector as parameter
+To select DOM elements and receive jQuery objects matching the selected elements, use the `$()` function, passing it a selector as parameter:
 
 | Selector | CSS example | jQuery | Result |
 | :------- | :----- | :---------- | :----- |
 | Element  | `p` | `$("p")` | **All** `<p>` elements in the page |
-| Id       | `#logo` | `$("#logo")` | **Unique** element with the `logo` id |
-| Class    | `.active` | `$(".active")` | **All** elements with a `active` class |
+| Id       | `#username` | `$("#username")` | **Unique** element with the `username` id |
+| Class    | `.row` | `$(".row")` | **All** elements with a `row` class |
 
-> Using a jQuery selector will always return you an `array` of jQuery objects, event with an Id selector.
+> Using a jQuery selector will always return you an `array` of jQuery objects, even with an Id selector (that should return one element).
 
-### Storing jQuery object
+### Good selecting practice
 
-You can obviously store in a variable any jQuery array returned from a call to the `$()` function, for future reference:
+Selecting elements in jQuery being [very vast][css-select], you can easily write selectors that aren't optimals, performace-wise.
 
-```js
-var paragraphs = $("p");
-console.log(paragraph); // Will print an array with all the "p" in the page.
-```
-This has **two** main advantages:
-* If you selected very specific elements using a **particularly complex selector**, you won't have to type this selector again.
-```js
-var eles = $("div.theCycle:visible input[type=text].required");
-```
-* Navigating the DOM is an **expensive operation**; limiting them is always a good thing. Storing the result of a jQuery selection in a variable helps you to do just that.
-```js
-var parag = $("p");
-parag.css("color", "white");
-parag.html("Hello World");
-parag.hide();
-```
+> Traversing the DOM is a **costly operation**. Your jQuery selectors (and your CSS ones as well) should try to be **as to-the-point as possible**.
 
-## Modifying things
+There's many good practice regarding jQuery selectors. We are only going to see a few of them.
 
-After selecting HTML elements, you will probably want to modify them.
+----
 
-With jQuery, you can do every DOM modification that you can do with pure JS.
+> Note that the following example contains some jQuery method.
+> 
+> **Don't mind them now, we will explicit these methods later on the course.**
 
-That is:
+#### Storing jQuery object
 
-* Create element(s)
-* Create new attribute(s) for an element
-* Change the content of an element (either text or HTML)
-* Add new class(es) to element(s)
-* Remove class(es) from element(s)
-* Insert element(s) before or after others
+When you know or discover that your are going to use the same jQuery selector **several time**, you should cache its result **in a JS variable**, for future reference.
 
-### The `text()` method
-
-To change the textual content of an HTML element, that is what's between the opening and the closing tag, you can use the `text()` method, and pass it the new content as parameter.
-
-Let's change all the content of the **badges** in the page.
-
-Remove all the code from your `script.js` file and add this instead:
+**Bad!**
 
 ```js
-$(".badge").text("12");
+$("article > p:first-child").addClass("catch-phrase");
+$("article > p:first-child").text("This is a very pertinent article");
+$("article > p:first-child").append("<span>CLICK ME!</span>");
 ```
-> All the badges in the left list should now have the value `12`.
+**Way better!**
+
+```js
+var `$firstSentences` = $("article > p:first-child");
+`$firstSentences`.addClass("catch-phrase");
+`$firstSentences`.text("This is a very pertinent article");
+`$firstSentences`.append("<span>CLICK ME!</span>");
+```
+> For ease the reading of the code, it's a good practice to **precede** caching variable's name with **the `$` character**, to indicate that **it contains jQuery object(s)**.
+
+#### Use `id` selectors
+
+HTML `id` attribute allows you to define **unique identifier** in an HTML page.
+
+Thanks to this uniqueness, element with `id` attributes are **extremly fast to retrieve** in the DOM, even with older browsers.
+
+> As much as possible, you should add `id` attributes to HTML elements that you'll select.
+
+```html
+<div class="panel-body">
+  <p><!-- content --></p>
+  <p id="the-one"><!-- content --></p>
+  <p><!-- content --></p>
+</div>
+```
+This...
+```js
+$("#the-one")
+```
+...will be way faster than this.
+```js
+$("div.panel-body p:nth-of-type(2)")
+```
+#### Don't over do it
+
+If you can't define `id` attributes in your HTML template, you'll need to use more complete selectors.
+
+When doing so, you might be tempted to be **as exhaustive as possible**, in order to be sure you'll get the right element(s). Like this for example:
+
+```js
+$("html body main.container div.list-group a.list-group-item h4")
+```
+> This is completely **unnecessary** and a **waste of resources**.
+
+You need to be precise with your selector to avoir selecting things you don't want. But being over-precise is **as bad** as being too vague.
+
+> Knowing your HTML structure is **mandatory** when writing jQuery selectors.
+
+We could simplify the precedent example like this:
+
+```js
+$("a.list-group-item h4")
+```
+
+#### Using `class` selector
+
+CSS classes being shared among elements, it's a great way to quickly select all related elements.
+
+```js
+// Will select all items from list-group lists.
+$(".list-group-item")
+```
+But there's a drawback.
+
+With `class` selector, jQuery will parse **all the DOM** and test **every single node** to see if it has the given class (or classes). This is possibly very inefficient.
+
+Thus, you should try to be **as precise as possible** when using `class` selector, by qualifying it with a tag name, for example.
+
+In our example, we know that the `.list-group-item` should only be applied to `<li>` or `<a>` element. So:
+
+```js
+// Will select only <li> and <a> that have the class
+$("li.list-group-item, a.list-group-item")
+```
+#### Selecting order
+
+When jQuery encounters a selector like `$("a.list-group-item h4")`, how do you think it's going to execute it ?
+
+> You might think that jQuery will fetch all the `a.list-group-item` first, then fetch all `h4` inside them.
+
+This is **not** the case. In fact, it's the **complete opposite**.
+
+To begin with, jQuery will fetch all `<h4>` in the page, and store them in an `array`.
+
+Then, it will examine each of these `<h4>`, and reject the ones that don't have an `a.list-group-item` as parent.
+
+> If you have many `<h4>` in your page or a far-too-precise selector, jQuery will take unnecessary time to process the selector.
+
+To solve this problem, you have to options:
+* Use the `.find()` method on the parent object.
+* Narrow the context by using the second parameter of the `$()` function.
+
+##### Try to `find()` me
+
+The `find()` method allows you to search for **elements in the DOM**, but limited to the context of the jQuery object on which you called the method.
+
+If we use the previous example again (the `$("a.list-group-item h4")` case), we would use the method like this:
+
+```js
+$("a.list-group-item").find("h4")
+```
+> We first fetch the `a.list-group-item`, then we search for `h4` elements **inside** the retrieved `a.list-group-item` elements.
+
+##### Refine the use of `$()`
+
+We said before that `$()` is the function to use to **retrieve DOM elements**.
+
+Its first parameter is **the selector** for those elements.
+
+But the function also have a second parameter, that is the **context in which the search is conducted**.
+
+By default, the context is the complete HTML page, but you can pass it **any object representing a subset of the DOM**.
+
+For the previous example, we could write our selector like this:
+
+```js
+// First, we retrieve all the list-group items
+var $listElements = $("a.list-group-item");
+
+// Then we search for <h4> element, but only in the subset of the Dom
+// contained in the previously retrieved elements 
+$("h4", $listElements)
+```
+In a more compressed style, it would resemble this:
+
+```js
+$("h4", $("a.list-group-item"))
+```
+
+## Example file
+
+The rest of this slide-deck will rely on [this `index.html` file][ex-file] as context.
+
+Be sure to download it and place it in a new project directory (e.g. `jquery-course`), if you want to try and follow with the examples.
+
+<p class="center"><img src="images/template.jpg" class="shadow" width="70%" /></p>
+
+> Note that this example file includes Bootstrap through a CDN. Feel free to change that to a local link if you'd prefer ([see here][local-bs]).
+
+<!-- slide-front-matter class: center, middle -->
+
+## Learn by example
+
+For the rest of this course, we are going to discover how to do things with jQuery by implementing features on the example template.
+
+These features are:
+
+* Select another discussion in the left list, and reset the unread indicator
+
+* Change the alignment of the "New message" area, using the three buttons
+
+* Add a new message to the discussion when clicking on the "Send" button
+
+* Remove messages from the discussion when clicking on the trash button
+
+## Feature : *"Select discussion item"*
+
+<!-- slide-front-matter class: center, middle -->
+
+### Template update N°1
+
+For **better UI behavior**, we need to tell our browser to show the **click pointer icon** when passing over our discussion list items.
+
+Add this line in the `<style>` tag, after the `main` style:
+
+```css
+.list-group-item { cursor: pointer; }
+```
+<!-- slide-front-matter class: middle -->
+
+### Events
+
+Most of the functionnalities we'll implement will rely on things being **clicked**.
+
+> jQuery can handle more events than just click, [see here][jq-events].
+
+Use the `click()` method to add a click event on an element. 
+
+> The `click()` methid needs a callback function as its argument, that will be called with **one argument**: the **fired event**
+
+In order to select another discussion, we need to add a `click` event to the **list elements**.
+
+Add this code in your `script.js` file:
+
+```js
+$("a.list-group-item").click(function(event) {
+  console.log(event);
+});
+```
+Now, go to your page, open your console and try to **click** on one of the list item.
+
+> You should see the object representing the event.
+
+#### `this`? `$(this)`?
+
+When writing event callback functions you might want to retrieve **the DOM element that triggered the event**.
+
+You can do that with the property `currentTarget` of the event object:
+
+```js
+$("a.list-group-item").click(function(event) {
+  console.log(`event.currentTarget`);
+});
+```
+More simply, use the `this` keyword to achieve the **same purpose**:
+
+```js
+$("a.list-group-item").click(function(event) {
+  console.log(`this`);
+});
+```
+Since we are using jQuery, we'd prefer retrieving a **jQuery object** representing this DOM element.
+
+Do that by passing `this` to the `$()` function:
+
+```js
+$("a.list-group-item").click(function(event) {
+  console.log(`$(this)`);
+});
+```
+
+### Add a CSS class
+
+On the page, there is one list item that has a different style.
+
+This is **the currently selected item**, and the effect is achieved using the `.active` class from the Bootstrap framework.
+
+When another list item will be clicked we want to **switch the active state** from the previous list item to the one being activated.
+
+This means adding the `.active` CSS class **to the currently clicked element**.
+
+Use the `.addClass()` method to do that, and pass it a `string` with the **name of the classes** to be added, separated by a **space**.
+
+```js
+$("a.list-group-item").click(function(event) {
+  // Add the 'active' class to the clicked list item
+* $(this).addClass("active");
+});
+```
+> Go on your page, and click on your list items.
+
+> The class is correctly added. Next step is to **remove this class** from the previsouly active element.
+
+### Remove a CSS class
+
+To remove a CSS class from an element, simply use the `.removeClass()` method.
+
+> Pass it a `string` argument with the names of the classes to be removed, separated by a space.
+
+Now, we want to remove the active state from the previously selected list element.
+
+This element is a `a.list-group-item` with the `.active` class.
+
+```js
+$("a.list-group-item").click(function(event) {
+  // Remove the 'active' class from the previously selected list item
+* $("a.list-group-item.active").removeClass("active");
+  // Add the 'active' class to the clicked list item
+  $(this).addClass("active");
+});
+```
+> Note how we append the `.active` class to our selector.
+
+Trying to remove a CSS class from an element that **didn't have it** in the first time will **not raise any error**, fortunately.
+
+### Change the content
+
+Now that we can change the selected discussion list item, we want to **remove the notification** about unread messages, that is the badge in the item.
+
+For that we will **change the content** of the `span.badge` inside the list item.
+
+Use the `.text()` method to do so, and pass it as argument a `string` that represents the **new content**.
+
+> Calling the method with **no argument** returns the **current** content.
+
+In our case, since we want to remove the content of the element, we'll use an empty `string` (`""`):
+```js
+$("a.list-group-item").click(function(event) {
+  /* Add this after previous code */
+
+  // Remove the unread notification
+* $("span.badge", this).text("");
+});
+```
+> Note that we used the `this` keyword as context when searching for the `span.badge` element, since `this` represents the list item.
+
+### Complete code
+
+Here's the complete code for this feature:
+> For better readability and structure, we've splitted the **event declaration** from the **function implementation**.
+
+```js
+$("a.list-group-item").click(`switchListItem`);
+
+function switchListItem() {
+
+	// Change the active state to the clicked item
+	$("a.list-group-item.active").removeClass("active");
+	$(this).addClass("active");
+
+	// Clear the unread notification for the clicked item
+  $("span.badge", this).text("");
+}
+```
+
+> Note that we passed the `switchListItem` function as parameter to the `.click()` method **without parenthesis**.
+
+> We dont' want to **execute the function**, we just want to pass its **reference**.
+
+## Feature : *"Change message alignment"*
+
+<!-- slide-front-matter class: center, middle -->
+
+### Template update N°2
+
+For the next feature, we will need to **add some `id`** in our `index.html` page.
+
+At the **line 125**, add this `id` to the `<textarea>` element:
+
+```html
+&lt;textarea id="`message`" [...] &gt;&lt;/textarea&gt;
+```
+
+At the **line 127**, add this `id` to the `<div>` element:
+
+```html
+<div class="btn-group btn-group-sm" id="`align-btns`">
+```
+
+<!-- slide-front-matter class: middle -->
+
+### Attach the events
+
+Our three alignment buttons are all children of the same element, which is the `div#align-btns`.
+
+We can thus use this element in our selector to access the buttons:
+
+```js
+$("#align-btns button")...
+```
+> We have seen that this kind of notation can be optimized.
+> 
+> Let's use the second paramter of `$()` to retrieve the buttons, and then attach them the event:
+
+```js
+$("button", $("#align-btns")).click(function(event) {
+  console.log(this);
+});
+```
+> **"What is this strange behavior?"** you might say, **"The page is reload each time a button is clicked. Why?"**
+
+#### Buttons in a form
+
+If you look closely to the HTML structure in which the `button`s are placed, you'll see that they are placed **inside a form**:
+
+```html
+*<form>
+  <!-- textarea element -->
+  <div class="btn-group btn-group-sm" id="align-btns">
+    <button class="btn btn-default active">
+      <span class="glyphicon glyphicon-align-left"></span>
+    </button>
+    <button class="btn btn-default">
+      <span class="glyphicon glyphicon-align-center"></span>
+    </button>
+    <button class="btn btn-default">
+      <span class="glyphicon glyphicon-align-right"></span>
+    </button>
+  </div>
+  <!-- send button -->
+*</form>
+```
+> Clicking on a `<button>` that's placed inside a `<form>` will trigger the submission of said `<form>`.
+
+> **That's a default behavior that we don't want.**
+
+### Prevent default behavior
+
+Remember that the **callback function** called when an event is triggered has one parameter, that is **the triggered event object** ?
+
+This event object will **trigger the default behavior** attached to it **after** our code is executed, **unless we say it otherwise**.
+
+The `.preventDefault()` method of the event object is rightly there for this purpose.
+
+Let's call this method at the last line of our callback function:
+
+```js
+$("button", $("#align-btns")).click(function(event) {
+  console.log(this);
+  // Prevent the default submit behavior
+* event.preventDefault();
+});
+```
+> Clicking on the button will now no longer reload the page.
+
+### Change button state
+
+The *align left* button is constantly in an active state. This effect is achieved by using the `.active` class from the Bootstrap framework.
+
+In the same fashion as the state of the discussion list item, we will want to switch the state when a button is pressed.
+
+This is the code that achieve that:
+
+```js
+$("button", $("#align-btns")).click(function(event) {
+  // Change the active state when a button is clicked
+* $("#align-btns").find("button.active").removeClass("active");
+* $(this).addClass("active");
+  
+  // Prevent the default submit behavior
+  event.preventDefault();
+});
+```
+> Go on your page, and click on the alignment button, then click somewhere else, and **observe how your button react**.
+
+> You should see that **its style changes**. On Chrome, when clicked, **a blue border is added**, that disappear when you click elsewhere.
+
+### Managing the focus
+
+This is related to the **focus**, that is an indication of the element in the page that you're currently "using".
+
+Focusing in or out of an element is an event to which you can react with JS and/or jQuery.
+
+But you can also activate these event on elements within your code.
+
+In our case, we want to focus out of the button once it has been clicked.
+
+This event of focusing our an element is called `blur`, and can be activated by using the `.blur()` jQuery method:
+
+```js
+$("button", $("#align-btns")).click(function(event) {
+  // Change the active state when a button is clicked
+  $("button.active", $("#align-btns")).removeClass("active");
+  $(this).addClass("active");
+* $(this).blur();
+  // Prevent the default submit behavior
+  event.preventDefault();
+});
+```
+### Chaining method calls
+
+In the previous code example, you might have seen that we called, one after the other, two different methods on the same object:
+
+```js
+  $(this).addClass("active");
+  $(this).blur();
+```
+jQuery allows you to call **several methods on the same line**.
+
+> This is called **method chaining**.
+
+In our case, we can do that...
+
+```js
+  $(this).addClass("active").blur();
+```
+...because the `addClass()` returns the object that called it, here `$(this)`, on which we can call `.blur()` right away.
+
+> You need to be aware of **what is returned** by each method if you want to use method chaining.
+
+#### Be cautious
+
+Remember what the `.find()` method does?
+
+```js
+$("#align-buttons").find("button");
+```
+
+> The `.find()` method here will return all the `button` elements that it's found inside the `#align-buttons` element.
+
+Thus, methods chained after a call to `.find()` will **not be applied** to the `$("#align-buttons")` object:
+
+```js
+$("#align-buttons").find("button")`.addClass("active")`;
+```
+> The `active` class will be applied to each objects returned from `.find()`.
+
+If you'd want to apply the `.addClass()` method to the `$("#align-buttons")` object first, you'd need to write it like this:
+
+```js
+$("#align-buttons")`.addClass("active")`.find("button");
+```
 
 ## Resources
 
@@ -215,6 +662,8 @@ $(".badge").text("12");
 
 **Further reading**
 
+* [Tips for good jQuery selectors][5-tips-selec]
+
 [sublime]: https://www.sublimetext.com/
 [chrome]: https://www.google.com/chrome/
 [js]: ../js
@@ -224,18 +673,50 @@ $(".badge").text("12");
 [ls]: https://www.npmjs.com/package/live-server
 [local-bs]: ../bootstrap-basics/#5
 [css-select]: https://www.w3schools.com/cssref/css_selectors.asp
+[5-tips-selec]: https://www.sitepoint.com/efficient-jquery-selectors/
+[jq-events]: https://api.jquery.com/category/events/
 
 ## TODO
 
-* Add `#align-buttons` line 126
+* Add `#align-btns` line 126
+* Add `#send-btn` line 138
 * Add `#dialog` line 74
+* Add `#message` line 125
+* Add `.list-group-item { cursor: pointer; }` line 15
+* Add after line 162 :
+```html
+<!-- Templates -->
+<div class="hidden" id="template-new-message">
+  <div class="col-md-8 col-md-offset-4">
+    <div class="alert alert-warning">
+      <span class="message-text"></span>
+      <div class="pull-right">
+        <span class="small text-info"></span>
+        <button class="btn btn-link btn-xs">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+```
 
 ## TOADD
 
-* click()
-* $(this)
+* click() & events
+* on() function and event on created DOM element
+* $(this) VS this
 * children()
 * hasClass()
 * e.preventDefault()
-* blur()
-* Select element in sub-scope
+* blur() and event function
+* removeClass() and addClass()
+* hasClass()
+* chaining method call
+* parents() VS parent()
+* fadeOut()
+* remove()
+* val()
+* append()
+* clone() and templating techniques
+* text() VS html()
