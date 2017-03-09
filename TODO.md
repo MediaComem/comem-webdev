@@ -1,6 +1,7 @@
 # TODO
 
 * Make home link go back to year
+* Download font awesome
 
 * Express mongoose: ID virtual, transform
 * Express mongoose: add links to implementations in demo API
