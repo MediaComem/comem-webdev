@@ -130,7 +130,7 @@ Ionic is basically **Cordova** and **Angular** plugged together:
 
 Ionic lets you build web apps that **look like native apps** with HTML, CSS and JavaScript:
 
-<p class='center'><img src='images/ionic-app.png' class='w80' /></p>
+<p class='center'><img src='images/ionic-app.jpg' class='w80' /></p>
 
 
 
