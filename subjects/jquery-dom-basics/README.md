@@ -18,9 +18,40 @@ Learn how to use the jQuery library for manipulating the DOM of a WebPage and, t
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [What is this subject?](#what-is-this-subject)
-  - [What?](#what)
+- [What is jQuery](#what-is-jquery)
+- [Include jQuery](#include-jquery)
+  - [Script inclusions](#script-inclusions)
+  - [Add custom script](#add-custom-script)
+  - [Test everything](#test-everything)
+- [jQuery documentation](#jquery-documentation)
+- [The `$` object](#the--object)
+- [Selecting things](#selecting-things)
+  - [Good selecting practice](#good-selecting-practice)
+- [Example file](#example-file)
+- [Learn by example](#learn-by-example)
+- [Feature : *"Select discussion item"*](#feature--select-discussion-item)
+  - [Template update N°1](#template-update-n%C2%B01)
+  - [Events](#events)
+  - [Add a CSS class](#add-a-css-class)
+  - [Remove a CSS class](#remove-a-css-class)
+  - [Change the content](#change-the-content)
+  - [Complete code](#complete-code)
+- [Feature : *"Change message alignment"*](#feature--change-message-alignment)
+  - [Template update N°2](#template-update-n%C2%B02)
+  - [Attach the events](#attach-the-events)
+  - [Prevent default behavior](#prevent-default-behavior)
+  - [Change button state](#change-button-state)
+  - [Managing the focus](#managing-the-focus)
+  - [Chaining method calls](#chaining-method-calls)
+  - [Planning the logic](#planning-the-logic)
+  - [Detect the button](#detect-the-button)
+  - [Do you have *any* class?](#do-you-have-any-class)
+  - [Finally... change the alignment!](#finally-change-the-alignment)
+  - [Complete code](#complete-code-1)
+- [Feature : *"Add new message"*](#feature--add-new-message)
 - [Resources](#resources)
+- [TODO](#todo)
+- [TOADD](#toadd)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -653,6 +684,154 @@ If you'd want to apply the `.addClass()` method to the `$("#align-buttons")` obj
 $("#align-buttons")`.addClass("active")`.find("button");
 ```
 
+### Planning the logic
+
+Now that our buttons behave as expected, let's make them concretly **change the text alignment** in the "New message" area.
+
+Bootstrap has **three utility classes** that helps you manage text-alignment:
+
+* `.text-left`
+* `.text-center`
+* `.text-right`
+
+So, all we need to do, in our callback function, is:
+
+1. Detect **which button** has been clicked
+2. **Remove any precedent alignment class** from the `#message` element
+3. **Add the correct alignment class** to the `#message` element
+
+### Detect the button
+
+To detect which button has been click we *could* add an `id` to each button.
+
+But, in the HTML, we can see that there is already something that could help us in that task: the icon.
+
+```html
+<div class="btn-group btn-group-sm" id="align-btns">
+  <button class="btn btn-default active">
+*   <span class="glyphicon glyphicon-align-left"></span>
+  </button>
+  <button class="btn btn-default">
+*   <span class="glyphicon glyphicon-align-center"></span>
+  </button>
+  <button class="btn btn-default">
+*   <span class="glyphicon glyphicon-align-right"></span>
+  </button>
+</div>
+```
+> We need to retrieve the `<span>` element inside the button, then check what class this `<span>` has.
+
+### Do you have *any* class?
+
+The `.hasClass()` method can detect if the element possesses the class name given as parameter.
+
+> This method returns a boolean (`true`/`false`).
+
+```js
+// Will return true
+$("li.active").hasClass("active");
+``` 
+
+Let's retrieve the `<span>` inside the `this` button, and check for example, if it has the `.glyphicon-align-right` class:
+
+```js
+$("button", $("#align-btns")).click(function(event) {
+  /* Previous code */
+  $(this).addClass("active").blur();
+
+* if ($("span", this).hasClass("glyphicon-align-right")) {
+    // The clicked button is the one for align to the right.
+  }
+
+  /* Following code */
+});
+```
+
+#### if ... else if ... else
+
+Using a `if ... else if ... else` structure, we can complete our test:
+
+```js
+$("button", $("#align-btns")).click(function(event) {
+  // Change the active state when a button is clicked
+  $("button", $("#align-btns")).removeClass("active");
+  $(this).addClass("active").blur();
+
+  if (`$("span", this).hasClass("glyphicon-align-right")`) {
+    // The clicked button is the one to align to the right
+    console.log("Align to the right!");
+
+  } else if (`$("span", this).hasClass("glyphicon-align-center")`) {
+    // The clicked button is the one to align to the center
+    console.log("Align to the center!");
+
+  } else {
+    // The clicked button is neither the one to align to the right
+    // nor the one to align to the center...
+    // It must be the one to align to the left, then!
+    console.log("Align to the left!");
+  }
+
+  // Prevent the default submit behavior
+  event.preventDefault();
+});
+```
+> Go on and try that.
+
+### Finally... change the alignment!
+
+**When the** *align-right* **button has been clicked:**
+
+```js
+if ($("span", this).hasClass("glyphicon-align-right")) {
+*   $("#message").removeClass("text-left text-center").addClass("text-right");
+}
+```
+**When the** *align-center* **button has been clicked:**
+```js
+else if ($("span", this).hasClass("glyphicon-align-center")) {
+*   $("#message").removeClass("text-right text-left").addClass("text-center");
+}
+```
+**When the** *align-center* **button has been clicked:**
+```js
+else {
+*   $("#message").removeClass("text-right text-center");
+}
+```
+> We don't have to add the `.text-left` class because, by default, the text is aligned to the left in HTML elements.
+
+### Complete code
+
+Here's the complete code for this feature:
+> For better readability and structure, we've splitted the **event declaration** from the **function implementation**.
+
+```js
+$("button", $("#align-btns")).click(changeAlignment);
+
+function changeAlignment(event) {
+  // Change the active state when a button is clicked
+  $("button", $("#align-btns")).removeClass("active");
+  $(this).addClass("active").blur();
+
+  // React to the adequate clicked button
+  if ($("span", this).hasClass("glyphicon-align-right")) {
+    $("#message").removeClass("text-left text-center").addClass("text-right");
+  } else if ($("span", this).hasClass("glyphicon-align-center")) {
+    $("#message").removeClass("text-right text-left").addClass("text-center");
+  } else {
+    $("#message").removeClass("text-right text-center");
+  }
+  
+  // Prevent the default submit behavior
+  event.preventDefault();
+}
+```
+
+## Feature : *"Add new message"*
+
+<!-- slide-front-matter class: center, middle -->
+
 ## Resources
 
 **Documentation**
@@ -678,11 +857,8 @@ $("#align-buttons")`.addClass("active")`.find("button");
 
 ## TODO
 
-* Add `#align-btns` line 126
 * Add `#send-btn` line 138
 * Add `#dialog` line 74
-* Add `#message` line 125
-* Add `.list-group-item { cursor: pointer; }` line 15
 * Add after line 162 :
 ```html
 <!-- Templates -->
@@ -703,16 +879,8 @@ $("#align-buttons")`.addClass("active")`.find("button");
 
 ## TOADD
 
-* click() & events
 * on() function and event on created DOM element
-* $(this) VS this
 * children()
-* hasClass()
-* e.preventDefault()
-* blur() and event function
-* removeClass() and addClass()
-* hasClass()
-* chaining method call
 * parents() VS parent()
 * fadeOut()
 * remove()
