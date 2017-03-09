@@ -156,10 +156,24 @@ Let's generate an app called `ionic-demo` with the `tabs` starter template:
 
 ```bash
 $> cd /path/to/projects
-$> ionic start ionic-demo tabs
+$> ionic start ionic-tabs-demo tabs
 ```
 
 The app should open in your browser.
+
+
+
+### Starter templates
+
+You can also start with a much simpler template.
+This will generate an app with just one page and a title:
+
+```bash
+$> cd /path/to/projects
+$> ionic start ionic-blank-demo blank
+```
+
+You will find many Ionic app templates shared by the community in the [Ionic market][ionic-market].
 
 
 
@@ -337,4 +351,5 @@ Here's an example of the code for a **list view**:
 [ionic-css]: http://ionicframework.com/docs/components/
 [ionic-docs]: http://ionicframework.com/docs/v1/
 [ionic-js]: http://ionicframework.com/docs/api/
+[ionic-market]: https://market.ionic.io
 [node]: https://nodejs.org/en/
