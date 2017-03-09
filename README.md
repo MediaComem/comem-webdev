@@ -50,6 +50,7 @@ Materials for the COMEM+ web development courses.
   * [Express (Node.js web framework)](subjects/express/)
     * [Express Best Practices](subjects/express-best-practices/)
     * [Using Mongoose](subjects/express-mongoose/)
+* [Ionic](subjects/ionic/)
 
 **Web Services**
 
