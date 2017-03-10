@@ -190,7 +190,7 @@ Ionic has many [CSS components][ionic-css] you can use out of the box:
 <!-- slide-column 65 -->
 
 ```html
-<button class="`button button-positive`">
+<button class='`button button-positive`'>
   button-positive
 </button>
 ```
@@ -204,8 +204,8 @@ Ionic has many [CSS components][ionic-css] you can use out of the box:
 <!-- slide-column 65 -->
 
 ```html
-<div class="`card`">
-  <div class="item item-text-wrap">
+<div class='`card`'>
+  <div class='item item-text-wrap'>
     This is a basic Card
     which contains an item
     that has wrapping text.
@@ -222,15 +222,15 @@ Ionic has many [CSS components][ionic-css] you can use out of the box:
 <!-- slide-column 65 -->
 
 ```html
-<div class="`list`">
-  <label class="item item-input">
-    <input type="text" placeholder="First Name">
+<div class='`list`'>
+  <label class='item item-input'>
+    <input type='text' placeholder='First Name'>
   </label>
-  <label class="item item-input">
-    <input type="text" placeholder="Last Name">
+  <label class='item item-input'>
+    <input type='text' placeholder='Last Name'>
   </label>
-  <label class="item item-input">
-    &lt;textarea placeholder="Comments"&gt;&lt;/textarea&gt;
+  <label class='item item-input'>
+    &lt;textarea placeholder='Comments'&gt;&lt;/textarea&gt;
   </label>
 </div>
 ```
