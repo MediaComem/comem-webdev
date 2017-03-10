@@ -896,8 +896,6 @@ The first thing we need to do, before actually inserting a new message, is **som
 
 In this case, we want to **reject** the creation of the new message if there is no new message to create, i.e. when the "New message" text-area is **empty**.
 
-
-
 ## Resources
 
 **Documentation**
@@ -923,7 +921,6 @@ In this case, we want to **reject** the creation of the new message if there is 
 
 ## TODO
 
-* Add `#send-btn` line 138
 * Add after line 162 :
 ```html
 <!-- Templates -->
@@ -949,7 +946,6 @@ In this case, we want to **reject** the creation of the new message if there is 
 * parents() VS parent()
 * fadeOut()
 * remove()
-* val()
 * append()
 * clone() and templating techniques
 * text() VS html()
