@@ -12,7 +12,7 @@ Learn how Bootstrap helps you structure your HTML layouts, using both its grid s
 **Recommended reading**
 
 * [Project setup][projset]
-* [Bootstrap - Basics][bootstrap]
+* [Bootstrap][bootstrap]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -310,7 +310,7 @@ You will find the final HTML file for this course [here][fef]
 * [Bootstrap Grid example][bge]
 * [Responsive utilities][ru]
 
-[bootstrap]: ../bootstrap-basics
+[bootstrap]: ../bootstrap
 [projset]: ../masrad-project-setup
 [chrome]: https://www.google.com/chrome/
 [sublime]: https://www.sublimetext.com/

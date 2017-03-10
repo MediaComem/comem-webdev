@@ -33,14 +33,14 @@ Materials for the COMEM+ web development courses.
 
 **Languages & Frameworks**
 
-* [Bootstrap](subjects/bootstrap-basics)
+* [Bootstrap](subjects/bootstrap)
   * [Bootstrap Layout management](subjects/bootstrap-layout-management)
 * [JavaScript](subjects/js/)
   * [JavaScript DOM API](subjects/js-dom/)
   * [JavaScript closures](subjects/js-closures/)
   * [JavaScript prototypes](subjects/js-prototypes/)
 * jQuery
-  * [jQuery - DOM basics](subjects/jquery-dom-basics)
+  * [jQuery - DOM](subjects/jquery-dom)
   * jQuery - AJAX
 * [Angular](subjects/angular/)
   * [Angular UI Router](subjects/angular-ui-router/)
@@ -74,7 +74,7 @@ Materials for the COMEM+ web development courses.
 * [Web Services](subjects/webserv-course/)
 * [Advanced Frontend Development](subjects/masrad-intro)
   * [Project Setup](subjects/masrad-project-setup)
-  * [Bootstrap Exercise](subjects/masrad-bootstrap-exercise)
+  * [Bootstrap Practice](subjects/masrad-bootstrap-practice)
 
 
 

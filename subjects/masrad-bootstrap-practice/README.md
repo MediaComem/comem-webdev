@@ -13,7 +13,7 @@ Hands-on practice on the use of Bootstrap to create a WebPage.
 **Recommended reading**
 
 * [Project setup][projset]
-* [Bootstrap - Basics][bb]
+* [Bootstrap][bb]
 * [Bootstrap - Layout management][blm]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -97,7 +97,7 @@ This exercice will require you to use:
 [btn-group]: http://getbootstrap.com/components/#btn-groups
 [nav-text]: http://getbootstrap.com/components/#navbar-text
 [nest]: http://getbootstrap.com/css/#grid-nesting
-[bb]: ../bootstrap-basics
+[bb]: ../bootstrap
 [blm]: ../bootstrap-layout-management
 [projset]: ../masrad-project-setup
 [sublime]: https://www.sublimetext.com/

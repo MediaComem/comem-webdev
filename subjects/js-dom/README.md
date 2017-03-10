@@ -1,4 +1,4 @@
-# JavaScript - Basics with the DOM API
+# JavaScript - DOM API
 
 <!-- slide-include ../../BANNER.md -->
 
@@ -12,8 +12,8 @@ Learn or rediscover how to use the DOM API to manipulate the underlying HTML obj
 **Recommended reading**
 
 * [Project setup][projset]
-* [Bootstrap - Basics][bootstrap]
-* [JavaScript basics and more][js-bas]
+* [Bootstrap][bootstrap]
+* [JavaScript][js-bas]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -48,7 +48,7 @@ Let's add the following `<script>` section in our `index.html` file:
 
 > We know we shall avoid global variable, but for a small example like this, we can be tolerant ...
 
-```js
+```html
 <script type="text/javascript">
     var content = {
         alertText: "The document and all sub-resources have finished loading. The state 'complete' indicates that the load event is about to fire. ",
@@ -188,7 +188,7 @@ You will find the final HTML file for this course [here][fef]
 * [DOM documentation](domdoc)
 
 [domdoc]: https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
-[bootstrap]: ../bootstrap-basics
+[bootstrap]: ../bootstrap
 [js-bas]: ../js
 [projset]: ../masrad-project-setup
 [chrome]: https://www.google.com/chrome/

@@ -13,6 +13,7 @@ Learn how to use the jQuery library for manipulating the DOM of a WebPage and, t
 **Recommended reading**
 
 * [JavaScript][js]
+* [Bootstrap][bs]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -910,6 +911,7 @@ In this case, we want to **reject** the creation of the new message if there is 
 [sublime]: https://www.sublimetext.com/
 [chrome]: https://www.google.com/chrome/
 [js]: ../js
+[bs]: ../bootstrap
 [dl-jquery]: https://code.jquery.com/jquery-3.1.1.min.js
 [ex-file]: https://gist.githubusercontent.com/Tazaf/2ca35d60688eec1281fd9546abe1f76a/raw/70c767db08e1e57b7db78df17258739d3ebeea2e/index.html
 [jq-doc]: http://api.jquery.com/
