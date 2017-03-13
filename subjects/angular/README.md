@@ -341,7 +341,7 @@ angular.module('starter').controller('HelloController', function() {
 Reference this new `ctrl.value` variable in the view with `ng-model`:
 
 ```html
-<p>Two times <input `ng-model='ctrl.value'` /> equals {{ double(`ctrl.value`) }}</p>
+<p>Two times <input `ng-model='ctrl.value'` /> equals {{ ctrl.double(`ctrl.value`) }}</p>
 ```
 
 #### Data binding
@@ -362,7 +362,7 @@ angular.module('starter').controller('HelloController', function() {
 Then add a button that calls this new function below the previous HTML:
 
 ```html
-<p>Two times <input ng-model='ctrl.value' /> equals {{ double(ctrl.value) }}</p>
+<p>Two times <input ng-model='ctrl.value' /> equals {{ ctrl.double(ctrl.value) }}</p>
 *<button type='button' ng-click='ctrl.reset()'>Reset</button>
 ```
 
@@ -514,8 +514,8 @@ You can now display the joke in the HTML template:
 ```html
 <div ng-controller='HelloController as ctrl'>
   <p>Hello {{ ctrl.name }}!</p>
-  <p>Two times two equals {{ double(2) }}</p>
-* <p>Did you hear? {{ joke }}</p>
+  <p>Two times two equals {{ ctrl.double(2) }}</p>
+* <p>Did you hear? {{ ctrl.joke }}</p>
 </div>
 ```
 
