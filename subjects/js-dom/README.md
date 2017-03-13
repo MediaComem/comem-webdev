@@ -19,6 +19,17 @@ Learn or rediscover how to use the DOM API to manipulate the underlying HTML obj
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
+- [Starting file](#starting-file)
+- [Document Object Model (DOM)](#document-object-model-dom)
+  - [`Document` object and event handling](#document-object-and-event-handling)
+  - [Example 1 - message alert](#example-1---message-alert)
+  - [Example 1 - display as the first child](#example-1---display-as-the-first-child)
+  - [Example 1 - up to you!](#example-1---up-to-you)
+  - [Example 2 - alignment buttons](#example-2---alignment-buttons)
+  - [Example 2 - align each paragraph](#example-2---align-each-paragraph)
+  - [Exercice - up to you again!](#exercice---up-to-you-again)
+- [Resources](#resources)
+
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Starting file

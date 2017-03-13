@@ -13,6 +13,8 @@ Advanced routing for Angular applications.
 
 
 - [What is UI Router?](#what-is-ui-router)
+  - [States](#states)
+- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
