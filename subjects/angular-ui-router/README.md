@@ -224,6 +224,7 @@ $urlRouterProvider`.otherwise`(function($injector) {
 * Nested states
 * Named views
 * Transitions (blocking transitions)
+* Better explain `ng-controller as` vs `controllerAs`
 
 
 
