@@ -255,7 +255,7 @@ var `$firstSentences` = $("article > p:first-child");
 `$firstSentences`.text("This is a very pertinent article");
 `$firstSentences`.append("<span>CLICK ME!</span>");
 ```
-> For ease the reading of the code, it's a good practice to **precede** caching variable's name with **the `$` character**, to indicate that **it contains jQuery object(s)**.
+> For better code-reading, it's a good practice to **precede** caching variable's name with **the `$` character**, to indicate that **it contains jQuery object(s)**.
 
 #### Use `id` selectors
 
@@ -274,11 +274,11 @@ Thanks to this uniqueness, element with `id` attributes are **extremly fast to r
 ```
 This...
 ```js
-$("#the-one")
-```
-...will be way faster than this.
-```js
 $("div.panel-body p:nth-of-type(2)")
+```
+...will be way **slower** than this.
+```js
+$("#the-one")
 ```
 #### Don't over do it
 
