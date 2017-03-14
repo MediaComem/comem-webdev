@@ -87,6 +87,32 @@ Learn how to use the jQuery library for manipulating the DOM of a WebPage and, t
 > 
 > **As such, some examples could be out-of-date.**
 
+## Example file
+
+The rest of this slide-deck will rely on [this `index.html` file][ex-file] as context.
+
+Be sure to download it and place it in a new project directory (e.g. `jquery-course`), if you want to try and follow with the examples.
+
+<p class="center"><img src="images/template.jpg" class="shadow" width="70%" /></p>
+
+> Note that this example file includes Bootstrap through a CDN. Feel free to change that to a local link if you'd prefer ([see here][local-bs]).
+
+<!-- slide-front-matter class: center, middle -->
+
+## Learn by example
+
+For the rest of this course, we are going to discover how to do things with jQuery by implementing features on the example template.
+
+These features are:
+
+* Select another discussion in the left list, and reset the unread indicator
+
+* Change the alignment of the "New message" area, using the three buttons
+
+* Add a new message to the discussion when clicking on the "Send" button
+
+* Remove messages from the discussion when clicking on the trash button
+
 ## Include jQuery
 
 To add jQuery in your project, you can include it via a CDN link, in your `index.html` file:
@@ -351,32 +377,6 @@ In a more compressed style, it would resemble this:
 ```js
 $("h4", $("a.list-group-item"))
 ```
-
-## Example file
-
-The rest of this slide-deck will rely on [this `index.html` file][ex-file] as context.
-
-Be sure to download it and place it in a new project directory (e.g. `jquery-course`), if you want to try and follow with the examples.
-
-<p class="center"><img src="images/template.jpg" class="shadow" width="70%" /></p>
-
-> Note that this example file includes Bootstrap through a CDN. Feel free to change that to a local link if you'd prefer ([see here][local-bs]).
-
-<!-- slide-front-matter class: center, middle -->
-
-## Learn by example
-
-For the rest of this course, we are going to discover how to do things with jQuery by implementing features on the example template.
-
-These features are:
-
-* Select another discussion in the left list, and reset the unread indicator
-
-* Change the alignment of the "New message" area, using the three buttons
-
-* Add a new message to the discussion when clicking on the "Send" button
-
-* Remove messages from the discussion when clicking on the trash button
 
 ## Feature : *"Select discussion item"*
 
