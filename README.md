@@ -37,6 +37,7 @@ Materials for the COMEM+ web development courses.
   * [Bootstrap Layout management](subjects/bootstrap-layout-management)
 * [JavaScript](subjects/js/)
   * [JavaScript DOM API](subjects/js-dom/)
+  * [JavaScript Asynchronous browser/server interaction (AJAX)](subjects/js-ajax/)
   * [JavaScript closures](subjects/js-closures/)
   * [JavaScript prototypes](subjects/js-prototypes/)
 * jQuery
