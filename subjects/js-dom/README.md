@@ -73,7 +73,7 @@ Let's add the following `<script>` section in our `index.html` file:
     }
 </script>
 ```
-> See also the [DOM documentation](domdoc) `Document.readyState`
+> See also the [DOM documentation][domdoc] `Document.readyState`
 
 <!-- slide-notes -->
 
@@ -196,7 +196,7 @@ You will find the final HTML file for this course [here][fef]
 
 **Documentation**
 
-* [DOM documentation](domdoc)
+* [DOM documentation][domdoc]
 
 [domdoc]: https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
 [bootstrap]: ../bootstrap
@@ -205,4 +205,4 @@ You will find the final HTML file for this course [here][fef]
 [chrome]: https://www.google.com/chrome/
 [sublime]: https://www.sublimetext.com/
 [bsef]: https://gist.githubusercontent.com/Tazaf/18732ef01164f7b6348443c4c4748f42/raw/9f1dec778546a4d9741f1d17b08212c5606c26ca/index.html
-[fef]: https://gist.githubusercontent.com/oertz/164a883774727e34fd9190e6abf84bd2/raw/95374b82a1fd742538dea9f72d9443d3dee5e08d/index.html
+[fef]: https://gist.githubusercontent.com/oertz/164a883774727e34fd9190e6abf84bd2
