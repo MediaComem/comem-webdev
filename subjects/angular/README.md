@@ -475,7 +475,7 @@ Angular provides several useful services out of the box.
 The `$http` service can make AJAX requests for you:
 
 ```js
-angular.module('starter').factory(HelloService, function(`$http`) {
+angular.module('starter').factory('HelloService', function(`$http`) {
 
   var service = {};
 
@@ -1163,7 +1163,7 @@ Form       | `$submitted` | True if the form has been submitted (even if invalid
   </div>
 
   <input type='submit' ng-disabled='`userForm.$invalid`' value='Save' />
-</div>
+</form>
 ```
 
 See it in action [here][angular-codepen-form-validation].
