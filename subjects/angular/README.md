@@ -1221,6 +1221,13 @@ Using it is as simple as applying the directive as an attribute:
 
 
 
+## TODO
+
+* Explain `$http`
+* One controller, one view
+
+
+
 [a-guide-to-web-components]: https://css-tricks.com/modular-future-web-components/
 [ajax]: https://developer.mozilla.org/en-US/docs/AJAX/Getting_Started
 [angular]: https://angularjs.org/
