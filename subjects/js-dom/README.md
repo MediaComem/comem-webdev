@@ -59,7 +59,7 @@ Let's add the following `<script>` section in our `index.html` file:
 
 > We know we shall avoid global variable, but for a small example like this, we can be tolerant ...
 
-```html
+```js
 <script type="text/javascript">
     var content = {
         alertText: "The document and all sub-resources have finished loading. The state 'complete' indicates that the load event is about to fire. ",
