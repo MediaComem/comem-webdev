@@ -1439,11 +1439,11 @@ The complete code for this example application can be found [here][complete].
 [js]: ../js
 [bs]: ../bootstrap
 [dl-jquery]: https://code.jquery.com/jquery-3.1.1.min.js
-[ex-file]: https://gist.githubusercontent.com/Tazaf/2ca35d60688eec1281fd9546abe1f76a/raw/70c767db08e1e57b7db78df17258739d3ebeea2e/index.html
+[ex-file]: https://gist.githubusercontent.com/Tazaf/2ca35d60688eec1281fd9546abe1f76a
 [jq-doc]: http://api.jquery.com/
 [ls]: https://www.npmjs.com/package/live-server
 [local-bs]: ../bootstrap-basics/#5
 [css-select]: https://www.w3schools.com/cssref/css_selectors.asp
 [5-tips-selec]: https://www.sitepoint.com/efficient-jquery-selectors/
 [jq-events]: https://api.jquery.com/category/events/
-[complete]: https://gist.githubusercontent.com/Tazaf/1eb7e4d4b2bd6a5508b6e2c88f6739c0/raw/cb5b91005a2ff5fd27f2df9afbe8f927781e2590/script.js
+[complete]: https://gist.githubusercontent.com/Tazaf/1eb7e4d4b2bd6a5508b6e2c88f6739c0
