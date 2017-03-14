@@ -54,6 +54,7 @@ Materials for the COMEM+ web development courses.
 * [Ionic](subjects/ionic/)
   * Running Ionic apps on a mobile phone
   * Developing Ionic apps with live reload
+  * [Ionic Extras](subjects/ionic-extras/)
 
 **Web Services**
 
