@@ -12,6 +12,7 @@ Getting started with and understanding the basics of [AngularJS][angular] (versi
 
 * [JavaScript](../js/)
 * [JavaScript closures](../js-closures/)
+* [JavaScript promises](../js-promises/)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -1225,7 +1226,7 @@ Using it is as simple as applying the directive as an attribute:
 ## TODO
 
 * Explain `$http`
-* One controller, one view
+* Promises in angular
 
 
 
