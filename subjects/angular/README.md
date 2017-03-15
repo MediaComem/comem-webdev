@@ -38,6 +38,7 @@ Getting started with and understanding the basics of [AngularJS][angular] (versi
   - [Dependency injection and minification](#dependency-injection-and-minification)
   - [Forms](#forms)
 - [Resources](#resources)
+- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

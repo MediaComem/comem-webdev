@@ -21,6 +21,22 @@ We will talk about a technology called **AJAX (Asynchronous JavaScript and XML)*
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
+- [AJAX technology](#ajax-technology)
+- [Classic model](#classic-model)
+- [Asynchronous model](#asynchronous-model)
+- [Starting file](#starting-file)
+- [Dynamic Script Loading (1)](#dynamic-script-loading-1)
+- [Dynamic Script Loading](#dynamic-script-loading)
+- [Web service, web resource, URL, HTTP GET, POST, ...](#web-service-web-resource-url-http-get-post-)
+- [Web resource `getWeatherIcaoHTML`](#web-resource-getweathericaohtml)
+- [Callback function declaration](#callback-function-declaration)
+- [Web resource `getWeatherIcaoJSONP`](#web-resource-getweathericaojsonp)
+- [Create the HTML user interface](#create-the-html-user-interface)
+- [Web resource `getWeatherIcaoJSON`](#web-resource-getweathericaojson)
+- [Callback function listener](#callback-function-listener)
+- [More to come ...](#more-to-come-)
+- [Resources](#resources)
+
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## AJAX technology
