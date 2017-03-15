@@ -19,6 +19,7 @@ Useful tools to add to an Ionic application.
 - [Geolocation](#geolocation)
   - [Getting the user's location](#getting-the-users-location)
   - [Geolocation on insecure origins](#geolocation-on-insecure-origins)
+  - [Geolocation doesn't work on my device](#geolocation-doesnt-work-on-my-device)
 - [Leaflet](#leaflet)
   - [Your map state](#your-map-state)
   - [Adding a map](#adding-a-map)
@@ -30,6 +31,11 @@ Useful tools to add to an Ionic application.
   - [Mapbox access tokens](#mapbox-access-tokens)
   - [Using a Mapbox tileset with Leaflet](#using-a-mapbox-tileset-with-leaflet)
   - [Mapbox and Leaflet](#mapbox-and-leaflet)
+- [Using your mobile device's camera](#using-your-mobile-devices-camera)
+  - [Create an Angular service for the camera](#create-an-angular-service-for-the-camera)
+  - [Calling the camera service](#calling-the-camera-service)
+  - [The camera and `ionic serve`](#the-camera-and-ionic-serve)
+- [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -112,6 +118,14 @@ You should run your Ionic app on localhost to solve this issue:
 ```bash
 $> ionic serve --address localhost
 ```
+
+
+
+### Geolocation doesn't work on my device
+
+When running on an actual mobile device, some versions of some platforms don't have the HTML geolocation API available.
+
+Install [cordova-plugin-geolocation][cordova-geolocation] to solve the issue.
 
 
 
@@ -431,13 +445,150 @@ Your map should now be using your Mapbox tileset:
 
 
 
+## Using your mobile device's camera
+
+The camera is part of your mobile device's hardware,
+so you'll need Cordova to access it for you.
+
+Install [cordova-plugin-camera][cordova-camera] with the following command in your app's directory:
+
+```bash
+$> cd /path/to/projects/my-app
+$> cordova plugin add cordova-plugin-camera
+```
+
+This plugin adds a `navigator.camera` object that you can use to take pictures
+(only when running your app on an actual mobile device).
+
+
+
+### Create an Angular service for the camera
+
+Instead of using the camera object directly, it's a good idea to put it into an Angular service.
+We'll create a `CameraService` service with a `getPicture()` function which returns a promise:
+
+```js
+angular.module('my-app').factory(`'CameraService'`, function($q) {
+
+  var service = {
+    `getPicture`: function() {
+      var deferred = $q.defer();
+      var options = { // Return the raw base64 PNG data
+        destinationType: navigator.camera.DestinationType.DATA_URL,
+        correctOrientation: true
+      };
+
+      `navigator.camera.getPicture`(function(result) {
+        deferred.resolve(result);
+      }, function(err) {
+        deferred.reject(err);
+      }, options);
+
+      return deferred.promise;
+    }
+  };
+
+  return service;
+});
+```
+
+
+
+### Calling the camera service
+
+You can now inject and use the `CameraService` in your controllers.
+Let's add a `takePicture()` function to a controller:
+
+```js
+angular.module('my-app').controller('MyCtrl', function(`CameraService`, $log) {
+  var myCtrl = this;
+
+  `myCtrl.takePicture` = function() {
+    `CameraService.getPicture()`.then(function(result) {
+      $log.debug('Picture taken!');
+      `myCtrl.pictureData` = result;
+    }).catch(function(err) {
+      $log.error('Could not get picture because: ' + err.message);
+    });
+  };
+});
+```
+
+Call it in the view and display the result:
+
+```html
+<button type='button button-positive' ng-click='`myCtrl.takePicture()`'>
+  Take picture
+</button>
+<img ng-if='`myCtrl.pictureData`' width='100%'
+     ng-src='data:image/png;base64,{{ `myCtrl.pictureData` }}' />
+```
+
+
+
+### The camera and `ionic serve`
+
+The camera and the `navigator.camera` object will only be available on physical devices,
+so your code will produce errors during local development with `ionic serve`.
+
+To mitigate this issue, you can add a function to your service to test if the camera is available:
+
+```js
+angular.module('my-app').factory('CameraService', function($q) {
+  var service = {
+*   isSupported: function() {
+*     return navigator.camera !== undefined;
+*   },
+    // ...
+  };
+  return service;
+});
+```
+
+#### Notifying the user that the feature is unsupported
+
+That way you can display some kind of notification to tell the user that he won't be able to use the camera,
+for example using Ionic's `$ionicPopup` service:
+
+```js
+.controller('MyCtrl', function(CameraService, `$ionicPopup`, $log) {
+  var myCtrl = this;
+
+  myCtrl.takePicture = function() {
+*   if (!CameraService.isSupported()) {
+*     return $ionicPopup.alert({
+*       title: 'Not supported',
+*       template: 'You cannot use the camera on this platform'
+*     });
+*   }
+    // ...
+  };
+});
+```
+
+
+
+## Resources
+
+**Documentation**
+
+* [angular-leaflet-directive][angular-leaflet-directive] ([examples][angular-leaflet-directive-examples])
+* [cordova-plugin-camera][cordova-camera]
+* [cordova-plugin-geolocation][cordova-geolocation]
+* [Ionic v1 documentation][ionic-docs]
+
+
+
 [angular-leaflet-directive]: https://github.com/tombatossals/angular-leaflet-directive
 [angular-leaflet-directive-events]: http://tombatossals.github.io/angular-leaflet-directive/#!/examples/events
 [angular-leaflet-directive-examples]: http://tombatossals.github.io/angular-leaflet-directive/#!/examples/simple-map
 [angularjs-geolocation]: https://github.com/arunisrael/angularjs-geolocation/
 [bower]: https://bower.io
 [cordova]: https://cordova.apache.org
+[cordova-camera]: https://github.com/apache/cordova-plugin-camera
+[cordova-geolocation]: https://github.com/apache/cordova-plugin-geolocation
 [ionic]: http://ionicframework.com
+[ionic-docs]: http://ionicframework.com/docs/v1/
 [html-geolocation]: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation
 [leaflet]: http://leafletjs.com
 [mapbox]: https://www.mapbox.com/
