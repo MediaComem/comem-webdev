@@ -12,8 +12,26 @@ Useful tools to add to an Ionic application.
 
 * [Ionic](../ionic/)
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Geolocation](#geolocation)
+  - [Getting the user's location](#getting-the-users-location)
+  - [Geolocation on insecure origins](#geolocation-on-insecure-origins)
+- [Leaflet](#leaflet)
+  - [Your map state](#your-map-state)
+  - [Adding a map](#adding-a-map)
+  - [Adding markers to your map](#adding-markers-to-your-map)
+  - [Leaflet events](#leaflet-events)
+- [Mapbox](#mapbox)
+  - [Mapbox tilesets](#mapbox-tilesets)
+  - [Mapbox map ID](#mapbox-map-id)
+  - [Mapbox access tokens](#mapbox-access-tokens)
+  - [Using a Mapbox tileset with Leaflet](#using-a-mapbox-tileset-with-leaflet)
+  - [Mapbox and Leaflet](#mapbox-and-leaflet)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 
