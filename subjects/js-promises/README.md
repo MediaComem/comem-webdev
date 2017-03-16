@@ -30,8 +30,10 @@ Learn to use promises for asynchronous computation.
   - [Triumph over the callback hell](#triumph-over-the-callback-hell)
   - [Complex chains](#complex-chains)
 - [Asynchronicity](#asynchronicity)
+- [Parallel execution](#parallel-execution)
+  - [Successful parallel execution](#successful-parallel-execution)
+  - [Failed parallel execution](#failed-parallel-execution)
 - [Resources](#resources)
-- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -743,6 +745,10 @@ This behavior enables complex asynchronous workflows with smart error handling:
 
 <img src='images/complex-promise-chain.png' class='w100' />
 
+<!-- slide-container -->
+
+Promises are a **powerful abstraction** that make it **easy to compose asynchronous workflows**.
+
 
 
 ## Asynchronicity
@@ -782,7 +788,26 @@ We've seen how to handle **sequential** asynchronous operations,
 but promises also allow you to handle **parallel asynchronous operations**.
 
 The `Promise.all()` method takes an **array of promises** and returns a **new promise**.
-This new promise will be resolved when all the promises in the array have been resolved:
+This new promise will be resolved **when all the promises in the array have been resolved**.
+
+```js
+Promise.all([ promise1, promise2, promise3 ]).then(function(results) {
+  console.log(results); // [ result1, result2, result3 ]
+}).catch(function(err) {
+  // At least one promise was rejected
+});
+```
+
+It will be resolved with an **array of results** which contains the resolution values of the original promises **in the same order** as they are passed to `Promise.all()`.
+
+If one or more of the original promises is **rejected**,
+the new promise **is also rejected** with the same reason as the first promise to be rejected.
+
+
+
+### Successful parallel execution
+
+Here's an example of parallel promise execution where **both are resolved**:
 
 ```js
 var phonePromise = new Promise(function(resolve, reject) {
@@ -802,28 +827,63 @@ Promise.all(promises).then(function(results) {
 });
 ```
 
+<p class='center'><img src='images/promise-all-1.png' class='w80'></p>
+
+
+
+### Failed parallel execution
+
+Here's an example of parallel promise execution where **one is rejected**:
+
+```js
+var phonePromise = new Promise(function(resolve, reject) {
+  resolve({ brand: 'Samsung' });
+});
+
+var cakePromise = new Promise(function(resolve, reject) {
+  reject(new Error('The cake is a lie'));
+});
+
+var promises = [ phonePromise, cakePromise ];
+
+Promise.all(promises).then(function(results) {
+  // not called
+}).catch(function(err) {
+  console.log(err.message); // 'The cake is a lie'
+});
+```
+
+<p class='center'><img src='images/promise-all-2.png' class='w80'></p>
+
 
 
 ## Resources
 
+**Documentation**
+
 * [Promises/A+ specification][promises-spec]
+* [Promises][mdn-promises]
 
 **Further reading**
 
 * [JavaScript Promises for Dummies][javascript-promises-for-dummies]
 * [JavaScript Promises: an Introduction][javascript-promises-an-introduction]
-* [Promises][mdn-promises]
+* [Promise nuggets][promise-nuggets]
+* [Aren't promises just callbacks?][arent-promises-just-callbacks]
+
+**Popular promise librairies**
+
+* [Bluebird][bluebird]
+* [q][q]
 
 
 
-## TODO
-
-* all
-
-
-
+[arent-promises-just-callbacks]: http://stackoverflow.com/questions/22539815/arent-promises-just-callbacks
+[bluebird]: http://bluebirdjs.com/docs/getting-started.html
 [javascript-promises-an-introduction]: https://developers.google.com/web/fundamentals/getting-started/primers/promises
 [javascript-promises-for-dummies]: https://scotch.io/tutorials/javascript-promises-for-dummies
 [mdn-promises]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [promises-codepen]: http://codepen.io/AlphaHydrae/pen/PpJNXb?editors=1010
+[promise-nuggets]: https://promise-nuggets.github.io/
 [promises-spec]: https://promisesaplus.com
+[q]: https://github.com/kriskowal/q
