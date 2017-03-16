@@ -776,6 +776,34 @@ I got a Samsung
 
 
 
+## Parallel execution
+
+We've seen how to handle **sequential** asynchronous operations,
+but promises also allow you to handle **parallel asynchronous operations**.
+
+The `Promise.all()` method takes an **array of promises** and returns a **new promise**.
+This new promise will be resolved when all the promises in the array have been resolved:
+
+```js
+var phonePromise = new Promise(function(resolve, reject) {
+  resolve({ brand: 'Samsung' });
+});
+
+var cakePromise = new Promise(function(resolve, reject) {
+  resolve('Yummy');
+});
+
+var promises = [ phonePromise, cakePromise ];
+
+Promise.all(promises).then(function(results) {
+  console.log(results.length); // 2
+  console.log(results[0]); // { brand: 'Samsung' }
+  console.log(results[1]); // 'Yummy'
+});
+```
+
+
+
 ## Resources
 
 * [Promises/A+ specification][promises-spec]
