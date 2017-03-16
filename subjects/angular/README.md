@@ -37,9 +37,21 @@ Getting started with and understanding the basics of [AngularJS][angular] (versi
 - [Advanced concepts](#advanced-concepts)
   - [Scope hierarchy](#scope-hierarchy)
   - [Dependency injection and minification](#dependency-injection-and-minification)
-  - [Forms](#forms)
+- [Forms](#forms)
+  - [HTML validations](#html-validations)
+  - [Binding to form state](#binding-to-form-state)
+- [Promises in Angular](#promises-in-angular)
+  - [The `$q` service](#the-q-service)
+  - [Creating promises with `$q`](#creating-promises-with-q)
+  - [Transforming asynchronous callbacks into promises](#transforming-asynchronous-callbacks-into-promises)
+  - [Do not overuse deferred objects](#do-not-overuse-deferred-objects)
+- [The `$http` service](#the-http-service)
+  - [How to make requests](#how-to-make-requests)
+  - [How to parse a response](#how-to-parse-a-response)
+  - [Promises and `$http`](#promises-and-http)
+  - [Sequential HTTP requests](#sequential-http-requests)
+  - [Recursive HTTP requests with promises](#recursive-http-requests-with-promises)
 - [Resources](#resources)
-- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1059,7 +1071,7 @@ You will often find the inline array annotation in examples as it is the recomme
 
 
 
-### Forms
+## Forms
 
 Angular provides **validation** services for forms and controls.
 These validations are performed **client-side** for a better user experience: the user gets **instant feedback**.
@@ -1067,7 +1079,9 @@ These validations are performed **client-side** for a better user experience: th
 However, keep in mind that although this provides a good user experience, it can easily be circumvented and thus **cannot be trusted**.
 **Server-side validation is still necessary** for a secure application.
 
-#### HTML validations
+
+
+### HTML validations
 
 HTML 5 has built-in validation attributes to define validations on your form inputs (e.g. `<input>`, `<textarea>`, etc):
 
@@ -1103,7 +1117,9 @@ Angular **will validate** your inputs for you instead of the browser.
 This enables **more complex validations and interaction**.
 Another advantage is that Angular **polyfills** HTML 5 validations in older browsers that don't support them.
 
-#### Binding to form state
+
+
+### Binding to form state
 
 Any form in an Angular application is an instance of [FormController][angular-form-controller].
 Any input with the `ng-model` directive is an instance of [NgModelController][angular-ng-model-controller].
@@ -1204,6 +1220,435 @@ Using it is as simple as applying the directive as an attribute:
 
 
 
+## Promises in Angular
+
+Promises are common in Angular.
+
+For example, the `$http` service **returns a promise** when you call it:
+a promise that will be **resolved** with the server's HTTP response when it's available,
+or **rejected** if the requests times out or the status code sent by the server indicates an error (e.g. 4xx or 5xx).
+
+Many popular Angular libraries also return promises.
+
+
+
+### The `$q` service
+
+You **MUST NOT** use native ES6 promises in Angular.
+They are not integrated into the Angular digest cycle which makes two-way binding possible.
+
+Instead, you should use the `$q` service provided by Angular,
+which is a [Promises/A+][promises-spec]-compliant implementation of promises inspired by the popular promise library [q][q].
+
+
+
+### Creating promises with `$q`
+
+If you have an asynchronous operation or piece of code that **does not already return a promise**,
+here's a few ways you can create promises with the `$q` service:
+
+<!-- slide-column -->
+
+```js
+// Create a resolved promise
+var promise = `$q.when('foo')`;
+promise.then(function(result) {
+  console.log(result); // 'foo'
+});
+```
+
+<!-- slide-column 55 -->
+
+```js
+// Create a rejected promise
+var promise = `$q.reject(new Error('bug'))`;
+promise.catch(function(err) {
+  console.log(err.message); // 'bug'
+});
+```
+
+<!-- slide-container -->
+
+```js
+// Execute asynchronous operations in parallel
+var usersPromise = $http({ url: '/users' });
+var itemsPromise = $http({ url: '/items' });
+
+`$.all([ usersPromise, itemsPromise ])`.then(function(results) {
+  var users = results[0];
+  var items = results[1];
+  // ...
+});
+```
+
+Don't forget to inject `$q` into your controller/service/etc.
+
+
+
+### Transforming asynchronous callbacks into promises
+
+Let's suppose you have a piece of code using **custom callbacks**,
+like a call to retrieve the user's location with the HTML5 geolocation API:
+
+```js
+navigator.geolocation.getCurrentPosition(function successCallback(data) {
+  // Do stuff with data
+}, function errorCallback(err) {
+  // Handle the error
+});
+```
+
+How can you **make it a promise** to benefit from promise chaining, composition and error handling?
+
+This is how you would do it with **ES6** promises
+(**DO NOT** do this in Angular):
+
+```js
+function getPicture() {
+  return `new Promise`(function(`resolve`, `reject`) {
+    navigator.geolocation.getCurrentPosition(function successCallback(data) {
+      `resolve(data)`;
+    }, function errorCallback(err) {
+      `reject(err)`;
+    });
+  })
+}
+```
+
+#### Deferred objects
+
+The `$q` service allows you to create a **deferred object**, let's call it `deferred`:
+
+```js
+var deferred = $q.defer();
+```
+
+This object contains a **promise** that you can retrieve and return with `deferred.promise`.
+You can **resolve or reject** that promise with the deferred object's `resolve()` or `reject()` functions:
+
+```js
+var promise = deferred.promise;
+if (allGood) {
+  deferred.resolve('Yeehaw!');
+} else {
+  deferred.reject(new Error('Oops'));
+}
+```
+
+#### Deferred object example
+
+Here's how you would transform the asynchronous geolocation call with **callbacks into a promise**:
+
+```js
+function getPicture() {
+  var `deferred` = `$q.defer()`;
+  navigator.geolocation.getCurrentPosition(function successCallback(data) {
+    `deferred.resolve(data)`;
+  }, function errorCallback(err) {
+    `deferred.reject(err)`;
+  });
+  return `deferred.promise`;
+}
+```
+
+
+
+### Do not overuse deferred objects
+
+Why is this stupid?
+
+```js
+function getUserFromServer() {
+  var deferred = $q.defer();
+
+  $http({ url: '/users' }).then(function(res) {
+    deferred.resolve(res);
+  }).catch(function(err) {
+    deferred.reject(err);
+  });
+
+  return deferred.promise;
+}
+
+getUserFromServer().then(function(users) {
+  // Do something with "res.data"...
+});
+```
+
+#### Do not make it a promise if it's one already
+
+The `$http` service **already returns a promise**,
+you don't have to make a new one.
+Just **chain it**:
+
+```js
+function getUserFromServer() {
+  return $http({ url: '/users' });
+}
+
+getUserFromServer().then(function(res) {
+  // Do something with "res.data"...
+});
+```
+
+
+
+## The `$http` service
+
+<!-- slide-front-matter class: center, middle -->
+
+The `$http` service is a core AngularJS service that facilitates communication with remote HTTP servers.
+
+
+
+### How to make requests
+
+Here's a typical HTTP `POST` request to authenticate a user:
+
+```http
+POST /authenticate HTTP/1.1
+Authorization: Bearer letmein
+Content-Type: application/json
+
+{ "name": "jdoe", "password": "test" }
+```
+
+Here's how you would make that request with Angular:
+
+```js
+$http({
+  method: 'POST',
+  headers: {
+    Authorization: 'Bearer letmein',
+    Content-Type: 'application/json'
+  },
+  data: {
+    name: 'jdoe',
+    password: 'test'
+  }
+});
+```
+
+#### Query parameters
+
+Here's an HTTP `GET` request with query parameters:
+
+```http
+GET /movies?director=abc&include=foo&include=bar&page=2&pageSize=30
+```
+
+You can put the query parameters in the URL yourself:
+
+```js
+var director = 'abc';
+var page = 2;
+var pageSize = 30;
+var includes = [ 'foo', 'bar' ];
+
+var url = '/movies';
+url = url + '?director=' + director;
+url = url + '&page=' + page + '&pageSize=' + pageSize;
+
+for (var i = 0; i < includes.length; i++) {
+  url = url + '&include=' + includes[i];
+}
+
+$http({
+  url: url
+});
+
+// GET /movies?director=abc&include=foo&include=bar&page=2&pageSize=30
+```
+
+#### Using the `params` object
+
+Or you can use the `params` object which does it for you:
+
+```js
+var director = 'abc';
+var page = 2;
+var pageSize = 30;
+var includes = [ 'foo', 'bar' ];
+
+$http({
+  url: '/movies,
+* params: {
+*   director: director,
+*   page: page,
+*   pageSize: pageSize,
+*   include: includes
+* }
+});
+
+// GET /movies?director=abc&include=foo&include=bar&page=2&pageSize=30
+```
+
+
+
+### How to parse a response
+
+Here's a typical HTTP response:
+
+```http
+HTTP/1.1 201 Created
+Content-Type: application/json
+Location: /users/abc
+
+{
+  "id": "abc",
+  "name": "jdoe"
+}
+```
+
+Here's how to extract all the data from that response:
+
+```js
+$http(options).then(function(res) {
+  // Get the status code
+  console.log(res`.status`); // 201
+  console.log(res`.statusText`); // 'Created'
+  // Get the headers
+  console.log(res`.headers`('Content-Type')); // 'application/json'
+  console.log(res`.headers`('Location')); // '/users/abc'
+  // Get the response body
+  console.log(res`.data`); // { id: 'abc', name: 'jdoe' }
+  console.log(res`.data`.name); // 'jdoe'
+});
+```
+
+
+
+### Promises and `$http`
+
+The `$http` service returns a promise when you use it:
+
+```js
+var promise = $http({
+  url: '/items'
+});
+```
+
+It is **resolved** with the HTTP response object when the request completes successfully:
+
+```js
+promise.then(function(res) {
+  console.log(res.data); // [ 'foo', 'bar', 'baz' ]
+});
+```
+
+Or **rejected** if the request times out or the server sends a status code indicating an error.
+The HTTP response is provided as the reason:
+
+```js
+promise.catch(function(res) {
+  console.log(res.status); // 422
+  console.log(res.statusText); // Unprocessable Entity
+});
+```
+
+
+
+### Sequential HTTP requests
+
+HTTP requests are asynchronous, so to make several requests **sequentially**,
+you have to wait until each request is done to trigger the next one:
+
+```js
+`$http`({
+  method: 'POST',
+  url: '/users',
+  data: userData
+}).then(function userCreated(res) {
+  return `$http`({
+    method: 'POST',
+    url: '/auth',
+    data: userData
+  }).then(function userAuthenticated(res) {
+    return `$http`({
+      url: '/users/' + res.data.id + '/stats'
+    }).then(function userStatsRetrieved(res) {
+      // Do something with "res.data"...
+    });
+  });
+}).catch(function(err) {
+  $log.error(err);
+});
+```
+
+That's not very easy to read.
+
+#### Flattening sequential HTTP requests with chained promises
+
+```js
+function createUser(userData) {
+  return $http({ method: 'POST', url: '/users', data: userData })
+    .then(function() {
+      return userData;
+    });
+}
+
+function authenticateUser(userData) {
+  return $http({ method: 'POST', url: '/auth', data: userData })
+    .then(function(res) {
+      return res.data.id;
+    });
+}
+
+function getUserStats(userId) {
+  return $http({ url: '/users/' + userId + '/stats' });
+}
+
+var userData = { name: 'jdoe', password: 'letmein' };
+
+*createUser()
+* .then(authenticateUser)
+* .then(getUserStats)
+* .then(function(res) {
+*   // Do something with "res.data"...
+* }).catch(function(err) {
+*   $log.error(err);
+* });
+```
+
+
+
+### Recursive HTTP requests with promises
+
+What if you are getting items from a paginated collection and want to fetch all of them?
+
+<!-- slide-column -->
+
+```js
+var items = [];
+
+function fetchAllItems(page) {
+  // GET the current page
+  return $http({
+    url: '/items',
+    params: {
+      page: page || 1 // Start from page 1
+    }
+  }).then(function(res) {
+    if (res.data.length) {
+      // If there are any items, add them
+      // and recursively fetch the next page
+      items = items.concat(res.data);
+      return fetchAllItems(page + 1);
+    }
+  });
+}
+
+fetchAllItems().then(function(allItems) {
+  // Do something with "allItems"...
+});
+```
+
+<!-- slide-column 40 -->
+
+<img src='images/recursion.jpg' class='w100' />
+
+
+
 ## Resources
 
 **Documentation**
@@ -1220,13 +1665,6 @@ Using it is as simple as applying the directive as an attribute:
 
 * [A guide to web components][a-guide-to-web-components]
 * [Angular 2 Components][angular-2-series-components]
-
-
-
-## TODO
-
-* Explain `$http`
-* Promises in angular
 
 
 
@@ -1248,6 +1686,7 @@ Using it is as simple as applying the directive as an attribute:
 [angular-guide]: https://docs.angularjs.org/guide
 [angular-input]: https://docs.angularjs.org/api/ng/directive/input
 [angular-ng-model-controller]: https://docs.angularjs.org/api/ng/type/ngModel.NgModelController
+[angular-q]: https://docs.angularjs.org/api/ng/service/$q
 [angular-2]: https://angular.io
 [angular-2-series-components]: http://blog.ionic.io/angular-2-series-components/
 [chrome]: https://www.google.com/chrome/
@@ -1256,5 +1695,7 @@ Using it is as simple as applying the directive as an attribute:
 [html-input]: https://www.w3schools.com/tags/tag_input.asp
 [jquery]: http://jquery.com
 [minification]: https://en.wikipedia.org/wiki/Minification_(programming)
+[q]: https://github.com/kriskowal/q
+[promises-spec]: https://promisesaplus.com
 [typescript]: https://www.typescriptlang.org
 [web-components]: https://developer.mozilla.org/en-US/docs/Web/Web_Components
