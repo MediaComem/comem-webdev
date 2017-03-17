@@ -1619,22 +1619,24 @@ What if you are getting items from a paginated collection and want to fetch all 
 <!-- slide-column -->
 
 ```js
-var items = [];
+function fetchAllItems(page, items) {
+  page = page || 1; // Start from page 1
+  items = items || [];
 
-function fetchAllItems(page) {
   // GET the current page
   return $http({
     url: '/items',
     params: {
-      page: page || 1 // Start from page 1
+      page: page
     }
   }).then(function(res) {
     if (res.data.length) {
       // If there are any items, add them
       // and recursively fetch the next page
       items = items.concat(res.data);
-      return fetchAllItems(page + 1);
+      return fetchAllItems(page + 1, items);
     }
+    return items;
   });
 }
 
