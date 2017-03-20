@@ -253,7 +253,51 @@ function callback(evt) {
 * parse the response when the request is [DONE](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState) with successful HTTP status, 
 * it is stored as raw text in the `responseText` property of the XHR object
 
-## More to come ...
+## Using jQuery to AJAX
+
+Write less, do more ! Let's see how jQuery help us to manage AJAX. We rewrite everything with jQuery.
+
+>  At first, insert the library like this
+
+```js
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+```
+> Then register a click event listener on the button
+
+```js
+$(document).ready(function (e) {
+    $("#get-observation").click(send);
+}); 
+``` 
+> Let's add an AJAX request:
+
+* there is the [main method][jqajdoc] `jQuery.ajax()` or `$.ajax()` which offers all the possible functionalities. 
+* there are [shorthand methods][smsdoc] for the more common and specific types of AJAX requests with even less code - `jQuery.get(), jQuery.getJSON(), jQuery.getScript(), jQuery.post(), .load()`.
+
+## Use of `$.ajax()`
+
+The send() function is completely replaced by this
+
+```js
+function send() {
+    $.ajax({
+        url: "http://dfa-ogo.rhcloud.com/getWeatherIcaoJSON.php",
+        method: "GET",
+        data: {
+            icao: document.getElementById("airportCode").selectedOptions[0].value
+        },
+        dataType: "json"
+    }).done(callbackOk);
+
+    $("#status").text("Waiting ...");
+}
+```
+
+* `$.ajax` takes an object - it holds properties to configure the AJAX request
+ * the service URL and HTTP method
+ * the data object whose keys/values are used to complete the request
+ * the expected data type of the result 
+* we register a function callback which is called when the request terminates successfully (done) 
 
 ## Resources
 
@@ -273,3 +317,5 @@ You will find the final HTML file for this course here
 [ajsf]: https://gist.githubusercontent.com/oertz/f5b661e075aa59a326b2d56a4567495d/raw/567a446ecfe951db315c971079e652ee16e66c54/ajax_0
 [fef]: https://gist.githubusercontent.com/oertz/164a883774727e34fd9190e6abf84bd2/raw/95374b82a1fd742538dea9f72d9443d3dee5e08d/index.html
 [xhr]: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+[smsdoc]: https://api.jquery.com/category/ajax/shorthand-methods/
+[jqajdoc]: https://api.jquery.com/jQuery.ajax/
