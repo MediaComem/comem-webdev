@@ -475,6 +475,7 @@ You will find the final HTML file for this course here
 * [jQuery AJAX documentation][jqajdoc]
 * [Same Origin Policy MDN documentation][sop]
 * [CORS W3C recommandation][cors]
+* [GeoNames Weather JSON Webservice][geonames]
 
 [bootstrap]: ../bootstrap
 [js-bas]: ../js
@@ -490,3 +491,4 @@ You will find the final HTML file for this course here
 [jqajdoc]: https://api.jquery.com/jQuery.ajax/
 [cors]: https://www.w3.org/TR/cors/
 [sop]: https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy
+[geonames]: http://www.geonames.org/export/JSON-webservices.html#weatherIcaoJSON
