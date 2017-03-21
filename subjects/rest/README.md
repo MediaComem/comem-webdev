@@ -538,7 +538,7 @@ It's up to you to decide whether you want to **reinvent the wheel**, or **stand 
 
 
 
-### Common methods
+### Common [methods][http-methods]
 
 | Method    | Purpose                                                       |
 | :---      | :---                                                          |
@@ -552,7 +552,7 @@ It's up to you to decide whether you want to **reinvent the wheel**, or **stand 
 
 
 
-### Common request headers
+### Common request [headers][http-request-headers]
 
 <!-- slide-front-matter class: compact-table -->
 
@@ -569,7 +569,7 @@ Example                              | What the client is asking
 
 
 
-### Common response headers
+### Common response [headers][http-response-headers]
 
 <!-- slide-front-matter class: compact-table -->
 
@@ -585,7 +585,7 @@ Example                                  | What the server is telling you
 
 
 
-### Common successful response status codes
+### Common successful response [status codes][http-status-codes]
 
 <!-- slide-front-matter class: compact-table -->
 
@@ -623,7 +623,7 @@ Code                         | What the server is telling you
 
 
 
-### Common server error response status codes
+### Common server error response [status codes][http-status-codes]
 
 <!-- slide-front-matter class: compact-table -->
 
@@ -968,6 +968,8 @@ Collection errors                                                               
 [http-methods-patch-rfc]: https://tools.ietf.org/html/rfc5789
 [http-methods-rfc]: https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
 [http-methods-rest]: http://www.restapitutorial.com/lessons/httpmethods.html
+[http-request-headers]: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Request_fields
+[http-response-headers]: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Response_fields
 [http-status-codes]: https://httpstatuses.com
 [http-status-codes-rfc]: https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
 [http-teapot]: https://tools.ietf.org/html/rfc2324
