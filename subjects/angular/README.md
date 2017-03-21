@@ -116,7 +116,7 @@ A single-page application (SPA) is a web application that **fits on a single web
 
 
 
-### Dynamic HTML
+### Dynamic HTML with Angular
 
 > "AngularJS is what HTML would have been, had it been designed for building web-apps."
 
@@ -299,8 +299,8 @@ You can also access the scope by using **named controllers**.
 
 ```js
 angular.module('starter').controller('HelloController', function() {
-  `var ctrl = this;`
-  `ctrl.name` = 'World';
+  `var helloCtrl = this;`
+  `helloCtrl.name` = 'World';
 });
 ```
 
@@ -308,8 +308,8 @@ In the template, use `MyController as myName` in the `ng-controller` attribute.
 This assigns a name to the controller, which you can then use in interpolation:
 
 ```html
-<div ng-controller='HelloController `as ctrl`'>
-  <p>Hello {{ `ctrl.name` }}!</p>
+<div ng-controller='HelloController `as helloCtrl`'>
+  <p>Hello {{ `helloCtrl.name` }}!</p>
 </div>
 ```
 
@@ -323,9 +323,9 @@ You can also attach functions to the scope or controller:
 
 ```js
 angular.module('starter').controller('HelloController', function() {
-  var ctrl = this;
-  ctrl.name = 'World';
-* ctrl.double = function(n) {
+  var helloCtrl = this;
+  helloCtrl.name = 'World';
+* helloCtrl.double = function(n) {
 *   return n * 2;
 * };
 });
@@ -334,9 +334,9 @@ angular.module('starter').controller('HelloController', function() {
 These functions can be called in the view:
 
 ```html
-<div ng-controller='HelloController as ctrl'>
-  <p>Hello {{ ctrl.name }}!</p>
-* <p>Two times two equals {{ ctrl.double(2) }}</p>
+<div ng-controller='HelloController as helloCtrl'>
+  <p>Hello {{ helloCtrl.name }}!</p>
+* <p>Two times two equals {{ helloCtrl.double(2) }}</p>
 </div>
 ```
 
@@ -346,16 +346,19 @@ You can bind the **view model** and **view** together:
 
 ```js
 angular.module('starter').controller('HelloController', function() {
-  var ctrl = this;
+  var helloCtrl = this;
   // ...
-  `ctrl.value = 2;`
+  `helloCtrl.value = 2;`
 });
 ```
 
-Reference this new `ctrl.value` variable in the view with `ng-model`:
+Reference this new `helloCtrl.value` variable in the view with `ng-model`:
 
 ```html
-<p>Two times <input `ng-model='ctrl.value'` /> equals {{ ctrl.double(`ctrl.value`) }}</p>
+<p>
+  Two times <input `ng-model='helloCtrl.value'` />
+  equals {{ helloCtrl.double(`helloCtrl.value`) }}
+</p>
 ```
 
 #### Data binding
@@ -365,10 +368,10 @@ Add a function that modifies the value of your scope variable:
 
 ```js
 angular.module('starter').controller('HelloController', function() {
-  var ctrl = this;
+  var helloCtrl = this;
   // ...
-* ctrl.reset = function() {
-*   ctrl.value = 2;
+* helloCtrl.reset = function() {
+*   helloCtrl.value = 2;
 * };
 });
 ```
@@ -376,8 +379,11 @@ angular.module('starter').controller('HelloController', function() {
 Then add a button that calls this new function below the previous HTML:
 
 ```html
-<p>Two times <input ng-model='ctrl.value' /> equals {{ ctrl.double(ctrl.value) }}</p>
-*<button type='button' ng-click='ctrl.reset()'>Reset</button>
+<p>
+  Two times <input ng-model='helloCtrl.value' />
+  equals {{ helloCtrl.double(helloCtrl.value) }}
+</p>
+*<button type='button' ng-click='helloCtrl.reset()'>Reset</button>
 ```
 
 See how the view changes when you modify the value and click the reset button.
@@ -433,9 +439,9 @@ Using the service is as simple as adding it as an argument to our controller:
 
 ```js
 angular.module('starter').controller('HelloController', function(`HelloService`) {
-  var ctrl = this;
-  ctrl.name = 'World';
-  ctrl.double = `HelloService.double`;
+  var helloCtrl = this;
+  helloCtrl.name = 'World';
+  helloCtrl.double = `HelloService.double`;
 });
 ```
 
@@ -513,12 +519,12 @@ That way your controller remains **as simple as possible** and only manages the 
 ```js
 angular.module('starter').controller('HelloController', function(HelloService) {
 
-  var ctrl = this;
-  this.name = 'World';
-  this.double = HelloService.double;
+  var helloCtrl = this;
+  helloCtrl.name = 'World';
+  helloCtrl.double = HelloService.double;
 
 * HelloService.retrieveJoke().then(function(joke) {
-*   ctrl.joke = joke;
+*   helloCtrl.joke = joke;
 * });
 });
 ```
@@ -526,10 +532,10 @@ angular.module('starter').controller('HelloController', function(HelloService) {
 You can now display the joke in the HTML template:
 
 ```html
-<div ng-controller='HelloController as ctrl'>
-  <p>Hello {{ ctrl.name }}!</p>
-  <p>Two times two equals {{ ctrl.double(2) }}</p>
-* <p>Did you hear? {{ ctrl.joke }}</p>
+<div ng-controller='HelloController as helloCtrl'>
+  <p>Hello {{ helloCtrl.name }}!</p>
+  <p>Two times two equals {{ helloCtrl.double(2) }}</p>
+* <p>Did you hear? {{ helloCtrl.joke }}</p>
 </div>
 ```
 
@@ -583,7 +589,7 @@ You apply a filter by "piping" a value into it.
 Let's modify the first paragraph of our previous template a bit:
 
 ```html
-<p>{{ `ctrl.name | hello` }}</p>
+<p>{{ `helloCtrl.name | hello` }}</p>
 ```
 
 #### Built-in filters
@@ -607,7 +613,7 @@ Filter    | Purpose
 Several filters can be "piped" together:
 
 ```html
-<p>{{ ctrl.name | uppercase | hello }}</p>
+<p>{{ helloCtrl.name | uppercase | hello }}</p>
 ```
 
 Let's try the `date` filter.
@@ -615,16 +621,16 @@ Create a date in your controller first:
 
 ```js
 angular.module('starter').controller('HelloController', function(HelloService) {
-  var ctrl = this;
+  var helloCtrl = this;
   // ...
-  `ctrl.now = new Date();`
+  `helloCtrl.now = new Date();`
 });
 ```
 
 Then filter it in the view:
 
 ```html
-<p>It's {{ `ctrl.now | date: 'HH:mm:ss'` }}</p>
+<p>It's {{ `helloCtrl.now | date: 'HH:mm:ss'` }}</p>
 ```
 
 
@@ -638,7 +644,7 @@ You've already used them: `ng-controller` and `ng-model` are directives.
 A directive can be an **HTML attribute**:
 
 ```html
-<input `ng-model='ctrl.value'` />
+<input `ng-model='helloCtrl.value'` />
 ```
 
 An **HTML class**:
@@ -671,7 +677,7 @@ angular.module('starter')`.directive('redAlert', function() {`
 You can then use this directive in the view:
 
 ```html
-<div ng-controller='HelloController as ctrl'>
+<div ng-controller='HelloController as helloCtrl'>
   <!-- ... -->
   <p `class='red-alert'`>Did you hear? {{ joke }}</p>
   <!-- ... -->
@@ -787,9 +793,9 @@ Let's add a list of people to our `HelloController`:
 
 ```js
 angular.module('starter').controller('HelloController', function(HelloService) {
-  var ctrl = this;
+  var helloCtrl = this;
   // ...
-* ctrl.people = [
+* helloCtrl.people = [
 *   { firstName: 'John', lastName: 'Doe' },
 *   { firstName: 'Jane', lastName: 'Doe' },
 *   { firstName: 'Richard', lastName: 'Doe' }
@@ -803,7 +809,7 @@ Let's also use `ng-repeat` to display all the people in a list:
 ```html
 <p>
   <ul>
-    <li `ng-repeat='person in ctrl.people'`>
+    <li `ng-repeat='person in helloCtrl.people'`>
       `<person-name person='person'></person-name>`
     </li>
   </ul>
@@ -895,7 +901,7 @@ The **parent component** (or view) can plug a **callback function** into our new
 ```html
 <person-name
   person='person'
-  `on-say-hello='ctrl.sayHelloToPerson(personToSalute)'`>
+  `on-say-hello='helloCtrl.sayHelloToPerson(personToSalute)'`>
 </person-name>
 ```
 
@@ -906,10 +912,10 @@ Define the `sayHelloToPerson` function in `HelloController` to react to the outp
 
 ```js
 angular.module('starter').controller('HelloController', function(HelloService) {
-  var ctrl = this;
+  var helloCtrl = this;
   // ...
-* ctrl.sayHelloToPerson = function(person) {
-*   ctrl.name = person.firstName;
+* helloCtrl.sayHelloToPerson = function(person) {
+*   helloCtrl.name = person.firstName;
 * };
 });
 ```
