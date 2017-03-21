@@ -601,15 +601,15 @@ Code                    | What the server is telling you
 
 
 
-### Common client error response status codes
+### Common client error response [status codes][http-status-codes]
 
 <!-- slide-front-matter class: compact-table -->
 
 Code                         | What the server is telling you
 :---                         | :---
-`400 Bad Request`            | I cannot parse the request body (e.g. invalid JSON)
-`401 Unauthorized`           | I do now know you, please [authenticate][http-auth]
-`403 Forbidden`              | I know you, but you aren't allowed to do that
+`400 Bad Request`            | I cannot understand the request (e.g. invalid JSON)
+`401 Unauthorized`           | I do not know you, please [authenticate][http-auth]
+`403 Forbidden`              | I know you, but you do not have sufficient access rights to do that
 `404 Not Found`              | The resource you are requesting does not exist
 `405 Method Not Allowed`     | You can't make a `GET/POST/...` on this resource
 `406 Not Acceptable`         | I can't answer in the format you asked for in the `Accept` header
