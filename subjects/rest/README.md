@@ -592,7 +592,7 @@ Example                                  | What the server is telling you
 Code                    | What the server is telling you
 :---                    | :---
 `200 OK`                | Your request was successful
-`201 Created`           | I have created a **new resource** and telling you where it is in the `Location` header
+`201 Created`           | I have created a **new resource** and am telling you where it is in the `Location` header
 `202 Accepted`          | I have received your request but will process it later
 `204 No Content`        | I have processed your request but have no content to send you
 `301 Moved Permanently` | The resource you are requesting has **moved permanently** and I am telling you where in the `Location` header
