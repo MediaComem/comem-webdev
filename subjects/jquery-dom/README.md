@@ -20,6 +20,8 @@ Learn how to use the jQuery library for manipulating the DOM of a WebPage and, t
 
 
 - [What is jQuery](#what-is-jquery)
+- [Example file](#example-file)
+- [Learn by example](#learn-by-example)
 - [Include jQuery](#include-jquery)
   - [Script inclusions](#script-inclusions)
   - [Add custom script](#add-custom-script)
@@ -28,8 +30,6 @@ Learn how to use the jQuery library for manipulating the DOM of a WebPage and, t
 - [The `$` object](#the--object)
 - [Selecting things](#selecting-things)
   - [Good selecting practice](#good-selecting-practice)
-- [Example file](#example-file)
-- [Learn by example](#learn-by-example)
 - [Feature : *"Select discussion item"*](#feature--select-discussion-item)
   - [Template update N°1](#template-update-n%C2%B01)
   - [Events](#events)

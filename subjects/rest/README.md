@@ -538,7 +538,7 @@ It's up to you to decide whether you want to **reinvent the wheel**, or **stand 
 
 
 
-### Common methods
+### Common [methods][http-methods]
 
 | Method    | Purpose                                                       |
 | :---      | :---                                                          |
@@ -552,7 +552,7 @@ It's up to you to decide whether you want to **reinvent the wheel**, or **stand 
 
 
 
-### Common request headers
+### Common request [headers][http-request-headers]
 
 <!-- slide-front-matter class: compact-table -->
 
@@ -569,7 +569,7 @@ Example                              | What the client is asking
 
 
 
-### Common response headers
+### Common response [headers][http-response-headers]
 
 <!-- slide-front-matter class: compact-table -->
 
@@ -585,7 +585,7 @@ Example                                  | What the server is telling you
 
 
 
-### Common successful response status codes
+### Common successful response [status codes][http-status-codes]
 
 <!-- slide-front-matter class: compact-table -->
 
@@ -601,15 +601,15 @@ Code                    | What the server is telling you
 
 
 
-### Common client error response status codes
+### Common client error response [status codes][http-status-codes]
 
 <!-- slide-front-matter class: compact-table -->
 
 Code                         | What the server is telling you
 :---                         | :---
-`400 Bad Request`            | I cannot parse the request body (e.g. invalid JSON)
-`401 Unauthorized`           | I do now know you, please [authenticate][http-auth]
-`403 Forbidden`              | I know you, but you aren't allowed to do that
+`400 Bad Request`            | I cannot understand the request (e.g. invalid JSON)
+`401 Unauthorized`           | I do not know you, please [authenticate][http-auth]
+`403 Forbidden`              | I know you, but you do not have sufficient access rights to do that
 `404 Not Found`              | The resource you are requesting does not exist
 `405 Method Not Allowed`     | You can't make a `GET/POST/...` on this resource
 `406 Not Acceptable`         | I can't answer in the format you asked for in the `Accept` header
@@ -623,7 +623,7 @@ Code                         | What the server is telling you
 
 
 
-### Common server error response status codes
+### Common server error response [status codes][http-status-codes]
 
 <!-- slide-front-matter class: compact-table -->
 
@@ -968,6 +968,8 @@ Collection errors                                                               
 [http-methods-patch-rfc]: https://tools.ietf.org/html/rfc5789
 [http-methods-rfc]: https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
 [http-methods-rest]: http://www.restapitutorial.com/lessons/httpmethods.html
+[http-request-headers]: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Request_fields
+[http-response-headers]: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Response_fields
 [http-status-codes]: https://httpstatuses.com
 [http-status-codes-rfc]: https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
 [http-teapot]: https://tools.ietf.org/html/rfc2324
