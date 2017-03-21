@@ -317,6 +317,49 @@ Even when using this syntax, there is still a **scope** being created and used.
 
 You will find examples of both (using only the scope or using named controllers) in the documentation and examples online.
 
+#### Outside the scope of a controller
+
+Add a new `div` outside the one you already created:
+
+```html
+<div ng-controller='HelloController as helloCtrl'>
+  <p>Hello {{ helloCtrl.name }}</p>
+</div>
+
+*<div>
+* <p>I am {{ helloCtrl.name }}</p>
+*</div>
+```
+
+No name will be displayed there.
+
+This new part of the DOM is **outside the scope** of `HelloController`,
+as we applied the `ng-controller` only to the other `div`.
+
+#### Multiple controllers
+
+Add another controller:
+
+```js
+angular.module('starter').controller('OtherController', function() {
+  var otherCtrl = this;
+  otherCtrl.name = 'Bob';
+});
+```
+
+Also add an `ng-controller` to use it on the second `div`,
+and change the variable from `helloCtrl.name` to `otherCtrl.name`:
+
+```html
+<div `ng-controller='OtherController as otherCtrl'`>
+ <p>I am {{ `otherCtrl`.name }}</p>
+</div>
+```
+
+This time it will work.
+
+As you can see, **each controller has its scope** and controls only that part of the DOM to which it is applied with `ng-controller`.
+
 #### Using functions in the view
 
 You can also attach functions to the scope or controller:
@@ -499,13 +542,13 @@ angular.module('starter').factory('HelloService', function(`$http`) {
 
   var service = {};
 
-  service.retrieveJoke = function() {
-    return `$http.get('https://api.icndb.com/jokes/random')`.then(function(res) {
-      return res.data.value.joke;
-    });
-  };
-
   // ...
+
+* service.retrieveJoke = function() {
+*   return $http.get('https://api.icndb.com/jokes/random').then(function(res) {
+*     return res.data.value.joke;
+*   });
+* };
 
   return service;
 });
@@ -679,7 +722,7 @@ You can then use this directive in the view:
 ```html
 <div ng-controller='HelloController as helloCtrl'>
   <!-- ... -->
-  <p `class='red-alert'`>Did you hear? {{ joke }}</p>
+  <p `red-alert`>Did you hear? {{ joke }}</p>
   <!-- ... -->
 </div>
 ```
