@@ -10,9 +10,8 @@ Getting started with and understanding the basics of [AngularJS][angular] (versi
 
 **Recommended reading**
 
-* [JavaScript](../js/)
-* [JavaScript closures](../js-closures/)
-* [JavaScript promises](../js-promises/)
+* [JavaScript][js]
+* [JavaScript closures][js-closures]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -22,7 +21,7 @@ Getting started with and understanding the basics of [AngularJS][angular] (versi
   - [Traditional Model-View-Controller (MVC) architecture](#traditional-model-view-controller-mvc-architecture)
   - [DOM manipulation and AJAX requests](#dom-manipulation-and-ajax-requests)
   - [Single-page applications](#single-page-applications)
-  - [Dynamic HTML](#dynamic-html)
+  - [Dynamic HTML with Angular](#dynamic-html-with-angular)
   - [Evolution of Angular](#evolution-of-angular)
 - [Getting started](#getting-started)
   - [Starter template](#starter-template)
@@ -34,23 +33,18 @@ Getting started with and understanding the basics of [AngularJS][angular] (versi
   - [Directives](#directives)
   - [Components](#components)
   - [Application configuration and runtime](#application-configuration-and-runtime)
-- [Advanced concepts](#advanced-concepts)
-  - [Scope hierarchy](#scope-hierarchy)
-  - [Dependency injection and minification](#dependency-injection-and-minification)
+- [Scope hierarchy](#scope-hierarchy)
+  - [Scopes and components](#scopes-and-components)
 - [Forms](#forms)
   - [HTML validations](#html-validations)
   - [Binding to form state](#binding-to-form-state)
-- [Promises in Angular](#promises-in-angular)
-  - [The `$q` service](#the-q-service)
-  - [Creating promises with `$q`](#creating-promises-with-q)
-  - [Transforming asynchronous callbacks into promises](#transforming-asynchronous-callbacks-into-promises)
-  - [Do not overuse deferred objects](#do-not-overuse-deferred-objects)
 - [The `$http` service](#the-http-service)
   - [How to make requests](#how-to-make-requests)
   - [How to parse a response](#how-to-parse-a-response)
-  - [Promises and `$http`](#promises-and-http)
-  - [Sequential HTTP requests](#sequential-http-requests)
-  - [Recursive HTTP requests with promises](#recursive-http-requests-with-promises)
+- [Best practices](#best-practices)
+  - [File structure](#file-structure)
+  - [Multiple controllers on one page](#multiple-controllers-on-one-page)
+  - [Dependency injection and minification](#dependency-injection-and-minification)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -149,8 +143,9 @@ This tutorial will cover Angular 1, but many concepts are useful to understand A
 
 ### Starter template
 
-This tutorial assumes that you have a web page running with Angular included.
-If you don't, you can save the following HTML to a file and open it in your browser:
+You can use this template for the exercises in this tutorial.
+It includes Angular already.
+Save it as an HTML file and create an empty `angular-demo.js` file next to it:
 
 ```html
 <!DOCTYPE html>
@@ -164,13 +159,14 @@ src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js'>
   </head>
   <body>
     <!-- Your HTML goes here -->
-    <script>
-      <!-- Your JavaScript goes here -->
-    </script>
+
+    <!-- Your JavaScript goes in that file -->
+    <script src='angular-demo.js'></script>
   </body>
-</html>
+&lt;/html&gt;
 ```
 
+You can use [live-server][live-server] to serve these files in your browser.
 You should keep your [developer console][chrome-dev] open throughout this tutorial to detect errors in your code.
 
 
@@ -198,6 +194,7 @@ You should keep your [developer console][chrome-dev] open throughout this tutori
 * Interpolation
 * Two-way data binding
 * Dependency injection
+* Scope hierarchy
 * Form validation
 
 
@@ -699,7 +696,7 @@ An **HTML class**:
 Or a custom **HTML tag**:
 
 ```html
-*<person-name person='person'></person-name>
+*<person person='person'></person>
 ```
 
 #### Making your own directive
@@ -723,7 +720,6 @@ You can then use this directive in the view:
 <div ng-controller='HelloController as helloCtrl'>
   <!-- ... -->
   <p `red-alert`>Did you hear? {{ joke }}</p>
-  <!-- ... -->
 </div>
 ```
 
@@ -767,70 +763,7 @@ Directive             | Description
 
 Read the [documentation][angular-directives-list] to learn more.
 
-
-
-### Components
-
-Components are a **special kind of directive** with simpler configuration and which is suitable for a **component-based application structure**.
-They're a first step towards making applications with [web components][a-guide-to-web-components], an approach which has been taken further in Angular 2.
-
-A component is basically:
-
-* A **reusable view** (an HTML template)
-* Some **logic** attached to this template (a controller)
-* Clearly defined **inputs** and **outputs**
-
-For this example, we'll create a `<person-name>` component to display a person.
-
-#### Component HTML template
-
-Let's define the HTML template for our component:
-
-```html
-{{ personNameCtrl.person.firstName }} {{ personNameCtrl.person.lastName }}
-```
-
-You can register a template in `index.html` by adding this somewhere in the `<body>`:
-
-```html
-<script type='text/ng-template' id='personName.html'>
-  {{ personNameCtrl.person.firstName }} {{ personNameCtrl.person.lastName }}
-</script>
-```
-
-**If** you are serving the content with a web server,
-you can also save it to a `personName.html` file next to `index.html` (just the contents without the `<script>` tag around it).
-Angular will make an AJAX request to load it dynamically.
-
-The two solutions are **equivalent**.
-
-#### Component definition
-
-Call Angular's `component()` function to define a component.
-The second argument is a **component definition object** with various properties that configure your component:
-
-```js
-angular.module('starter').component('personName', `{`
-* templateUrl: 'personName.html',
-* bindings: {
-*   person: '<'
-* },
-* controller: function() {
-*   var personNameCtrl = this;
-* },
-* controllerAs: 'personNameCtrl'
-`}`);
-```
-
-* `templateUrl` tells Angular what **HTML template** to use
-  (it can be a relative or absolute URL)
-* `bindings` defines the component's **inputs** and **outputs**
-* `controller` is the component's **controller** that will be applied to the template
-  (just like if we used `ng-controller`)
-* `controllerAs` is the **name of the controller** in the template
-  (just like if we used `as personNameCtrl` in `ng-controller`)
-
-#### Using a component
+#### An example with `ng-repeat`
 
 Let's add a list of people to our `HelloController`:
 
@@ -846,14 +779,120 @@ angular.module('starter').controller('HelloController', function(HelloService) {
 });
 ```
 
+Let's say we want to display an `<ul>` list with an `<li>` element for each person.
+`ng-repeat` can handle that for you:
+
+```html
+<div ng-controller='HelloController as helloCtrl'>
+  <!-- ... -->
+  <p>
+    <ul>
+      <li `ng-repeat='person in helloCtrl.people'`>
+        {{ person.firstName }} {{ person.lastName }}
+      </li>
+    </ul>
+  </p>
+</div>
+```
+
+#### Two-way binding with `ng-repeat`
+
+Let's add a couple of HTML input fields to add a new person with a first and last name,
+and a button that will call `helloCtrl.addPerson()` when clicked:
+
+```html
+<div ng-controller='HelloController as helloCtrl'>
+  <!-- ... -->
+  <p>
+    <input ng-model='helloCtrl.newPerson.firstName' placeholder='First' />
+    <input ng-model='helloCtrl.newPerson.lastName' placeholder='Last' />
+    <button type='button' ng-click='helloCtrl.addPerson()'>Add</button>
+  </p>
+</div>
+```
+
+Now add that function to the controller:
+
+```js
+angular.module('starter').controller('HelloController', function(HelloService) {
+  var helloCtrl = this;
+  // ...
+* helloCtrl.addPerson = function() {
+*   helloCtrl.people.push(helloCtrl.newPerson);
+*   helloCtrl.newPerson = {};
+* };
+});
+```
+
+The HTML is automatically updated when the new person is pushed into the array.
+Angular's two-way binding and `ng-repeat` do everything for us.
+
+
+
+### Components
+
+Components are a **special kind of directive** with simpler configuration and which is suitable for a **component-based application structure**.
+They're a first step towards making applications with [web components][a-guide-to-web-components], an approach which has been taken further in Angular 2.
+
+A component is basically:
+
+* A **reusable view** (an HTML template)
+* Some **logic** attached to this template (a controller)
+* Clearly defined **inputs** and **outputs**
+
+For this example, we'll create a `<person>` component to display a person.
+
+#### Component HTML template
+
+Let's say we want to reuse the bit of template we wrote to display a person,
+because we know we're going to display people at multiple places in our app:
+
+```html
+{{ personCtrl.person.firstName }} {{ personCtrl.person.lastName }}
+```
+
+`personCtrl` will be our component's controller.
+We will define it later.
+
+Save this content to a `person.html` file next to `index.html`.
+Angular will make an AJAX request to load it dynamically when we define our component.
+
+#### Component definition
+
+Call Angular's `component()` function to define a component.
+The second argument is a **component definition object** with various properties that configure your component:
+
+```js
+angular.module('starter').component('person', `{`
+* templateUrl: 'person.html',
+* bindings: {
+*   person: '<'
+* },
+* controller: function() {
+*   var personCtrl = this;
+* },
+* controllerAs: 'personCtrl'
+`}`);
+```
+
+* `templateUrl` tells Angular what **HTML template** to use
+  (it can be a relative or absolute URL)
+* `bindings` defines the component's **inputs** and **outputs**
+* `controller` is the component's **controller** that will be applied to the template
+  (just like if we used `ng-controller`)
+* `controllerAs` is the **name of the controller** in the template
+  (just like if we used `as personCtrl` in `ng-controller`)
+
+#### Using a component
+
 Now we can use our new component in the main view.
-Let's also use `ng-repeat` to display all the people in a list:
+Update the list to use your new component:
 
 ```html
 <p>
   <ul>
-    <li `ng-repeat='person in helloCtrl.people'`>
-      `<person-name person='person'></person-name>`
+    <li ng-repeat='person in helloCtrl.people'>
+      `<person person='person'></person>`
     </li>
   </ul>
 </p>
@@ -887,29 +926,29 @@ Here's an example of the difference between using `<` and `@`:
 #### Component outputs
 
 Outputs allow your component to **communicate with the parent component** (or view).
-Let's modify our `personName.html` template and add a button to say hello to each person:
+Let's modify our `person.html` template and add a button to say hello to each person:
 
 ```html
-{{ personNameCtrl.person.firstName }} {{ personNameCtrl.person.lastName }}
-*<button type='button' ng-click='personNameCtrl.sayHello()'>Say hello</button>
+{{ personCtrl.person.firstName }} {{ personCtrl.person.lastName }}
+*<button type='button' ng-click='personCtrl.sayHello()'>Say hello</button>
 ```
 
 Add the `sayHello` function to the component's controller.
 Just log the name for now and make sure it works:
 
 ```js
-angular.module('starter').component('personName', {
-  templateUrl: 'personName.html',
+angular.module('starter').component('person', {
+  templateUrl: 'person.html',
   bindings: {
     person: '<'
   },
   controller: function() {
-    var personNameCtrl = this;
-*   personNameCtrl.sayHello = function() {
-*     console.log(personNameCtrl.person);
+    var personCtrl = this;
+*   personCtrl.sayHello = function() {
+*     console.log(personCtrl.person);
 *   };
   },
-  controllerAs: 'personNameCtrl'
+  controllerAs: 'personCtrl'
 });
 ```
 
@@ -921,19 +960,19 @@ You define an output by adding a `&` binding.
 This kind of binding is a **function** that is added to the scope and **which you can call**:
 
 ```js
-angular.module('starter').component('personName', {
-  templateUrl: 'personName.html',
+angular.module('starter').component('person', {
+  templateUrl: 'person.html',
   bindings: {
     person: '<',
 *   onSayHello: '&'
   },
   controller: function() {
-    var personNameCtrl = this;
-    personNameCtrl.sayHello = function() {
-*     personNameCtrl.onSayHello({ personToSalute: personNameCtrl.person });
+    var personCtrl = this;
+    personCtrl.sayHello = function() {
+*     personCtrl.onSayHello({ personToSalute: personCtrl.person });
     };
   },
-  controllerAs: 'personNameCtrl'
+  controllerAs: 'personCtrl'
 });
 ```
 
@@ -942,10 +981,10 @@ angular.module('starter').component('personName', {
 The **parent component** (or view) can plug a **callback function** into our new component output:
 
 ```html
-<person-name
+<person
   person='person'
   `on-say-hello='helloCtrl.sayHelloToPerson(personToSalute)'`>
-</person-name>
+</person>
 ```
 
 We can use the property names of the object passed to the output as variables in the parent
@@ -989,7 +1028,9 @@ Simply inject it where you need it:
 ```js
 angular.module('starter')
   .controller('HelloController', function(HelloService, `theMeaningOfLife`) {
+    var helloCtrl = this;
     // ...
+*   console.log('The meaning of life is ' + theMeaningOfLife);
   });
 ```
 
@@ -1031,13 +1072,7 @@ You can use it to perform tasks that should be run once when your application st
 
 
 
-## Advanced concepts
-
-<!-- slide-front-matter class: center, middle -->
-
-
-
-### Scope hierarchy
+## Scope hierarchy
 
 Many directives in Angular create a **new scope**, like `ng-controller` or `ng-repeat`.
 Child scopes **inherit properties from their parent scope**.
@@ -1046,77 +1081,14 @@ Child scopes **inherit properties from their parent scope**.
 
 You can see it in action [here][angular-codepen-scope-hierarchy].
 
-#### Scopes and components
+
+
+### Scopes and components
 
 When you define a component, you create an **isolated scope** which **does not inherit** from the parent scope.
 Your component can only communicate with the parent view through **inputs** and **outputs**.
 
 You can see it in action [here][angular-codepen-scope-components].
-
-
-
-### Dependency injection and minification
-
-**Minification** is the process of **removing all unnecessary characters** from source code **without changing its functionality**.
-Take the following code as an example:
-
-```js
-var numbers = [];
-for (var i = 0; i < 20; i++) {
-  numbers[i] = i;
-}
-```
-
-It can be rewritten like this:
-
-```js
-for(var a=[i=0];++i<20;a[i]=i);
-```
-
-Although much less readable, minified code can be much smaller.
-Minification tools are often used to **reduce file size**, especially when downloading a rich Internet application's **JavaScript files**.
-
-#### Dependency injection is broken by minification
-
-Angular relies on **variable names** to perform dependency injection by default:
-
-```js
-.controller('HelloController', function(`HelloService`) {
-  var helloCtrl = this;
-  helloCtrl.double = `HelloService`.double;
-});
-```
-
-This code **will not work if variable names are minified**:
-
-```js
-.controller('HelloController',function(`a`){
-var b=this;b.double=`a`.double;
-});
-```
-
-How would Angular know that variable `a` should be your `HelloService`?
-
-#### Inline array annotation
-
-When you know your code is going to be minified, you should use the **inline array annotation** to declare your injected parameters:
-
-```js
-.controller('HelloController', `[ 'HelloService', function(HelloService) {`
-  var helloCtrl = this;
-  helloCtrl.double = HelloService.double;
-`}]`);
-```
-
-That way, even when your variables are minified, the **names in the inline array** will tell Angular what you need to inject:
-
-```js
-.controller('HelloController',[`'HelloService'`,function(`a`){
-var b=this;b.double=`a`.double;
-}]);
-```
-
-You will often find the inline array annotation in examples as it is the recommended dependency injection syntax.
 
 
 
@@ -1269,179 +1241,6 @@ Using it is as simple as applying the directive as an attribute:
 
 
 
-## Promises in Angular
-
-Promises are common in Angular.
-
-For example, the `$http` service **returns a promise** when you call it:
-a promise that will be **resolved** with the server's HTTP response when it's available,
-or **rejected** if the requests times out or the status code sent by the server indicates an error (e.g. 4xx or 5xx).
-
-Many popular Angular libraries also return promises.
-
-
-
-### The `$q` service
-
-You **MUST NOT** use native ES6 promises in Angular.
-They are not integrated into the Angular digest cycle which makes two-way binding possible.
-
-Instead, you should use the `$q` service provided by Angular,
-which is a [Promises/A+][promises-spec]-compliant implementation of promises inspired by the popular promise library [q][q].
-
-
-
-### Creating promises with `$q`
-
-If you have an asynchronous operation or piece of code that **does not already return a promise**,
-here's a few ways you can create promises with the `$q` service:
-
-<!-- slide-column -->
-
-```js
-// Create a resolved promise
-var promise = `$q.when('foo')`;
-promise.then(function(result) {
-  console.log(result); // 'foo'
-});
-```
-
-<!-- slide-column 55 -->
-
-```js
-// Create a rejected promise
-var promise = `$q.reject(new Error('bug'))`;
-promise.catch(function(err) {
-  console.log(err.message); // 'bug'
-});
-```
-
-<!-- slide-container -->
-
-```js
-// Execute asynchronous operations in parallel
-var usersPromise = $http({ url: '/users' });
-var itemsPromise = $http({ url: '/items' });
-
-`$.all([ usersPromise, itemsPromise ])`.then(function(results) {
-  var users = results[0];
-  var items = results[1];
-  // ...
-});
-```
-
-Don't forget to inject `$q` into your controller/service/etc.
-
-
-
-### Transforming asynchronous callbacks into promises
-
-Let's suppose you have a piece of code using **custom callbacks**,
-like a call to retrieve the user's location with the HTML5 geolocation API:
-
-```js
-navigator.geolocation.getCurrentPosition(function successCallback(data) {
-  // Do stuff with data
-}, function errorCallback(err) {
-  // Handle the error
-});
-```
-
-How can you **make it a promise** to benefit from promise chaining, composition and error handling?
-
-This is how you would do it with **ES6** promises
-(**DO NOT** do this in Angular):
-
-```js
-function getPicture() {
-  return `new Promise`(function(`resolve`, `reject`) {
-    navigator.geolocation.getCurrentPosition(function successCallback(data) {
-      `resolve(data)`;
-    }, function errorCallback(err) {
-      `reject(err)`;
-    });
-  })
-}
-```
-
-#### Deferred objects
-
-The `$q` service allows you to create a **deferred object**, let's call it `deferred`:
-
-```js
-var deferred = $q.defer();
-```
-
-This object contains a **promise** that you can retrieve and return with `deferred.promise`.
-You can **resolve or reject** that promise with the deferred object's `resolve()` or `reject()` functions:
-
-```js
-var promise = deferred.promise;
-if (allGood) {
-  deferred.resolve('Yeehaw!');
-} else {
-  deferred.reject(new Error('Oops'));
-}
-```
-
-#### Deferred object example
-
-Here's how you would transform the asynchronous geolocation call with **callbacks into a promise**:
-
-```js
-function getPicture() {
-  var `deferred` = `$q.defer()`;
-  navigator.geolocation.getCurrentPosition(function successCallback(data) {
-    `deferred.resolve(data)`;
-  }, function errorCallback(err) {
-    `deferred.reject(err)`;
-  });
-  return `deferred.promise`;
-}
-```
-
-
-
-### Do not overuse deferred objects
-
-Why is this stupid?
-
-```js
-function getUserFromServer() {
-  var deferred = $q.defer();
-
-  $http({ url: '/users' }).then(function(res) {
-    deferred.resolve(res);
-  }).catch(function(err) {
-    deferred.reject(err);
-  });
-
-  return deferred.promise;
-}
-
-getUserFromServer().then(function(users) {
-  // Do something with "res.data"...
-});
-```
-
-#### Do not make it a promise if it's one already
-
-The `$http` service **already returns a promise**,
-you don't have to make a new one.
-Just **chain it**:
-
-```js
-function getUserFromServer() {
-  return $http({ url: '/users' });
-}
-
-getUserFromServer().then(function(res) {
-  // Do something with "res.data"...
-});
-```
-
-
-
 ## The `$http` service
 
 <!-- slide-front-matter class: center, middle -->
@@ -1567,136 +1366,129 @@ $http(options).then(function(res) {
 
 
 
-### Promises and `$http`
+## Best practices
 
-The `$http` service returns a promise when you use it:
+<!-- slide-front-matter class: center, middle, image-header -->
 
-```js
-var promise = $http({
-  url: '/items'
-});
-```
-
-It is **resolved** with the HTTP response object when the request completes successfully:
-
-```js
-promise.then(function(res) {
-  console.log(res.data); // [ 'foo', 'bar', 'baz' ]
-});
-```
-
-Or **rejected** if the request times out or the server sends a status code indicating an error.
-The HTTP response is provided as the reason:
-
-```js
-promise.catch(function(res) {
-  console.log(res.status); // 422
-  console.log(res.statusText); // Unprocessable Entity
-});
-```
+<img src='images/best-practices.jpg' class='w50' />
 
 
 
-### Sequential HTTP requests
+### File structure
 
-HTTP requests are asynchronous, so to make several requests **sequentially**,
-you have to wait until each request is done to trigger the next one:
-
-```js
-`$http`({
-  method: 'POST',
-  url: '/users',
-  data: userData
-}).then(function userCreated(res) {
-  return `$http`({
-    method: 'POST',
-    url: '/auth',
-    data: userData
-  }).then(function userAuthenticated(res) {
-    return `$http`({
-      url: '/users/' + res.data.id + '/stats'
-    }).then(function userStatsRetrieved(res) {
-      // Do something with "res.data"...
-    });
-  });
-}).catch(function(err) {
-  $log.error(err);
-});
-```
-
-That's not very easy to read.
-
-#### Flattening sequential HTTP requests with chained promises
-
-```js
-function createUser(userData) {
-  return $http({ method: 'POST', url: '/users', data: userData })
-    .then(function() {
-      return userData;
-    });
-}
-
-function authenticateUser(userData) {
-  return $http({ method: 'POST', url: '/auth', data: userData })
-    .then(function(res) {
-      return res.data.id;
-    });
-}
-
-function getUserStats(userId) {
-  return $http({ url: '/users/' + userId + '/stats' });
-}
-
-var userData = { name: 'jdoe', password: 'letmein' };
-
-*createUser()
-* .then(authenticateUser)
-* .then(getUserStats)
-* .then(function(res) {
-*   // Do something with "res.data"...
-* }).catch(function(err) {
-*   $log.error(err);
-* });
-```
-
-
-
-### Recursive HTTP requests with promises
-
-What if you are getting items from a paginated collection and want to fetch all of them?
+There are several possible file structures:
 
 <!-- slide-column -->
 
+**By element type**
+
+```txt
+index.html
+*controllers
+  hello-controller.js
+  other-controller.js
+*services
+  hello-service.js
+*components
+  person-component.js
+  person-component.html
+```
+
+<!-- slide-column -->
+
+**By feature**
+
+```txt
+index.html
+*hello
+  hello-controller.js
+  hello-service.js
+*other
+  other-controller.js
+*person-component
+  person-component.js
+  person-component.html
+```
+
+<!-- slide-container -->
+
+There is no *right or wrong* solution here.
+
+Just **don't put everything in one file**.
+
+
+
+### Multiple controllers on one page
+
+When you have a complex page with multiple areas that each have their specific logic,
+it's good practice to **isolate each part into a component**:
+
+<p class='center'><img src='images/master-detail-components.png' class='w80' /></p>
+
+
+
+### Dependency injection and minification
+
+**Minification** is the process of **removing all unnecessary characters** from source code **without changing its functionality**.
+Take the following code as an example:
+
 ```js
-function fetchAllItems(page, items) {
-  page = page || 1; // Start from page 1
-  items = items || [];
-
-  // GET the current page
-  return $http({
-    url: '/items',
-    params: {
-      page: page
-    }
-  }).then(function(res) {
-    if (res.data.length) {
-      // If there are any items, add them
-      // and recursively fetch the next page
-      items = items.concat(res.data);
-      return fetchAllItems(page + 1, items);
-    }
-    return items;
-  });
+var numbers = [];
+for (var i = 0; i < 20; i++) {
+  numbers[i] = i;
 }
+```
 
-fetchAllItems().then(function(allItems) {
-  // Do something with "allItems"...
+It can be rewritten like this:
+
+```js
+for(var a=[i=0];++i<20;a[i]=i);
+```
+
+Although much less readable, minified code can be much smaller.
+Minification tools are often used to **reduce file size**, especially when downloading a rich Internet application's **JavaScript files**.
+
+#### Dependency injection is broken by minification
+
+Angular relies on **variable names** to perform dependency injection by default:
+
+```js
+.controller('HelloController', function(`HelloService`) {
+  var helloCtrl = this;
+  helloCtrl.double = `HelloService`.double;
 });
 ```
 
-<!-- slide-column 40 -->
+This code **will not work if variable names are minified**:
 
-<img src='images/recursion.jpg' class='w100' />
+```js
+.controller('HelloController',function(`a`){
+var b=this;b.double=`a`.double;
+});
+```
+
+How would Angular know that variable `a` should be your `HelloService`?
+
+#### Inline array annotation
+
+When you know your code is going to be minified, you should use the **inline array annotation** to declare your injected parameters:
+
+```js
+.controller('HelloController', `[ 'HelloService', function(HelloService) {`
+  var helloCtrl = this;
+  helloCtrl.double = HelloService.double;
+`}]`);
+```
+
+That way, even when your variables are minified, the **names in the inline array** will tell Angular what you need to inject:
+
+```js
+.controller('HelloController',[`'HelloService'`,function(`a`){
+var b=this;b.double=`a`.double;
+}]);
+```
+
+You will often find the inline array annotation in examples as it is the recommended dependency injection syntax.
 
 
 
@@ -1715,7 +1507,9 @@ fetchAllItems().then(function(allItems) {
 **Further reading**
 
 * [A guide to web components][a-guide-to-web-components]
-* [Angular 2 Components][angular-2-series-components]
+* [Angular 2 components][angular-2-series-components]
+* [JavaScript promises][js-promises]
+* [Promises in Angular][angular-promises]
 
 
 
@@ -1737,7 +1531,7 @@ fetchAllItems().then(function(allItems) {
 [angular-guide]: https://docs.angularjs.org/guide
 [angular-input]: https://docs.angularjs.org/api/ng/directive/input
 [angular-ng-model-controller]: https://docs.angularjs.org/api/ng/type/ngModel.NgModelController
-[angular-q]: https://docs.angularjs.org/api/ng/service/$q
+[angular-promises]: ../angular-promises/
 [angular-2]: https://angular.io
 [angular-2-series-components]: http://blog.ionic.io/angular-2-series-components/
 [chrome]: https://www.google.com/chrome/
@@ -1745,8 +1539,10 @@ fetchAllItems().then(function(allItems) {
 [html-history-api]: https://developer.mozilla.org/en-US/docs/Web/API/History_API
 [html-input]: https://www.w3schools.com/tags/tag_input.asp
 [jquery]: http://jquery.com
+[js]: ../js/
+[js-closures]: ../js-closures/
+[js-promises]: ../js-promises/
+[live-server]: https://www.npmjs.com/package/live-server
 [minification]: https://en.wikipedia.org/wiki/Minification_(programming)
-[q]: https://github.com/kriskowal/q
-[promises-spec]: https://promisesaplus.com
 [typescript]: https://www.typescriptlang.org
 [web-components]: https://developer.mozilla.org/en-US/docs/Web/Web_Components
