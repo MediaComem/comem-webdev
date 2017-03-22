@@ -1,4 +1,4 @@
-# Bootstrap - Basics
+# Bootstrap
 
 <!-- slide-include ../../BANNER.md -->
 
