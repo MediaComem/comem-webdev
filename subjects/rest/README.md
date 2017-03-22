@@ -31,12 +31,12 @@ Learn the core architectural principles of RESTful APIs are and how they compare
   - [HTTP provides the [content negotiation][http-content-negotiation] mechanisms](#http-provides-the-content-negotiationhttp-content-negotiation-mechanisms)
 - [But can't I just use GET and POST?](#but-cant-i-just-use-get-and-post)
   - [Standards](#standards)
-  - [Common methods](#common-methods)
-  - [Common request headers](#common-request-headers)
-  - [Common response headers](#common-response-headers)
-  - [Common successful response status codes](#common-successful-response-status-codes)
-  - [Common client error response status codes](#common-client-error-response-status-codes)
-  - [Common server error response status codes](#common-server-error-response-status-codes)
+  - [Common [methods][http-methods]](#common-methodshttp-methods)
+  - [Common request [headers][http-request-headers]](#common-request-headershttp-request-headers)
+  - [Common response [headers][http-response-headers]](#common-response-headershttp-response-headers)
+  - [Common successful response [status codes][http-status-codes]](#common-successful-response-status-codeshttp-status-codes)
+  - [Common client error response [status codes][http-status-codes]](#common-client-error-response-status-codeshttp-status-codes)
+  - [Common server error response [status codes][http-status-codes]](#common-server-error-response-status-codeshttp-status-codes)
   - [Conditional update example](#conditional-update-example)
 - [[Create, read, update, delete (CRUD)][crud]](#create-read-update-delete-crudcrud)
   - [Postman](#postman)
@@ -592,7 +592,7 @@ Example                                  | What the server is telling you
 Code                    | What the server is telling you
 :---                    | :---
 `200 OK`                | Your request was successful
-`201 Created`           | I have created a **new resource** and telling you where it is in the `Location` header
+`201 Created`           | I have created a **new resource** and am telling you where it is in the `Location` header
 `202 Accepted`          | I have received your request but will process it later
 `204 No Content`        | I have processed your request but have no content to send you
 `301 Moved Permanently` | The resource you are requesting has **moved permanently** and I am telling you where in the `Location` header
