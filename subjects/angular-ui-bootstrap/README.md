@@ -79,7 +79,7 @@ To create a dropdown menu in your application, you'll need to respect a specific
 
 ```html
 <div `class="dropdown"`>
-  <button type="button" `data-toggle="dropdown"`>
+  <button class="btn btn-default" `data-toggle="dropdown"`>
     Dropdown trigger
     <span class="caret"></span>
   </button>
@@ -179,21 +179,115 @@ Then, include the file with a `<script>` tag in your `index.html`
 <script src="js/ui-bootstrap-tpls-2.5.0.min.js"></script>
 ```
 
-Finally, don't forget to add the dependency in your app's `module`:
+Finally, don't forget to **add the dependency** in your app's `module`:
 
 ```js
 angular.module('myModule', ['`ui.bootstrap`']);
 ```
 
+## Documentation
+
+<!-- slide-front-matter class: center, middle -->
+
+As always, the prime source of information about the library is it's official **documentation**.
+
+In the case of Angular UI Bootstrap, you'll find it [here][uib-doc]
+
+> Angular UI Bootstrap contains **all Bootstrap JS components**, along with some additionnal behaviors
+
+## Dropdown Menus (Again)
+
+Using Bootstrap Dropdown with Angular UI Bootstrap is very **simple**.
+
+You'll need to respect the **same HTML Bootstrap Markup** as before, but will need to **remove** all the `data-*` attribute, and replace them with **directives**:
+
+```html
+<!-- remove class="dropdown" -->
+<div `uib-dropdown`>
+  <!-- remove data-toggle="dropdown" -->
+  <button class="btn btn-default" `uib-dropdown-toggle`>
+    Dropdown trigger
+    <span class="caret"></span>
+  </button>
+  <!-- nothing to remove here. Just add the directive -->
+  <ul class="dropdown-menu" `uib-dropdown-menu`>
+    <li><a href="#">Element 1</a></li>
+    <li><a href="#">Element 2</a></li>
+  </ul>
+</div>
+```
+## Modals (Again)
+
+On the other hand, modals are a **little bit** more complicated to implement, because you'll need to **add some code**.
+
+The HTML markup for the modal template is **the same as before** (see [here](./#7)).
+
+> You should move this markup in it's own `html` file, for a better **structure**.
+
+In the case of Angular UI Bootstrap, you don't have to add an `id` attribute to the modal.
+
+### The Modal Trigger
+
+The button that previously triggered the showing of the modal needs to be **changed**.
+
+It will no longer rely on `data-*` attribute, but will instead trigger **a call to a function in its controller**.
+
+You can remove all `data-*` attributes from the button, and **replace** them with a `ng-click` directive, with the name of **the function to trigger**:
+
+```html
+<a href="#"
+  class="btn btn-success navbar-btn"
+  `ng-click="ctrl.openModal()"`>Log in</a>
+```
+### The Trigger Function
+
+Now, in the controller that's **responsible for this button**, add a new service dependency, called `$uibModal`.
+
+Use this service's `.open()` method to create the function that will **show the modal** when triggered by the button.
+
+```js
+angular.module("myApp").controller("myController", function(`$uibModal`) {
+  var ctrl = this;
+
+  ctrl.openModal = function() {
+      `$uibModal.open`({
+        // Pass the path to the file containing your modal template
+        templateUrl: "modal/template.html",
+        // You can assign your modal its own controller
+        controller: "myModalController",
+        // The alias for the modal's controller
+        controllerAs: "modal"
+      });
+  };
+});
+```
+
+### The Modal Controller
+
+As said in the previous slide, you can assign **its own controller** to your modal.
+
+In this controller, if you want to **access the current modal instance**, you'll need to inject **a new service dependency**, called `$uibModalInstance`.
+
+With this service, you could for example create a function that will **close the currently opened modal**, using the `.close()` method:
+
+```js
+angular
+  .module("myApp")
+  .controller("myModalController", function($`uibModalInstance`) {
+    var ctrl = this;
+  
+    // This function could be called by a button in the modal template
+    ctrl.close = `$uibModalInstance.close`;
+  });
+```
+
 ## Resources
+
+<!-- slide-front-matter class: middle -->
 
 **Documentation**
 
-* [RTFM][rtfm]
-
-**Further reading**
-
-* [Coffee][coffee]
+* [Angular UI Bootstrap Documentation][uib-doc]
 
 [js]: ../js
 [bootstrap]: ../bootstrap
@@ -202,3 +296,4 @@ angular.module('myModule', ['`ui.bootstrap`']);
 [chrome]: https://www.google.com/chrome/
 [sublime]: https://www.sublimetext.com/
 [auib]: https://angular-ui.github.io/bootstrap/
+[uib-doc]: https://angular-ui.github.io/bootstrap/
