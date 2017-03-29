@@ -37,6 +37,35 @@ Angular has a built-in router, [ngRoute][angular-router], but it's not very flex
 
 
 
+### Getting started
+
+TODO: link to repo
+
+
+
+### Adding UI router to your Angular app
+
+Angular UI router is a third-party library: it is not included out of the box in Angular.
+Luckily, the starter project already includes it for you:
+
+```html
+<script type="text/javascript" src="assets/js/angular-ui-router.min.js"></script>
+```
+
+Angular UI router provides an **Angular module** called `ui.router`.
+To use it, you need to add that module as a dependency when declaring your application module (in `js/app.js`):
+
+```js
+angular.module('AddressBook', [
+  'angular-storage'`,`
+  `'ui.router'`
+]);
+```
+
+You now have access to Angular UI router's services.
+
+
+
 ## States
 
 UI router is basically a [state machine][state-machine].
@@ -55,23 +84,18 @@ Think about each **page** of an application as a **set of states**:
 
 ### Defining states
 
-You define states in an **Angular config function** by injecting the `$stateProvider` and calling its `state` function with **state definition objects**:
+You define states in an **Angular config function** by injecting the `$stateProvider` and calling its `state` function with a **state definition object**.
+
+Let's define a state for the address book's home page:
 
 ```js
-angular.module('starter').config(function($stateProvider) {
-  `$stateProvider.state`('homePage', {
-    url: '/',
-    templateUrl: 'templates/home.html',
-    controller: 'HomePageController',
-    controllerAs: 'homePageCtrl'
-  });
-
-  `$stateProvider.state`('itemsPage', {
-    url: '/items',
-    templateUrl: 'templates/items.html',
-    controller: 'ItemsPageController',
-    controllerAs: 'itemsPageCtrl'
-  });
+angular.module('AddressBook').config(function($stateProvider) {
+* $stateProvider.state('home', {
+*   url: '',
+*   templateUrl: '/templates/home.html',
+*   controller: 'HomePageController',
+*   controllerAs: 'homePageCtrl'
+* });
 });
 ```
 
@@ -87,9 +111,9 @@ Each state usually has at least:
 * A `controller`: the **logic** for that state's view
 
 ```js
-$stateProvider.state(`'homePage'`, {
-  `url`: '/',
-  `templateUrl`: 'templates/home.html',
+$stateProvider.state(`'home'`, {
+  `url`: '',
+  `templateUrl`: '/templates/home.html',
   `controller`: 'HomePageController',
   `controllerAs`: 'homePageCtrl'
 });
@@ -100,16 +124,17 @@ $stateProvider.state(`'homePage'`, {
 You can also encapsulate your page into an **Angular component** and give that to UI router instead of the separate template and controller:
 
 ```js
-angular.module('starter')`.component('HomePageComponent'`, {
-  templateUrl: 'templates/home.html',
+angular.module('AddressBook')`.component('HomePageComponent'`, {
+  templateUrl: '/templates/home.html',
   controller: function() {
     // ...
-  }
+  },
+  controllerAs: 'homePageCtrl'
 });
 
-angular.module('starter').config(function($stateProvider) {
-  $stateProvider.state(`'homePage'`, {
-    `url`: '/',
+angular.module('AddressBook').config(function($stateProvider) {
+  $stateProvider.state(`'home'`, {
+    `url`: '',
     `component`: 'HomePageComponent'
   });
 });
@@ -119,16 +144,16 @@ angular.module('starter').config(function($stateProvider) {
 
 ### Where does the template get inserted?
 
-When a state is activated, its template is inserted into the `ui-view` of its parent state's template.
-If it's a top-level state, its parent template is `index.html`:
+When a state is activated, its **template** is **inserted** into the `ui-view` of its **parent state's template**.
+If it's a **top-level state** like the `home` state we just defined, its parent template is `index.html`:
 
 ```html
-<body ng-app='myApp'>
-  <div `ui-view` />
-</body>
+<main class="container">
+  `<div ui-view />`
+</main>
 ```
 
-In some other frameworks using Angular UI router, this is a different directive (e.g. `<ion-nav-view>` in Ionic).
+In some other frameworks using Angular UI router, the directive may have a different name (e.g. `<ion-nav-view>` in Ionic).
 
 
 
@@ -220,11 +245,12 @@ $urlRouterProvider`.otherwise`(function($injector) {
 
 ## TODO
 
-* Resolve?
+* ui-sref-active
 * Nested states
 * Named views
 * Transitions (blocking transitions)
-* Better explain `ng-controller as` vs `controllerAs`
+* Best practices for controllers (controller on state instead of in template)
+* Resolve?
 
 
 
