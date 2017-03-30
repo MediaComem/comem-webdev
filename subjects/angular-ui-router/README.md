@@ -18,14 +18,40 @@ State-based routing for Angular applications.
 
 
 - [What is UI Router?](#what-is-ui-router)
+  - [Getting started](#getting-started)
+  - [Adding UI router to your Angular app](#adding-ui-router-to-your-angular-app)
 - [States](#states)
   - [Defining states](#defining-states)
   - [State definition objects](#state-definition-objects)
   - [Where does the template get inserted?](#where-does-the-template-get-inserted)
-  - [Activating a state](#activating-a-state)
+  - [Adding new states](#adding-new-states)
+- [HTML 5 mode](#html-5-mode)
+  - [HTML 5 mode updates](#html-5-mode-updates)
+  - [Server-side configuration](#server-side-configuration)
+- [Linking to other states](#linking-to-other-states)
+  - [Client-side routing and single-page applications](#client-side-routing-and-single-page-applications)
+  - [Linking to state names with `ui-sref`](#linking-to-state-names-with-ui-sref)
+- [Nested states](#nested-states)
   - [State parameters](#state-parameters)
-  - [The default state](#the-default-state)
-- [TODO](#todo)
+  - [Navigating to a state with parameters](#navigating-to-a-state-with-parameters)
+  - [Adding a `ui-view` in the parent state's template](#adding-a-ui-view-in-the-parent-states-template)
+  - [Accessing state parameter with `$stateParams`](#accessing-state-parameter-with-stateparams)
+- [Highlighting menu items corresponding to states](#highlighting-menu-items-corresponding-to-states)
+- [Restricting access to pages](#restricting-access-to-pages)
+  - [Attaching custom data to states](#attaching-custom-data-to-states)
+  - [Angular events](#angular-events)
+  - [The `$stateChangeStart` event](#the-statechangestart-event)
+  - [Blocking a state transition](#blocking-a-state-transition)
+- [Navigating programmatically with `$state.go()`](#navigating-programmatically-with-statego)
+  - [Giving state parameters to `$state.go()`](#giving-state-parameters-to-statego)
+  - [Redirecting when logging out](#redirecting-when-logging-out)
+  - [Hiding the Contacts menu when logged out](#hiding-the-contacts-menu-when-logged-out)
+- [Setting a default state](#setting-a-default-state)
+  - [Redirecting to a state name `otherwise()`](#redirecting-to-a-state-name-otherwise)
+- [Full page contact details](#full-page-contact-details)
+  - [Create a new controller](#create-a-new-controller)
+  - [Add a link to the full page details](#add-a-link-to-the-full-page-details)
+- [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -827,6 +853,68 @@ So at that time, it's possible to retrieve `$state` and use it.
 
 
 
+## Full page contact details
+
+Let's add a state that will show the contact details on the whole page rather than next to the list:
+
+```js
+$stateProvider.state('fullPageContactDetails', {
+  url: '/contacts/:id/full',
+  controller: 'FullContactDetailsController',
+  controllerAs: 'contactDetailsCtrl',
+  templateUrl: '/templates/contact-details-full.html',
+  data: {
+    authRequired: true
+  }
+});
+```
+
+This time the state is **not a child of `contacts`**,
+because we want the whole `ui-view` in `index.html` to only show the contact details.
+It's also a **different template** without a panel, more suited for a full page.
+
+This time, the URL is **not relative** since it's not a child state.
+
+
+
+### Create a new controller
+
+Instead of reusing the same controller,
+we recommend that you **copy** `ContactDetailsController` and rename the new version to `FullContactDetailsController`.
+This is not strictly necessary for this example as the implementation is the same, but it is a **good practice**.
+
+If the contact details panel and full details page change independently in the future,
+it will be simpler to update **isolated controllers** than to have one controller managing two different views.
+
+
+
+### Add a link to the full page details
+
+Update `/templates/contact-details.html` to add a link to the full details page:
+
+```html
+<a ui-sref="fullPageContactDetails({ id: contactDetailsCtrl.contact.id  })">
+  Full page
+</a>
+```
+
+The `/templates/contact-details-full.html` template also has a similar link back to the list:
+
+```html
+<a ui-sref="contacts.details({ id: contactDetailsCtrl.contact.id  })">
+  Back to list
+</a>
+```
+
+You can now navigate to and from a contact's full details page.
+
+The highlight on the Contacts menu link does not work for this new page.
+You could [fix that][ui-sref-active-abstract-state] with an abstract state,
+but that is out of the scope of this tutorial.
+(Read the guide first to learn about abstract states.)
+
+
+
 ## Resources
 
 Event this tutorial is only an overview of the full capabilities of Angular UI router.
@@ -848,3 +936,4 @@ Read the [guide][angular-ui-router-guide] to learn more.
 [history-api]: https://developer.mozilla.org/en-US/docs/Web/API/History_API
 [live-server]: https://github.com/tapio/live-server
 [state-machine]: https://en.wikipedia.org/wiki/Finite-state_machine
+[ui-sref-active-abstract-state]: http://jeremysawesome.com/2017/03/15/fixing-ui-sref-active-specifying-default-abstract-state/
