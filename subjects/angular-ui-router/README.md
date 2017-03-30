@@ -59,7 +59,7 @@ You will implement the following:
 
 * A home page accessible by clicking "Address Book"
 * A contacts page giving you access to the list of contacts and the details of each contact
-* Access control: in the end, the contacts page should only be accessible when logged in
+* Access control: the contacts page should only be accessible when logged in
 
 
 
@@ -604,114 +604,246 @@ This will log a message in the console every time you are transitioning to a sta
 ### Blocking a state transition
 
 We want to block state transitions to protected states.
-To do this, you must:
+To do this, you must know:
 
-* Check the `data.authRequired` property we added earlier, to know if the state is protected or not
-* Block the transition if authentication is required but the user is not logged
+* If authentication is required for the target state;
+  you can know that by checking the `data.authRequired` property you added earlier
+* If the user is logged in;
+  you can do that by injecting `AuthService` and calling its `isLoggedIn()` function
 
 ```js
-$rootScope.$on('$stateChangeStart', function(event, toState) {
+angular.module('AddressBook').run(function(`AuthService`, $rootScope) {
+  $rootScope.$on('$stateChangeStart', function(event, toState) {
 
-* var authRequired = false;
-* if (toState.data) {
-*   authRequired = toState.data.authRequired;
-* }
+*   var authRequired = false;
+*   if (toState.data) {
+*     authRequired = toState.data.authRequired;
+*   }
 
-  console.log('Transitioning to ' + toState.name);
+*   var loggedIn = AuthService.isLoggedIn();
+
+    console.log('Transitioning to ' + toState.name);
+  });
 });
 ```
 
+#### Using `event.preventDefault()` to block the transition
 
-
-### Activating a state
-
-There are **3 ways** to activate a state:
-
-* Navigate to the `url` associated with the state
-* Click a link containing the `ui-sref` directive
-* Navigate programmatically by calling `$state.go()`
-
-#### The `ui-sref` directive
-
-The `ui-sref` directive (`sref` meaning **state reference**) allows you to make links to states instead of links to URLs.
-
-**Instead of `href`**, you add the `ui-sref` attribute to a link:
-
-```html
-<a ui-sref='itemsPage'>Items</a>
-```
-
-Note that it references the **state name** (`itemsPage`), not the state's URL (`/items`).
-It's good practice to use `ui-sref` instead of `href` everywhere in your app if you're using UI router.
-
-#### Navigating programmatically
-
-Sometimes you need to trigger a state transition in code.
-You can inject UI router's `$state` service and call its `go()` function:
+Now that you have the information you need, you can block the transition **if the state is protected** and **if the user is not logged in**:
 
 ```js
-angular.module('myApp').controller('MyCtrl', function($state) {
-  var myCtrl = this;
-  myCtrl.goToItems = function() {
-    `$state.go('items');`
+angular.module('AddressBook').run(function(AuthService, $rootScope) {
+  $rootScope.$on('$stateChangeStart', function(event, toState) {
+
+    var authRequired = false;
+    if (toState.data) {
+      authRequired = toState.data.authRequired;
+    }
+
+    var loggedIn = AuthService.isLoggedIn();
+
+*   if (authRequired && !loggedIn) {
+*     event.preventDefault();
+*     console.warn('Blocked state transition to ' + toState.name);
+*   } else {
+*     console.log('Transitioning to ' + toState.name);
+*   }
+  });
+});
+```
+
+The `event.preventDefault()` function is a standard function to cancel JavaScript events
+(for the events that support it).
+When you use it on Angular UI router's `$stateChangeStart` event, it cancels the state transition.
+
+#### Make sure you can't access the protected states
+
+Now you cannot access the protected states through the links any more.
+Even if you manually visit their URLs, the states will not be activated.
+
+> **A note on security:** this only blocks the state transition at the level of the **client-side** router.
+It does not prevent the user from manually loading the template (e.g. `/templates/contacts.html`)
+or from calling your web service if you have one (e.g. to load the list of contacts).
+So while doing this is a good thing to do for the user experience,
+you still have to **have security at the level of the web service**.
+
+If you log in, you should be able to access the Contacts and details pages again.
+Try logging in and out and seeing how the app behaves.
+
+What could we still improve?
+
+
+
+## Navigating programmatically with `$state.go()`
+
+When a state transition is blocked, it would be nice to redirect the user to an accessible page,
+such as the home page.
+
+In addition to navigating **in the view** with the `ui-sref` directive,
+you can also navigate **in code** with the `$state` service provided by Angular UI router.
+Simply inject it and call `$state.go()` with the **name of the state** you want to transition to:
+
+```js
+angular.module('AddressBook').run(function(AuthService, $rootScope, `$state`) {
+  $rootScope.$on('$stateChangeStart', function(event, toState) {
+    // ...
+    if (authRequired && !loggedIn) {
+      event.preventDefault();
+      console.warn('Blocked state transition to ' + toState.name);
+*     $state.go('home');
+    } else {
+      console.log('Transitioning to ' + toState.name);
+    }
+  });
+});
+```
+
+Try to manually go to `/contacts` by typing the URL path in your browser's address bar;
+you should be redirected to the home page this time.
+
+
+
+### Giving state parameters to `$state.go()`
+
+You can also use `$state.go()` to navigate to a state with parameters.
+You simply have to pass a JavaScript object which is a key/value map of the parameter names and their values.
+
+For example, to navigate to the details page for the contact with the ID 10293, you would do this:
+
+```js
+var contactId = '10293';
+$state.go('contacts.details', { id: contactId })
+```
+
+
+
+### Redirecting when logging out
+
+If the user is on a protected page and logs out, it would be better to also redirect him to the home page,
+since he shouldn't have access to the current page any more.
+
+Update the `NavController` in `auth.js` to do that:
+
+```js
+.controller('NavController', function(AuthService, `$state`) {
+  var navCtrl = this;
+
+  navCtrl.isLoggedIn = AuthService.isLoggedIn;
+
+  navCtrl.logIn = function(event) {
+    event.preventDefault();
+    AuthService.setLoggedIn(true);
+  };
+
+  navCtrl.logOut = function(event) {
+    event.preventDefault();
+    AuthService.setLoggedIn(false);
+*   $state.go('home');
   };
 });
 ```
 
-Similarly to `ui-sref`, it takes the **state name** as an argument, not the state's URL.
 
 
+### Hiding the Contacts menu when logged out
 
-### State parameters
+You might also want to hide links to inaccessible pages when the user is logged out.
+Angular UI router cannot help you with this, so you have to do it yourself.
 
-Part of the URL is often dynamic, such as an item ID.
-When configuring your state with `$stateProvider`, you can define **URL parameters** in state URLs like this:
-
-```js
-$stateProvider.state('itemDetailsPage', {
-    url: '/items/`:itemId`',
-    templateUrl: 'templates/itemDetails.html',
-    controller: function(`$stateParams`) {
-      var itemId = `$stateParams.itemId`;
-    },
-    controllerAs: 'itemDetailsCtrl'
-  });
-```
-
-Note that you can inject the special `$stateParams` object;
-its key and values are the URL parameters names and values, respectively.
-
-#### Using state parameters when navigating
-
-You can specify the values of state parameters when navigating with `ui-sref` like this:
-
-```html
-<a ui-sref='itemDetailsPage`({ itemId: item.id })`'>{{ item.name }}</a>
-```
-
-Similarly with `$state.go()`:
+If you take a look at `NavController` in `js/auth.js`,
+you will see that it already exposes the `isLoggedIn()` function from `AuthService` to the view:
 
 ```js
-$state.go('itemDetailsPage', `{ itemId: item.id }`);
-```
+.controller('NavController', function(AuthService, $state) {
+  var navCtrl = this;
 
+* navCtrl.isLoggedIn = AuthService.isLoggedIn;
 
-
-### The default state
-
-When configuring your states, the `otherwise()` function of `$urlRouterProvider` allows you to navigate to default state when the URL does not match any defined state:
-
-```js
-$urlRouterProvider`.otherwise`(function($injector) {
-  $injector.get('$state').go('itemsPage');
+  // ...
 });
 ```
+
+You can use this function in the view in combination with the `ng-if` directive
+to show DOM elements only if the user is logged in:
+
+```html
+<ul class="nav navbar-nav" `ng-if="navCtrl.isLoggedIn()"`>
+  <li ui-sref-active="active"><a ui-sref="contacts">Contacts</a></li>
+</ul>
+```
+
+
+
+## Setting a default state
+
+With the current implementation, try navigating to the path `/foo` and see what happens:
+**no state is activated** and the `ui-view` remains blank!
+
+By default, Angular UI router only activates a state if the URL matches one of the URLs defined in the state definition objects.
+
+Let's **redirect** the user to an existing page if that happens.
+Angular UI router provides the `$urlRouterProvider` service.
+It has an `otherwise()` function you can call with the URL to redirect to.
+
+Make the following changes to the configuration function in `js/app.js`:
+
+```js
+.config(function($locationProvider, $stateProvider, `$urlRouterProvider`) {
+  // ...
+
+* $urlRouterProvider.otherwise('/');
+});
+```
+
+You should now be redirect to the home page when trying to access `/foo` or any other URL path that does not correspond to a defined state.
+
+
+
+### Redirecting to a state name `otherwise()`
+
+Note that otherwise takes an **URL** as argument and **not a state name**.
+
+To redirect to a state name, you need the `$state` service, which you **cannot** get in a configuration function.
+Angular configuration functions are run **before services are created** when the app starts.
+
+But you can still use `$state` if you want.
+Pass a callback function to `otherwise()` instead of a string:
+it will be called with Angular's **injector**, and you can use the injector to retrieve the `$state` service:
+
+```js
+.config(function($locationProvider, $stateProvider, $urlRouterProvider) {
+  // ...
+
+  $urlRouterProvider.otherwise(`function($injector) {`
+*   var $state = $injector.get('$state');
+*   $state.go('home');
+  `}`);
+});
+```
+
+This will work since the callback function passed to `otherwise()` is not called when the app starts,
+but when the user navigates to an unknown URL path.
+So at that time, it's possible to retrieve `$state` and use it.
+
+
+
+## Resources
+
+Event this tutorial is only an overview of the full capabilities of Angular UI router.
+Read the [guide][angular-ui-router-guide] to learn more.
+
+**Documentation**
+
+* [API reference][angular-ui-router-api-reference]
+* [Guide][angular-ui-router-guide]
 
 
 
 [angular-router]: https://docs.angularjs.org/api/ngRoute
 [angular-ui-router]: https://ui-router.github.io
-[angular-ui-router-events]: https://ui-router.github.io/ng1/docs/0.3.1/index.html#/api/ui.router.state.$state
+[angular-ui-router-api-reference]: https://ui-router.github.io/ng1/docs/0.4.2/index.html#/api
+[angular-ui-router-events]: https://ui-router.github.io/ng1/docs/0.4.2/index.html#/api/ui.router.state.$state
+[angular-ui-router-guide]: https://github.com/angular-ui/ui-router/wiki
 [chrome]: https://www.google.com/chrome/
 [history-api]: https://developer.mozilla.org/en-US/docs/Web/API/History_API
 [live-server]: https://github.com/tapio/live-server
