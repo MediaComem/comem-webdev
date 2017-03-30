@@ -46,3 +46,33 @@ Our web application will make use of a REST web service backend for Citizen Enga
 [Citizen Engagement API documentation](https://mediacomem.github.io/comem-citizen-engagement-api/)
 
 <img src='images/archi-dfa.png' width='80%' />
+
+## Features requirements
+
+* A citizen must be able to register a new account and log in to the app (and log out)
+* A citizen must be able to report an issue at a specific location, with a description, a type of issue and optional tags
+* A citizen must be able to see what issues there are on a map of the area, and the details of those issues
+* A citizen must be able to filter issues by type so as to see only some issues (on the map and/or in other screens)
+* A citizen must be able to search so as to see only some issues (on the map and/or in other screens)
+* A citizen and a staff member must be able to post comments on issues and the list of comments for an issue must be visible somewhere in the app
+
+* *Bonus*: 
+  * a staff member can log in to the app, start working on issues, and resolve or reject them
+  * a staff member can add, edit and remove issue types from inside the app
+
+## Implementation requirements
+
+* The app must follow Bootstrap and AngularJS best practices
+* The app must use the Citizen Engagement API
+* The app must use HTML5 Geolocation API (e.g. to automatically determine an issue's location or center the map)
+* The app must use Mapbox (or an equivalent map library)
+
+### Delivery
+
+Each person or group must send an e-mail **no later than May 8th 2017** to Olivier Ertz with
+* either the link to your source code repository on GitHub or with an archive of your source code (don't forget to comment it!)
+* only what is required to make your app run and use CDN links in your final delivery
+* a documentation (e.g. README file) that presents your approach, the organization of your solution and optionally some information to know to make it run 
+
+
+
