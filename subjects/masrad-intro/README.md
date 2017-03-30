@@ -57,8 +57,8 @@ Our web application will make use of a REST web service backend for Citizen Enga
 * A citizen and a staff member must be able to post comments on issues and the list of comments for an issue must be visible somewhere in the app
 
 * *Bonus*: 
-  * a staff member can log in to the app, start working on issues, and resolve or reject them
-  * a staff member can add, edit and remove issue types from inside the app
+  * staff member can log in to the app, start working on issues, and resolve or reject them
+  * staff member can add, edit and remove issue types from inside the app
 
 ## Implementation requirements
 
@@ -70,7 +70,7 @@ Our web application will make use of a REST web service backend for Citizen Enga
 ### Delivery
 
 Each person or group must send an e-mail **no later than May 8th 2017** to Olivier Ertz with
-* either the link to your source code repository on GitHub or with an archive of your source code (don't forget to comment it!)
+* either the link to your Git source code repository (e.g. on GitHub) or with an archive of your source code (don't forget to comment it!)
 * only what is required to make your app run and use CDN links in your final delivery
 * a documentation (e.g. README file) that presents your approach, the organization of your solution and optionally some information to know to make it run 
 
