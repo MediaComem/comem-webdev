@@ -47,7 +47,7 @@ To start your project, you can clone the repository that contains a basic projec
 
 To do this, go to the directory that contains all your project, and use this command:
 
-```shell
+```bash
 $> git clone git@github.com:MediaComem/comem-webdev-angular-auth-starter.git
 ```
 
