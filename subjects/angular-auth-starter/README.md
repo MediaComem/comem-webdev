@@ -60,8 +60,8 @@ $> git clone git@github.com:MediaComem/comem-webdev-angular-auth-starter.git
 This project already contains some basic structure. That is:
 * The `angular` framework
 * The `angular-ui-router` library
-* The `lodash`library *(not required, but could prove usefule for your project)*
-* The `moment` library *(not required, but could prove usefule for your project)*
+* The `lodash`library *(not required, but could prove usefull for your project)*
+* The `moment` library *(not required, but could prove usefull for your project)*
 * The `Bootstrap CSS` framework
 * An `index.html` file that includes all preceding frameworks/libraires
 * An `app.js` file that contains:
@@ -124,15 +124,15 @@ To try it, go to your app, and access the [url defined in this new state][login]
 
 You should see the form.
 
-> We do not user the HTML5 mode in this example. But if you'd like your url to not have the `#!` fragment, see [here][html5mode]
+> We do not use the HTML5 mode in this example. But if you'd like your url to not have the `#!` fragment, see [here][html5mode]
 
 ### Get the values
 
 We will use this form to log on our user. For that, we will call the `POST /auth` URL of the Citizen Engagment API.
 
-Tale a loog a the [documentation for this URL][auth-url] to see what we'll need to send.
+Tale a look a the [documentation for this URL][auth-url] to see what we'll need to send.
 
-Using angular's two-way-binding, we can bind our form input to a similar object in our controller.
+Using angular's two-way-binding, we can bind our form input values to a similar object in our controller.
 
 In our `login-ctrl.js` add this at the end of the controller function:
 
@@ -147,16 +147,14 @@ In our `login.html`, use the `ng-model` directive to bind each input to this obj
 ```
 
 ```html
-<input [...] id="password" ng-model="login.user.password">
+<input [...] id="password" `ng-model="login.user.password"`>
 ```
 
-> Angular will automatically create the `name` and `password` property to the `user` object, event though we didn't explecitly declared them.
+> Angular will automatically create the `name` and `password` property to the `user` object, event though we didn't explicitly declared them.
 
 ### Button click
 
-These binded values will be used when our user click on the button to log himself in.
-
-So let's create a function that will be triggered by this user interaction:
+These binded values will be used by a function triggered when our user click on the button to log himself in.
 
 In `login-ctrl.js`, add this code at the end of the controller function:
 
@@ -205,11 +203,11 @@ This token will then need to be sent along any other request.
 
 So it could be a good idea to store this token in our `AuthService`.
 
-Let's do this:
+Let's prepare it for that:
 
 ```js
 angular.module('app').factory('AuthService', function() {
-  var service = {};
+  var service = {
 *   token: null,
 *    
 *   setToken: function(token) {
@@ -226,7 +224,7 @@ angular.module('app').factory('AuthService', function() {
 ```
 ## Get the authentication token
 
-We'll need :
+To effectively get the token, we'll need :
 * The angular `$http` service to call the API and retrieve the result
 * Our brand new `AuthService` to store the token we'll receive
 * The `$state` service to redirect the user when he's logged in
@@ -256,12 +254,10 @@ Right now, if an error occurs, we don't do anything, which is not good.
 
 What we'd like to do is catch any error and tell the user that something went wrong.
 
-Let's add some HTML at the end of our `login.html`:
+Let's add some HTML at the end of our `login.html`, which will not be visible unless `login.error` has a value:
 
 ```html
-<div class="alert alert-danger" ng-if="login.error">
-  {{ login.error }}
-</div>
+<div class="alert alert-danger" ng-if="login.error">{{ login.error }}</div>
 ```
 And update our `connect` function in `login-ctrl.js`:
 
@@ -280,7 +276,7 @@ login.connect = function() {
 ```
 ## Restrict access
 
-We can now use our `AuthService` to restrict access to our app to only logged in user.
+We can now use our `AuthService` to restrict access to our app to only logged in users.
 
 This can be done in a `run` block, using the `$stateChangeStart` event of Angular UI Router:
 
@@ -296,7 +292,7 @@ angular.module('app').run(function(AuthService, $rootScope, $state) {
     });
 });
 ```
-> This basically detect any time the user tries to go to antoher state, and check if someone not logged in (`!AuthService.token`) tries to go to any other state than the `login` one (`toState.name !== 'login'`).
+> This basically detects any time the user tries to go to antoher state, and check if he's not logged in (`!AuthService.token`) and tries to go to any other state than the `login` one (`toState.name !== 'login'`).
 
 > If this is the case, the transition is prevented (`event.preventDefault()`) and the user is redirected to the `login` state (`$state.go('login')`).
 
@@ -308,7 +304,7 @@ That's perfectly normal: your `AuthService` is recreated each time, and thus the
 
 To keep the connected state, we'll need to store this token in a more persistant manner, in this case the `localStorage`.
 
-To follow the "*Angular Way*", we will not use it directly, but rather use a library that provides a dedicated angular service.
+To follow the "*Angular Way*", we will not use the `localStorage` API directly, but rather use a library that provides a dedicated angular service.
 
 This library is [Angular Storage][ng-store].
 
@@ -320,7 +316,7 @@ Download the `js` file [here][dl-ng-store], and save it in your `assets/js` dire
 
 ### Update our app
 
-To use this persistant storage, we only need to update our `AuthService`, since it's responsible fot token management.
+To use this persistant storage, we only need to update our `AuthService`, since it's responsible for token management.
 
 ```js
 angular.module('app').factory('AuthService', function(`store`) {
@@ -341,7 +337,7 @@ angular.module('app').factory('AuthService', function(`store`) {
 ```
 > This way, each time we reload, the `AuthService` will try to get the `token` from `localStorage`.
 
-> It the `auth-token` key doesn't exist, `token` will be `null` and the user will be considered not logged in.
+> It the `auth-token` key doesn't exist, `token` will be `null` and the user will be considered as not logged in.
 
 ## Add a new page
 
@@ -361,9 +357,7 @@ $stateProvider.state('second', {
     templateUrl: './templates/second.html'
 });
 ```
-> Now, try to access this new state. You should be redirected to the `login` page instead.
-
-> Then, log into the app, and try to go again to the new state, after being redirected to the main page.
+> If you delete the `auth-token` key in your `localStorage` and try to reload the `/second` page, you should be redirected to the `/login` page instead.
 
 ## Log out
 
@@ -385,6 +379,7 @@ angular.module('app').controller('LogoutCtrl', function(`AuthService, $state`) {
 ```
 
 > Don't forget, once again, to add the new file in your `index.html` inclusions.
+
 ### Add the function
 
 The function that will be triggered when the user log out will be as follow:
@@ -482,11 +477,16 @@ $http({
 
 You now have a functionning authentication workflow that you can use for your Citizen Engagment Project.
 
-You'll obviously have to adapt the given template to your design and site.
+You'll obviously have to adapt the given templates to your design and site.
 
 **You can delete the `second.html` template and remove its corresponding state, as they are completely useless for your app.**
 
 > The complete code for this course can be download from GitHub [here][solution].
+
+> If you previously cloned the repo, you can just do:
+```bash
+$> git checkout solution
+```
 
 [ng]: ../angular
 [ng-router]: ../angular-ui-router
