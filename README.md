@@ -48,6 +48,7 @@ Materials for the COMEM+ web development courses.
   * [Promises in Angular](subjects/angular-promises/)
   * [Angular UI Router](subjects/angular-ui-router/)
   * [Angular UI Bootstrap](subjects/angular-ui-bootstrap/)
+  * [Angular Auth Starter](subjects/angular-auth-starter/)
 * [Node.js](subjects/node/)
   * [npm (package manager)](subjects/npm/)
   * [Express (Node.js web framework)](subjects/express/)
