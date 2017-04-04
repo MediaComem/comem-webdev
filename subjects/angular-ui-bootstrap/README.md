@@ -19,9 +19,22 @@ Learn how to use the Bootstrap JS plugins within an AngularJS app.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Courses](#courses)
-- [Subjects](#subjects)
-- [Contributing](#contributing)
+- [Bootstrap JS](#bootstrap-js)
+  - [Include Bootstrap JS](#include-bootstrap-js)
+- [What can it do?](#what-can-it-do)
+- [Dropdown menus](#dropdown-menus)
+- [Modals](#modals)
+  - [The Modal Markup](#the-modal-markup)
+  - [The Modal Trigger](#the-modal-trigger)
+- [What's wrong with Angular?](#whats-wrong-with-angular)
+- [Include Angular UI Bootstrap](#include-angular-ui-bootstrap)
+- [Documentation](#documentation)
+- [Dropdown Menus (Again)](#dropdown-menus-again)
+- [Modals (Again)](#modals-again)
+  - [The Modal Trigger](#the-modal-trigger-1)
+  - [The Trigger Function](#the-trigger-function)
+  - [The Modal Controller](#the-modal-controller)
+- [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

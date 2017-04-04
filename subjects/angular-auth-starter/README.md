@@ -18,9 +18,12 @@ Kickstart your Citizen Engagement project by implementing a complete authentific
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Courses](#courses)
-- [Subjects](#subjects)
-- [Contributing](#contributing)
+- [First step](#first-step)
+- [What is contained in the base project](#what-is-contained-in-the-base-project)
+- [The log in page](#the-log-in-page)
+  - [Add the controller](#add-the-controller)
+  - [Show it on the app](#show-it-on-the-app)
+- [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

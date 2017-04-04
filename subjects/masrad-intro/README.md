@@ -7,6 +7,9 @@
   - [Report a problem](#report-a-problem)
   - [Front-end](#front-end)
   - [Back-end](#back-end)
+  - [Features requirements](#features-requirements)
+  - [Implementation requirements](#implementation-requirements)
+  - [Delivery](#delivery)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
