@@ -1,6 +1,6 @@
-# Angular Auth Starter
+# Angular Leaflet
 
-Kickstart your Citizen Engagement project by implementing a complete authentification workflow.
+Learn the basics of using the angular-leaflet directive in your project, to display and manipulate maps.
 
 <!-- slide-include ../../BANNER.md -->
 
@@ -12,7 +12,6 @@ Kickstart your Citizen Engagement project by implementing a complete authentific
 **Recommended reading**
 
 * [Angular][ng]
-* [Angular UI Router][ng-router]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -41,463 +40,180 @@ Kickstart your Citizen Engagement project by implementing a complete authentific
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## First step
+## Introduction
 
-To start your project, you can clone the repository that contains a basic project structure.
+[Leaflet][leaflet] is a JavaScript library that provides an API for creating, displaying and manipulating maps in applications.
 
-To do this, go to the directory that contains all your project, and use this command:
+It's not usable as-is in an angular project, because it does not follow the "*Angular Way*".
 
-```bash
-$> git clone git@github.com:MediaComem/comem-webdev-angular-auth-starter.git
-```
+Thus, you'll need to use a community created angular directive that embeds Leaflet: the [angular-leaflet-directive][ngld].
 
-> You can also access directly the [GitHub page of the project][git-proj], and download a `.zip` file of the project.
+## Download the requisites
 
-> If you do this, be sure to download a zip for the `master` branch.
+Even if you won't use it directly, you'll need to download the Leaflet library, since angular-leaflet relies on it.
 
-## What is contained in the base project
+To do this, use [any methods proposed by Leaflet][leaflet-dl].
 
-This project already contains some basic structure. That is:
-* The `angular` framework
-* The `angular-ui-router` library
-* The `lodash`library *(not required, but could prove usefull for your project)*
-* The `moment` library *(not required, but could prove usefull for your project)*
-* The `Bootstrap CSS` framework
-* An `index.html` file that includes all preceding frameworks/libraires
-* An `app.js` file that contains:
-  * The main `angular` module, named `app`
-  * A `config` function attached to this `app` module with one predefined route, `home`
-* An almost blank `main.html` template, used by the `home` state
+> We recommand that you download the latest Leaflet version.
 
-## The log in page
+You'll get a `leaflet.zip` file, that you'll need to unzip in your project.
 
-First, let's create an `html` template that will display a form, which we will use to log our user.
+Do this in a `leaflet` directory, directly under your `assets` directory.
 
-In the `templates` directory, create a new file called `login.html` and put in the following code:
+Once it's done, you'll then need to include both the `leaflet.js` and `leaflet.css` files in your `index.html` file:
 
 ```html
-<form id="login" name="loginForm">
-  <div class="form-group">
-    <label for="username">Username</label>
-    <input required type="text" id="username" class="form-control">
-  </div>
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input required type="password" class="form-control" id="password">
-  </div>
-  <button class="btn btn-success">Log in</button>
-</form>
+<link rel="stylesheet" href="assets/leaflet/leaflet.css">
 ```
-> We will complete this template throughout the slides.
-
-### Add the controller
-
-To control this page, i.e. the form, the button and the data, we will need a controller.
-
-In the `js` directory, create a new file called `login-ctrl.js`, and add in the following code:
-
-```js
-angular.module('app').controller('LoginCtrl', function() {
-  var login = this;
-});
+```html
+<script type="text/javascript" src="assets/leaflet/leaflet.js"></script>
 ```
+## Include the directive
 
-> Don't forget to add a `<script>` tag in your `index.html` file that points to this file, after the inclusion of the main `app.js` file.
+You'll then need to download and include the files for the `angular-leaflet` directive.
 
-### Show it on the app
+To get the `.js` file, go to the GitHub repository, or download it from [there][ngld-dl].
 
-To link all this together and show our login page on our app, we need to add a new navigation state to our router.
+Either way, you should place it in your `assets/js` directoty.
 
-The states definition are located in the main `app.js` file.
+Then, don't forget to add the file in your `index.html` file
 
-Open it and, right after the `home` state declaration, add a new state that points to the `login.html` template, with the `LoginCtrl` :
-
-```js
-// After home state
-$stateProvider.state('login', {
-    url: '/login',
-    templateUrl: './templates/login.html',
-    controller: 'LoginCtrl as login'
-});
-```
-To try it, go to your app, and access the [url defined in this new state][login].
-
-You should see the form.
-
-> We do not use the HTML5 mode in this example. But if you'd like your url to not have the `#!` fragment, see [here][html5mode]
-
-### Get the values
-
-We will use this form to log on our user. For that, we will call the `POST /auth` URL of the Citizen Engagment API.
-
-Tale a look a the [documentation for this URL][auth-url] to see what we'll need to send.
-
-Using angular's two-way-binding, we can bind our form input values to a similar object in our controller.
-
-In our `login-ctrl.js` add this at the end of the controller function:
-
-```js
-login.user = {};
-```
-
-In our `login.html`, use the `ng-model` directive to bind each input to this object:
+Be sure to add it **after the inclusion of both `angular` and `leaflet`!**
 
 ```html
-<input [...] id="username" [...] `ng-model="login.user.name"`>
+<script type="text/javascript" src="assets/js/angular-leaflet-directive.min.js"></script>
 ```
+
+Finally, add the dependence in your app's dependencies.
+
+```js
+angular.module('app', [
+  // Previous dependencies
+  'leaflet-directive'`
+]);
+```
+
+## Documentation
+
+<!-- slide-front-matter class: center, middle -->
+
+**BEWARE!**
+
+The documentation for `angular-leaflet-directive` is... [lacking][ngld-doc], to say the least.
+
+This is a library that you'll need to learn by trying things and deciphering examples ([which are aplenty][ngld-ex]).
+
+We will sometimes redirect you to the [Leaflet Documentation][leaflet-doc], but know that you won't be able to use it as-is with `angular-leaflet-directive`...
+
+> **You've been warned.**
+
+## Include the map
+
+The `leaflet-directive` is, as its name implies, an angular directive that uses Leaflet to show the map on your page.
+
+This directive is named `<leaflet>`, and accepts a bunch of attributes that will modify or extend its behavior (*you'll need a controller for that*).
+
+The easiest way of showing a map is to just add the directive, adding it some `width` and `height`, either with CSS or HTML attributes:
 
 ```html
-<input [...] id="password" `ng-model="login.user.password"`>
+<!-- Somewhere in your template -->
+<leaflet width="100%" height="480px"></leaflet>
 ```
+> The displayed map will have basics behavior:
+* Open Street Map baselayer
+* Zoom, with:
+  * +/- buttons controls
+  * double-click
+  * mouse scroll
+* Paning (drag'n'drop)
 
-> Angular will automatically create the `name` and `password` property to the `user` object, event though we didn't explicitly declared them.
+## Change default behavior
 
-### Button click
+> In the following examples, the controller for the directive has a `map` alias.
 
-These binded values will be used by a function triggered when our user click on the button to log himself in.
-
-In `login-ctrl.js`, add this code at the end of the controller function:
+To change some default behavior of the map, create an object on your controller with the desired changes (**all are optionals**):
 
 ```js
-login.connect = function() {
-  console.log(login.user);
-};
+map.defaults = {
+  doubleClickZoom: false, // disable the double-click zoom
+  scrollWheelZoom: false, // disable zooming with the scroll
+  dragging: false, // disable moving the map with dragging it with the mouse
+  minZoom: 10, // Limit the minimal zoom
+  maxZoom: 16, // Limit the maximal zoom
+  ...
+}
 ```
-And bind this function to the click on the button, using `ng-click`:
+> You can try some of the options [here][map-options]
+
+Then bind this object to the `default` attribute of the directive:
 
 ```html
-<button class="btn btn-success" `ng-click="login.connect()"`>Log in</button>
+<leaflet [...] `defaults="map.defaults"`></leaflet>
 ```
-> Try filling your form and clicking on the button with your console open
 
-To ensure that the click is only possible when the form is valid, add this:
+## Center the map
+
+You can change the default center and zoom of the displayed map.
+
+In the controller, you'll need to declare an object like this one:
+
+```js
+map.center = {
+  // These are the coordinates for the center of Yverdon-les-Bains
+  lat: 46.778474,
+  lng: 6.641183,
+  zoom: 15 // This one is actually optional
+}
+```
+> By default, `angular-leaflet` uses **latitude and longitude coordinates**.
+
+Then, bind this `map.center` object to the `lf-center` attribute of the directive:
 
 ```html
-<button [...] `ng-disabled="loginForm.$invalid"`>Log in</button>
+<leaflet [...] `lf-center="map.center"`></leaflet>
 ```
 
-## Manage the authentication
+## Add markers
 
-We will regularly check if our user is connected thoughout our app.
+To add some markers on your map, you can declare an array in your controller, that will hold all your marker objects.
 
-To manage this information, let's create an angular service that we'll call `AuthService`.
-
-In the `js` directory, create a new file, called `auth-service.js`, and add this code:
+Each marker object needs, at minimum, `lat` and `lng` properties:
 
 ```js
-angular.module('app').factory('AuthService', function() {
-  var service = {};
-
-  return service;
-});
-```
-> It doesn't do much for now...
-> 
-> Again, don't forget to add the `auth-service.js` file to your `index.html` script inclusions.
-
-### Complete the service
-
-With the [API auth documentation][auth-url], we know that we will receive a `token` when our user is logged in.
-
-This token will then need to be sent along any other request.
-
-So it could be a good idea to store this token in our `AuthService`.
-
-Let's prepare it for that:
-
-```js
-angular.module('app').factory('AuthService', function() {
-  var service = {
-*   token: null,
-*    
-*   setToken: function(token) {
-*     service.token = token;
-*   }
-*
-*   unsetToken: function() {
-*     service.token = null;
-*   }
-  };
-
-  return service;
-});
-```
-## Get the authentication token
-
-To effectively get the token, we'll need :
-* The angular `$http` service to call the API and retrieve the result
-* Our brand new `AuthService` to store the token we'll receive
-* The `$state` service to redirect the user when he's logged in
-
-In `login-ctrl.js` add the correct dependencies to the controller:
-
-```js
-[...].controller('LoginCtrl', function(`AuthService, $http, $state`) {
-```
-Then, complete the `connect` function:
-
-```js
-login.connect = function() {
-  $http({
-    method: 'POST',
-    url: 'https://citizen-api.herokuapp.com/api/auth',
-    data: login.user
-  }).then(function(res) {
-    AuthService.setToken(res.data.token);
-    $state.go('home');
-  });
-};
-```
-### Add error handling
-
-Right now, if an error occurs, we don't do anything, which is not good.
-
-What we'd like to do is catch any error and tell the user that something went wrong.
-
-Let's add some HTML at the end of our `login.html`, which will not be visible unless `login.error` has a value:
-
-```html
-<div class="alert alert-danger" ng-if="login.error">{{ login.error }}</div>
-```
-And update our `connect` function in `login-ctrl.js`:
-
-```js
-login.connect = function() {
-* delete login.error;
-  $http({
-    // ...
-  }).then(function(res) {
-    // ...
-  })`.catch(function(error) {`
-*   login.error = "Unable to log you."
-*   console.log(error);
-* });
-};
-```
-## Restrict access
-
-We can now use our `AuthService` to restrict access to our app to only logged in users.
-
-This can be done in a `run` block, using the `$stateChangeStart` event of Angular UI Router:
-
-Add this at the end of your `app.js` file:
-
-```js
-angular.module('app').run(function(AuthService, $rootScope, $state) {
-    $rootScope.$on('$stateChangeStart', function(event, toState) {
-        if (!AuthService.token && toState.name !== 'login') {
-            event.preventDefault();
-            $state.go('login');
-        }
-    });
-});
-```
-> This basically detects any time the user tries to go to antoher state, and check if he's not logged in (`!AuthService.token`) and tries to go to any other state than the `login` one (`toState.name !== 'login'`).
-
-> If this is the case, the transition is prevented (`event.preventDefault()`) and the user is redirected to the `login` state (`$state.go('login')`).
-
-## Persist the token
-
-You might have noticed that, every time you reload the app, you have to log in again.
-
-That's perfectly normal: your `AuthService` is recreated each time, and thus the auth token is `null`.
-
-To keep the connected state, we'll need to store this token in a more persistant manner, in this case the `localStorage`.
-
-To follow the "*Angular Way*", we will not use the `localStorage` API directly, but rather use a library that provides a dedicated angular service.
-
-This library is [Angular Storage][ng-store].
-
-Download the `js` file [here][dl-ng-store], and save it in your `assets/js` directory.
-
-> Don't forget to:
-> * Include the `js` file in your `index.html` script inclusions
-> * Register the `angular-storage` module in your `app` module dependencies
-
-### Update our app
-
-To use this persistant storage, we only need to update our `AuthService`, since it's responsible for token management.
-
-```js
-angular.module('app').factory('AuthService', function(`store`) {
-  var service = {};
-    token: `store.get('auth-token')`,
-    setToken: function(token) {
-      service.token = token;
-*     store.set('auth-token', token);
-    },
-    unsetToken: function() {
-      service.token = null;
-*     store.remove('auth-token');
-    }
-  };
-
-  return service;
-});
-```
-> This way, each time we reload, the `AuthService` will try to get the `token` from `localStorage`.
-
-> It the `auth-token` key doesn't exist, `token` will be `null` and the user will be considered as not logged in.
-
-## Add a new page
-
-To test all this, we will add a new page to our app, for the logged in user to go to.
-
-Add a new file on the `templates` directory, name it `second.html` and add this markup:
-
-```html
-<h1>Second Page</h1>
-<button class="btn btn-default">Log out</button>
-```
-Add a new `state` in `app.js`, after the `login` one:
-
-```js
-$stateProvider.state('second', {
-    url: '/second',
-    templateUrl: './templates/second.html'
-});
-```
-> If you delete the `auth-token` key in your `localStorage` and try to reload the `/second` page, you should be redirected to the `/login` page instead.
-
-## Log out
-
-Now that we can log in, let's implement a log out feature.
-
-To do so, we'll create a new controller, `LogoutCtrl`, in a `logout-ctrl.js` file inside the `js` directory, with this code:
-
-```js
-angular.module('app').controller('LogoutCtrl', function() {
-  var logout = this;
-});
-```
-This controller will have to delete the `token` from the `localStorage` when the user log out, and then redirect to the `login` page.
-
-So it needs two dependencies:
-
-```js
-angular.module('app').controller('LogoutCtrl', function(`AuthService, $state`) {
-```
-
-> Don't forget, once again, to add the new file in your `index.html` inclusions.
-
-### Add the function
-
-The function that will be triggered when the user log out will be as follow:
-
-```js
-angular.module('app').controller('LogoutCtrl', function(AuthService, $state) {
-  var logout = this;
-
-* logout.disconnect = function() {
-*   AuthService.unsetToken();
-*   $state.go('login');
-* }
-});
-```
-We can now call this function by reacting to a click on the button inside the `second.html` page:
-
-```html
-<button 
-  class="btn btn-default"
-  `ng-controller="LogoutCtrl as logout"`
-  `ng-click="logout.disconnect()"`>
-  Log out
-</button>
-```
-## Add the header
-
-Nearly every URL of the Citizen Engagment API requires a logged in user to be executed.
-
-So each time we make one of these calls in our app, we'll have to add an `Authorization` header, whose value should be `Bearer` followed by the auth token.
-
-This can be easily done with the angular `$http` service.
-
-For example, if we were to retrieve the list of issue types, we would do something like this:
-
-```js
-$http({
-    method: 'GET',
-    url: 'https://citizen-api.herokuapp.com/api/issueTypes',
-*   headers: {
-*       Authorization: 'Bearer ' + AuthService.authToken
-*   }
-}).then(/* ... */).catch(/* ... */)
-```
-> Adding manually this header for each API call will quickly become annoying. We can automate this using an angular interceptor.
-
-## Interceptor 2000©
-
-An **Interceptor** is nothing more than a special angular service, that will intercept an http call, an possibly manipulate it.
-
-To create the interceptor, in the `js` directory, create a new `auth-interceptor.js` file, and add this:
-
-```js
-angular.module('app').factory('AuthInterceptor', function(AuthService) {
-  return {
-    request: function (config) {
-      if (AuthService.token) {
-        config.headers.Authorization = "Bearer " + AuthService.token;
-      }
-      return config;
-    }
+map.markers = [
+  {
+    lat: 46.781547,
+    lng: 6.640351,
+  }, {
+    lat: 46.781058,
+    lng: 6.647179
+  }, {
+    lat: 46.778246,
+    lng: 6.641490
   }
-});
+]
 ```
+Then, bind this array to the `markers` attribute of the directive:
 
-This interceptor check if the user is logged in (`AuthService.token`) and, if it's the case, it add a new header to the request, with the correct syntax and the auth token.
-
-> Again... include the file in `index.html`.
-
-### Register the Interceptor
-
-For the interceptor to kick in, you'll need to register it in your `$http` service.
-
-To do that, in your `config` block in `app.js`, add a dependency to the `$httpProvider` and the following code at the end of the function:
-
-```js
-$httpProvider.interceptors.push('AuthInterceptor');
+```html
+<leaflet [...] `markers="map.markers"`></leaflet>
 ```
-This tells the `$http` service that all requests must be given to `AuthInterceptor` prior to being executed.
+### Fix the default marker
 
-You can now omit the `Authorization` header from your manual calls.
+At the time of the creation of this subject, there was a bug in the directive code regarding the default marker icon.
 
-So the previous example could now be:
+Thus, for it to properly show, we have to create a custom icon object with the default values.
 
-```js
-$http({
-    method: 'GET',
-    url: 'https://citizen-api.herokuapp.com/api/issueTypes',
-}).then(/* ... */).catch(/* ... */)
-```
-> No `Authorizazion` header! Yet it will still be applied, thanks to the **Inteceptor**.
 
-## Conclusion
-
-<!-- slide-front-matter class: middle -->
-
-You now have a functionning authentication workflow that you can use for your Citizen Engagment Project.
-
-You'll obviously have to adapt the given templates to your design and site.
-
-**You can delete the `second.html` template and remove its corresponding state, as they are completely useless for your app.**
-
-> The complete code for this course can be download from GitHub [here][solution].
-
-> If you previously cloned the repo, you can just do:
-```bash
-$> git checkout solution
-```
 
 [ng]: ../angular
-[ng-router]: ../angular-ui-router
 [chrome]: https://www.google.com/chrome/
 [sublime]: https://www.sublimetext.com/
-[ng-storage]: https://github.com/auth0/angular-storage/blob/master/dist/angular-storage.min.js
-[git-proj]: https://github.com/MediaComem/comem-webdev-angular-auth-starter
-[html5mode]: ../angular-ui-router/#13
-[login]: http://127.0.0.1:8080/#!/login
-[auth-url]: https://mediacomem.github.io/comem-citizen-engagement-api/#auth_post
-[second]: http://127.0.0.1:8080/#!/second
-[dl-ng-store]: https://github.com/MediaComem/comem-webdev-angular-auth-starter/blob/solution/assets/js/angular-storage.min.js
-[ng-store]: https://github.com/auth0/angular-storage
-[solution]: https://github.com/MediaComem/comem-webdev-angular-auth-starter/tree/solution
+[leaflet]: http://leafletjs.com/
+[ngld]: http://tombatossals.github.io/angular-leaflet-directive/#!/
+[leaflet-dl]: http://leafletjs.com/download.html
+[ngld-dl]: https://github.com/MediaComem/webdev-masrad_angular-leaflet-demo/blob/master/assets/js/angular-leaflet-directive.min.js
+[ngld-doc]: https://github.com/tombatossals/angular-leaflet-directive/tree/master/doc
+[ngld-ex]: http://tombatossals.github.io/angular-leaflet-directive/examples/0000-viewer.html#/basic/first-example
+[leaflet-doc]: http://leafletjs.com/reference-1.0.3.html
+[map-options]: https://github.com/tombatossals/angular-leaflet-directive/blob/master/doc/defaults-attribute.md
