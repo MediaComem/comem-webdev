@@ -34,6 +34,7 @@ Kickstart your Citizen Engagement project by implementing a complete authentific
   - [Update our app](#update-our-app)
 - [Add a new page](#add-a-new-page)
 - [Log out](#log-out)
+  - [Add the function](#add-the-function)
 - [Add the header](#add-the-header)
 - [Interceptor 2000©](#interceptor-2000%C2%A9)
   - [Register the Interceptor](#register-the-interceptor)
