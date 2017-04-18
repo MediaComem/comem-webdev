@@ -175,7 +175,7 @@ Then, bind this `map.center` object to the `lf-center` attribute of the directiv
 
 ## Add markers
 
-To add some markers on your map, you can declare an array in your controller, that will hold all your marker objects.
+To add some markers on your map, declare an array of marker objects.
 
 Each marker object needs, at minimum, `lat` and `lng` properties:
 
@@ -198,13 +198,113 @@ Then, bind this array to the `markers` attribute of the directive:
 ```html
 <leaflet [...] `markers="map.markers"`></leaflet>
 ```
+> You can add new marker objects in this `map.markers` array at anytime; they will by dynamically added to the map.
+
 ### Fix the default marker
 
-At the time of the creation of this subject, there was a bug in the directive code regarding the default marker icon.
+When writing this subject, we stumble upon a bug where **the default icons where not showing**.
 
-Thus, for it to properly show, we have to create a custom icon object with the default values.
+**If this happens to you**, copy/paste this code **before the definition** of your `map.markers`...
+```js
+var defaultIcon = {
+  iconUrl: "assets/leaflet/images/marker-icon.png",
+  shadowUrl: "assets/leaflet/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41]
+}
+```
+...then, add this property to all your markers:
+```js
+{
+  ...
+  icon: defaultIcon
+}
+```
+> We will see in more details what this do
 
+### Personalize the markers icon
 
+You can use your own marker icons in your map. For that, you can define an Icon object in your controller, listing the properties of your custom icon:
+
+```js
+var myIcon = {
+  iconUrl: "images/myIcon.png", // The only one that's required
+  iconSize: [38, 95], // [X, Y], in pixels
+  iconAnchor: [22, 95], // The point that will match the coordinates
+  shadowUrl: "images/myIconShadow.png", // if your icon has a shadow
+  shadowSize: [50, 64], // see iconSize
+  shadowAnchor: [5, 64] // see iconAnchor
+};
+```
+> The list of all the properties for this object can be found [here][doc-icon]
+
+Then, reference this object in your marker object, using the `icon` property:
+
+```js
+map.markers = [
+  // Previous markers
+  {
+    lat: 46.779244,
+    lng: 6.659402,
+    `icon: myIcon`
+  }
+]
+```
+
+### Draggable Markers
+
+To make your marker movable on the map, add the `draggable` property:
+
+```js
+map.markers = [
+  // Previous markers
+  {
+    lat: 46.779244,
+    lng: 6.659402,
+    icon: myIcon,
+    `draggable: true`
+  }
+]
+```
+> Moving the marker will update its `lat` and `lng` properties' value
+
+To react to the marker being moved, you can attach a listener to your controller's `$scope`:
+
+```js
+$scope.$on('leafletDirectiveMarker.dragend', function(event, args) {
+  console.log(args.model); // Will give you the updated marker object
+});
+```
+> Remember to add `$scope` to your controller's dependencies
+
+## Events
+
+Leaflet provides a quite extensive list of events to react to.
+
+> By default, all fired events are logged in the console. That's convenient to find the name of the event to which we want to react.
+
+To react to one event, add a listener to your controller's `$scope` with the `.$on()` method:
+
+```js
+$scope.$on('eventName', function(event, args) {
+  // Do something
+});
+```
+
+Here a list of the more perrtinent events:
+
+* `leafletDirectiveMarker.dragend`: the user stops dragging a marker. Use `args.model` to access the updated marker.
+* `leafletDirectiveMarker.click`: the user clicked on a marker. Use `args.model` to access the clicked marker.
+* `leafletDirectiveMap.click`: the user clicked somewhere on the map. Use the `args.leafletEvent.latlng` object to access the coordinates of the clicked point.
+
+## Complete example
+
+<!-- slide-front-matter class: center, middle -->
+
+You will found the complete example with all the features presented in this subject in [this GitHub repository][complete-example].
 
 [ng]: ../angular
 [chrome]: https://www.google.com/chrome/
@@ -217,3 +317,5 @@ Thus, for it to properly show, we have to create a custom icon object with the d
 [ngld-ex]: http://tombatossals.github.io/angular-leaflet-directive/examples/0000-viewer.html#/basic/first-example
 [leaflet-doc]: http://leafletjs.com/reference-1.0.3.html
 [map-options]: https://github.com/tombatossals/angular-leaflet-directive/blob/master/doc/defaults-attribute.md
+[doc-icon]: http://leafletjs.com/reference.html#icon-options
+[complete-example]: https://github.com/MediaComem/webdev-masrad_angular-leaflet-demo
