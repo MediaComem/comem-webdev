@@ -138,7 +138,7 @@ map.defaults = {
 ```
 > You can try some of the options [here][map-options]
 
-Then bind this object to the `default` attribute of the directive:
+Then bind this object to the `defaults` attribute of the directive:
 
 ```html
 <leaflet [...] `defaults="map.defaults"`></leaflet>
@@ -176,7 +176,7 @@ Each marker object needs, at minimum, `lat` and `lng` properties:
 map.markers = [
   {
     lat: 46.781547,
-    lng: 6.640351,
+    lng: 6.640351
   }, {
     lat: 46.781058,
     lng: 6.647179
@@ -191,7 +191,7 @@ Then, bind this array to the `markers` attribute of the directive:
 ```html
 <leaflet [...] `markers="map.markers"`></leaflet>
 ```
-> You can add new marker objects in this `map.markers` array at anytime; they will by dynamically added to the map.
+> You can add new marker objects in this `map.markers` array at anytime; they will be dynamically added to the map.
 
 ### Fix the default marker
 

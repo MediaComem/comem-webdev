@@ -48,6 +48,7 @@ Materials for the COMEM+ web development courses.
   * [Angular UI Bootstrap](subjects/angular-ui-bootstrap/)
   * [Angular Auth Starter](subjects/angular-auth-starter/)
   * [Angular Leaflet](subjects/angular-leaflet)
+  * [Angular Geolocation](subjects/angular-geolocation)
 * [Node.js](subjects/node/)
   * [npm (package manager)](subjects/npm/)
   * [Express (Node.js web framework)](subjects/express/)
