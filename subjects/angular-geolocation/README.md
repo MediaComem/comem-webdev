@@ -116,9 +116,16 @@ To know the reason of the error, access the `$geolocation.position.error.message
 
 When `.watchPosition()` detects and error, it fires an event, called `$geolocation.position.error` to which you can listen.
 
+## Resources
+
+**Documentation**
+
+* [ngGeolocation - Documentation][ngloc-doc]
+
 [ng]: ../angular
 [chrome]: https://www.google.com/chrome/
 [sublime]: https://www.sublimetext.com/
 [geoapi-doc]: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation
 [ngloc]: https://github.com/ninjatronic/ngGeolocation
 [ngloc-file]: https://github.com/ninjatronic/ngGeolocation/blob/master/ngGeolocation.min.js
+[ngloc-doc]: https://github.com/ninjatronic/ngGeolocation/wiki/API-Reference
