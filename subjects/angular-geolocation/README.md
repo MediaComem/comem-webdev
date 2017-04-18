@@ -68,7 +68,7 @@ angular.module("app").controller("myController", function ($geolocation) {
   $geolocation.getCurrentPosition()
     .then(function (position) {
       // This will be executed when the location is accessed
-      console.log(data)
+      console.log(position)
     }, function (error) {
       // This will be executed if the user denies access
       // or the browser doesn't support the Geolocation API
@@ -80,11 +80,11 @@ angular.module("app").controller("myController", function ($geolocation) {
 
 Use `position.coords.latitude` and `position.coords.longitude` to actually get the position's coordinates
 
-### `.watchLocation()`
+### `.watchPosition()`
 
 You could want to access the user location on a regular bassis. To do this, you mustn't call the `.getCurrentLocation()` each time.
 
-You'll use the `.watchLocation()` method.
+You'll use the `.watchPosition()` method.
 
 ```js
 angular.module("app").controller("myController", function ($geolocation) {
