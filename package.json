@@ -22,6 +22,7 @@
   "homepage": "https://github.com/MediaComem/comem-webdev#readme",
   "dependencies": {
     "del": "^2.2.2",
+    "font-awesome": "^4.7.0",
     "gulp": "^3.9.1",
     "gulp-chain": "^2.0.1",
     "gulp-connect": "^5.0.0",

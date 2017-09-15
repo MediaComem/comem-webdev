@@ -1,4 +1,5 @@
 *.odg#
+/assets/vendor
 /build
 /local.config.js
 /npm-debug.log
