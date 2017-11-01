@@ -89,7 +89,7 @@ and also a pointer to the previous commit.
 
 A branch is simply a lightweight, movable pointer to a commit.
 
-<img src='images/branch.png' width='45%' />
+<svg git-memoir='branchingOneLine' git-memoir-start='setup' width='100%' height='137px'></svg>
 
 The default branch is **master**.
 The special **HEAD** pointer indicates the current branch.
@@ -133,8 +133,8 @@ The `git log` command can show you a representation of the commit graph and its 
 
 ```bash
 $> git log --oneline --decorate --graph --all
- * 4f94ga (HEAD -> master) Improve layout
- * 9ab3gd Fix addition
+ * 4f94fa (HEAD -> master) Improve layout
+ * 9ab3fd Fix addition
  * 387f12 First version
 ```
 
@@ -144,8 +144,8 @@ In fact, this command is so useful you should make an **alias**, as we will use 
 $> git config --global alias.graph "log --oneline --graph --decorate --all"
 
 $> git graph
- * 4f94ga (HEAD -> master) Improve layout
- * 9ab3gd Fix addition
+ * 4f94fa (HEAD -> master) Improve layout
+ * 9ab3fd Fix addition
  * 387f12 First version
 ```
 
@@ -162,7 +162,7 @@ It's very fast and simple to create a new branch:
 $> git branch feature-sub
 ```
 
-<img src='images/new-branch.png' width='45%' />
+<svg git-memoir='branchingOneLine' git-memoir-start='commits' width='100%' height='137px'></svg>
 
 There is now a new pointer to the current commit.
 Note that **HEAD** didn't move – we are still on the **master** branch.
@@ -188,7 +188,7 @@ $> git checkout feature-sub
 Switched to branch 'feature-sub'
 ```
 
-<img src='images/checkout.png' width='45%' />
+<svg git-memoir='branchingOneLine' git-memoir-start='branch' width='100%' height='137px'></svg>
 
 This moves `HEAD` to point to the `feature-sub` branch.
 
@@ -205,7 +205,7 @@ $> git add subtraction.js
 $> git commit -m "Implement subtraction"
 ```
 
-<img src='images/commit-on-branch.png' width='60%' />
+<svg git-memoir='branchingOneLine' git-memoir-start='checkout' width='100%' height='137px'></svg>
 
 
 
@@ -227,7 +227,7 @@ Two things happened:
 * The `HEAD` pointer was **moved** back to the master branch
 * The files in your working directory were **reverted** back to the snapshot that master points to
 
-<img src='images/back-to-master.png' width='60%' />
+<svg git-memoir='branchingOneLine' git-memoir-start='commit-on-a-branch' width='100%' height='137px'></svg>
 
 You have essentially **rewinded** the work you've done in `feature-sub`, and are working on an **older version** of the project.
 
@@ -244,7 +244,7 @@ $> git checkout -b fix-add
 Switched to a new branch 'fix-add'
 ```
 
-<img src='images/fix-add-branch.png' width='60%' />
+<svg git-memoir='branchingOneLine' git-memoir-start='back-to-master' width='100%' height='137px'></svg>
 
 Nothing has changed yet because fix-add still points to the same commit as master.
 
@@ -268,7 +268,7 @@ Now your project history has **diverged**.
 The changes in feature-sub and fix-add are **isolated**.
 You can **switch back and forth** between the branches with `git checkout`.
 
-<img src='images/fix-add-diverged.png' width='60%' />
+<svg git-memoir='branching' git-memoir-start='another-branch' width='100%' height='275px'></svg>
 
 
 
@@ -280,7 +280,7 @@ You can **switch back and forth** between the branches with `git checkout`.
 ```bash
 $> git checkout master
 $> git merge fix-add
-Updating 4f94ga..2817bc
+Updating 4f94fa..2817bc
 Fast-forward
  addition.js | 2 +-
   1 file changed, 1 insertion(+), 1 deletion(-)
@@ -292,6 +292,8 @@ The fix-add branch pointed to a commit **directly ahead** of the commit master p
 There is no divergent history, so Git simply has to **moves the pointer forward**.
 This is what is called a fast-forward.
 
+<svg git-memoir='branching' git-memoir-start='divergent-history' width='100%' height='275px'></svg>
+
 
 
 ### Delete a branch
@@ -299,12 +301,12 @@ This is what is called a fast-forward.
 > **Exercise:** now that we've brought our fix back into master, we don't need the fix-add branch anymore.
   Let's delete it.
 
-<img src='images/merge-fix-add.png' width='60%' />
-
 ```bash
 $> git branch -d fix-add
 Deleted branch fix-add (was 2817bc).
 ```
+
+<svg git-memoir='branching' git-memoir-start='fast-forward-merge' width='100%' height='275px'></svg>
 
 
 
@@ -320,7 +322,7 @@ $> git add subtraction.js
 $> git commit -m "Comment subtract function"
 ```
 
-<img src='images/continue-work-on-feature-sub.png' width='75%' />
+<svg git-memoir='branching' git-memoir-start='delete-branch' width='100%' height='275px'></svg>
 
 
 
@@ -367,7 +369,7 @@ Type `:wq` (**w**rite and **q**uit) to save and exit.
 You can see the new **merge commit** that Git has created.
 It is a special commit in that it has more than one parent:
 
-<img src='images/merge-feature-sub.png' width='90%' />
+<svg git-memoir='branching' git-memoir-start='work-on-feature-branch' width='100%' height='275px'></svg>
 
 Now that you're done, you can delete feature-sub:
 
@@ -400,8 +402,8 @@ $> git graph
  * | 2817bc Fix addition
  | * 712ff2 Implement subtraction
  |/
- * `4f94ga` (origin/master, origin/HEAD) Comment add function
- * 9ab3gd Simplify addition and subtraction implementation
+ * `4f94fa` (origin/master, origin/HEAD) Comment add function
+ * 9ab3fd Simplify addition and subtraction implementation
  * 387f12 First version
 ```
 
@@ -414,7 +416,7 @@ Make a copy of that commit hash.
 You can create a branch at any point in the project's history by passing an additional commit reference to `git checkout`:
 
 ```bash
-$> git checkout -b better-sub 4f94ga
+$> git checkout -b better-sub 4f94fa
 ```
 
 <img src='images/better-sub-branch.png' width='90%' />
@@ -606,7 +608,7 @@ Let's again pretend to be another colleague.
 This time, this colleague decided to delete `subtraction.js` in his branch because he doesn't like to see files with incomplete code:
 
 ```bash
-$> git checkout -b cleanup 4f94ga
+$> git checkout -b cleanup 4f94fa
 $> rm subtraction.js
 $> git add --all
 $> git commit -m "Remove incomplete implementations"
