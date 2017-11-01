@@ -4,11 +4,10 @@
   "version": "1.0.0",
   "description": "Materials for COMEM+ web development courses",
   "scripts": {
-    "build": "gulp build",
+    "build": "courses-md build",
     "deploy": "./deploy.sh",
     "doctoc": "gulp doctoc",
-    "pdf": "gulp pdf",
-    "start": "gulp"
+    "start": "courses-md"
   },
   "repository": {
     "type": "git",
@@ -21,22 +20,15 @@
   },
   "homepage": "https://github.com/MediaComem/comem-webdev#readme",
   "dependencies": {
-    "del": "^2.2.2",
+    "courses-md": "^0.4.1",
+    "doctoc": "^1.3.0",
     "font-awesome": "^4.7.0",
     "gulp": "^3.9.1",
     "gulp-chain": "^2.0.1",
-    "gulp-connect": "^5.0.0",
     "gulp-doctoc": "^0.1.4",
-    "gulp-markdown": "^1.2.0",
-    "gulp-open": "^2.0.0",
-    "gulp-rename": "^1.2.2",
     "gulp-util": "^3.0.8",
-    "gulp-watch": "^4.3.11",
-    "handlebars": "^4.0.6",
-    "html-pdf": "^2.1.0",
+    "html-pdf": "^2.2.0",
     "lodash": "^4.17.4",
-    "md2remark": "~0.1.5",
-    "run-sequence": "^1.2.2",
     "through2": "^2.0.3"
   }
 }

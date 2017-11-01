@@ -1,7 +1,6 @@
 *.odg#
-/assets/vendor
 /build
-/local.config.js
+/config.local.js
 /npm-debug.log
 /pdf
 /tmp

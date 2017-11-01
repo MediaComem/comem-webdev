@@ -1,7 +1,6 @@
 # TODO
 
 * Make home link go back to year
-* Download font awesome
 * Doctoc for specific subjects
 
 * Express mongoose: ID virtual, transform
@@ -27,7 +26,6 @@
 * JavaScript dates
 * Clean up links at end of slides
 
-* Rev assets
 * Slide-specific css
 
 ## Ideas for new subjects

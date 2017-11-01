@@ -629,6 +629,8 @@ From there, you can use some commands:
 | `q!`        | Force Vim to quit (any unsaved modification will be lost)  |
 | `wq` or `x` | Save the file then quit Vim.                               |
 
+<!-- TODO: add link http://www.openvim.com/ -->
+
 
 
 ## The `PATH` variable
