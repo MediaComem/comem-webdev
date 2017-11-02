@@ -5,7 +5,7 @@
   "description": "Materials for COMEM+ web development courses",
   "scripts": {
     "build": "courses-md build",
-    "deploy": "./deploy.sh",
+    "deploy": "courses-md publish",
     "doctoc": "gulp doctoc",
     "start": "courses-md",
     "watch": "courses-md watch"
