@@ -89,7 +89,7 @@ and also a pointer to the previous commit.
 
 A branch is simply a lightweight, movable pointer to a commit.
 
-<svg git-memoir='branchingOneLine' git-memoir-start='setup' width='100%' height='137px'></svg>
+<git-memoir name="branchingOneLine" chapter='commits' svg-height='137px'></git-memoir>
 
 The default branch is **master**.
 The special **HEAD** pointer indicates the current branch.
@@ -162,7 +162,7 @@ It's very fast and simple to create a new branch:
 $> git branch feature-sub
 ```
 
-<svg git-memoir='branchingOneLine' git-memoir-start='commits' width='100%' height='137px'></svg>
+<git-memoir name="branchingOneLine" chapter='branch' svg-height='137px'></git-memoir>
 
 There is now a new pointer to the current commit.
 Note that **HEAD** didn't move – we are still on the **master** branch.
@@ -188,7 +188,7 @@ $> git checkout feature-sub
 Switched to branch 'feature-sub'
 ```
 
-<svg git-memoir='branchingOneLine' git-memoir-start='branch' width='100%' height='137px'></svg>
+<git-memoir name="branchingOneLine" chapter='checkout' svg-height='137px'></git-memoir>
 
 This moves `HEAD` to point to the `feature-sub` branch.
 
@@ -205,7 +205,7 @@ $> git add subtraction.js
 $> git commit -m "Implement subtraction"
 ```
 
-<svg git-memoir='branchingOneLine' git-memoir-start='checkout' width='100%' height='137px'></svg>
+<git-memoir name="branchingOneLine" chapter='commit-on-a-branch' svg-height='137px'></git-memoir>
 
 
 
@@ -227,7 +227,7 @@ Two things happened:
 * The `HEAD` pointer was **moved** back to the master branch
 * The files in your working directory were **reverted** back to the snapshot that master points to
 
-<svg git-memoir='branchingOneLine' git-memoir-start='commit-on-a-branch' width='100%' height='137px'></svg>
+<git-memoir name="branchingOneLine" chapter='back-to-master' svg-height='137px'></git-memoir>
 
 You have essentially **rewinded** the work you've done in `feature-sub`, and are working on an **older version** of the project.
 
@@ -244,7 +244,7 @@ $> git checkout -b fix-add
 Switched to a new branch 'fix-add'
 ```
 
-<svg git-memoir='branchingOneLine' git-memoir-start='back-to-master' width='100%' height='137px'></svg>
+<git-memoir name="branchingOneLine" chapter='another-branch' svg-height='137px'></git-memoir>
 
 Nothing has changed yet because fix-add still points to the same commit as master.
 
@@ -261,6 +261,8 @@ $> git commit -m "Fix addition"
  1 file changed, 1 insertion(+), 1 deletion(-)
 ```
 
+<git-memoir name="branching" chapter='divergent-history' svg-height='275px'></git-memoir>
+
 #### Divergent history
 
 Now your project history has **diverged**.
@@ -268,7 +270,7 @@ Now your project history has **diverged**.
 The changes in feature-sub and fix-add are **isolated**.
 You can **switch back and forth** between the branches with `git checkout`.
 
-<svg git-memoir='branching' git-memoir-start='another-branch' width='100%' height='275px'></svg>
+<git-memoir name="branching" chapter='switch-branches' svg-height='275px'></git-memoir>
 
 
 
@@ -292,7 +294,7 @@ The fix-add branch pointed to a commit **directly ahead** of the commit master p
 There is no divergent history, so Git simply has to **moves the pointer forward**.
 This is what is called a fast-forward.
 
-<svg git-memoir='branching' git-memoir-start='divergent-history' width='100%' height='275px'></svg>
+<git-memoir name="branching" chapter='fast-forward-merge' svg-height='275px'></git-memoir>
 
 
 
@@ -306,7 +308,7 @@ $> git branch -d fix-add
 Deleted branch fix-add (was 2817bc).
 ```
 
-<svg git-memoir='branching' git-memoir-start='fast-forward-merge' width='100%' height='275px'></svg>
+<git-memoir name="branching" chapter='delete-branch' svg-height='275px'></git-memoir>
 
 
 
@@ -322,7 +324,7 @@ $> git add subtraction.js
 $> git commit -m "Comment subtract function"
 ```
 
-<svg git-memoir='branching' git-memoir-start='delete-branch' width='100%' height='275px'></svg>
+<git-memoir name="branching" chapter='work-on-feature-branch' svg-height='275px'></git-memoir>
 
 
 
@@ -369,7 +371,7 @@ Type `:wq` (**w**rite and **q**uit) to save and exit.
 You can see the new **merge commit** that Git has created.
 It is a special commit in that it has more than one parent:
 
-<svg git-memoir='branching' git-memoir-start='work-on-feature-branch' width='100%' height='275px'></svg>
+<git-memoir name="branching" chapter='merge' svg-height='275px'></git-memoir>
 
 Now that you're done, you can delete feature-sub:
 

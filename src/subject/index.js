@@ -1,96 +1,250 @@
-import course from 'courses-md/dist/client';
+import tippy from 'tippy.js';
+import subject from 'courses-md/dist/client';
 window.gitMemoir = require('exports-loader?gitMemoir!git-memoir/dist/git-memoir');
-window.course = course;
+window.subject = subject;
 
 import 'font-awesome/css/font-awesome.css';
 
 import './assets/bootstrap-btn.css';
+import 'tippy.js/dist/tippy.css';
 import './assets/fonts/DroidSerif/DroidSerif.css';
 import './assets/fonts/UbuntuMono/UbuntuMono.css';
 import './assets/fonts/YanoneKaffeesatz/YanoneKaffeesatz.css';
 import './assets/slides.css';
+import './assets/git-memoir.css';
 
 import heigLogo from './assets/heig.png';
 
-course.gitMemoirs = {};
+subject.events = subject.jQuery({});
+subject.gitMemoirs = {};
 
-course.jQuery(function() {
+subject.jQuery(function() {
 
-  const $ = course.jQuery;
+  const $ = subject.jQuery;
 
-  course.setLogo({
+  subject.setLogo({
     linkUrl: 'https://heig-vd.ch',
     imageUrl: heigLogo,
     height: 60
   });
 
-  course.start();
+  subject.start();
 
   updateGitMemoirs();
-  course.slideshow.on('afterShowSlide', updateGitMemoirs);
-  course.slideshow.on('beforeHideSlide', stopGitMemoir);
+  subject.slideshow.on('afterShowSlide', updateGitMemoirs);
+  subject.slideshow.on('beforeHideSlide', stopGitMemoir);
 
   function updateGitMemoirs() {
-    $('.remark-visible .remark-slide-content svg[git-memoir]').each(function() {
-      const $svg = $(this);
-      startGitMemoir(this, {
-        memoir: $svg.attr('git-memoir'),
-        start: $svg.attr('git-memoir-start'),
-        end: $svg.attr('git-memoir-end')
-      });
+    $('.remark-visible .remark-slide-content git-memoir').each(function() {
+      const $memoir = $(this);
+      startGitMemoir($memoir);
     });
   }
 
-  function startGitMemoir(svg, options) {
+  function startGitMemoir($memoir) {
 
-    const memoirFunc = course.gitMemoirs[options.memoir];
-    if (!memoirFunc) {
-      throw new Error(`No memoir found named "${options.memoir}"`);
-    } else if (typeof(memoirFunc) != 'function') {
-      throw new Error(`Memoir named "${options.memoir}" must be a function, got ${typeof(memoirFunc)}`);
+    const name = $memoir.attr('name');
+    if (!name) {
+      throw new Error(`<git-memoir> tag has no name attribute`);
     }
 
-    const drawer = new gitMemoir.Drawer(memoirFunc(), {
-      svg: svg
+    const svgHeight = $memoir.attr('svg-height');
+    if (!svgHeight) {
+      throw new Error(`<git-memoir> tag has no svg-height attribute`);
+    }
+
+    const chapter = $memoir.attr('chapter');
+
+    let chapters = parseInt($memoir.attr('chapters'), 10);
+    if (isNaN(chapters) || !chapters) {
+      chapters = 1;
+    }
+
+    const memoirFunc = subject.gitMemoirs[name];
+    if (!memoirFunc) {
+      throw new Error(`No memoir found named "${name}"`);
+    } else if (typeof(memoirFunc) != 'function') {
+      throw new Error(`Memoir named "${name}" must be a function, got ${typeof(memoirFunc)}`);
+    }
+
+    const memoir = memoirFunc();
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+    const $svg = $(svg)
+      .attr('width', '100%')
+      .attr('height', svgHeight)
+      .appendTo($memoir);
+
+    const modes = [ 'autoplay', 'manual', 'visualization' ];
+
+    let played = false;
+    let playing = false;
+
+    const $controls = $('<div class="controls" />').appendTo($memoir);
+    const $play = $('<button type="button" class="play tooltip" title="Play"><i class="fa fa-play" /></button>').appendTo($controls);
+
+    const $mode = $('<button type="button" class="mode tooltip" data-dynamictitle="true"><i class="fa" /></button>');
+    if (isLocalStorageAvailable()) {
+      $mode.appendTo($controls);
+    }
+
+    const $back = $('<button type="button" class="back tooltip" title="Back"><i class="fa fa-backward" /></button>"').appendTo($controls);
+
+    updateModeButton();
+    const tooltips = tippy('git-memoir .tooltip[title]', {
+      hideOnClick: false
     });
 
-    $(svg).data('git-memoir-drawer', drawer);
+    $memoir.data('tooltips', tooltips);
 
-    let drawing = drawer.draw({
-      immediate: true,
-      initialDelay: 0,
-      stepDuration: 0,
-      until: options.start
+    const drawer = new gitMemoir.Drawer(memoir, {
+      svg: $svg[0]
     });
 
-    if (options.end || options.start) {
+    $memoir.data('drawer', drawer);
+
+    let drawing = initialDraw();
+
+    if (isMode('autoplay')) {
+      play();
+    }
+
+    updatePlayButtons();
+
+    subject.events.trigger('memoir:start', [ drawer, $svg ]);
+
+    $play.on('click', () => play());
+    $mode.on('click', () => cycleMode());
+    $back.on('click', () => back());
+
+    function initialDraw() {
 
       const drawOptions = {
-        initialDelay: 1000,
-        stepDuration: 1000
+        immediate: true,
+        initialDelay: 0,
+        stepDuration: 0
       };
 
-      if (options.end) {
-        drawOptions.until = options.end;
+      if (!played && isMode('visualization')) {
+        drawOptions.chapter = chapter;
+        played = true;
       } else {
-        drawOptions.chapters = 1;
+        drawOptions.until = chapter;
       }
 
-      drawing = drawing.then(() => drawer.draw(drawOptions));
+      return drawer.draw(drawOptions);
+    }
+
+    function play(instant) {
+      if ($play.is('.disabled') || playing) {
+        return;
+      }
+
+      playing = true;
+      updatePlayButtons();
+
+      if (played) {
+        drawer.clear();
+        drawing = initialDraw();
+      }
+
+      const done = () => {
+        playing = false;
+        played = true;
+        updatePlayButtons();
+      };
+
+      drawing = drawing.then(() => drawer.draw({
+        immediate: !!instant,
+        chapters: 1,
+        initialDelay: instant ? 0 : 1000,
+        stepDuration: instant ? 0 : 1000
+      })).then(done, done);
+    }
+
+    function back() {
+      if ($back.is('.disabled') || playing || !played) {
+        return;
+      }
+
+      drawer.clear();
+      drawing = initialDraw();
+      played = false;
+
+      updatePlayButtons();
+    }
+
+    function cycleMode() {
+
+      const index = modes.indexOf(getMode());
+      setMode(index < modes.length - 1 ? modes[index + 1] : modes[0]);
+
+      if ((isMode('autoplay') || isMode('visualization')) && !playing && !played) {
+        play(isMode('visualization'));
+      }
+    }
+
+    function isMode(mode) {
+      return getMode() == mode;
+    }
+
+    function setMode(mode) {
+      localStorage.gitMemoirMode = mode;
+      updateModeButton();
+    }
+
+    function getMode() {
+      return isLocalStorageAvailable() ? localStorage.gitMemoirMode || 'autoplay' : 'visualization';
+    }
+
+    function updateModeButton() {
+
+      let icon = 'play-circle-o';
+      let title = 'Autoplay mode';
+
+      if (isMode('manual')) {
+        icon = 'pause-circle-o';
+        title = 'Manual mode';
+      } else if (isMode('visualization')) {
+        icon = 'check-circle-o';
+        title = 'Visualization mode';
+      }
+
+      $mode
+        .attr('title', title)
+        .find('i')
+        .removeClass('fa-play-circle-o fa-pause-circle-o fa-check-circle-o')
+        .addClass(`fa-${icon}`);
+    }
+
+    function updatePlayButtons() {
+      $play[playing ? 'addClass' : 'removeClass']('disabled');
+      $back[playing || !played ? 'addClass' : 'removeClass']('disabled');
     }
   }
 
   function stopGitMemoir() {
-    $('.remark-visible .remark-slide-content svg[git-memoir]').each(function() {
+    $('.remark-visible .remark-slide-content git-memoir').each(function() {
 
-      const $svg = $(this);
+      const $memoir = $(this);
 
-      const drawer = $svg.data('git-memoir-drawer');
+      const drawer = $memoir.data('drawer');
       if (drawer) {
         drawer.stop();
       }
 
-      $svg.children().remove();
+      const tooltips = $memoir.data('tooltips');
+      if (tooltips) {
+        tooltips.destroyAll();
+      }
+
+      $memoir.children().remove();
+
+      subject.events.trigger('memoir:stop', $memoir);
     });
+  }
+
+  function isLocalStorageAvailable() {
+    return typeof(Storage) != 'undefined';
   }
 });
