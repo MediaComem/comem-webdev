@@ -14,6 +14,11 @@ _.merge(config, {
     highlightLines: true,
     highlightSpans: true,
     countIncrementalSlides: false
+  },
+  publish: {
+    url: 'git@github.com:MediaComem/comem-webdev-docs.git',
+    branch: 'master',
+    version: '2017-2018'
   }
 });
 
