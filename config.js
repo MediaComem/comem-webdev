@@ -8,7 +8,6 @@ _.merge(config, {
   title: 'COMEM+ Web Dev',
   version: '2017-2018',
   repoUrl: 'https://github.com/MediaComem/comem-webdev',
-  baseUrl: 'https://mediacomem.github.io/comem-webdev-docs',
   homeTemplate: path.join(__dirname, 'templates', 'index.html'),
   remark: {
     highlightLines: true,
@@ -16,7 +15,8 @@ _.merge(config, {
     countIncrementalSlides: false
   },
   publish: {
-    url: 'git@github.com:MediaComem/comem-webdev-docs.git',
+    gitUrl: 'git@github.com:MediaComem/comem-webdev-docs.git',
+    baseUrl: 'https://mediacomem.github.io/comem-webdev-docs',
     branch: 'master',
     version: '2017-2018'
   }
