@@ -911,6 +911,12 @@ console.log(crew);
 
 
 
+## TODO
+
+* `let item of list`
+
+
+
 [array-functions]: https://www.w3schools.com/jsref/jsref_obj_array.asp
 [babel]: http://babeljs.io
 [chrome]: https://www.google.com/chrome/
