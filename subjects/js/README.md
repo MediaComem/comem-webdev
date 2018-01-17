@@ -914,6 +914,7 @@ console.log(crew);
 ## TODO
 
 * `let item of list`
+* destructuring assignment
 
 
 
