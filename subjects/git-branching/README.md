@@ -700,6 +700,7 @@ $> git commit -m "Merge cleanup (kept implemented subtraction.js)"
 ## TODO
 
 * Create diagram for the last conflict example
+* "What is a branch?" slide: https://blog.thoughtram.io/git/2014/11/18/the-anatomy-of-a-git-commit.html
 
 
 
