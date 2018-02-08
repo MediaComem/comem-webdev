@@ -109,9 +109,9 @@ console.log(typeof undefinedValue); // "undefined"
 console.log(typeof aSymbol); // "symbol"
 
 // There is no integer type
-console.log(isInteger(aNumber)); // false
+console.log(Number.isInteger(aNumber)); // false
 console.log(typeof 4); // "number"
-console.log(isInteger(4)); // true
+console.log(Number.isInteger(4)); // true
 
 // Symbols are unique identifiers
 console.log(Symbol('foo') == aSymbol); // false
