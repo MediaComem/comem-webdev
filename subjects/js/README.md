@@ -45,6 +45,7 @@ and one of the three core technologies of the web.
   - [Example](#example)
   - [Using JSON](#using-json)
 - [Resources](#resources)
+- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -915,6 +916,10 @@ console.log(crew);
 
 * `let item of list`
 * destructuring assignment
+* spread
+* classes, static
+* import/export
+* getters/setters
 
 
 
