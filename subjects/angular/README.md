@@ -1,6 +1,8 @@
 # Angular
 
-Getting started with and understanding the basics of [AngularJS][angular] (version 1), the JavaScript front-end web application framework.
+Get started with and understand the basics of [Angular][angular], the JavaScript front-end web application framework.
+
+This is a 
 
 <!-- slide-include ../../BANNER.md -->
 
@@ -12,6 +14,7 @@ Getting started with and understanding the basics of [AngularJS][angular] (versi
 
 * [JavaScript][js]
 * [JavaScript closures][js-closures]
+* [TypeScript][ts]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -126,12 +129,10 @@ With Angular, you can:
 ### Evolution of Angular
 
 Angular is one of the most popular client-side frameworks, and it is still evolving.
-[Angular 2][angular-2] has been released recently (June 2016) to take advantage of:
+Starting with version 2 of the framework (released in June 2016) you can take advantage of:
 
 * [TypeScript][typescript]: a superset of JavaScript with optional typing and the latest ECMAScript features
 * [Web components][web-components]: a way to create reusable user interface widgets
-
-This tutorial will cover Angular 1, but many concepts are useful to understand Angular 2 as well.
 
 
 
@@ -143,30 +144,10 @@ This tutorial will cover Angular 1, but many concepts are useful to understand A
 
 ### Starter template
 
-You can use this template for the exercises in this tutorial.
-It includes Angular already.
-Save it as an HTML file and create an empty `angular-demo.js` file next to it:
+You can clone the following project for the exercises in this tutorial:
 
-```html
-<!DOCTYPE html>
-<html lang='en'>
-  <head>
-    <meta charset='utf-8'>
-    <title>Angular demo</title>
-    <script
-src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js'>
-    </script>
-  </head>
-  <body>
-    <!-- Your HTML goes here -->
+[COMEM+ Angular Starter Project][angular-starter]
 
-    <!-- Your JavaScript goes in that file -->
-    <script src='angular-demo.js'></script>
-  </body>
-&lt;/html&gt;
-```
-
-You can use [live-server][live-server] to serve these files in your browser.
 You should keep your [developer console][chrome-dev] open throughout this tutorial to detect errors in your code.
 
 
@@ -178,255 +159,296 @@ You should keep your [developer console][chrome-dev] open throughout this tutori
 **Angular elements**
 
 * Modules
-* Controllers
-* Scope
+* Components
+* Directives
 * Services
-* Filters
-* Directives & components
-* Constants
-* Config functions
-* Run functions
+* HTTP
+* Pipes
 
 <!-- slide-column -->
 
 **Angular concepts**
 
 * Interpolation
-* Two-way data binding
+* Data binding
 * Dependency injection
-* Scope hierarchy
 * Form validation
 
 
 
 ### Modules
 
-To make an Angular application, you have to create a **module**:
+An Angular application is a **module**.
+You can find one in `src/app/app.module.ts` in the starter project:
 
-```js
-// Create an angular module
-angular.module('starter', []);
+```ts
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppComponent } from './app.component';
+
+`@NgModule`({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class `AppModule` { }
 ```
 
-The two arguments of `angular.module()` are:
+A module is a way to help organize related things (components, services, etc) together.
 
-* A name (in this case: the name of your application)
-* A list of dependencies (leave it blank for now)
+#### Basic module definition
 
-To plug your Angular application into a web page, use the `ng-app` attribute.
-It's customary to put it on the `<body>` tag:
+Take a look at the [`@NgModule`][angular-docs-ng-module] annotation:
 
-```html
-*<body ng-app='starter'>
-  <!-- Page content -->
-</body>
+```ts
+@NgModule({
+  `declarations`: [
+    AppComponent
+  ],
+  `imports`: [
+    BrowserModule
+  ],
+  `providers`: [],
+  `bootstrap`: [AppComponent]
+})
 ```
 
+* The **declarations** array is a list of components (also directives and pipes) which belong to this module.
+* The **imports** array is a list of other modules whose exported components should be available in this module.
+  It allows you to express a dependency on another module.
+* The **providers** array is a list of service providers (more about that later).
+* **bootstrap** is the root component that Angular creates and inserts into `index.html`
 
 
-### Controllers
 
-A controller is a function which **controls part of an HTML template**:
+### Components
 
-```js
-angular.module('starter').controller(`'HelloController'`, function($scope) {
-  $scope.name = 'World';
-});
+Components are the most basic **building block** of an UI in an Angular application.
+An Angular application is a tree of Angular components.
+
+You will find a component in `src/app/app.component.ts` in the starter project:
+
+```ts
+import { Component } from '@angular/core';
+
+`@Component`({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export `class AppComponent` {
+  title: string;
+
+  constructor() {
+    this.title = 'app';
+  }
+}
 ```
 
-You can apply your controller to the HTML tags you want to control with the `ng-controller` attribute:
-
-```html
-<div `ng-controller='HelloController'`>
-  <p>Hello {{ name }}!</p>
-</div>
-```
+A component is any [JavaScript class][js-classes] annotated with the [`@Component`][angular-docs-component] decorator.
 
 Let's dig into that line by line.
 
-#### Creating a controller
+#### Component selector
 
-Note that we call `angular.module()` again, but this time **only with the name**.
-Instead of creating a new module, this returns the **existing module** with that name:
+The `selector` property of the `@Component` decorator indicates what tag you should put in your HTML to instantiate the component:
 
-```js
-`angular.module('starter')`.controller('HelloController', function($scope) {
-  $scope.name = 'World';
-});
+```ts
+@Component({
+  `selector: 'app-root'`,
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
 ```
 
-Then, we define a controller named `HelloController`:
-
-```js
-angular.module('starter')`.controller('HelloController'`, function($scope) {
-  $scope.name = 'World';
-});
-```
-
-That controller is simply a **function**:
-
-```js
-angular.module('starter').controller('HelloController', `function($scope) {`
-* $scope.name = 'World';
-`}`);
-```
-
-#### The scope
-
-The `$scope` object is the **view model**, i.e. the model that will be presented by the view:
-
-```js
-angular.module('starter').controller('HelloController', function(`$scope`) {
-  `$scope.name` = 'World';
-});
-```
-
-Properties you attach to the scope can be interpolated into HTML templates with double curly braces:
+Open `src/index.html` in the starter project.
+You will find the `<app-root>` tag:
 
 ```html
-<div ng-controller='HelloController'>
-  <p>Hello `{{ name }}`!</p>
-</div>
+<body>
+  `<app-root></app-root>`
+&lt;/body&gt;
 ```
 
-#### Named controllers
+#### Component template
 
-You can also access the scope by using **named controllers**.
-**Instead** of using the `$scope`, you attach properties directly to the controller using `this`:
+The `templateUrl` property of the `@Component` decorator tells Angular which HTML file to use to display the component:
 
-```js
-angular.module('starter').controller('HelloController', function() {
-  `var helloCtrl = this;`
-  `helloCtrl.name` = 'World';
-});
+```ts
+@Component({
+  selector: 'app-root',
+  `templateUrl: './app.component.html'`,
+  styleUrls: ['./app.component.css']
+})
 ```
 
-In the template, use `MyController as myName` in the `ng-controller` attribute.
-This assigns a name to the controller, which you can then use in interpolation:
+For very simple components, you can also use `template` instead of `templateUrl` to use an **inline template**:
 
-```html
-<div ng-controller='HelloController `as helloCtrl`'>
-  <p>Hello {{ `helloCtrl.name` }}!</p>
-</div>
+```ts
+@Component({
+  selector: 'app-root',
+  `template: '<h1>Welcome to {{ title }}!</h1>'`,
+  styleUrls: ['./app.component.css']
+})
 ```
 
-Even when using this syntax, there is still a **scope** being created and used.
+#### Component styles
 
-You will find examples of both (using only the scope or using named controllers) in the documentation and examples online.
+Similarly, the `styleUrls` property is a list of CSS files to apply to the component:
 
-#### Outside the scope of a controller
-
-Add a new `div` outside the one you already created:
-
-```html
-<div ng-controller='HelloController as helloCtrl'>
-  <p>Hello {{ helloCtrl.name }}</p>
-</div>
-
-*<div>
-* <p>I am {{ helloCtrl.name }}</p>
-*</div>
+```ts
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  `styleUrls: ['./app.component.css']`
+})
 ```
 
-No name will be displayed there.
+It's also possible to use **inline styles** for very simple components:
 
-This new part of the DOM is **outside the scope** of `HelloController`,
-as we applied the `ng-controller` only to the other `div`.
-
-#### Multiple controllers
-
-Add another controller:
-
-```js
-angular.module('starter').controller('OtherController', function() {
-  var otherCtrl = this;
-  otherCtrl.name = 'Bob';
-});
+```ts
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  `styles: [ 'h1 { font-weight: normal;  }' ]`
+})
 ```
 
-Also add an `ng-controller` to use it on the second `div`,
-and change the variable from `helloCtrl.name` to `otherCtrl.name`:
+Styles in Angular are **modular**.
+They apply only *within the template of that component*.
 
-```html
-<div `ng-controller='OtherController as otherCtrl'`>
- <p>I am {{ `otherCtrl`.name }}</p>
-</div>
-```
-
-This time it will work.
-
-As you can see, **each controller has its scope** and controls only that part of the DOM to which it is applied with `ng-controller`.
-
-#### Using functions in the view
-
-You can also attach functions to the scope or controller:
-
-```js
-angular.module('starter').controller('HelloController', function() {
-  var helloCtrl = this;
-  helloCtrl.name = 'World';
-* helloCtrl.double = function(n) {
-*   return n * 2;
-* };
-});
-```
-
-These functions can be called in the view:
-
-```html
-<div ng-controller='HelloController as helloCtrl'>
-  <p>Hello {{ helloCtrl.name }}!</p>
-* <p>Two times two equals {{ helloCtrl.double(2) }}</p>
-</div>
-```
-
-#### Using `ng-model`
-
-You can bind the **view model** and **view** together:
-
-```js
-angular.module('starter').controller('HelloController', function() {
-  var helloCtrl = this;
-  // ...
-  `helloCtrl.value = 2;`
-});
-```
-
-Reference this new `helloCtrl.value` variable in the view with `ng-model`:
-
-```html
-<p>
-  Two times <input `ng-model='helloCtrl.value'` />
-  equals {{ helloCtrl.double(`helloCtrl.value`) }}
-</p>
-```
+Read the [Component Styles][angular-component-styles] documentation to learn more.
 
 #### Data binding
 
-What's interesting about `ng-model` is that it goes both ways.
-Add a function that modifies the value of your scope variable:
+You can display data by **binding** parts of an HTML template to properties of a component.
 
-```js
-angular.module('starter').controller('HelloController', function() {
-  var helloCtrl = this;
-  // ...
-* helloCtrl.reset = function() {
-*   helloCtrl.value = 2;
-* };
-});
+```ts
+export class AppComponent {
+  `title: string;`
+
+  constructor() {
+    this.title = 'app';
+  }
+}
 ```
 
-Then add a button that calls this new function below the previous HTML:
+Enclosing a component's property name in double curly braces in the template is called **interpolation**:
+
+```html
+<h1>
+  Welcome to `{{ title }}`!
+</h1>
+```
+
+#### Interpolation with functions
+
+Interpolation is not limited to simple properties.
+You can also use a component's **methods** in the template.
+
+Add the following method to the component (`src/app/app.component.ts`):
+
+```ts
+export class AppComponent {
+  // ...
+
+*  hello(name: string): string {
+*    return 'Hello ' + name + '!';
+*  }
+}
+```
+
+Now use that function in the template (`src/app/app.component.html`):
 
 ```html
 <p>
-  Two times <input ng-model='helloCtrl.value' />
-  equals {{ helloCtrl.double(helloCtrl.value) }}
+  `{{ hello("World") }}`
 </p>
-*<button type='button' ng-click='helloCtrl.reset()'>Reset</button>
 ```
 
-See how the view changes when you modify the value and click the reset button.
+
+
+### User input
+
+One of the things you will need to do is **react to user input** (e.g. through forms).
+Let's make our greeting **dynamic** by adding an input field to customize the name.
+Make the following changes to the component:
+
+```ts
+export class AppComponent {
+  title: string;
+  `greeting: string;`
+
+  constructor() {
+    this.title = 'app';
+    `this.greeting = '';`
+  }
+  // ...
+}
+```
+
+Now interpolate that new property into the function in the template:
+
+```html
+<p>
+  {{ `hello(greeting)` }}
+</p>
+```
+
+#### `ngModel`
+
+Add an input field to the template above the greeting:
+
+```html
+*<p>
+*  <input type='text' placeholder='Who are you?' [(ngModel)]='greeting' />
+*</p>
+<p>
+  {{ `hello(greeting)` }}
+</p>
+```
+
+`[(ngModel)]` is Angular's **two-way data binding** syntax.
+It binds the `greeting` property to the HTML input field.
+
+You will most likely get this error:
+
+```
+Uncaught Error: Template parse errors:
+Can't bind to 'ngModel' since it isn't a known property of 'input'.
+```
+
+This is because `[(ngModel)]` belongs to the optional `FormsModule`, which you have to *opt in* to using.
+
+#### `FormsModule`
+
+To **import** the module into your application, you must add it to the `imports` array of your own module in `src/app/app.module.ts`:
+
+```ts
+*import { FormsModule } from '@angular/forms';
+// Other imports...
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    `FormsModule`
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+Once you've done that, the field should display correctly.
 
 #### Two-way data binding
 
@@ -442,10 +464,108 @@ The developer has to write code that constantly syncs the view with the model an
 
 With Angular changes are **immediately reflected** in both view and model.
 
-This is one of the great strengths of Angular: the **controller** is completely **isolated from and unaware of the view**.
+This is a strength of Angular: a **component** is **isolated from and unaware of the view**.
 It does not care about DOM manipulation or rendering concerns.
 
 <img src='images/two-way-data-binding.png' width='100%' />
+
+
+
+### Directives
+
+A **directive** is a class with a `@Directive` decorator.
+
+The **component** that we've seen before is a *directive-with-a-template*
+A `@Component` decorator is actually a `@Directive` decorator extended with template-oriented features.
+
+Two other kinds of directives exist: **structural** and **attribute** directives.
+
+#### Structural directives
+
+Structural directives are responsible for HTML layout.
+They shape or reshape the **DOM's structure**, typically by **adding, removing, or manipulating elements**.
+
+Let's add the [`ngIf`][angular-docs-ng-if] directive to our template as an example:
+
+```html
+<p `*ngIf='greeting'`>
+  {{ hello(greeting) }}
+</p>
+```
+
+As you can see, the entire paragraph is now removed from the DOM as long as the `greeting` property is blank (e.g. `undefined` or an empty string).
+It is added back as soon as `greeting` has a value.
+
+Read the [documentation][angular-structural-directives] to learn more about structural directives.
+Many more such directives are provided by Angular out of the box, like [`ngFor`][angular-docs-ng-for] (which we'll use later) and [`ngSwitch`][angular-docs-ng-switch].
+
+#### Attribute directives
+
+An **attribute** directive changes the **appearance or behavior of a DOM element**.
+
+Create a `src/app/highlight.directive.ts` file with the following contents:
+
+```ts
+import { Directive } from '@angular/core';
+
+@Directive({
+  selector: '[appHighlight]'
+})
+export class HighlightDirective {
+  constructor() {
+    console.log('the highlight directive was used');
+  }
+}
+```
+
+Similarly to a component, a directive is a JavaScript class, this time annotated with the [`@Directive`][angular-docs-directive] decorator.
+
+The selector, `[appHighlight]` is an [attribute selector][css-attribute-selector].
+Also note that it is good practice to prefix the selector with your application name ("app" for this example) to avoid **naming collisions** with other directives.
+
+##### Using an attribute directive
+
+To use your new attribute directive, you must **declare** it in your module's `declarations` array in `src/app/app.module.ts`:
+
+```ts
+*import { HighlightDirective } from './highlight.directive';
+// Other imports...
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    `HighlightDirective`
+  ],
+  // ...
+})
+export class AppModule { }
+```
+
+Now all you need to do is add the attribute to an element in `src/app/app.component.html`.
+Let's add it to the greeting.
+
+```html
+<p *ngIf='greeting' `appHighlight`>
+  {{ hello(greeting) }}
+</p>
+```
+
+You should see the directive being used in the console after entering some text in the input field.
+
+##### Modifying the DOM
+
+```ts
+import { Directive, `ElementRef` } from '@angular/core';
+
+@Directive({
+  selector: '[appHighlight]'
+})
+export class HighlightDirective {
+  constructor(`el: ElementRef`) {
+    `el.nativeElement.style.backgroundColor = 'yellow';`
+  }
+}
+```
 
 
 
@@ -1515,16 +1635,24 @@ You will often find the inline array annotation in examples as it is the recomme
 
 [a-guide-to-web-components]: https://css-tricks.com/modular-future-web-components/
 [ajax]: https://developer.mozilla.org/en-US/docs/AJAX/Getting_Started
-[angular]: https://angularjs.org/
+[angular]: https://angular.io
+[angularjs]: https://angularjs.org/
 [angular-api]: https://docs.angularjs.org/api
 [angular-built-in-filters]: https://docs.angularjs.org/api/ng/filter
 [angular-codepen]: http://codepen.io/AlphaHydrae/pen/LxoRze?editors=1010#0
 [angular-codepen-form-validation]: http://codepen.io/AlphaHydrae/pen/EWZOOR?editors=1011
 [angular-codepen-scope-hierarchy]: http://codepen.io/AlphaHydrae/pen/ryjaXN?editors=1010#0
 [angular-codepen-scope-components]: http://codepen.io/AlphaHydrae/pen/LWxVzj?editors=1010#0
+[angular-component-styles]: https://angular.io/guide/component-styles
 [angular-components]: https://docs.angularjs.org/guide/component
 [angular-directives]: https://docs.angularjs.org/guide/directive
 [angular-directives-list]: https://docs.angularjs.org/api/ng/directive
+[angular-docs-component]: https://angular.io/api/core/Component
+[angular-docs-directive]: https://angular.io/api/core/Directive
+[angular-docs-ng-for]: https://angular.io/api/common/NgForOf
+[angular-docs-ng-if]: https://angular.io/api/common/NgIf
+[angular-docs-ng-module]: https://angular.io/api/core/NgModule
+[angular-docs-ng-switch]: https://angular.io/api/common/NgSwitch
 [angular-element]: https://docs.angularjs.org/api/ng/function/angular.element
 [angular-form-controller]: https://docs.angularjs.org/api/ng/type/form.FormController
 [angular-forms]: https://docs.angularjs.org/guide/forms
@@ -1532,17 +1660,20 @@ You will often find the inline array annotation in examples as it is the recomme
 [angular-input]: https://docs.angularjs.org/api/ng/directive/input
 [angular-ng-model-controller]: https://docs.angularjs.org/api/ng/type/ngModel.NgModelController
 [angular-promises]: ../angular-promises/
-[angular-2]: https://angular.io
+[angular-starter]: https://github.com/MediaComem/comem-angular-starter#readme
+[angular-structural-directives]: https://angular.io/guide/structural-directives
 [angular-2-series-components]: http://blog.ionic.io/angular-2-series-components/
 [chrome]: https://www.google.com/chrome/
 [chrome-dev]: https://developers.google.com/web/tools/chrome-devtools/console/
+[css-attribute-selector]: https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors
 [html-history-api]: https://developer.mozilla.org/en-US/docs/Web/API/History_API
 [html-input]: https://www.w3schools.com/tags/tag_input.asp
 [jquery]: http://jquery.com
 [js]: ../js/
+[js-classes]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
 [js-closures]: ../js-closures/
 [js-promises]: ../js-promises/
-[live-server]: https://www.npmjs.com/package/live-server
 [minification]: https://en.wikipedia.org/wiki/Minification_(programming)
 [typescript]: https://www.typescriptlang.org
+[typescript-subject]: ../ts
 [web-components]: https://developer.mozilla.org/en-US/docs/Web/Web_Components
