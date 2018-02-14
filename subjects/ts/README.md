@@ -328,7 +328,7 @@ function warnUser(): void {
 }
 
 let foo: string = warnUser();
-//                ^^^^^^^^
+//                ^^^^^^^^ ERROR!
 //                Type 'void' is not assignable to type 'string'.
 ```
 
