@@ -14,7 +14,7 @@ This is a
 
 * [JavaScript][js]
 * [JavaScript closures][js-closures]
-* [TypeScript][ts]
+* [TypeScript][ts-subject]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -131,7 +131,7 @@ With Angular, you can:
 Angular is one of the most popular client-side frameworks, and it is still evolving.
 Starting with version 2 of the framework (released in June 2016) you can take advantage of:
 
-* [TypeScript][typescript]: a superset of JavaScript with optional typing and the latest ECMAScript features
+* [TypeScript][ts]: a superset of JavaScript with optional typing and the latest ECMAScript features
 * [Web components][web-components]: a way to create reusable user interface widgets
 
 
@@ -358,9 +358,9 @@ Add the following method to the component (`src/app/app.component.ts`):
 export class AppComponent {
   // ...
 
-*  hello(name: string): string {
-*    return 'Hello ' + name + '!';
-*  }
+* hello(name: string): string {
+*   return 'Hello ' + name + '!';
+* }
 }
 ```
 
@@ -407,7 +407,7 @@ Add an input field to the template above the greeting:
 
 ```html
 *<p>
-*  <input type='text' placeholder='Who are you?' [(ngModel)]='greeting' />
+* <input type='text' placeholder='Who are you?' [(ngModel)]='greeting' />
 *</p>
 <p>
   {{ `hello(greeting)` }}
@@ -464,8 +464,8 @@ The developer has to write code that constantly syncs the view with the model an
 
 With Angular changes are **immediately reflected** in both view and model.
 
-This is a strength of Angular: a **component** is **isolated from and unaware of the view**.
-It does not care about DOM manipulation or rendering concerns.
+Also note that our **component** is **isolated from and unaware of the view**:
+it does not care about DOM manipulation or rendering concerns.
 
 <img src='images/two-way-data-binding.png' width='100%' />
 
@@ -508,10 +508,10 @@ Create a `src/app/highlight.directive.ts` file with the following contents:
 ```ts
 import { Directive } from '@angular/core';
 
-@Directive({
+`@Directive`({
   selector: '[appHighlight]'
 })
-export class HighlightDirective {
+export `class HighlightDirective` {
   constructor() {
     console.log('the highlight directive was used');
   }
@@ -545,14 +545,16 @@ Now all you need to do is add the attribute to an element in `src/app/app.compon
 Let's add it to the greeting.
 
 ```html
-<p *ngIf='greeting' `appHighlight`>
-  {{ hello(greeting) }}
-</p>
+<h1 `appHighlight`>
+  Welcome to {{ title }}!
+</h1>
 ```
 
 You should see the directive being used in the console after entering some text in the input field.
 
 ##### Modifying the DOM
+
+Now add an `ElementRef` argument to the directive's constructor:
 
 ```ts
 import { Directive, `ElementRef` } from '@angular/core';
@@ -567,49 +569,263 @@ export class HighlightDirective {
 }
 ```
 
+Doing this **injects** a reference to the host DOM element, the element to which you applied the `appHighlight` attribute.
+
+`ElementRef` grants direct access to the host DOM element through its `nativeElement` property.
+In this example we set the background color to yellow.
+
+#### Common directives
+
+These common directives are provided by Angular out of the box:
+
+* [`ngClass`][angular-docs-ng-class] - Adds and removes **CSS classes** on an HTML element.
+* [`ngFor`][angular-docs-ng-for] - Instantiates a template **once per item** from an iterable.
+* [`ngIf`][angular-docs-ng-if] - **Conditionally includes** a template based on the value of an expression.
+* [`ngPlural`][angular-docs-ng-plural] - Adds/removes DOM sub-trees based on a numeric value. (Tailored for **pluralization**.)
+* [`ngStyle`][angular-docs-ng-style] - Update an HTML element's **styles**.
+* [`ngSwitch`][angular-docs-ng-switch] - Adds/removes DOM sub-trees when the nest match expressions matches the **switch** expression.
+
+
+
+### Models
+
+Let's make our application funny by adding some jokes.
+
+It's good practice to create **classes** for your **business models**.
+Let's start with a very simple one.
+
+Angular CLI comes with scaffolding tools to help you create files.
+You can generate a model class with the following command:
+
+```bash
+$> ng generate class models/joke
+```
+
+This will create a `src/app/models/joke.ts` file.
+Open it and add a `text` attribute to our new `Joke` class:
+
+```ts
+export class Joke {
+  `text: string;`
+}
+```
+
+#### Using models
+
+Let's add some jokes to our component:
+
+```ts
+// Other imports...
+`import { Joke } from './models/joke';`
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title: string;
+  greeting: string;
+  `jokes: Joke[];`
+
+  constructor() {
+    this.title = 'app';
+    this.greeting = '';
+*   this.jokes = [
+*     { text: 'Knock knock' },
+*     { text: 'The cake is a lie' }
+*   ];
+  }
+  // ...
+}
+```
+
+#### Using `ngFor`
+
+Now that we have some jokes, let's display them.
+We want a `<ul>` list, with a `<li>` item for each joke.
+That's a job for the `ngFor` directive.
+
+Add this at the bottom of the component's template:
+
+```html
+<ul>
+  <li *ngFor='let joke of jokes'>{{ joke.text }}</li>
+</ul>
+```
+
+The directive handles repeating the `<li>` element for us.
+No need to write it multiple times, or to manually build and concatenate DOM elements in the component's TypeScript code.
+
+#### Using `ngPlural`
+
+While we're at it, let's also add a header above the list:
+
+```html
+<h2>
+  {{ jokes.length }} jokes
+</h2>
+```
+
+You might notice that we'll have a minor problem when there is only one joke.
+It will say "1 jokes" instead of "1 joke".
+
+The [`ngPlural`][angular-docs-ng-plural] directive comes to the rescue:
+
+```html
+<h2 [ngPlural]='jokes.length'>
+  {{ jokes.length }}
+  <ng-template ngPluralCase='=1'>joke</ng-template>
+  <ng-template ngPluralCase='other'>jokes</ng-template>
+</h2>
+```
+
 
 
 ### Services
 
-In general, controllers shouldn't try to do too much.
-They should contain only the business logic needed for a **single view**.
-Keep controllers slim is by encapsulating work that doesn't belong to controllers into **services** and then using these services in controllers.
+Let's do something more interesting: fetch some jokes on the internet.
 
-You can create a service by calling `factory()`.
-As the name implies, you must pass a **factory function** that will create and return the service.
+To do it "The Angular Way", we'll encapsulate that functionality into a **service**.
 
-Let's create a service with that `double` function we wrote earlier:
+Why?
+**Components** should not try to do too much;
+they should focus on **presenting data** and **delegate data access** to specialized classes.
+**Services** are here to fill that role.
 
-```js
-angular.module('starter')`.factory('HelloService', function() {`
+This helps your components remain as simple as possible while services handle your business logic.
 
-  var service = {};
+Let's use Angular CLI to generate a joke service:
 
-  service.double = function(n) {
-    return n * 2;
-  };
-
-  return service;
-`}`);
+```bash
+$> ng generate service --spec false services/joke
 ```
+
+(The `--spec false` option disables the generation of an test file for the service.
+We will not cover [automated tests][angular-testing] in this tutorial, but you should definitely check it out.)
+
+#### The joke service
+
+The `src/app/services/joke.service.ts` file has been generated:
+
+```ts
+import { Injectable } from '@angular/core';
+
+`@Injectable`()
+export `class JokeService` {
+  constructor() { }
+}
+```
+
+Once again, a service is simply a JavaScript class, annotated with the [`@Injectable`][angular-docs-injectable] decorator.
+More about that later.
+
+For now, simply add a method which returns a joke:
+
+```ts
+`import { Joke } from '../models/joke';`
+
+@Injectable()
+export class JokeService {
+  constructor() { }
+
+* getJoke(): Joke {
+*   return { text: 'Knock knock' };
+* }
+}
+```
+
+#### Providing the joke service
+
+To use the service, you must **provide** it in your module's `providers` array in `src/app/app.module.ts`:
+
+```ts
+// Other imports...
+`import { JokeService } from './services/joke.service';`
+
+@NgModule({
+  // ...
+  providers: [
+    `JokeService`
+  ],
+  // ...
+})
+export class AppModule { }
+```
+
+#### Injecting the joke service
+
+Once you've done that, you can **inject** it into your component.
+You just have to add a **constructor parameter property**.
+While you're at it, also add a **method to add a joke**:
+
+```ts
+export class AppComponent {
+  // ...
+  constructor(`private jokeService: JokeService`) {
+    // ...
+  }
+
+* addJoke() {
+*   this.jokes.push(this.jokeService.getJoke());
+* }
+  // ...
+}
+```
+
+And use that button in the template:
+
+```html
+<p>
+  <button type='button' (click)='addJoke()'>Add joke</button>
+</p>
+```
+
+The `(click)` attribute is Angular's syntax to listen to the `click` event on a DOM element and trigger something when it occurs.
+
+#### Why does it work?
+
+Our component now uses the service.
+But why does it work?
+All you did was add a parameter property to the constructor:
+
+```ts
+constructor(`private jokeService: JokeService`) {
+  // ...
+}
+```
+
+As a reminder, in TypeScript this is equivalent to:
+
+```ts
+export class AppComponent {
+  `jokeService: JokeService;`
+
+  constructor(`jokeService: JokeService`) {
+    `this.jokeService = jokeService;`
+  }
+}
+```
+
+You **never instantiated the service with `new`**, so where is the instance coming from?
 
 #### Dependency injection
 
-Using the service is as simple as adding it as an argument to our controller:
+Angular relies on [dependency injection][di] to plug components, services and other elements together.
 
-```js
-angular.module('starter').controller('HelloController', function(`HelloService`) {
-  var helloCtrl = this;
-  helloCtrl.name = 'World';
-  helloCtrl.double = `HelloService.double`;
-});
-```
+* After creating your service, you **provided** it in the application **module**.
+* This makes it possible for Angular's **injector** to know that your service exists and to create instances of it.
+* By adding the parameter to the component's constructor, you **asked Angular to inject** an instance of the service at runtime.
 
-This works because Angular is built around **dependency injection**:
+Dependency injection is a form of [inversion of control][ioc],
+meaning that parts of your code **receive** the flow of control instead of driving it like in classic procedural programming.
 
-* When you define a controller, service or other kind of Angular element, you give it **a name**
-* In the factory function that creates the controller (or other element), you tell Angular **the names of the other elements you need** as arguments
-* Angular will **inject** the required elements into your factory function for you
+The general goal is to:
+
+* **Decouple** the execution of a task from implementation.
+* **Focus** a component on the task it is designed for.
+* **Free components from assumptions** about how other systems do what they do and instead rely on **contracts**.
+* **Prevent side effects** when **replacing** a component.
 
 #### Why dependency injection?
 
@@ -795,160 +1011,6 @@ Then filter it in the view:
 
 
 
-### Directives
-
-[Directives][angular-directives] are **markers on a DOM element** that tell Angular's **HTML compiler** to attach a **specified behavior** to that DOM element, or to **transform** the DOM element and its children.
-
-You've already used them: `ng-controller` and `ng-model` are directives.
-
-A directive can be an **HTML attribute**:
-
-```html
-<input `ng-model='helloCtrl.value'` />
-```
-
-An **HTML class**:
-
-```html
-<p `class='my-directive'`>Hello</p>
-```
-
-Or a custom **HTML tag**:
-
-```html
-*<person person='person'></person>
-```
-
-#### Making your own directive
-
-A directive is not magic, you can create your own using Angular's `directive` function.
-This function must return a **directive definition object**:
-
-```js
-angular.module('starter')`.directive('redAlert', function() {`
-  return `{`
-*   link: function(scope, element, attributes) {
-*     element.css('background-color', '#ff7777');
-*   }
-  `}`;
-`}`);
-```
-
-You can then use this directive in the view:
-
-```html
-<div ng-controller='HelloController as helloCtrl'>
-  <!-- ... -->
-  <p `red-alert`>Did you hear? {{ joke }}</p>
-</div>
-```
-
-Note that you use **dash-delimited names in the view**,
-but Angular looks for a directive with a corresponding **camel-case name**.
-
-#### DOM manipulation in directives
-
-The **main goal** of directives is to perform **DOM manipulation instead of controllers**,
-so that controllers only have to deal with the view model.
-
-A directive's link function has the following signature:
-
-```
-  function(scope, element, attributes)
-```
-
-* The `scope` is the Angular scope object corresponding to the HTML DOM element to which the directive is attached
-* The `element` is a [jQuery][jquery] wrapper around the HTML DOM element
-* The `attributes` are an object representing the HTML DOM element's attributes and values
-
-If you have not included jQuery in your project, the `element` is actually a [jqLite wrapper][angular-element].
-
-jqLite is a tiny, API-compatible **subset of jQuery** that allows Angular to manipulate the DOM in a cross-browser compatible way.
-It implements only the **most commonly needed** functionality with the goal of having a **very small footprint**.
-
-#### Built-in directives
-
-Directive             | Description
-:---                  | :---
-`ng-app`              | Designate the root HTML element of an Angular application
-`ng-class`            | Set CSS classes on an HTML element based on an expression
-`ng-controller`       | Attach an Angular controller to an HTML element
-`ng-click`            | Specify custom behavior when an HTML element is clicked
-`ng-disabled`         | Sets the `disabled` attribute on an HTML element (e.g. `<input>`, `<button>`, `<select>`) based on an expression
-`ng-if`               | Removes or recreates an HTML element based on an expression
-`ng-model`            | Bind a form input (e.g. `<input>`, `<select>`, `<textarea>`) to a property of the Angular scope
-`ng-repeat`           | Repeat an HTML element once per item from a list
-`ng-show` / `ng-hide` | Shows or hides an HTML element based on an expression
-`ng-switch`           | Conditionally swap HTML elements based on an expression
-
-Read the [documentation][angular-directives-list] to learn more.
-
-#### An example with `ng-repeat`
-
-Let's add a list of people to our `HelloController`:
-
-```js
-angular.module('starter').controller('HelloController', function(HelloService) {
-  var helloCtrl = this;
-  // ...
-* helloCtrl.people = [
-*   { firstName: 'John', lastName: 'Doe' },
-*   { firstName: 'Jane', lastName: 'Doe' },
-*   { firstName: 'Richard', lastName: 'Doe' }
-* ];
-});
-```
-
-Let's say we want to display an `<ul>` list with an `<li>` element for each person.
-`ng-repeat` can handle that for you:
-
-```html
-<div ng-controller='HelloController as helloCtrl'>
-  <!-- ... -->
-  <p>
-    <ul>
-      <li `ng-repeat='person in helloCtrl.people'`>
-        {{ person.firstName }} {{ person.lastName }}
-      </li>
-    </ul>
-  </p>
-</div>
-```
-
-#### Two-way binding with `ng-repeat`
-
-Let's add a couple of HTML input fields to add a new person with a first and last name,
-and a button that will call `helloCtrl.addPerson()` when clicked:
-
-```html
-<div ng-controller='HelloController as helloCtrl'>
-  <!-- ... -->
-  <p>
-    <input ng-model='helloCtrl.newPerson.firstName' placeholder='First' />
-    <input ng-model='helloCtrl.newPerson.lastName' placeholder='Last' />
-    <button type='button' ng-click='helloCtrl.addPerson()'>Add</button>
-  </p>
-</div>
-```
-
-Now add that function to the controller:
-
-```js
-angular.module('starter').controller('HelloController', function(HelloService) {
-  var helloCtrl = this;
-  // ...
-* helloCtrl.addPerson = function() {
-*   helloCtrl.people.push(helloCtrl.newPerson);
-*   helloCtrl.newPerson = {};
-* };
-});
-```
-
-The HTML is automatically updated when the new person is pushed into the array.
-Angular's two-way binding and `ng-repeat` do everything for us.
-
-
-
 ### Components
 
 Components are a **special kind of directive** with simpler configuration and which is suitable for a **component-based application structure**.
@@ -1121,94 +1183,6 @@ angular.module('starter').controller('HelloController', function(HelloService) {
 * };
 });
 ```
-
-
-
-### Application configuration and runtime
-
-The remaining Angular elements are simple but useful:
-
-* **Constants** allow to define constant values that can serve as configuration
-* **Config functions** are run when configuring the Angular application,
-  and allow you to customize services and other elements
-* **Run functions** are run after configuration is complete,
-  before your controllers, directives and components are applied
-
-#### Constants
-
-A constant is simply a **value that can be injected** into other Angular elements.
-You define it by calling Angular's `constant()` function:
-
-```js
-angular.module('starter')`.constant('theMeaningOfLife', 42)`;
-```
-
-Simply inject it where you need it:
-
-```js
-angular.module('starter')
-  .controller('HelloController', function(HelloService, `theMeaningOfLife`) {
-    var helloCtrl = this;
-    // ...
-*   console.log('The meaning of life is ' + theMeaningOfLife);
-  });
-```
-
-#### Config functions
-
-A **config function** is called while the Angular application is being configured:
-
-```js
-angular.module('starter').config(function() {
-  // Do some stuff...
-});
-```
-
-You **cannot** inject services into a config function, as they have not been instantiated yet.
-You can however inject constants and **providers**, which can be used to customize services:
-
-```js
-angular.module('starter').config(function(`$httpProvider`, `theMeaningOfLife`) {
-  // Get the object of default headers send by $http on every request
-  var commonHeaders = `$httpProvider`.defaults.headers.common;
-  // Tell $http to always request XML from the server
-  commonHeaders.Accept = 'application/xml';
-  // Tell $http to always send the MeaningOfLife header to the server
-  commonHeaders.MeaningOfLife = `theMeaningOfLife`;
-});
-```
-
-#### Run functions
-
-A **run function** is called after the Angular application is configured but **before** your controllers, directives and components are applied:
-
-```js
-angular.module('starter').run(function(HelloService) {
-  console.log('2 times 2 equals ' + HelloService.double(2));
-});
-```
-
-You can use it to perform tasks that should be run once when your application starts.
-
-
-
-## Scope hierarchy
-
-Many directives in Angular create a **new scope**, like `ng-controller` or `ng-repeat`.
-Child scopes **inherit properties from their parent scope**.
-
-<p class='center'><img src='images/scope-hierarchy.png' /></p>
-
-You can see it in action [here][angular-codepen-scope-hierarchy].
-
-
-
-### Scopes and components
-
-When you define a component, you create an **isolated scope** which **does not inherit** from the parent scope.
-Your component can only communicate with the parent view through **inputs** and **outputs**.
-
-You can see it in action [here][angular-codepen-scope-components].
 
 
 
@@ -1547,71 +1521,6 @@ it's good practice to **isolate each part into a component**:
 
 
 
-### Dependency injection and minification
-
-**Minification** is the process of **removing all unnecessary characters** from source code **without changing its functionality**.
-Take the following code as an example:
-
-```js
-var numbers = [];
-for (var i = 0; i < 20; i++) {
-  numbers[i] = i;
-}
-```
-
-It can be rewritten like this:
-
-```js
-for(var a=[i=0];++i<20;a[i]=i);
-```
-
-Although much less readable, minified code can be much smaller.
-Minification tools are often used to **reduce file size**, especially when downloading a rich Internet application's **JavaScript files**.
-
-#### Dependency injection is broken by minification
-
-Angular relies on **variable names** to perform dependency injection by default:
-
-```js
-.controller('HelloController', function(`HelloService`) {
-  var helloCtrl = this;
-  helloCtrl.double = `HelloService`.double;
-});
-```
-
-This code **will not work if variable names are minified**:
-
-```js
-.controller('HelloController',function(`a`){
-var b=this;b.double=`a`.double;
-});
-```
-
-How would Angular know that variable `a` should be your `HelloService`?
-
-#### Inline array annotation
-
-When you know your code is going to be minified, you should use the **inline array annotation** to declare your injected parameters:
-
-```js
-.controller('HelloController', `[ 'HelloService', function(HelloService) {`
-  var helloCtrl = this;
-  helloCtrl.double = HelloService.double;
-`}]`);
-```
-
-That way, even when your variables are minified, the **names in the inline array** will tell Angular what you need to inject:
-
-```js
-.controller('HelloController',[`'HelloService'`,function(`a`){
-var b=this;b.double=`a`.double;
-}]);
-```
-
-You will often find the inline array annotation in examples as it is the recommended dependency injection syntax.
-
-
-
 ## Resources
 
 **Documentation**
@@ -1649,9 +1558,13 @@ You will often find the inline array annotation in examples as it is the recomme
 [angular-directives-list]: https://docs.angularjs.org/api/ng/directive
 [angular-docs-component]: https://angular.io/api/core/Component
 [angular-docs-directive]: https://angular.io/api/core/Directive
+[angular-docs-injectable]: https://angular.io/api/core/Injectable
+[angular-docs-ng-class]: https://angular.io/api/common/NgClass
 [angular-docs-ng-for]: https://angular.io/api/common/NgForOf
 [angular-docs-ng-if]: https://angular.io/api/common/NgIf
 [angular-docs-ng-module]: https://angular.io/api/core/NgModule
+[angular-docs-ng-plural]: https://angular.io/api/common/NgPlural
+[angular-docs-ng-style]: https://angular.io/api/common/NgStyle
 [angular-docs-ng-switch]: https://angular.io/api/common/NgSwitch
 [angular-element]: https://docs.angularjs.org/api/ng/function/angular.element
 [angular-form-controller]: https://docs.angularjs.org/api/ng/type/form.FormController
@@ -1662,10 +1575,12 @@ You will often find the inline array annotation in examples as it is the recomme
 [angular-promises]: ../angular-promises/
 [angular-starter]: https://github.com/MediaComem/comem-angular-starter#readme
 [angular-structural-directives]: https://angular.io/guide/structural-directives
+[angular-testing]: https://angular.io/guide/testing
 [angular-2-series-components]: http://blog.ionic.io/angular-2-series-components/
 [chrome]: https://www.google.com/chrome/
 [chrome-dev]: https://developers.google.com/web/tools/chrome-devtools/console/
 [css-attribute-selector]: https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors
+[di]: https://en.wikipedia.org/wiki/Dependency_injection
 [html-history-api]: https://developer.mozilla.org/en-US/docs/Web/API/History_API
 [html-input]: https://www.w3schools.com/tags/tag_input.asp
 [jquery]: http://jquery.com
@@ -1673,7 +1588,8 @@ You will often find the inline array annotation in examples as it is the recomme
 [js-classes]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
 [js-closures]: ../js-closures/
 [js-promises]: ../js-promises/
+[ioc]: https://en.wikipedia.org/wiki/Inversion_of_control
 [minification]: https://en.wikipedia.org/wiki/Minification_(programming)
-[typescript]: https://www.typescriptlang.org
-[typescript-subject]: ../ts
+[ts]: https://www.typescriptlang.org
+[ts-subject]: ../ts
 [web-components]: https://developer.mozilla.org/en-US/docs/Web/Web_Components
