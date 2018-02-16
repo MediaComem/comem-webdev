@@ -747,7 +747,7 @@ You don't have to escape anything. To insert variables inside the string, use `$
 
 
 
-## Array functions
+## Manipulating arrays
 
 Arrays in JavaScript are objects and provide you with a [boatload of methods][array-functions] to manipulate items:
 
@@ -790,6 +790,28 @@ let starships = ["NX-01", "NCC-1701", "NCC-1701 D", "NCC-1764", "NCC-74656"];
 let enterprises = starships.slice(0, 3);
 console.log(enterprises); // ["NX-01", "NCC-1701", "NCC-1701 D"]
 ```
+
+### The `for...of` loop
+
+**ES6**'s `for...of` loop is a new, simpler way of **iterating over all elements** of an array:
+
+```js
+let fruits = [ 'apple', 'pear' ];
+
+// Classic "for" loop
+for (let i = 0; i < fruits.length; i++) {
+  let fruit = fruits[i];
+  console.log('fruit: ' + fruit);
+}
+
+// Equivalent "for...of" loop
+for (let fruit of fruits) {
+  console.log('fruit: ' + fruit);
+}
+```
+
+The `for...of` loop is actually not limited to arrays:
+it can iterate over any [iterable object][js-iterable] such as Map, Set, etc.
 
 
 
@@ -942,6 +964,8 @@ console.log(crew);
 [js-async-iteration]: http://2ality.com/2016/10/asynchronous-iteration.html
 [js-generators]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators
 [js-imports]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
+[js-iterable]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
+[js-loops]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration
 [js-promise]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [js-proxy]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
 [js-shared-memory]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer
