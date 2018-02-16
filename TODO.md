@@ -30,11 +30,9 @@
 
 ## Subjects
 
-* Angular
-  * Observables
-  * Dependency injection
-* Typescript
-  * Automatic field declaration in constructor
+* JavaScript
+  * async/await
+  * spread operator
 * Ionic
   * Navigation
 
