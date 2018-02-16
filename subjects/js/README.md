@@ -818,7 +818,7 @@ Note that you **cannot** put a JavaScript function in a JSON object.
 
 ### Example
 
-Here is an example of a **JavaScript object**, and it's **description in JSON**:
+Here is an example of a **JavaScript object**, and its **description in JSON**:
 
 <!-- slide-column -->
 
