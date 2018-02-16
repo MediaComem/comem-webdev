@@ -95,12 +95,12 @@ In server-side code running with the latest **Node.js** versions, all **ES6** fe
 <!-- slide-column 70 -->
 
 ```js
-var aString = "HEIG-VD";
-var aNumber = 3.12;
-var aBoolean = true;
-var nullValue = null;
-var undefinedValue;
-var aSymbol = Symbol('foo');
+let aString = "HEIG-VD";
+let aNumber = 3.12;
+let aBoolean = true;
+let nullValue = null;
+let undefinedValue;
+let aSymbol = Symbol('foo');
 
 console.log(typeof aString); // "string"
 console.log(typeof aNumber); // "number"
@@ -142,7 +142,7 @@ The types are:
 
 ```js
 // Let's create an object
-var person = {
+let person = {
   firstName: 'John',
   lastName: 'Doe'
 };
@@ -150,14 +150,14 @@ var person = {
 // We can dynamically add properties
 person.gender = 'male';
 
-var property = 'zip';
+let property = 'zip';
 person[property] = 1446;
 
 // And delete them
 delete person.firstName;
 
 // And list them
-for (var key in person) {
+for (let key in person) {
   console.log(key + ': ' + person[key]);
 }
 ```
@@ -182,12 +182,12 @@ They are list-like objects with numeric keys.
 
 ```js
 // Let's create an array
-var fruits = [ 'apple', 'pear' ];
+let fruits = [ 'apple', 'pear' ];
 
 console.log(typeof fruits); // "object"
 
 // Iterate over it
-for (var i = 0; i < fruits.length; i++) {
+for (let i = 0; i < fruits.length; i++) {
   console.log('fruit ' + i + ' is ' + fruits[i]);
 }
 
@@ -205,7 +205,7 @@ Values have a type, but **variables don't**.
 When you declare a variable, you don't specify a type.
 
 ```js
-var aVariable = "aString";
+let aVariable = "aString";
 console.log(typeof aVariable); // "string"
 
 aVariable = 3.12;
@@ -263,7 +263,7 @@ if (0) {
 This can cause weird bugs sometimes:
 
 ```js
-var countdown = "";
+let countdown = "";
 if (countdown == 0) {
   console.log('We are done'); // "We are done"
 }
@@ -288,7 +288,7 @@ It can be stored in variables like any other value.
 
 ```js
 // Store a function in a variable
-var hello = function(name) {
+let hello = function(name) {
   console.log('Hello ' + name + '!');
 };
 
@@ -299,7 +299,7 @@ console.log(typeof(hello)); // "function"
 hello('World'); // "Hello World!"
 
 // Store a function as an object's property
-var anObject = {
+let anObject = {
   aProperty: function() {
     return 42;
   }
@@ -308,7 +308,7 @@ var anObject = {
 // That property now holds a function as its value
 console.log(typeof(anObject.aProperty)); // "function"
 
-var value = anObject.aProperty();
+let value = anObject.aProperty();
 console.log(value); // 42
 ```
 
@@ -325,10 +325,10 @@ function makeSquareFunction() {
 }
 
 // By calling it, we get a function
-var square = makeSquareFunction();
+let square = makeSquareFunction();
 console.log(typeof(square)); // "function"
 
-var result = square(5);
+let result = square(5);
 console.log(result); // 25
 ```
 
@@ -377,7 +377,7 @@ function compute() {
 }
 
 // Call compute with "add"
-var value = compute(2, 4, add);
+let value = compute(2, 4, add);
 console.log(value); // 6
 
 // Call compute with "multiply"
@@ -397,7 +397,7 @@ These properties of functions enable powerful functional programming patterns:
 
 ```js
 // Define an array of people objects
-var people = [
+let people = [
   { firstName: 'John', lastName: 'Doe' },
   { firstName: 'John', lastName: 'Smith' },
   { firstName: 'Deborah', lastName: 'Smith' }
@@ -411,7 +411,7 @@ function getName(person) {
 // The "map" function of arrays returns an array of the same size,
 // but with each element "mapped" or "transformed" using the provided
 // function
-var lastNames = people.map(getName);
+let lastNames = people.map(getName);
 
 // We transformed an array of people into an array of last names
 console.log(lastNames); // [ "Doe", "Smith", "Smith" ]
@@ -424,14 +424,14 @@ console.log(lastNames); // [ "Doe", "Smith", "Smith" ]
 While seaching for examples on the web, you will stumble upon some strange syntax:
 
 ```js
-var result = compute(3, 4, (nb1, nb2) => nb1 / nb2);
+let result = compute(3, 4, (nb1, nb2) => nb1 / nb2);
 ```
 
 You are facing the new **ES6** syntax for functions.
 The example above is equivalent to writing:
 
 ```js
-var result = compute(3, 4, function(nb1, nb2) {
+let result = compute(3, 4, function(nb1, nb2) {
   return nb1 / nb2;
 });
 ```
@@ -449,7 +449,7 @@ The part left of the `=>` represents the **function's arguments**.
 If your function has **only one** argument, you can **omit** the parentheses:
 
 ```js
-var squareroot = compute(16, number => Math.sqrt(number));
+let squareroot = compute(16, number => Math.sqrt(number));
 ```
 
 But if your function has **no arguments**, you **MUST** add **empty parentheses**:
@@ -471,13 +471,13 @@ The `return` keyword is **implicit** with one-line bodies that have no brackets:
 
 ```js
 // This arrow function will return the square root of the number
-var squareroot = compute(16, number => Math.sqrt(number));
+let squareroot = compute(16, number => Math.sqrt(number));
 ```
 
 If the body has **more than one line**, you **MUST add brackets** `{}` around it (_and use the `return` keyword if necessary_):
 
 ```js
-var square = compute(4, number => {
+let square = compute(4, number => {
   let result = number * number;
   return number;
 });
@@ -494,7 +494,7 @@ All you have to do is call the function with `new` like in mose object-oriented 
 function Starship() {
 }
 
-var discovery = new Starship();
+let discovery = new Starship();
 console.log(discovery); // {}
 console.log(discovery instanceof Starship); // true
 ```
@@ -517,7 +517,7 @@ function Starship(name, designation) {
 * this.designation = designation;
 }
 
-var discovery = new Starship("Discovery", "NCC-1031");
+let discovery = new Starship("Discovery", "NCC-1031");
 ```
 
 Now, if we log this new object, we'll see:
@@ -720,13 +720,13 @@ In JavaScript, you (now) have 3 ways to use strings:
 
 ```js
 // With single quotes: '
-var string = 'I\'m your "Wurst" nightmare: ' + worstNightmare;
+let string = 'I\'m your "Wurst" nightmare: ' + worstNightmare;
 ```
 You have to **escape** all other single quotes, and use `+` to concatenate.
 
 ```js
 // With double quotes: "
-var string = "I'm your \"Wurst\" nightmare: " + worstNightmare;
+let string = "I'm your \"Wurst\" nightmare: " + worstNightmare;
 ```
 You have to escape all other double quotes, and use `+` to concatenate.
 
@@ -734,7 +734,7 @@ You have to escape all other double quotes, and use `+` to concatenate.
 
 ```js
 // With backticks (template literals): `
-var string = `I'm your "Wurst" nightmare: ${worstNightmare}`;
+let string = `I'm your "Wurst" nightmare: ${worstNightmare}`;
 ```
 
 You don't have to escape anything. To insert variables inside the string, use `${variable}`.
@@ -761,7 +761,7 @@ Function     | Effect
 `.forEach()`
 
 ```js
-var crew = ["Jonathan", "T'Pol", "Trip", "Malcolm", "Sato", "Travis"];
+let crew = ["Jonathan", "T'Pol", "Trip", "Malcolm", "Sato", "Travis"];
 crew.forEach(function(element, index) {
   console.log("Hello, my name is " + element + ", and I'm n°" + index);
 });
@@ -770,8 +770,8 @@ crew.forEach(function(element, index) {
 `.find()`
 
 ```js
-var ages = [3, 10, 19, 25];
-var adult = ages.find(function(age) {
+let ages = [3, 10, 19, 25];
+let adult = ages.find(function(age) {
   return age >= 18;
 });
 console.log(adult); // 19
@@ -780,9 +780,9 @@ console.log(adult); // 19
 `.slice()`
 
 ```js
-var starships = ["NX-01", "NCC-1701", "NCC-1701 D", "NCC-1764", "NCC-74656"];
+let starships = ["NX-01", "NCC-1701", "NCC-1701 D", "NCC-1764", "NCC-74656"];
 // Start at position 0, included, and end before position 3, excluded.
-var enterprises = starships.slice(0, 3);
+let enterprises = starships.slice(0, 3);
 console.log(enterprises); // ["NX-01", "NCC-1701", "NCC-1701 D"]
 ```
 
@@ -823,7 +823,7 @@ Here is an example of a **JavaScript object**, and its **description in JSON**:
 <!-- slide-column -->
 
 ```js
-var starship = {
+let starship = {
   designation: "NX-01",
   crew: 83,
   captain: {
@@ -880,8 +880,8 @@ Fortunately, JavaScript provides the **global `JSON` object** which can do it fo
 To transform a **JavaScript object to JSON text**, use `JSON.stringify()`:
 
 ```js
-var crew = {name: "T'Pol", species: "Vulcan", station: "Science Officer"};
-*var crewJson = JSON.stringify(crew);
+let crew = {name: "T'Pol", species: "Vulcan", station: "Science Officer"};
+*let crewJson = JSON.stringify(crew);
 console.log(crewJson);
 // "{"name":"T'Pol","species":"Vulcan","station":"Science Officer"}"
 ```
@@ -889,8 +889,8 @@ console.log(crewJson);
 To do the opposite, that is create a JavaScript object from JSON text, use `JSON.parse()`:
 
 ```js
-var crewJson = '{"name": "Travis", "species": "Human", "station": "Helm"}';
-*var crew = JSON.parse(crewJson);
+let crewJson = '{"name": "Travis", "species": "Human", "station": "Helm"}';
+*let crew = JSON.parse(crewJson);
 console.log(crew);
 // Object {name: "Travis", species: "Human", station: "Helm"}
 ```
