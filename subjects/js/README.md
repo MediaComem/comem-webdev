@@ -815,6 +815,164 @@ it can iterate over any [iterable object][js-iterable] such as Map, Set, etc.
 
 
 
+## Destructuring assignment
+
+<!-- slide-front-matter class: center, middle -->
+
+The destructuring assignment syntax makes it possible to **unpack values from arrays**, or **properties from objects**, into **distinct variables**.
+
+
+
+### Array destructuring
+
+<!-- slide-column -->
+
+Basic variable assignment.
+
+```js
+let foo = [ 'one', 'two', 'three' ];
+
+*let [ one, two, three ] = foo;
+console.log(one); // "one"
+console.log(two); // "two"
+console.log(three); // "three"
+```
+
+<!-- slide-column -->
+
+Equivalent without destructuring.
+
+```js
+let foo = [ 'one', 'two', 'three' ];
+
+*let one = foo[0];
+*let two = foo[1];
+*let three = foo[2];
+console.log(one); // "one"
+console.log(two); // "two"
+console.log(three); // "three"
+```
+
+<!-- slide-container -->
+
+You can also use destructuring separately from the variables' declaration:
+
+```js
+let foo = [ 'one', 'two', 'three' ];
+let one, two, three;
+
+*[ one, two, three ] = foo;
+console.log(one); // "one"
+console.log(two); // "two"
+console.log(three); // "three"
+```
+
+#### Array destructuring features & tricks
+
+Here's a few things you can do with array destructuring:
+
+```js
+// Default values
+let a, b;
+*[ a=5, b=7 ] = [ 1 ];
+console.log(a); // 1
+console.log(b); // 7
+
+// Swapping variables
+let a = 1;
+let b = 3;
+*[a, b] = [b, a];
+console.log(a); // 3
+console.log(b); // 1
+
+// Ignoring values
+*let [ a, , b ] = [ 1, 2, 3 ];
+console.log(a); // 1
+console.log(b); // 3
+
+// Assigning the rest to a variable
+*let [ a, ...b ] = [ 1, 2, 3 ];
+console.log(a); // 1
+console.log(b); // [2, 3]
+```
+
+
+
+### Object destructuring
+
+<!-- slide-column -->
+
+Basic variable assignment.
+
+```js
+let o = { p: 42, q: true };
+
+*let { p, q } = o;
+console.log(p); // 42
+console.log(q); // true
+```
+
+<!-- slide-column -->
+
+Equivalent without destructuring.
+
+```js
+let o = { p: 42, q: true };
+
+*let p = o.p;
+*let q = o.q;
+console.log(p); // 42
+console.log(q); // true
+```
+
+<!-- slide-container -->
+
+You can also use destructuring separately from the variables' declaration
+(but you have to put it within parentheses):
+
+```js
+let o = { p: 42, q: true };
+let p, q;
+
+*({ p, q } = 0);
+console.log(p); // 42
+console.log(q); // true
+```
+
+#### Object destructuring features & tricks
+
+Here's a few things you can do with object destructuring:
+
+```js
+// Assigning to new variable names
+let o = { p: 42, q: true };
+
+*let { p: foo, q: bar } = o;
+console.log(foo); // 42
+console.log(bar); // true
+
+// Default values
+*let { a = 10, b = 5 } = { a: 3 };
+console.log(a); // 3
+console.log(b); // 5
+
+// Unpacking fields from function parameters
+*function userId({id}) {
+  return id;
+}
+
+let user = { id: 42, name: 'Bob' };
+console.log('userId: ' + userId(user)); // "userId: 42"
+
+// Assigning the rest to a variable
+*let { a, b, ...rest } = { a: 10, b: 20, c: 30, d: 40 }
+console.log(a); // 10
+console.log(b); // 20
+console.log(rest); // { c: 30, d: 40 }
+```
+
+
+
 ## JSON
 
 <!-- slide-front-matter class: center, middle -->
@@ -941,12 +1099,9 @@ console.log(crew);
 
 ## TODO
 
-* `let item of list`
-* destructuring assignment
-* spread
 * classes, static
-* import/export
 * getters/setters
+* import/export
 
 
 
@@ -962,6 +1117,7 @@ console.log(crew);
 [js-arrow-functions]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
 [js-async]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
 [js-async-iteration]: http://2ality.com/2016/10/asynchronous-iteration.html
+[js-destructuring-assignment]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
 [js-generators]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators
 [js-imports]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
 [js-iterable]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
