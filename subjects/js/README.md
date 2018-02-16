@@ -68,19 +68,24 @@ It has been standardized in the [ECMAScript][es] language specification.
 
 <img src='images/timeline.png' width='100%' />
 
-**ECMAScript 2015** (also known as ECMAScript 6 or ES6) added iterators and for/of loops, Python-style [generators][js-generators] and generator expressions, [arrow functions][js-arrow-functions], binary data, typed arrays, collections (maps, sets and weak maps), [promises][js-promise], number and math enhancements, reflection, and [proxies][js-proxy].
+[**ECMAScript 2015** (also known as ECMAScript 6 or ES6)][es6] added iterators and for/of loops, Python-style [generators][js-generators] and generator expressions, [arrow functions][js-arrow-functions], binary data, typed arrays, collections (maps, sets and weak maps), [promises][js-promise], number and math enhancements, reflection, and [proxies][js-proxy].
 
-**ECMAScript 2017** (ES8) will add [async/await functions][js-async] and [shared memory and atomics][js-shared-memory].
+[**ECMAScript 2017** (ES8)][es8] added [async/await functions][js-async] and [shared memory and atomics][js-shared-memory].
+
+[**ECMAScript 2018** (ES9)][es9] will add [asynchronous iteration][js-async-iteration] and more.
 
 
 
-### JavaScript ES6 support
+### JavaScript ES6+ support
 
 There are features from ES6 that are **not yet fully supported** on all browsers.
 
-In client-side code running in the **browser**, you should stick with **ES5** or use a JavaScript compiler like [Babel][babel] to turn your ES6+ code into compatible ES5 code before releasing it.
+In client-side code running in the **browser**,
+you should stick with **ES5** or use a JavaScript compiler like [Babel][babel] or a module bundler like [Webpack][webpack]
+to turn your ES6+ code into compatible ES5 code before releasing it.
 
-In server-side code running with the latest **Node.js** versions, all **ES6** features are supported except for [imports][js-imports].
+In server-side code running with the latest **Node.js** versions,
+all **ES6+** features are supported except for [imports][js-imports].
 
 
 
@@ -927,10 +932,14 @@ console.log(crew);
 [babel]: http://babeljs.io
 [chrome]: https://www.google.com/chrome/
 [es]: https://en.wikipedia.org/wiki/ECMAScript
+[es6]: http://es6-features.org/
+[es8]: http://2ality.com/2016/02/ecmascript-2017.html
+[es9]: http://2ality.com/2017/02/ecmascript-2018.html
 [ex-function-as-argument]: http://codepen.io/AlphaHydrae/pen/dNBpPv?editors=0010
 [first-class-functions]: https://en.wikipedia.org/wiki/First-class_function
 [js-arrow-functions]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
 [js-async]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
+[js-async-iteration]: http://2ality.com/2016/10/asynchronous-iteration.html
 [js-generators]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators
 [js-imports]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
 [js-promise]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
@@ -945,3 +954,4 @@ console.log(crew);
 [push-doc]: https://www.w3schools.com/jsref/jsref_push.asp
 [slice-doc]: https://www.w3schools.com/jsref/jsref_slice_array.asp
 [reverse-doc]: https://www.w3schools.com/jsref/jsref_reverse.asp
+[webpack]: https://webpack.js.org/
