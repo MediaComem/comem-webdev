@@ -50,18 +50,23 @@ This is a
   - [Making a GET call](#making-a-get-call)
   - [Transforming data](#transforming-data)
   - [Transforming Observable streams](#transforming-observable-streams)
-  - [Filters](#filters)
-  - [Components](#components-1)
+- [Component interaction](#component-interaction)
+  - [Adding votes to the model](#adding-votes-to-the-model)
+  - [Creating a child component](#creating-a-child-component)
+  - [Passing data from parent to child with input binding](#passing-data-from-parent-to-child-with-input-binding)
+  - [Voting on jokes](#voting-on-jokes)
+  - [Displaying global voting information](#displaying-global-voting-information)
+  - [Output from child components](#output-from-child-components)
+  - [Listening to child component events from a parent](#listening-to-child-component-events-from-a-parent)
+  - [Clearing the votes](#clearing-the-votes)
+  - [More component interaction](#more-component-interaction)
 - [Forms](#forms)
   - [HTML validations](#html-validations)
-  - [Binding to form state](#binding-to-form-state)
-- [The `$http` service](#the-http-service)
-  - [How to make requests](#how-to-make-requests)
-  - [How to parse a response](#how-to-parse-a-response)
-- [Best practices](#best-practices)
-  - [File structure](#file-structure)
-  - [Multiple controllers on one page](#multiple-controllers-on-one-page)
+  - [Creating a form](#creating-a-form)
+  - [Checking the validation state](#checking-the-validation-state)
+  - [Default Angular validators](#default-angular-validators)
 - [Resources](#resources)
+- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -146,6 +151,7 @@ Starting with version 2 of the framework (released in June 2016) you can take ad
 
 * [TypeScript][ts]: a superset of JavaScript with optional typing and the latest ECMAScript features
 * [Web components][web-components]: a way to create reusable user interface widgets
+* And more...
 
 
 
@@ -605,6 +611,7 @@ These common directives are provided by Angular out of the box:
 Let's make our application funny by adding some jokes.
 
 It's good practice to create **classes** for your **business models**.
+A TypeScript class with clearly defined fields and types will help us avoid mistakes in our code.
 Let's start with a very simple one.
 
 Angular CLI comes with scaffolding tools to help you create files.
@@ -1031,7 +1038,7 @@ $> ng generate class models/joke-response
 ```
 
 Update the generated model to reflect the **structure** of the API response.
-Since it's a nested structure, we'll need 2 classes:
+Since it's a nested structure, we'll need **2 classes**:
 
 ```ts
 export class JokeResponse {
@@ -1415,8 +1422,7 @@ Let's turn our lonely greeting input field into a proper form:
 ```html
 `<form>`
   <p>
-    <input
-      type='text' placeholder='Who are you?' [(ngModel)]='greeting'
+    <input type='text' placeholder='Who are you?' [(ngModel)]='greeting'
       `name='greeting' required` />
 
     `<button type='submit'>Submit</button>`
@@ -1480,7 +1486,7 @@ We're going to make the following improvements:
 * **Display an error message** when the greeting input field contains an invalid value.
 * **Set the input field background color to red** if it contains an invalid value.
 
-#### Checking whether the form is valid in code
+#### Prevent the form's submission
 
 In Angular, any `<form>` tag is enriched by the [`NgForm`][angular-docs-ng-form] directive.
 You can retrieve the instance of the directive attached to the form by using a [**template reference variable**][angular-template-reference-variable]
@@ -1507,151 +1513,139 @@ displayGreeting(`form: NgForm`) {
 }
 ```
 
-#### Disabling the submit button if the form is invalid
+#### Disable the submit button
 
-As you've seen, the template reference variable is available in the template itself,
+The `#greetingForm` template reference variable is already available in the template from the previous modification,
 since we passed it to `displayGreeting()` as an argument.
 
-You can also bind other template elements to it or to its attributes.
-We'll do that to disable the submit button when the form is invalid:
+You can also bind it to DOM elements or their attributes elsewhere in the template.
+
+This time, we'll use [`NgForm`][angular-docs-ng-form]'s `invalid` attribute.
+We simply have to bind the value of the `<button>` tag's `disabled` attribute to it:
+
+* When the form is **invalid** (`greetingForm.invalid` is true), the button should be **disabled** (`disabled` should be true).
+* When the form is **valid** (`greetingForm.invalid` is false), the button should **not be disabled** (`disabled` should be false).
 
 ```html
 <button type='submit' `[disabled]='greetingForm.invalid'`>Submit</button>
 ```
 
-### Foo
+#### Display an error message
+
+We've seen that the `<form>` tag is **enriched** with the [`NgForm`][angular-docs-ng-form] **directive**,
+and that it's possible to **retrieve that directive** to gain access to the **form's validation state**.
+
+You can do the same with the `<input>` tag, by retrieving the field's [`NgModel`][angular-docs-ng-model]'s directive
+(which you applied by using `[(ngModel)]='expression'`):
+
+```html
+<input type='text' placeholder='Who are you?' [(ngModel)]='greeting'
+  name='greeting' required `#greetingInput='ngModel'` />
+```
+
+The `NgModel` directive also has the `valid` and `invalid` attributes,
+indicating whether that particular field is valid.
+All we have to do is add an error message to the form, and, through judicious use of our old friend the `NgIf` directive,
+only display the message when the field is invalid.
 
 ```html
 <form #greetingForm='ngForm' (submit)='displayGreeting(greetingForm)'>
-  <p>
-    <input type='text' placeholder='Who are you?' [(ngModel)]='greeting' name='greeting' #greetingInput='ngModel' required />
-    <button type='submit' [disabled]='greetingForm.invalid'>Submit</button>
-  </p>
-  <p *ngIf='greetingInput.invalid && greetingInput.dirty'>
-    Name is required
-  </p>
+  <!-- ... -->
+* <p *ngIf='greetingInput.invalid'>
+*   Name is required
+* </p>
 </form>
-<p *ngIf='displayedGreeting'>
-  {{ hello(displayedGreeting) }}
+```
+
+##### Dirty, pristine, touched, untouched
+
+That's nice, but the error message is displayed right away.
+It makes sense, since the **initial value** of the input field's **is actually invalid**.
+But that's not very user-friendly.
+Ideally, we would want the error message to be displayed **only once the user has interacted with the form**.
+
+Enter the following `NgForm` and `NgModel` attributes:
+
+* `dirty` - A control is **dirty** if the user has **changed its value**.
+* `pristine` - A control is **pristine** if the user has **not yet changed its value** (the opposite of `dirty`).
+* `touched` - A control is **touched** if the user has triggered a **[`blur`][blur-event] event** on it.
+* `untouched` - A control is **untouched** if the user has **not yet** triggered a **[`blur`][blur-event] event** on it (the opposite of `touched`).
+
+Make the following change to only display the error message after the user has started typing:
+
+```html
+<p *ngIf='greetingInput.invalid` && greetingInput.dirty`'>
+  Name is required
 </p>
 ```
 
-```ts
-// ...
-export class AppComponent {
-  // ...
-  greeting: string;
-* displayedGreeting: string;
-  // ...
+#### Set the input field background color to red
 
-  displayGreeting(form: NgForm) {
-    if (form.valid) {
-      this.displayedGreeting = this.greeting;
-    }
-  }
+Angular automatically **mirrors** many `NgModel` **properties** onto the `<input>` tag as **CSS classes**.
+You can use these classes to **style** form elements according to the state of the form.
+
+These are some of the supported classes ([full list][angular-form-control-status-classes]):
+
+* `.ng-valid` or `.ng-invalid` is applied depending on whether the value is valid
+* `.ng-pristine` or `.ng-dirty` is applied depending on whether the user has changed the value
+* `.ng-untouched` or `.ng-touched` is applied depending on whether the user has triggered `blur` event
+
+So when our field is invalid and dirty, it will have both the `.ng-invalid` and `.ng-dirty` CSS classes added to it.
+All you need to do is modify `src/app/app.component.css` to add a background color to input fields with this combination of classes:
+
+```css
+input.ng-invalid.ng-dirty {
+  background-color: #ffc0c0;
 }
 ```
 
+### Default Angular validators
 
+These are some of the validators provided **out of the box** by Angular:
 
-### Binding to form state
+* [`email`][angular-docs-email-validator] - Validates that a string is a valid e-mail address.
+* [`min`][angular-docs-min-validator] & [`max`][angular-docs-max-validator] - Validate that a number is within the specified bound(s).
+* [`min-length`][angular-docs-min-length-validator] & [`max-length`][angular-docs-max-length-validator] - Validate that a string's length is within the specified bound(s).
+* [`pattern`][angular-docs-pattern-validator] - Validates that a value matches a regular expression.
+* [`required`][angular-docs-required-validator] - Validates that a value is present.
 
-Any form in an Angular application is an instance of [FormController][angular-form-controller].
-Any input with the `ng-model` directive is an instance of [NgModelController][angular-ng-model-controller].
-By adding a `name` attribute to these elements, you can **bind form state to the scope**:
-
-```html
-<form `name='userForm'` ng-submit='submit()' novalidate>
-  <input type='text' ng-model='user.name' `name='name'` `required` />
-  <div ng-if='`userForm.name.$error.required`'>Tell us your name.</div>
-</form>
-```
-
-In this example, adding `name='userForm'` to the form **puts the `userForm` variable in the scope**:
-this is the `FormController` instance.
-
-Adding `name='name'` to the form field **puts the `userForm.name` variable in the scope**:
-this is the `NgModelController` instance.
-
-#### Form and `ng-model` controllers
-
-Form and `ng-model` controllers have the following useful properties:
-
-Ctrl       | Property     | Description
-:---       | :---         | :---
-Form       | `$pristine`  | True if the user has not interacted with the form
-Form       | `$dirty`     | True if the user has interacted with the form
-Form       | `$valid`     | True if all inputs are valid
-Form       | `$invalid`   | True if at least one input is invalid
-Form       | `$pending`   | True if an asynchronous validation is pending
-Form       | `$submitted` | True if the form has been submitted (even if invalid)
-`ng-model` | `$error`     | An object with all failing validations as keys
-`ng-model` | `$untouched` | True if the input has not lost focus yet
-`ng-model` | `$touched`   | True if the input has lost focus
-`ng-model` | `$pristine`  | True if the user has not interacted with the input
-`ng-model` | `$dirty`     | True if the user has interacted with the input
-`ng-model` | `$valid`     | True if the input has no errors
-`ng-model` | `$invalid`   | True if there is at least one error for the input
-
-#### Complete validation example
+Here's a few usage examples:
 
 ```html
-<form `name='userForm'` ng-submit='submit()' novalidate>
-  <label>
-    Name:
-    <input type='text' ng-model='user.name' `name='name'` required minlength=2 />
-  </label>
-  <div ng-if='`userForm.name.$dirty`'>
-    <div ng-if='`userForm.name.$error.required`'>Tell us your name.</div>
-    <div ng-if='`userForm.name.$error.minlength`'>Your name is too short.</div>
-  </div>
-
-  <label>
-    E-mail:
-    <input type='email' ng-model='user.email' `name='email'` required />
-  </label>
-  <div ng-if='`userForm.email.$dirty`'>
-    <span ng-if='`userForm.email.$error.required`'>Tell us your e-mail.</span>
-    <span ng-if='`userForm.email.$error.email`'>This is not a valid e-mail.</span>
-  </div>
-
-  <input type='submit' ng-disabled='`userForm.$invalid`' value='Save' />
-</form>
+<input `type='email'` name='email' />
+<input type='number' name='age' `min='3' max='10'` />
+<input type='text' name='firstName' `min-length='1' max-length='50'` />
+<input type='text' name='lastName' `pattern='[a-zA-Z ]*'` />
+<input type='text' name='occupation' `required` />
 ```
 
-See it in action [here][angular-codepen-form-validation].
-Read the [documentation][angular-forms] to learn more.
+#### Custom validators
 
-#### Custom synchronous validators
+These validators are nice, but you might need **more complex validations**.
 
-AngularJS provides basic implementation for most common HTML 5 validations,
-but sometimes you need to add your own.
-You can do that by defining a **validation directive**:
+That's why Angular allows you to implement [custom validators][angular-custom-validators].
+Here's an example of a validator that checks whether a string is all uppercase or all lowercase:
 
-```js
-var INTEGER_REGEXP = /^-?\d+$/;
-app.directive('integer', function() {
-  return {
-    `require: 'ngModel',` // Gives access to the ng-model controller
-    link: function(scope, element, attrs, `ngModelCtrl`) {
-      `ngModelCtrl.$validators.integer` = function(modelValue, viewValue) {
-        if (ngModelCtrl.$isEmpty(modelValue)) {
-          return true; // Consider an empty value to be valid
-        }
+```ts
+export function uniformCaseValidator(upper: boolean): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} => {
 
-        // Return true if the string value is an integer
-        `return INTEGER_REGEXP.test(viewValue);`
+    const lowercase = control.value.toLowerCase() === control.value;
+    const uppercase = control.value.toUpperCase() === control.value;
+    if (upper && !uppercase) || (!upper && !lowercase)) {
+      // The value is invalid.
+      return { // Return an error named after the validator.
+        uniformCase: { value: control.value }
       };
     }
+
+    return null; // All is well, there is no error.
   };
-});
+}
 ```
 
-Using it is as simple as applying the directive as an attribute:
-
-```html
-<input type='number' ng-model='size' name='size' min='0' max='10' `integer` />
-```
+It takes a bit more code than that to register the validator in order to use it in templates.
+You can find a full example [in the documentation][angular-custom-validators].
 
 
 
@@ -1679,11 +1673,13 @@ Using it is as simple as applying the directive as an attribute:
 ## TODO
 
 * Explain `[attr]` & `(event)`
-* Enrich forms section
 * Move directive section
 * Pipes
 * Get HTTP response
+* Mention async validators
 * Mention reactive forms
+* Observable error example
+* Prune references at bottom
 
 
 
@@ -1700,35 +1696,47 @@ Using it is as simple as applying the directive as an attribute:
 [angular-component-interaction]: https://angular.io/guide/component-interaction
 [angular-component-styles]: https://angular.io/guide/component-styles
 [angular-components]: https://docs.angularjs.org/guide/component
+[angular-custom-validators]: https://angular.io/guide/form-validation#custom-validators
 [angular-directives]: https://docs.angularjs.org/guide/directive
 [angular-directives-list]: https://docs.angularjs.org/api/ng/directive
 [angular-docs-component]: https://angular.io/api/core/Component
 [angular-docs-directive]: https://angular.io/api/core/Directive
+[angular-docs-email-validator]: https://angular.io/api/forms/EmailValidator
 [angular-docs-event-emitter]: https://angular.io/api/core/EventEmitter
 [angular-docs-http-client]: https://angular.io/guide/http
 [angular-docs-injectable]: https://angular.io/api/core/Injectable
 [angular-docs-input]: https://angular.io/api/core/Input
+[angular-docs-max-length-validator]: https://angular.io/api/forms/MaxLengthValidator
+[angular-docs-min-length-validator]: https://angular.io/api/forms/MinLengthValidator
+[angular-docs-max-validator]: https://angular.io/api/forms/Validators#max
+[angular-docs-min-validator]: https://angular.io/api/forms/Validators#min
 [angular-docs-ng-class]: https://angular.io/api/common/NgClass
 [angular-docs-ng-for]: https://angular.io/api/common/NgForOf
 [angular-docs-ng-if]: https://angular.io/api/common/NgIf
 [angular-docs-ng-form]: https://angular.io/api/forms/NgForm
+[angular-docs-ng-model]: https://angular.io/api/forms/NgModel
 [angular-docs-ng-module]: https://angular.io/api/core/NgModule
 [angular-docs-ng-plural]: https://angular.io/api/common/NgPlural
 [angular-docs-ng-style]: https://angular.io/api/common/NgStyle
 [angular-docs-ng-switch]: https://angular.io/api/common/NgSwitch
 [angular-docs-output]: https://angular.io/api/core/Output
+[angular-docs-pattern-validator]: https://angular.io/api/forms/PatternValidator
+[angular-docs-required-validator]: https://angular.io/api/forms/RequiredValidator
 [angular-element]: https://docs.angularjs.org/api/ng/function/angular.element
+[angular-form-control-status-classes]: https://angular.io/guide/form-validation#control-status-css-classes
 [angular-form-controller]: https://docs.angularjs.org/api/ng/type/form.FormController
 [angular-forms]: https://docs.angularjs.org/guide/forms
 [angular-guide]: https://docs.angularjs.org/guide
 [angular-input]: https://docs.angularjs.org/api/ng/directive/input
 [angular-ng-model-controller]: https://docs.angularjs.org/api/ng/type/ngModel.NgModelController
 [angular-promises]: ../angular-promises/
+[angular-reactive-forms]: https://angular.io/guide/reactive-forms
 [angular-starter]: https://github.com/MediaComem/comem-angular-starter#readme
 [angular-structural-directives]: https://angular.io/guide/structural-directives
 [angular-template-reference-variable]: https://angular.io/guide/template-syntax#ref-vars
 [angular-testing]: https://angular.io/guide/testing
 [angular-2-series-components]: http://blog.ionic.io/angular-2-series-components/
+[blur-event]: https://developer.mozilla.org/en-US/docs/Web/Events/blur
 [chrome]: https://www.google.com/chrome/
 [chrome-dev]: https://developers.google.com/web/tools/chrome-devtools/console/
 [css-attribute-selector]: https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors
