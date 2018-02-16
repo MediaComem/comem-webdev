@@ -398,7 +398,7 @@ Use the console in your browser's developer tools to see what the `console.log` 
 
 ### Transforming data with functions
 
-These properties of functions enable powerful functional programming patterns:
+These properties of functions enable powerful **functional programming** patterns:
 
 ```js
 // Define an array of people objects
