@@ -1,7 +1,6 @@
 import subject from 'courses-md/dist/client';
+import $ from 'jquery';
 import tippy from 'tippy.js';
-
-const $ = require('imports-loader?$=jQuery!jquery/dist/jquery');
 
 const MODES = [
   // The memoir starts in its initial state and starts drawing 1 second after the slide is displayed.
@@ -110,11 +109,14 @@ export class GitMemoirController {
     this.drawer = new gitMemoir.Drawer(memoir, {
       svg: $svg[0]
     });
+    //this.drawer.setDebugging(true);
 
-    this.drawInitialStep();
+    const drawingPromise = this.drawInitialStep();
 
     if (this.mode == 'autoplay') {
-      this.drawNextSteps();
+      drawingPromise.then(() => {
+        this.drawNextSteps();
+      });
     }
 
     this.$playButton.on('click', () => this.drawNextSteps());
@@ -125,8 +127,6 @@ export class GitMemoirController {
   drawInitialStep() {
 
     const drawOptions = {
-      immediate: true,
-      initialDelay: 0,
       stepDuration: 0
     };
 
@@ -163,12 +163,14 @@ export class GitMemoirController {
       this.updateControls();
     };
 
-    this.draw({
-      immediate: !!instant,
+    const drawOptions = {
+      //immediate: !!instant,
       chapters: 1,
       initialDelay: instant ? 0 : 1000,
       stepDuration: instant ? 0 : 1000
-    }).then(done, done);
+    };
+
+    this.draw(drawOptions).then(done, done);
   }
 
   undraw() {

@@ -1,6 +1,11 @@
 import subject from 'courses-md/dist/client';
+import { Drawer, MemoirBuilder } from 'git-memoir';
 
-window.gitMemoir = require('exports-loader?gitMemoir!git-memoir/dist/git-memoir');
+window.gitMemoir = {
+  Drawer: Drawer,
+  MemoirBuilder: MemoirBuilder
+};
+
 window.subject = subject;
 
 import { GitMemoirController } from './git-memoir';
