@@ -1,7 +1,7 @@
 import subject from 'courses-md/dist/client';
 import tippy from 'tippy.js';
 
-const $ = subject.jQuery;
+const $ = require('imports-loader?$=jQuery!jquery/dist/jquery');
 
 const MODES = [
   // The memoir starts in its initial state and starts drawing 1 second after the slide is displayed.

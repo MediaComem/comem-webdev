@@ -17,17 +17,12 @@ import './assets/git-memoir.css';
 
 import heigLogo from './assets/heig.png';
 
-const $ = subject.jQuery;
-
-$(function() {
-
-  subject.setLogo({
-    linkUrl: 'https://heig-vd.ch',
-    imageUrl: heigLogo,
-    height: 60
-  });
-
-  subject.start();
-
-  GitMemoirController.start();
+subject.setLogo({
+  linkUrl: 'https://heig-vd.ch',
+  imageUrl: heigLogo,
+  height: 60
 });
+
+subject
+  .afterStart(() => GitMemoirController.start())
+  .start();
