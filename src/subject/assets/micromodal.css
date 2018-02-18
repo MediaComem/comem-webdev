@@ -1,0 +1,53 @@
+.micromodal {
+  display: none;
+}
+
+.micromodal.is-open {
+  display: block;
+}
+
+.micromodal.is-open .overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 10000;
+}
+
+.micromodal.is-open .container {
+  background-color: #fff;
+  margin-top: 10vh;
+  padding: 30px;
+  width: 90vw;
+  max-height: 90vh;
+  border-radius: 4px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.micromodal.is-open .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+.micromodal.is-open .title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.25;
+  color: #00449e;
+  box-sizing: border-box;
+}
+
+.micromodal.is-open .source iframe {
+  width: 100% !important;
+  margin: 0 !important;
+}

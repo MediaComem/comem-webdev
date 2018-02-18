@@ -10,6 +10,9 @@ const config = {
     highlightSpans: true,
     countIncrementalSlides: false
   },
+  subjectScripts: [
+    'https://embed.runkit.com'
+  ],
   publish: {
     gitUrl: 'git@github.com:MediaComem/comem-webdev-docs.git',
     baseUrl: 'https://mediacomem.github.io/comem-webdev-docs',

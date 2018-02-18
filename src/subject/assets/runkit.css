@@ -1,0 +1,7 @@
+code.runkit {
+  cursor: pointer;
+}
+
+code.runkit:hover {
+  background-color: #ffffd0;
+}
