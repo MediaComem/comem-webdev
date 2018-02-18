@@ -65,6 +65,8 @@ export class GitMemoirController {
       this.chapters = 1;
     }
 
+    this.controlsEnabled = !this.$element.attr('controls') || this.$element.attr('controls').match(/^(1|y|yes|t|true)$/i);
+
     this.memoirFactory = subject.gitMemoirs[this.name];
     if (!this.memoirFactory) {
       throw new Error(`No memoir found named "${this.name}"; assign a factory function to "subject.gitMemoirs.${this.name}"`);
@@ -93,44 +95,50 @@ export class GitMemoirController {
       .attr('height', this.svgHeight)
       .appendTo(this.$element);
 
-    const $controls = $('<div class="controls" />').appendTo(this.$element);
-    this.$playButton = $('<button type="button" class="play tooltip" title="Play"><i class="fa fa-play" /></button>').appendTo($controls);
+    if (this.controlsEnabled) {
 
-    this.$modeButton = $('<button type="button" class="mode tooltip" data-dynamictitle="true"><i class="fa" /></button>');
-    if (isLocalStorageAvailable()) {
-      this.$modeButton.appendTo($controls);
+      const $controls = $('<div class="controls" />').appendTo(this.$element);
+      this.$playButton = $('<button type="button" class="play tooltip" title="Play"><i class="fa fa-play" /></button>').appendTo($controls);
+
+      this.$modeButton = $('<button type="button" class="mode tooltip" data-dynamictitle="true"><i class="fa" /></button>');
+      if (isLocalStorageAvailable()) {
+        this.$modeButton.appendTo($controls);
+      }
+
+      this.$backButton = $('<button type="button" class="back tooltip" title="Back"><i class="fa fa-backward" /></button>"').appendTo($controls);
+
+      this.updateControls();
+      this.createTooltips();
     }
-
-    this.$backButton = $('<button type="button" class="back tooltip" title="Back"><i class="fa fa-backward" /></button>"').appendTo($controls);
-
-    this.updateControls();
-    this.createTooltips();
 
     this.drawer = new gitMemoir.Drawer(memoir, {
       svg: $svg[0]
     });
-    //this.drawer.setDebugging(true);
+    this.drawer.setDebugging(true);
 
     const drawingPromise = this.drawInitialStep();
 
-    if (this.mode == 'autoplay') {
+    if (this.controlsEnabled && this.mode == 'autoplay') {
       drawingPromise.then(() => {
         this.drawNextSteps();
       });
     }
 
-    this.$playButton.on('click', () => this.drawNextSteps());
-    this.$modeButton.on('click', () => this.cycleMode());
-    this.$backButton.on('click', () => this.undraw());
+    if (this.controlsEnabled) {
+      this.$playButton.on('click', () => this.drawNextSteps());
+      this.$modeButton.on('click', () => this.cycleMode());
+      this.$backButton.on('click', () => this.undraw());
+    }
   }
 
   drawInitialStep() {
 
     const drawOptions = {
+      immediate: true,
       stepDuration: 0
     };
 
-    if (!this.played && this.mode == 'visualization') {
+    if (!this.played && (this.mode == 'visualization' || !this.controlsEnabled)) {
       drawOptions.chapter = this.chapter;
       this.played = true;
     } else {
@@ -146,7 +154,7 @@ export class GitMemoirController {
   }
 
   drawNextSteps(instant) {
-    if (this.$playButton.is('.disabled') || this.playing) {
+    if ((this.$playButton && this.$playButton.is('.disabled')) || this.playing) {
       return;
     }
 
@@ -164,7 +172,7 @@ export class GitMemoirController {
     };
 
     const drawOptions = {
-      //immediate: !!instant,
+      immediate: !!instant,
       chapters: 1,
       initialDelay: instant ? 0 : 1000,
       stepDuration: instant ? 0 : 1000
@@ -193,7 +201,12 @@ export class GitMemoirController {
         this.playing = true;
         return this.drawer.draw(options);
       })
-      .then(done, done);
+      .then(done)
+      .catch(err => {
+        console.warn(err);
+        done();
+        throw err;
+      });
 
     return this.drawingPromise;
   }
@@ -214,9 +227,11 @@ export class GitMemoirController {
   }
 
   updateControls() {
-    this.$playButton[this.playing ? 'addClass' : 'removeClass']('disabled');
-    this.$backButton[this.playing || !this.played ? 'addClass' : 'removeClass']('disabled');
-    this.updateModeButton();
+    if (this.controlsEnabled) {
+      this.$playButton[this.playing ? 'addClass' : 'removeClass']('disabled');
+      this.$backButton[this.playing || !this.played ? 'addClass' : 'removeClass']('disabled');
+      this.updateModeButton();
+    }
   }
 
   updateModeButton() {
