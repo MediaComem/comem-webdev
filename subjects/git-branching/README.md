@@ -80,7 +80,7 @@ This has many advantages:
 
 Remember that Git stores data as a series of snapshots.
 
-<img src='images/snapshots.png' width='45%' />
+<git-memoir name='internals' chapter='internals' controls='false' svg-height='137px'></git-memoir>
 
 Each **commit** contains a pointer to the snapshot of the content you staged, the author's user name and e-mail,
 and also a pointer to the previous commit.

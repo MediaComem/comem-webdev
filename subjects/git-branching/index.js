@@ -29,6 +29,36 @@
       .checkout('fix-add', { new: true });
   }
 
+  subject.gitMemoirs.internals = function() {
+    return new gitMemoir.MemoirBuilder()
+      .chapter('internals', {
+        before: (step, drawer) => {
+          drawer
+            .requireExtension(gitMemoir.horizontalLayoutExtensionPredicate)
+            .setBlobsVisible(false)
+            .setBranchesVisible(false)
+            .setTreesVisible(true);
+        }
+      })
+      .fileSystem('demo', fs => {
+        fs.write('demo/file1', 'data1')
+      })
+      .repo('demo', {}, { showInternals: false })
+      .add('file1')
+      .commit({ commit: { hash: '387f12' } })
+      .fileSystem('demo', fs => {
+        fs.write('demo/file1', 'data2')
+      })
+      .add('file1')
+      .commit({ commit: { hash: '9ab3fd' } })
+      .fileSystem('demo', fs => {
+        fs.write('demo/file1', 'data3')
+      })
+      .add('file1')
+      .commit({ commit: { hash: '4f94fa' } })
+      .memoir;
+  };
+
   subject.gitMemoirs.branchingOneLine = function() {
     return createBranchingBaseMemoir()
 
