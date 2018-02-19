@@ -1,6 +1,6 @@
 # TODO
 
-* Make home link go back to year
+* Template: auto-replace relative links with full URLs (test in generated PDF)
 * Doctoc for specific subjects
 
 * Express mongoose: ID virtual, transform
@@ -17,7 +17,6 @@
 * Glossary
 
 * You will need: code editor on all slides
-* Template: auto-replace relative links with full URLs (test in generated PDF)
 * Replace width='x%' by class='wx'
 * JavaScript truthy/falsy values
 * Link to slide form from README

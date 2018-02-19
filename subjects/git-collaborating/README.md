@@ -259,7 +259,7 @@ The `-u` option (or `--set-upstream`) tells Git to remember that you have linked
 
 <!-- slide-column 60 -->
 
-<img src='images/demo-1-git-push.png' width='100%' />
+<git-memoir name='github' chapter='bob-push' svg-height='300px'></git-memoir>
 
 <!-- slide-column 40 -->
 
@@ -308,15 +308,13 @@ The `git clone [url]` command copies the **remote** repository to your machine.
 
 <!-- slide-column 60 -->
 
-<img src='images/demo-2-git-clone.png' width='100%' />
+<git-memoir name='github' chapter='alice-pull' svg-height='400px'></git-memoir>
 
 <!-- slide-column 40 -->
 
 The entire history of the project is **pulled** (or downloaded) from the GitHub repository.
 
 Git will also automatically checkout the **master** branch in the working directory so you have something to work from.
-
-<!-- slide-container -->
 
 Again, Git has created a **remote-tracking branch** in Person B's repository,
 so that you can know what the current state of the remote is.
@@ -338,23 +336,27 @@ $> git commit -m "Shorter filenames"
 
 ### B: check the state of branches
 
-<!-- slide-column 60 -->
+<!-- slide-column 70 -->
 
-<img src='images/demo-3-local-commit.png' width='100%' />
+<git-memoir name='github' chapter='alice-commit' svg-height='275px'></git-memoir>
 
-<!-- slide-column 40 -->
+<!-- slide-column -->
 
 This is now the state of the shared repository and **Person B**'s local repository.
 
 There is a new commit in **Person B**'s repository that is not in the shared GitHub repository.
 
-<!-- slide-container -->
 
-Push it to update the shared repository:
+
+### B: push to the shared repository
+
+Push to update the shared repository:
 
 ```bash
 $> git push origin master
 ```
+
+<git-memoir name='github' chapter='alice-push' svg-height='275px'></git-memoir>
 
 
 
@@ -362,7 +364,7 @@ $> git push origin master
 
 <!-- slide-column 60 -->
 
-<img src='images/demo-4-remote-out-of-sync.png' width='100%' />
+<git-memoir name='github' chapter='bob-look' controls='false' svg-height='275px'></git-memoir>
 
 <!-- slide-column 40 -->
 
@@ -393,11 +395,11 @@ From github.com:PersonA/github-demo
    4f94ga..92fb8c  master     -> origin/master
 ```
 
-<!-- slide-column 60 -->
+<!-- slide-column 70 -->
 
-<img src='images/demo-5-git-fetch.png' width='100%' />
+<git-memoir name='github' chapter='bob-fetch' svg-height='250px'></git-memoir>
 
-<!-- slide-column 40 -->
+<!-- slide-column -->
 
 The new commit is now here and the remote-tracking branch has been updated.
 
