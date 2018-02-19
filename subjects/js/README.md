@@ -282,11 +282,11 @@ if (countdown == 0) {
 
 
 
-## JavaScript supports [first-class functions][first-class-functions]
+## JavaScript supports first-class functions
 
 <!-- slide-front-matter class: center, middle -->
 
-> "A programming language is said to have first-class functions if it treats functions as first-class citizens.
+> "A programming language is said to have [first-class functions][first-class-functions] if it treats functions as first-class citizens.
 
 > Specifically, this means the language supports **passing functions as arguments** to other functions, **returning them** as the values from other functions, and **assigning them to variables** or **storing them in data structures**."
 
