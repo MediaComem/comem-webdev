@@ -22,7 +22,7 @@ export class RunkitController {
     let disabled = false;
     let except = [];
 
-    if ($runkitConfig) {
+    if ($runkitConfig.length) {
 
       enabled = enabled || true;
       disabled = $runkitConfig.attr('disabled') !== undefined && $runkitConfig.attr('disabled') !== false;
