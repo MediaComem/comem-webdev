@@ -77,7 +77,8 @@ export class RunkitController {
     this.tip = tippy('.remark-visible .remark-slide-content .runkit[title]');
 
     this.modal = this.getModal();
-    this.$element.on('click', () => {
+    this.$element.on('click', event => {
+      event.preventDefault();
       MicroModal.show(`${this.sourceId}-modal`, {
         onShow: modal => {
 
