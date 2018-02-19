@@ -114,7 +114,7 @@ export class GitMemoirController {
     this.drawer = new gitMemoir.Drawer(memoir, {
       svg: $svg[0]
     });
-    this.drawer.setDebugging(true);
+    //this.drawer.setDebugging(true);
 
     const drawingPromise = this.drawInitialStep();
 

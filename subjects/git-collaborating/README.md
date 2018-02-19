@@ -308,7 +308,7 @@ The `git clone [url]` command copies the **remote** repository to your machine.
 
 <!-- slide-column 60 -->
 
-<git-memoir name='github' chapter='alice-pull' svg-height='400px'></git-memoir>
+<git-memoir name='github' chapter='alice-pull' svg-height='275px'></git-memoir>
 
 <!-- slide-column 40 -->
 
@@ -420,11 +420,11 @@ Fast-forward
  rename addition.js => add.js (100%)
 ```
 
-<!-- slide-column 60 -->
+<!-- slide-column 70 -->
 
-<img src='images/demo-6-git-merge.png' width='100%' />
+<git-memoir name='github' chapter='bob-merge' svg-height='240px'></git-memoir>
 
-<!-- slide-column 40 -->
+<!-- slide-column -->
 
 As expected, master has been fast-forwarded to the commit pointed to by origin/master and the working directory has been updated.
 
@@ -461,7 +461,6 @@ $> git merge origin/master
 
 **Person A** now notices that the last change breaks the calculator.
 This is because the files were renamed, but the `<script>` tags in `index.html` were not updated.
-
 Fix that bug, then commit and push the change:
 
 ```bash
@@ -470,6 +469,8 @@ $> git add index.html
 $> git commit -m "Fix bad <script> tags"
 $> git push origin master
 ```
+
+<git-memoir name='github' chapter='bob-fix' svg-height='250px'></git-memoir>
 
 
 
@@ -491,6 +492,10 @@ $> git push origin master
 <script src="addition.js"></script><script src="subtraction.js"></script>
 ```
 
+
+
+### B: push the other changes
+
 Commit and push the changes:
 
 ```bash
@@ -498,6 +503,8 @@ $> git add index.html
 $> git commit -m "Improve layout"
 $> git push origin master
 ```
+
+<git-memoir name='github' chapter='alice-fix' svg-height='250px'></git-memoir>
 
 
 
@@ -514,36 +521,66 @@ hint: (e.g., 'git pull ...') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 ```
 
-<!-- slide-column 60 -->
+<!-- slide-column 70 -->
 
-<img src='images/demo-7-b-state.png' width='100%' />
+<git-memoir name='github' chapter='alice-fix' controls='false' svg-height='250px'></git-memoir>
 
-<!-- slide-column 40 -->
+<!-- slide-column -->
 
 The push was **rejected** by the remote repository. Why?
 
 This is the state of **Person B**'s repository right now.
 
+#### B: fetch the changes
+
+Since Git tells Person B that the local copy of the remote repository is out of date, try fetching those changes:
+
+```bash
+$> git fetch origin
+```
+
+<git-memoir name='github' chapter='alice-fetch-changes' svg-height='325px'></git-memoir>
+
+#### B: try to push again
+
+```bash
+$> git push origin master
+To github.com:PersonA/github-demo.git
+ ! [rejected]        master -> master (non-fast forward)
+error: failed to push some refs to 'git@github.com:PersonA/github-demo.git'
+```
+
+<!-- slide-column 70 -->
+
+<git-memoir name='github' chapter='alice-fetch-changes' controls='false' svg-height='325px'></git-memoir>
+
+<!-- slide-column -->
+
+The push was **rejected again**!. Why?
+
+This is the state of **Person B**'s repository right now.
+
+
 
 
 ### Divergent history
 
-<!-- slide-column 60 -->
+<!-- slide-column 70 -->
 
-<img src='images/demo-8-git-fetch.png' width='100%' />
+<git-memoir name='github' chapter='alice-fetch-changes' controls='false' svg-height='325px'></git-memoir>
 
-<!-- slide-column 40 -->
+<!-- slide-column -->
 
 It's for the same reason as in the previous tutorial:
 **Person A** and **Person B**'s work have diverged from a common ancestor.
 
-If **Person B** did a `git fetch` now, this is what their repository would look like.
+A remote repository will **only accept fast-forward pushes** by default.
 
 
 
 ### B: pull changes from the shared repository
 
-**Person B** wants to fetch and merge the changes made by **Person A**.
+**Person B** wants to fetch **and** merge the changes made by **Person A**.
 Let's use the `git pull` command:
 
 ```bash
@@ -597,7 +634,7 @@ $> git commit -m "Merge origin/master"
 Now the state of **Person B**'s local repository is consistent with the state of the shared repository:
 the commit pointed to by **master** is ahead of the commit pointed to by **origin/master**.
 
-<img src='images/demo-9-b-state.png' width='80%' />
+<git-memoir name='github' chapter='alice-pull-changes' svg-height='325px'></git-memoir>
 
 
 
@@ -609,7 +646,7 @@ The push will be accepted now:
 $> git push origin master
 ```
 
-<img src='images/demo-10-git-push.png' width='80%' />
+<git-memoir name='github' chapter='alice-push-merge' svg-height='335px'></git-memoir>
 
 
 
@@ -621,7 +658,7 @@ $> git push origin master
 $> git pull origin master
 ```
 
-<img src='images/demo-11-git-pull.png' width='80%' />
+<git-memoir name='github' chapter='bob-pull-merge' svg-height='335px'></git-memoir>
 
 
 

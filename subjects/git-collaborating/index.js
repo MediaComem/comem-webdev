@@ -35,7 +35,11 @@
       .chapter('bob-push')
       .push('origin', 'master')
 
-      .chapter('alice-remote')
+      .chapter('alice-remote', {
+        before: function(step, drawer) {
+          drawer.requireExtension(gitMemoir.drawFileSystemExtensionPredicate).getViewStrategy().setHiddenFileSystems([ 'bob' ]);
+        }
+      })
       .fileSystem('alice', fs => {}, {
         /*icon: {
           svg: getComputerIcon(),
@@ -45,11 +49,7 @@
       .repo('alice-project')
       .remote.add('origin', 'github', 'shared-project')
 
-      .chapter('alice-pull', {
-        before: function(step, drawer) {
-          drawer.requireExtension(gitMemoir.drawFileSystemExtensionPredicate).getViewStrategy().setHiddenFileSystems([ 'bob' ]);
-        }
-      })
+      .chapter('alice-pull')
       .pull('origin', 'master')
 
       .chapter('alice-commit')
@@ -72,25 +72,41 @@
       .chapter('bob-merge')
       .merge('origin/master')
 
-      .chapter('box-fix')
+      .chapter('bob-fix')
       .commit({ commit: { hash: '55e12a' } })
       .push('origin', 'master')
 
-      .chapter('alice-fix')
+      .chapter('alice-fix-prepare', {
+        before: function(step, drawer) {
+          drawer.requireExtension(gitMemoir.drawFileSystemExtensionPredicate).getViewStrategy().setHiddenFileSystems([ 'bob' ]);
+        }
+      })
       .fileSystem('alice')
       .repo('alice-project')
+
+      .chapter('alice-fix')
       .commit({ commit: { hash: '102c34' } })
 
-      .chapter('alice-fetch')
+      .chapter('alice-fetch-changes')
+      .fetch({ remote: 'origin' })
+
+      .chapter('alice-pull-changes')
       .pull('origin', 'master')
 
       .chapter('alice-push-merge')
       .push('origin', 'master')
 
-      .chapter('bob-pull-merge')
+      .chapter('bob-pull-merge-prepare', {
+        before: function(step, drawer) {
+          drawer.requireExtension(gitMemoir.drawFileSystemExtensionPredicate).getViewStrategy().setHiddenFileSystems([ 'alice' ]);
+        }
+      })
       .fileSystem('bob')
       .repo('bob-project')
+
+      .chapter('bob-pull-merge')
       .pull('origin', 'master')
+
       .memoir;
   };
 })();
