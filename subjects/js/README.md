@@ -1,5 +1,7 @@
 # JavaScript
 
+<runkit global enabled='true'></runkit>
+
 Learn the basics of JavaScript, a high-level, dynamic, untyped and interpreted programming language,
 and one of the three core technologies of the web.
 
@@ -341,6 +343,8 @@ let result = square(5);
 console.log(result); // 25
 ```
 
+<runkit except='1'></runkit>
+
 Note that functions can be **anonymous** (i.e. they have no name),
 like the function returned from `makeSquareFunction`:
 
@@ -394,9 +398,7 @@ value = compute(2, 4, multiply);
 console.log(value); // 8
 ```
 
-Try to [implement it!][ex-function-as-argument]
-
-Use the console in your browser's developer tools to see what the `console.log` calls print.
+Open the **RunKit** and try to **implement it**!
 
 
 
@@ -430,6 +432,8 @@ console.log(lastNames); // [ "Doe", "Smith", "Smith" ]
 
 ### Arrow functions *(ES6)*
 
+<runkit disabled></runkit>
+
 While seaching for examples on the web, you will stumble upon some strange syntax:
 
 ```js
@@ -446,6 +450,8 @@ let result = compute(3, 4, function(nb1, nb2) {
 ```
 
 #### Arrow function arguments
+
+<runkit except='0,1'></runkit>
 
 Let's see how an arrow function is written:
 
@@ -469,6 +475,8 @@ setTimeout(() => console.log("Timeout finished"), 1000);
 ```
 
 #### Body of arrow functions
+
+<runkit disabled></runkit>
 
 ```js
 (nb1, nb2) => nb1 / nb2
@@ -527,11 +535,6 @@ function Starship(name, designation) {
 }
 
 let discovery = new Starship("Discovery", "NCC-1031");
-```
-
-Now, if we log this new object, we'll see:
-
-```js
 console.log(discovery);
 // Starship {name: "Discovery", designation: "NCC-1031"}
 ``` 
@@ -547,6 +550,8 @@ console.log(discovery);
 <!-- slide-front-matter class: center, middle -->
 
 ### Defining variables
+
+<runkit disabled></runkit>
 
 There are three ways to define a variable in JavaScript:
 
@@ -644,6 +649,8 @@ function logThings(things) {
   console.log('Last thing: ' + thing);
 }
 
+logThings([ 'apple', 'banana', 'pear' ]);
+
 // "apple"
 // "banana"
 // "pear"
@@ -651,7 +658,7 @@ function logThings(things) {
 // ReferenceError: thing is not defined
 ```
 
-It is recommended to use them instead of `var` in **ES6-compatible** environments.
+It is recommended to use them in **ES6-compatible** environments.
 
 
 
@@ -713,10 +720,10 @@ function logThings(things) {
 }
 
 var fruits = [ 'apple', 'banana', 'pear' ];
-logThings();
+logThings(fruits);
 
 // Oops, we've modified something outside of the function
-console.log(i); // 2
+console.log(i); // 3
 ```
 
 Just **don't do it**.
@@ -724,6 +731,8 @@ Just **don't do it**.
 
 
 ## String syntax
+
+<runkit disabled></runkit>
 
 In JavaScript, you (now) have 3 ways to use strings:
 
@@ -883,21 +892,21 @@ console.log(a); // 1
 console.log(b); // 7
 
 // Swapping variables
-let a = 1;
-let b = 3;
-*[a, b] = [b, a];
-console.log(a); // 3
-console.log(b); // 1
+let c = 1;
+let d = 3;
+*[c, d] = [d, c];
+console.log(c); // 3
+console.log(d); // 1
 
 // Ignoring values
-*let [ a, , b ] = [ 1, 2, 3 ];
-console.log(a); // 1
-console.log(b); // 3
+*let [ e, f ] = [ 'foo', 'bar', 'baz' ];
+console.log(e); // "foo"
+console.log(f); // "bar"
 
 // Assigning the rest to a variable
-*let [ a, ...b ] = [ 1, 2, 3 ];
-console.log(a); // 1
-console.log(b); // [2, 3]
+*let [ g, ...h ] = [ 1, 2, 3 ];
+console.log(g); // 1
+console.log(h); // [2, 3]
 ```
 
 
@@ -938,7 +947,7 @@ You can also use destructuring separately from the variables' declaration
 let o = { p: 42, q: true };
 let p, q;
 
-*({ p, q } = 0);
+*({ p, q } = o);
 console.log(p); // 42
 console.log(q); // true
 ```
@@ -967,12 +976,6 @@ console.log(b); // 5
 
 let user = { id: 42, name: 'Bob' };
 console.log('userId: ' + userId(user)); // "userId: 42"
-
-// Assigning the rest to a variable
-*let { a, b, ...rest } = { a: 10, b: 20, c: 30, d: 40 }
-console.log(a); // 10
-console.log(b); // 20
-console.log(rest); // { c: 30, d: 40 }
 ```
 
 
@@ -1028,7 +1031,7 @@ let starship = {
   ],
 * "warp.factor": 5,
 * "cloak": null
-}
+};
 ```
 
 This is a JavaScript object.

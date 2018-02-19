@@ -1,6 +1,7 @@
 import subject from 'courses-md/dist/client';
 import $ from 'jquery';
 import MicroModal from 'micromodal';
+import tippy from 'tippy.js';
 
 import { sha1 } from './utils';
 
@@ -12,9 +13,37 @@ export class RunkitController {
   }
 
   static startRunkit() {
-    $('.remark-visible .remark-slide-content code.javascript:not(.runkit)').each(function() {
+
+    const $globalRunkitConfig = $('runkit[global]');
+    let enabled = $globalRunkitConfig.length && $globalRunkitConfig.attr('enabled') && $globalRunkitConfig.attr('enabled').match(/^(1|y|yes|t|true)$/i);
+
+    const $runkitConfig = $('.remark-visible .remark-slide-content runkit:not([global])');
+
+    let disabled = false;
+    let except = [];
+
+    if ($runkitConfig) {
+
+      enabled = enabled || true;
+      disabled = $runkitConfig.attr('disabled') !== undefined && $runkitConfig.attr('disabled') !== false;
+
+      // Do not enable runkit if a <runkit> tag is found with this code block's index in its "disable" attribute (comma-separated list of indices)
+      if ($runkitConfig.attr('except')) {
+        except = except.concat($runkitConfig.attr('except').split(/\s*,\s*/).map(id => parseInt(id, 10)));
+      }
+    }
+
+    if (!enabled) {
+      return;
+    }
+
+    $('.remark-visible .remark-slide-content code.javascript:not(.runkit)').each(function(i) {
+      if (disabled || except.indexOf(i) >= 0) {
+        return;
+      }
+
       const $code = $(this);
-      new RunkitController($code).start();
+      new RunkitController($code, i).start();
     });
   }
 
@@ -29,9 +58,10 @@ export class RunkitController {
     });
   }
 
-  constructor($code) {
+  constructor($code, index) {
     this.$element = $code;
     this.$element.addClass('runkit').data('runkit-controller', this);
+    this.index = index;
   }
 
   start() {
@@ -42,15 +72,33 @@ export class RunkitController {
     this.source = this.parseCode(this.$element);
     this.sourceId = `runkit-comem-webdev-${sha1(this.source)}`;
 
+    $('<button />').addClass('runkit-button').attr('type', 'button').text('RunKit').prependTo(this.$element);
+    this.$element.attr('title', 'Click to run this code');
+    this.tip = tippy('.remark-visible .remark-slide-content .runkit[title]');
+
     this.modal = this.getModal();
     this.$element.on('click', () => {
       MicroModal.show(`${this.sourceId}-modal`, {
         onShow: modal => {
-          const $source = $(modal).find('.source');
+
+          const $modal = $(modal);
+          $modal.find('.status').text('Loading RunKit...');
+
+          const $source = $modal.find('.source');
           RunKit.createNotebook({
             element: $source[0],
             source: $source.text(),
-            onLoad: notebook => notebook.evaluate()
+            onLoad: notebook => {
+              $modal.find('.status').text('Executing...');
+              notebook.evaluate(() => {
+                setTimeout(() => {
+                  $modal.find('.status').fadeOut();
+                  $modal.find('.runkit-spinner').fadeOut(function() {
+                    $(this).remove();
+                  });
+                }, 1000);
+              });
+            }
           });
         },
         onClose: modal => {
@@ -62,9 +110,18 @@ export class RunkitController {
 
   destroy() {
 
-    const modalId = `${this.sourceId}-modal`;
-    const $modal = $(`#${modalId}`);
-    $modal.remove();
+    if (this.sourceId) {
+
+      const modalId = `${this.sourceId}-modal`;
+      const $modal = $(`#${modalId}`);
+      $modal.remove();
+
+      this.$element.find('.runkit-button').remove();
+    }
+
+    if (this.tip) {
+      this.tip.destroyAll();
+    }
 
     this.$element.removeClass('runkit').data('runkit-controller', null);
     this.$element.off('click');
@@ -92,11 +149,17 @@ function createModal(id, source) {
 
   const $header = $('<header />').addClass('header').appendTo($dialog);
   const $title = $('<h2 />').addClass('title').attr('id', `${id}-title`).text(titleText).appendTo($header);
-  const $closeButton = $('<button />').attr('aria-label', 'Close').attr('data-micromodal-close', '').text('Close').appendTo($header);
+  const $subTitle = $('<small />').addClass('status').text('Loading...').appendTo($title);
+  const $closeIcon = $('<i />').addClass('close fa fa-close').attr('aria-label', 'Close').attr('data-micromodal-close', '').appendTo($header);
 
   const $content = $('<div />').attr('id', `${id}-content`).appendTo($dialog);
   const $source = $('<div />').addClass('source').appendTo($content);
   const $sourceCode = $('<div />').css('display', 'none').text(source).appendTo($source);
+
+  const $spinner = $('<div />').addClass('runkit-spinner').appendTo($content);
+  $spinner.append($('<div />').addClass('bounce1'));
+  $spinner.append($('<div />').addClass('bounce2'));
+  $spinner.append($('<div />').addClass('bounce3'));
 
   return $modal;
 }

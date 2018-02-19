@@ -22,7 +22,7 @@ import './assets/runkit.css';
 import heigLogo from './assets/heig.png';
 
 subject.setLogo({
-  linkUrl: 'https://heig-vd.ch',
+  url: 'https://heig-vd.ch',
   imageUrl: heigLogo,
   height: 60
 });
