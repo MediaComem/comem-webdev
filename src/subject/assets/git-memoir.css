@@ -1,12 +1,13 @@
 git-memoir {
   display: block;
-  padding: 0.4em;
   border: 1px solid #c0c0c0;
   border-radius: 10px;
 }
 
 git-memoir svg {
   display: block;
+  margin: 0.4em;
+  width: calc(100% - 0.8em);
 }
 
 git-memoir .controls {
