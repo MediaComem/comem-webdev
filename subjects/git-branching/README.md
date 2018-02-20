@@ -192,7 +192,7 @@ Switched to branch 'feature-sub'
 
 This moves `HEAD` to point to the `feature-sub` branch.
 
-Nothing else happened because `HEAD` is still pointing to the same commit as master.
+Nothing else happened because `HEAD` is still pointing to the same commit as `master`.
 
 > **Exercise:** you can now implement the subtraction in `subtraction.js`.
 
@@ -213,7 +213,7 @@ As you commit, the current branch (the one pointed to by `HEAD`), moves forward 
 
 
 
-### Switch back to master
+### Switch back to `master`
 
 > **Exercise:** oops, you just noticed that addition is not working correctly.
 > You need to make a bugfix, but you don't want to mix that code with the new subtraction feature.
@@ -228,8 +228,8 @@ Switched to branch 'master'
 
 Two things happened when you ran `git checkout master`:
 
-* The `HEAD` pointer was **moved** back to the master branch.
-* The files in your working directory were **reverted** back to the snapshot that master points to.
+* The `HEAD` pointer was **moved** back to the `master` branch.
+* The files in your working directory were **reverted** back to the snapshot that `master` points to.
 
 <git-memoir name='branchingOneLine' chapter='back-to-master' svg-height='137px'></git-memoir>
 
@@ -250,7 +250,7 @@ Switched to a new branch 'fix-add'
 
 <git-memoir name='branchingOneLine' chapter='another-branch' svg-height='137px'></git-memoir>
 
-Nothing has changed yet because fix-add still points to the same commit as master.
+Nothing has changed yet because `fix-add` still points to the same commit as `master`.
 
 
 
@@ -271,7 +271,7 @@ $> git commit -m "Fix addition"
 
 Now your project history has **diverged**.
 
-The changes in feature-sub and fix-add are **isolated**.
+The changes in `feature-sub` and `fix-add` are **isolated**.
 You can **switch back and forth** between the branches with `git checkout`.
 
 <git-memoir name='branching' chapter='switch-branches' svg-height='275px'></git-memoir>
@@ -281,7 +281,7 @@ You can **switch back and forth** between the branches with `git checkout`.
 ### Merging
 
 Now that you've tested your fix and made sure it works,
-you want to **bring those changes** back **into the master branch**.
+you want to **bring those changes** back **into the `master` branch**.
 
 Git's `merge` command can do that for you,
 but it can only **bring changes** from another branch **into the current branch**,
@@ -312,7 +312,7 @@ Notice the term **fast-forward**.
 
 ### Fast-forward
 
-The fix-add branch pointed to a commit **directly ahead** of the commit master pointed to.
+The `fix-add` branch pointed to a commit **directly ahead** of the commit `master` pointed to.
 There is no divergent history, so Git simply has to **moves the pointer forward**.
 This is what is called a **fast-forward**.
 
@@ -322,7 +322,7 @@ This is what is called a **fast-forward**.
 
 ### Delete a branch
 
-> **Exercise:** now that we've brought our fix back into master, we don't need the fix-add branch anymore.
+> **Exercise:** now that we've brought our fix back into `master`, we don't need the `fix-add` branch anymore.
   Let's delete it.
 
 ```bash
@@ -336,7 +336,7 @@ Deleted branch fix-add (was 2817bc).
 
 ### Continue working on a feature branch
 
-> **Exercise:** let's switch back to our feature-sub branch and finish our work.
+> **Exercise:** let's switch back to our `feature-sub` branch and finish our work.
   Write a comment for the subtract function and commit your changes.
 
 ```bash
@@ -354,8 +354,8 @@ $> git commit -m "Comment subtract function"
 
 <git-memoir name='branching' chapter='work-on-feature-branch' controls='false' svg-height='200px'></git-memoir>
 
-Now that we're happy with our new subtraction feature, we want to **merge** it into master as well.
-But the `feature-sub` branch has **diverged from some older point compared to master**, so Git cannot do a fast-forward:
+Now that we're happy with our new subtraction feature, we want to **merge** it into `master` as well.
+But the `feature-sub` branch has **diverged from some older point compared to `master`**, so Git cannot do a fast-forward:
 
 * `feature-sub` points to commit `f92ab0` which contains our feature
 * `master` points to commit `2817bc` which contains the addition fix
@@ -366,7 +366,7 @@ A **new commit** will be created representing that state.
 
 #### Merge commit message
 
-> **Exercise:** switch back to the master branch and merge feature-sub into it.
+> **Exercise:** switch back to the `master` branch and merge `feature-sub` into it.
 
 ```bash
 $> git checkout master
@@ -400,7 +400,7 @@ It is a special commit in that it has more than one parent:
 
 #### Delete `feature-sub`
 
-Now that you're done, you can delete feature-sub:
+Now that you're done, you can delete `feature-sub`:
 
 ```bash
 $> git branch -d feature-sub
@@ -423,7 +423,7 @@ Let's pretend that a colleague of yours also implemented the subtraction functio
 ### Find the common ancestor
 
 We want to make it look as if your colleague did his work **at the same time** as you.
-Let's find the original starting point (the common ancestor where feature-sub and fix-add diverged) and start a new branch from there:
+Let's find the original starting point (the common ancestor where `feature-sub` and `fix-add` diverged) and start a new branch from there:
 
 ```bash
 $> git graph
@@ -495,7 +495,7 @@ Viewing the graph of commits, it's clear that the change has been made **in para
 
 ### Merge the conflicting branch
 
-Go back to master and merge better-sub:
+Go back to `master` and merge `better-sub`:
 
 ```bash
 $> git checkout master
@@ -578,7 +578,7 @@ Take a closer look at the conflict markers:
 ```
 
 * The section between `<<<<<<< HEAD` and `=======` is the content that was present in the current branch (`HEAD`) before you merged.
-* The section between `=======` and `>>>>>>> better-sub` is the content that is being merged in from the better-sub branch.
+* The section between `=======` and `>>>>>>> better-sub` is the content that is being merged in from the `better-sub` branch.
 
 Since Git cannot know which is better, it's **your responsibility** to:
 
@@ -662,7 +662,7 @@ $> git commit -m "Remove incomplete implementations"
 
 ### Merge the conflicting branch
 
-Let's try to merge that branch into master:
+Let's try to merge that branch into `master`:
 
 ```bash
 $> git checkout master
