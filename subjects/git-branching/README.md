@@ -283,7 +283,10 @@ Now your project history has **diverged**.
 The changes in `feature-sub` and `fix-add` are **isolated**.
 You can **switch back and forth** between the branches with `git checkout`.
 
-<git-memoir name='branching' chapter='switch-branches' svg-height='275px'></git-memoir>
+<git-memoir name='branching' chapter='switch-branches' svg-height='250px'></git-memoir>
+
+Every time you checkout one of these branches,
+the files in your **working directory** are updated to reflect the state of the corresponding commit, or snapshot.
 
 
 
