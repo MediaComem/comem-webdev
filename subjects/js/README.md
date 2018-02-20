@@ -277,8 +277,12 @@ This can cause weird bugs sometimes:
 let countdown = "";
 if (countdown == 0) {
   console.log('We are done'); // "We are done"
+} else {
+  console.log('We are not done');
 }
 ```
+
+Therefore, it's recommended to always use the triple-equal `===` operator for equality comparisons.
 
 
 
@@ -430,23 +434,23 @@ console.log(lastNames); // [ "Doe", "Smith", "Smith" ]
 
 
 
-### Arrow functions *(ES6)*
+### Arrow functions *(ES6+)*
 
 <runkit disabled></runkit>
 
 While seaching for examples on the web, you will stumble upon some strange syntax:
 
 ```js
-let result = compute(3, 4, (nb1, nb2) => nb1 / nb2);
+let divideFunc = (nb1, nb2) => nb1 / nb2;
 ```
 
-You are facing the new **ES6** syntax for functions.
+You are facing the new **ES6** syntax for functions called **arrow functions**.
 The example above is equivalent to writing:
 
 ```js
-let result = compute(3, 4, function(nb1, nb2) {
+let divideFunc = function(nb1, nb2) {
   return nb1 / nb2;
-});
+};
 ```
 
 #### Arrow function arguments
@@ -464,21 +468,20 @@ The part left of the `=>` represents the **function's arguments**.
 If your function has **only one** argument, you can **omit** the parentheses:
 
 ```js
-let squareroot = compute(16, number => Math.sqrt(number));
+let squareroot = number => Math.sqrt(number);
 ```
 
 But if your function has **no arguments**, you **MUST** add **empty parentheses**:
 
 ```js
 // No argument
-setTimeout(() => console.log("Timeout finished"), 1000);
+let callback = () => console.log("Timeout finished");
+setTimeout(callback, 1000);
 ```
 
 #### Body of arrow functions
 
-<runkit disabled></runkit>
-
-```js
+```
 (nb1, nb2) => nb1 / nb2
 ```
 
@@ -488,16 +491,19 @@ The `return` keyword is **implicit** with one-line bodies that have no brackets:
 
 ```js
 // This arrow function will return the square root of the number
-let squareroot = compute(16, number => Math.sqrt(number));
+let squareroot = number => Math.sqrt(number);
+console.log(squareroot(4)); // 2
 ```
 
 If the body has **more than one line**, you **MUST add brackets** `{}` around it (_and use the `return` keyword if necessary_):
 
 ```js
-let square = compute(4, number => {
+let square = number => {
   let result = number * number;
-  return number;
-});
+  return result;
+};
+
+console.log(square(5)); // 25
 ```
 
 ## Constructors
@@ -755,7 +761,8 @@ You have to escape all other double quotes, and use `+` to concatenate.
 let string = `I'm your "Wurst" nightmare: ${worstNightmare}`;
 ```
 
-You don't have to escape anything. To insert variables inside the string, use `${variable}`.
+You have to escape all other backticks, but you can use single and double quotes without escaping.
+To insert variables inside the string, use `${variable}`.
 (To do a back-tick use `Shift-^`, then hit the `Space` bar.)
 
 

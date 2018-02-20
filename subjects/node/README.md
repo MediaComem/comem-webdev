@@ -1,5 +1,7 @@
 # Node.js Introduction
 
+<runkit global enabled='true'></runkit>
+
 Learn how to use [Node.js][node], an asynchronous JavaScript runtime that can run on your local machine or server.
 
 <!-- slide-include ../../BANNER.md -->
@@ -73,8 +75,8 @@ Learn how to use [Node.js][node], an asynchronous JavaScript runtime that can ru
 
 <p class='center'><img src='images/lts-schedule.png' width='80%' /></p>
 
-* Odd-numbered versions (e.g. v5, v7) are **unstable** releases with the latest features, and will **no longer be supported after 6-9 months**.
-* Even-numbered versions (e.g. v4, v6) have **long term support (LTS)**.
+* Odd-numbered versions (e.g. v5, v7, v9) are **unstable** releases with the latest features, and will **no longer be supported after 6-9 months**.
+* Even-numbered versions (e.g. v4, v6, v8) have **long term support (LTS)**.
   They are actively developed for 6 months.
   They are supported for 18 months after that.
   They are still maintained (e.g. security fixes) for 12 months after that.
@@ -90,7 +92,7 @@ If the installation was successfull, you should be able to access Node.js in you
 
 ```bash
 $> node --version
-v6.10.0
+v8.9.4
 
 $> node
 > 1 + 2
@@ -186,7 +188,7 @@ You can use modules in your code with `require()`:
 
 ```js
 // Require the operating system core module
-const os = require('os');
+*const os = require('os');
 
 function hello(name) {
   console.log('Hello ' + name + '!');
@@ -208,6 +210,8 @@ I am running on darwin
 
 ### Writing your own module
 
+<runkit disabled></runkit>
+
 Let's say we want to extract the `hello` function to another module.
 Create a `utils.js` file:
 
@@ -228,6 +232,8 @@ Code that uses `require()` on that file will receive the `exports` object.
 
 
 ### Requiring local modules
+
+<runkit disabled></runkit>
 
 You also use `require()` for your own module, but instead of just a name you have to provide a **relative file path**.
 Modify `script.js` as follows:
@@ -252,6 +258,8 @@ I am running on darwin
 
 
 ### Export properties
+
+<runkit disabled></runkit>
 
 You can attach whatever you want to the `exports` object:
 
@@ -279,6 +287,8 @@ I am running on darwin
 
 
 ### Function as the main export
+
+<runkit disabled></runkit>
 
 Some modules only export a function instead of an object with properties.
 Add a `doIt.js` file:
@@ -510,88 +520,86 @@ What's wrong with this code?
 ```js
 const fs = require('fs');
 
-// Read a name from name.txt
-const name = fs.readFile('name.txt', 'utf-8', function(err, nameInFile) {
-  if (err) {
-    return console.warn('Could not read file because: ' + err.message);
-  }
-
-  return nameInFile;
-});
-
 // Save a salutation into hello.txt
-const salutation = 'Hello ' + name + '!';
-fs.writeFile('hello.txt', salutation, 'utf-8', function(err) {
+const newSalutation = 'Hello Bob!';
+fs.writeFile('hello.txt', newSalutation, 'utf-8', function(err) {
   if (err) {
     console.warn('Could not write in file because: ' + err.message);
   }
 });
+
+// Read the salutation from hello.txt
+const salutation = fs.readFile('hello.txt', 'utf-8', function(err, data) {
+  if (err) {
+    return console.warn('Could not read file because: ' + err.message);
+  }
+
+  return data;
+});
+
+// Log the salutation read from hello.txt
+console.log(salutation);
 ```
+
+Save it to a file and run it with `node` or run it with **RunKit** to see the issue.
 
 #### Mistake 1 result
 
-If you save this script in `bug1.js`, save a `name.txt` file containing a name and execute the script, this is what will happen:
+If you save the script to `bug1.js` and execute it this is what will happen:
 
 ```bash
-$> echo World > name.txt
-
 $> node bug1.js
-
-$> cat hello.txt
-Hello undefined!
+undefined
+Could not read file because: ENOENT: no such file or directory, open 'hello.txt'
 ```
-
-The script could not read the name from `name.txt`.
 
 #### Mistake 1 asynchronous issue
 
+<runkit disabled></runkit>
+
 There are two problems with this code. First, Node.js I/O functions (such as file operations) are **asynchronous**.
 
-When `fs.readFile()` is called, Node.js will start a thread and read the file in the background.
-Meanwhile, **your code will keep executing** and the call to `fs.writeFile` will occur **before the callback function of `fs.readFile` is called back**.
+When `fs.writeFile()` is called, Node.js will start a thread and write the file in the background.
+Meanwhile, **your code will keep executing** and the call to `fs.readFile` will occur **before the callback function of `fs.writeFile` is called back**
+and **before Node.js is done writing the file**.
 
 ```js
-const fs = require('fs');
-
-// Read a name from name.txt
-const name = `fs.readFile`('name.txt', 'utf-8', function(err, nameInFile) {
-  if (err) {
-    return console.warn('Could not read file because: ' + err.message);
-  }
-  return nameInFile;
-});
-
 // Save a salutation into hello.txt
-const salutation = 'Hello ' + name + '!';
-`fs.writeFile`('hello.txt', salutation, 'utf-8', function(err) {
+const newSalutation = 'Hello Bob!';
+`fs.writeFile`('hello.txt', newSalutation, 'utf-8', function(err) {
   if (err) {
     console.warn('Could not write in file because: ' + err.message);
   }
+});
+
+// Read the salutation from hello.txt
+const salutation = `fs.readFile`('hello.txt', 'utf-8', function(err, data) {
+  if (err) {
+    return console.warn('Could not read file because: ' + err.message);
+  }
+
+  return data;
 });
 ```
 
 #### Mistake 1 return issue
 
-Second, even if there was no asynchronous issue, the assignment of `const name` would still be `undefined`:
+<runkit disabled></runkit>
 
-* You are calling `fs.readFile()`, which returns `undefined`, and that is what is stored in the `name` variable
-* **When** Node.js is done reading the file in a separate thread, **it will call your callback function (later)**
-* The return value of your callback function is **not going anywhere**
+Second, even if there was no asynchronous issue, the assignment of `const salutation` would still be `undefined`:
+
+* You are calling `fs.readFile()`, which **always** returns `undefined`, and that is what is stored in the `name` variable.
+* **When** Node.js is done reading the file in a separate thread, **it will call your callback function (later)**.
+* The `return data;` of your callback function is **not going anywhere**.
 
 ```js
-const fs = require('fs');
-
-// Read a name from name.txt
-`const name` = fs.readFile('name.txt', 'utf-8', function(err, nameInFile) {
-  `return nameInFile`;
-});
-
-// Save a salutation into hello.txt
-const salutation = 'Hello ' + name + '!';
-fs.writeFile('hello.txt', salutation, 'utf-8', function(err) {
+// Read the salutation from hello.txt
+const salutation = `fs.readFile`('hello.txt', 'utf-8', function(err, data) {
   if (err) {
-    console.warn('Could not write in file because: ' + err.message);
+    return console.warn('Could not read file because: ' + err.message);
   }
+
+  return data;
 });
 ```
 
@@ -600,24 +608,27 @@ fs.writeFile('hello.txt', salutation, 'utf-8', function(err) {
 The second asynchronous call must be performed **inside the callback function of the previous call**.
 That way, it will not be executed **until the first call is done** and Node.js has called your callback function.
 
-You will also have direct access to the **result** passed to the callback function:
+The `console.log()` must also be performed **inside the second callback**.
 
 ```js
 const fs = require('fs');
 
-// Read a name from name.txt
-fs.readFile('name.txt', 'utf-8', `function(err, nameInFile) {`
+// Save a salutation into hello.txt
+const newSalutation = 'Hello Bob!';
+fs.writeFile('hello.txt', newSalutation, 'utf-8', `function(err) {`
   if (err) {
-    return console.warn('Could not read file because: ' + err.message);
+    console.warn('Could not write in file because: ' + err.message);
   }
 
-  // Save a salutation into hello.txt
-  const salutation = 'Hello ' + nameInFile + '!';
-  fs.writeFile('hello.txt', salutation, 'utf-8', function(err) {
+  // Read the salutation from hello.txt
+  fs.readFile('hello.txt', 'utf-8', `function(err, data) {`
     if (err) {
-      console.warn('Could not write in file because: ' + err.message);
+      return console.warn('Could not read file because: ' + err.message);
     }
-  });
+
+    // Log the salutation read from hello.txt
+    `console.log(data);`
+  `}`);
 `}`);
 ```
 
@@ -640,7 +651,7 @@ fs.readFile('file-that-does-not-exist.txt', 'utf-8', function(err, text) {
     console.warn('Could not read file because: ' + err.message);
   }
 
-  // Log the contents in upper case
+  // Log the salutation in upper case
   console.log(text.toUpperCase());
 });
 ```
@@ -667,6 +678,8 @@ As expected, we see the `Could not read file because: ...` log.
 But we also see another **unexpected error** and its stack trace.
 
 #### Mistake 2 issue
+
+<runkit disabled></runkit>
 
 There is an error check, but execution of the callback function is **not stopped**
 as there is no `return` and no `else`.
@@ -754,11 +767,15 @@ const server = http.createServer(function(req, res) {
 server.listen(port, hostname, function() {
   console.log('Server running at http://' + hostname + ':' + port + '/');
 });
+
+process.env.RUNKIT_ENDPOINT_URL // (for running with RunKit)
 ```
 
 
 
 ### Event emitters
+
+<runkit disabled></runkit>
 
 Many Node.js objects are [event emitters][node-event-emitter].
 You can register callback functions to **react** to these events:

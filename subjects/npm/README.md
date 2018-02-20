@@ -250,7 +250,7 @@ npm-demo@1.0.0 /path/to/projects/npm-demo
 └── lodash@4.17.4
 
 $> ls
-node_modules package.json
+node_modules package.json package-lock.json
 
 $> ls node_modules
 lodash
@@ -311,8 +311,11 @@ Error: Cannot find module 'lodash'
 ```
 
 Deleting the `node_modules` directory is not a common real-world scenario,
-but you probably have it listed in your `.gitignore` file.
-When **cloning** your project, your colleagues **won't** get the `node_modules` directory from the Git repository.
+
+However, it can get quite large, so most people have it in their `.gitignore` file in their Git repositories,
+since you just have to run `npm install` to get your dependencies back.
+
+That means that when **cloning** your project, your colleagues **won't** get the `node_modules` directory.
 
 #### Re-installing dependencies manually
 
@@ -329,17 +332,12 @@ This is the typical list of dependencies for a **barebones** Express web applica
 
 
 
-### The --save option
+### npm saves the dependencies to package.json
 
-Adding the `--save` option will make npm track the dependency:
+npm automatically tracks the dependencies you install.
+There is a `--save` option that was required for that in earlier versions, but it's the default now.
 
-```bash
-$> npm install --save lodash
-npm-demo@1.0.0 /path/to/projects/npm-demo
-└── lodash@4.17.4
-```
-
-A new `dependencies` section should have appeared in your `package.json` file:
+When you ran `npm install`, a new `dependencies` section should have appeared in your `package.json` file:
 
 <p class='center'><img src='images/npm-install-save.png' class='w70' /></p>
 
@@ -362,8 +360,8 @@ the install command will **read** the `package.json` and **install the dependenc
 
 <!-- slide-column 40 -->
 
-You should always use the `--save` option when adding dependencies to your project.
-That way, other members of the team will just have to run `npm install`.
+The `package-lock.json` also contains the precise versions of the packages you installed.
+That way, your entire team can reproduce the same package structure as on your machine.
 
 <!-- slide-column -->
 
@@ -434,13 +432,13 @@ $> mkdir ~/.npm-global
 $> npm config set prefix '~/.npm-global'
 ```
 
-And add this line to your CLI configuration file (e.g. `~/.bash_profile`):
+And add this line to your CLI configuration file (e.g. `~/.bashrc` or `~/.bash_profile`):
 
 ```bash
 export PATH=~/.npm-global/bin:$PATH
 ```
 
-Then retry the installation, which should work this time:
+Re-open your CLI, then retry the installation, which should work this time:
 
 ```bash
 $> npm install --global http-server
