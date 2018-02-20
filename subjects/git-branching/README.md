@@ -85,8 +85,14 @@ Remember that Git stores data as a series of snapshots.
 
 <git-memoir name='internals' chapter='internals' controls='false' svg-height='137px'></git-memoir>
 
-Each **commit** contains a pointer to the snapshot of the content you staged, the author's user name and e-mail,
-and also a pointer to the previous commit.
+Each **commit** contains a pointer to the snapshot of the content you staged,
+represented by the blue **T**ree objects above (as they refer to a *tree* of file snapshots).
+
+Each commit also contains:
+
+* The user name and e-mail or the author.
+* The date at which the commit was created.
+* A pointer to the previous commit (or commits).
 
 #### Branches point to commits
 
@@ -536,7 +542,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 * Git tells you that the merge is **not complete**:
   * You can either fix the conflicts and run `git commit` to end the merge, or cancel the whole thing with `git merge --abort`
-* `subtraction.js` was modified in **both the current branch and the branch we are trying to merge in**
+* `subtraction.js` was modified in **both** the **current branch** and the **branch we are trying to merge in**
 * You can use `git add <file>` to **mark the conflicts in a file as resolved**
 
 

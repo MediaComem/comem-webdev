@@ -551,15 +551,19 @@ $> git push origin master
 To github.com:bob/github-demo.git
  ! [rejected]        master -> master (non-fast forward)
 error: failed to push some refs to 'git@github.com:bob/github-demo.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 ```
 
 <!-- slide-column 70 -->
 
-<git-memoir name='github' chapter='alice-fetch-changes' controls='false' svg-height='325px'></git-memoir>
+<git-memoir name='github' chapter='alice-fetch-changes' controls='false' svg-height='315px'></git-memoir>
 
 <!-- slide-column -->
 
-The push was **rejected again**!. Why?
+The push was **rejected again**! **Why?**
 
 This is the state of **Alice**'s repository right now.
 

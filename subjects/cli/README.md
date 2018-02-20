@@ -41,7 +41,7 @@ Learn the basics of navigating your filesystem in a Unix command line interface.
 
 A CLI is a tool that allows you to use your computer by **writing** what you want to do (i.e. **commands**), instead of clicking on things.
 
-It's installed on computers (almost) since the beginning of time, but it has evolved "a little" since then. It usually looks something like this:
+It's been installed on computers since (almost) the beginning of time, but it has evolved "a little" since then. It usually looks something like this:
 
 <p class='center'><img src='images/cli.jpg' width='100%' /></p>
 
@@ -55,7 +55,7 @@ A CLI is not very user-friendly or visually appealing but it has several advanta
 * It can be easily **automated** through scripting
 * Is is ultimately **more powerful and efficient** than any GUI
 
-For these reasons, a lot of tools _(especially development tools)_ don't have any GUI and are only usable through a CLI.
+For these reasons, a lot of tools, **especially development tools**, don't have any GUI and are only usable through a CLI.
 
 **Thus, using a CLI is a requirement for any developer today.**
 
@@ -100,6 +100,9 @@ Then, search and open the **Git Bash** software.
 <!-- slide-container -->
 
 > Installing **Git Bash** will also install **Git** and **Git GUI** _(see the [Git tutorial][slide-git] for more information)_.
+
+As an alternative, you may also use the [Windows Subsystem for Linux][windows-subsystem-for-linux],
+but it sometimes has issues when integrating with other programs not installed in that CLI.
 
 
 
@@ -188,7 +191,7 @@ In the **first example**, we use the `ls` command to list elements in the curren
 
 #### Options with values
 
-Sometimes, some options have **values**:
+Some options require a **value**:
 
 ```bash
 tar -c -v `-f compressed.tar.gz` file-to-compress
@@ -219,7 +222,7 @@ They can cause **errors** in some scripts or tools, and will inevitably complica
 If you have a `Why So Serious` directory, this **WILL NOT work**:
 
 ```bash
-$> ls Why So Serious
+$> ls `Why` `So` `Serious`
 ```
 This command will be interpreted as a call to the `cd` command with **three arguments**: `Why`, `So` and `Serious`.
 
@@ -228,13 +231,13 @@ You **can** use arguments containing spaces, but you have to **escape** them fir
 <!-- slide-column -->
 
 ```bash
-$> ls "Why So Serious"
+$> ls `"Why So Serious"`
 ```
 
 <!-- slide-column -->
 
 ```bash
-$> ls Why\ So\ Serious
+$> ls `Why\ So\ Serious`
 ```
 
 
@@ -298,7 +301,8 @@ To quit these helps or commands, use the `q` key.
 
 #### Unix Command Syntax
 
-When calling the `help` function or looking up some documentation, you could eventually found some strange lines that apparently makes no sense, like:
+When reading a command's manual or documentation,
+you may find some strange syntax that make little sense to you, like:
 
 ```bash
 cd [-L|[-P [-e]] [-@]] [dir]
@@ -440,7 +444,7 @@ To go up into the parent directory, use the `..` path (**don't forget the space 
 ```bash
 $> pwd
 /Users/Batman/Documents
-$> cd ..
+$> `cd ..`
 $> pwd
 /Users/Batman
 ```
@@ -455,8 +459,18 @@ $> cd /Users/Batman/Pictures/
 
 At anytime and from anywhere, you can return to your **home directory** with the `cd` command, without any argument (or with the `~`):
 
+<!-- slide-column -->
+
 ```bash
 $> cd
+$> pwd
+/Users/Batman
+```
+
+<!-- slide-column -->
+
+```bash
+$> cd ~
 $> pwd
 /Users/Batman
 ```
@@ -533,6 +547,8 @@ $> cd /c/foo/bar
 $> cd /d/foo
 ```
 
+(In the Windows Subsystem for Linux, it's `/mnt/c` instead of `/c`.)
+
 **Copy/Paste**
 
 Since `Ctrl-C` is used to stop the current process, it **can't** be used as a shortcut to copy things from the CLI.
@@ -557,8 +573,9 @@ Instead, Git Bash has two custom shortcuts:
 ### WHY?!
 
 Why would you need to learn it?
+
 Sometimes it's just the **only editor you have** (e.g. on a server).
-Also **some tools will open vim** for user input.
+Also **some developer tools might open vim** for user input.
 
 If this happens (_and it will_), there's **one** imperative rule to follow:
 
@@ -617,7 +634,8 @@ You can also use some commands to interact with the text:
 
 ### Command mode
 
-The **Command** mode, which you can only access from the **Normal** mode, is the one you'll use to manipulate the file you're in.
+The **Command** mode, which you can only access from the **Normal** mode,
+is the one you'll mostly use to save and/or quit.
 
 To enter the **Command** mode, hit the `:` key.
 From there, you can use some commands:
@@ -733,3 +751,4 @@ The next time you run a command, your CLI will **first look** in this directory 
 [gitbash]: https://git-for-windows.github.io/
 [zsh-site]: http://zsh.sourceforge.net/
 [slide-git]: ../git
+[windows-subsystem-for-linux]: https://docs.microsoft.com/en-us/windows/wsl/about

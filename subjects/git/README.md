@@ -75,11 +75,11 @@ Its goals are:
 
 What can I do with it?
 
-* **Revert** files back to a previous state.
-* Revert the entire project back to a previous state.
+* **Revert** specific files (or an entire project) back to a previous state.
 * **Compare** changes over time.
-* See who last modified something that might be causing a problem, who introduced an issue and when, and more.
+* See who last modified something that might be causing a problem, when the issue was introduced, and more.
 * **Recover** if you screw things up or lose files.
+* **Collaborate** on a project as a distributed team.
 
 
 
@@ -129,6 +129,9 @@ Administrators have **fine-grained control** over who can do what.
 
 * The centralized server is a **single point of failure**
 * If proper backups are not kept, the history of the project **can be lost**
+
+> (You could also consider storing your files in a shared Dropbox, Google Drive, etc. to be a kind of centralized version control system.
+> However, it's doesn't have as many tools for **consulting and manipulating the history** of your project, or to **collaborate on source code**.)
 
 
 
@@ -449,7 +452,7 @@ nothing added to commit but untracked files present (use "git add" to track)
 ```
 
 Those files are **untracked**.
-Git will not include them unless you **explicitly** tell it to do so.
+Git will not include them in the repository unless you **explicitly** tell it to do so.
 
 #### Tracking new files
 
@@ -483,14 +486,15 @@ Git can show you what you have **staged**:
 
 ```diff
 $> git diff --staged
-diff --git a/hello.txt b/hello.txt
+
+diff --git a/hello.txt b/`hello.txt`
 new file mode 100644
 index 0000000..557db03
 --- /dev/null
 +++ b/hello.txt
 @@ -0,0 +1 @@
 +Hello World
-diff --git a/hi.txt b/hi.txt
+diff --git a/hi.txt b/`hi.txt`
 new file mode 100644
 index 0000000..e5db1d9
 --- /dev/null
@@ -505,17 +509,20 @@ It shows you each staged file and the changes in those files.
 
 ### Committing your changes
 
-Now that your staging area is set up the way you want it, you can **commit** your changes:
+Now that your staging area is set up the way you want it, you can **commit** your changes with the `git commit` command.
+This command takes a `--message` or `-m` option where you should put a short description of the changes you made:
 
 ```bash
 $> git commit -m "Add hello and hi files"
-[master (root-commit) c90aa36] Add hello and hi files
+
+[master (root-commit) `c90aa36`] Add hello and hi files
  2 files changed, 2 insertions(+)
  create mode 100644 hello.txt
  create mode 100644 hi.txt
 ```
 
-Note that Git gives you the beginning of the new commit's SHA-1 checksum (`c90aa36`) along with change statistics and other information.
+Note that Git gives you the beginning of the new commit's SHA-1 checksum (`c90aa36` in this example, but it will be different on your machine)
+along with change statistics and other information.
 
 ```bash
 $> git status
@@ -527,7 +534,8 @@ nothing to commit, working tree clean
 
 ### Modifying files
 
-Let's make some changes to both files:
+Let's make some changes.
+Add one line to both files:
 
 ```bash
 echo "You are beautiful" >> hello.txt
@@ -548,6 +556,9 @@ Changes not staged for commit:
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
+
+Git has identified the **modified files** different from the last commit,
+but they are **not staged**, meaning that if you try to commit now, those changes will **not** be committed.
 
 #### Staging modified files
 
@@ -603,9 +614,7 @@ What does this mean?
 
 Use `git diff` with the `--staged` option to show **staged** changes.
 
-You can also use it without the option to see **unstaged** changes.
-
-<!-- slide-column 60 -->
+<!-- slide-column -->
 
 ```diff
 $> git diff --staged
@@ -617,6 +626,14 @@ index 557db03..2136a8e 100644
  Hello World
 +You are beautiful
 ```
+
+<!-- slide-container -->
+
+<!-- slide-column 40 -->
+
+You can also use it without the option to see **unstaged** changes.
+
+<!-- slide-column -->
 
 ```diff
 $> git diff
@@ -651,11 +668,17 @@ This example shows you that the working directory and the staging area and reall
 
 #### Committing partially staged changes
 
+Commit now:
+
 ```bash
 $> git commit -m "The world is beautiful"
 [master b65ec9c] The world is beautiful
  1 file changed, 1 insertion(+)
+```
 
+As expected, the changes we did not stage are still **uncommitted**.
+
+```
 $> git status
 On branch master
 Changes not staged for commit:
@@ -668,12 +691,10 @@ Changes not staged for commit:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-As expected, the changes we did not stage are still **uncommitted**.
 Let's fix that:
 
 ```bash
 $> git add .
-
 $> git commit -m "New lines in hello.txt and hi.txt"
 [master dfc6c75] New lines in hello.txt and hi.txt
  2 files changed, 2 insertions(+)
@@ -720,7 +741,15 @@ Changes to be committed:
   renamed:    hi.txt -> people.txt
 ```
 
+Note that Git can tell that the file was moved.
+
 Many developers simply modify and manipulate files in their favorite editor or IDE, then use the command above.
+
+You may commit the rename now:
+
+```bash
+$> git commit -m "Rename hi.txt to people.txt"
+```
 
 
 
@@ -730,6 +759,12 @@ Git has a very powerful `log` command:
 
 ```bash
 $> git log
+commit 739b7c8987d72879f79ac7979as8f9db790a82da
+Author: John Doe <john.doe@example.com>
+Date:   Mon Jan 23 11:50:09 2017 +0100
+
+    Rename hi.txt to people.txt
+
 commit e753ceb86806b285aa105a846c7295e826439637
 Author: John Doe <john.doe@example.com>
 Date:   Mon Jan 23 11:50:07 2017 +0100
@@ -742,11 +777,7 @@ Date:   Mon Jan 23 11:50:00 2017 +0100
 
     The world is beautiful
 
-commit c90aa36ffca90aad44572c0cb319037c921eceb2
-Author: John Doe <john.doe@example.com>
-Date:   Mon Jan 23 11:01:06 2017 +0100
-
-    Add hello and hi files
+...
 ```
 
 
@@ -859,14 +890,14 @@ Sometimes you make a change and you realize it was wrong or you don't need it an
 Git actually tells you what to do to discard that change:
 
 ```bash
-$> echo "Hi Steve" >> hi.txt
+$> echo "Hi Steve" >> people.txt
 $> git status
 On branch master
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
+  `(use "git checkout -- <file>..." to discard changes in working directory)`
 
-  modified:   hi.txt
+  modified:   people.txt
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
@@ -874,7 +905,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 Simply use `git checkout` as instructed:
 
 ```bash
-$> git checkout hi.txt
+$> git checkout people.txt
 
 $> git status
 On branch master
@@ -890,22 +921,22 @@ Note that in this case, **the change is forever lost** as it was never committed
 If you have staged a file but realize you don't want it in the next commit anymore, Git also tells you what to do:
 
 ```bash
-$> echo "Hi Steve" >> hi.txt
-$> git add hi.txt
+$> echo "Hi Steve" >> people.txt
+$> git add people.txt
 $> git status
 On branch master
 Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
+  `(use "git reset HEAD <file>..." to unstage)`
 
-  modified:   hi.txt
+  modified:   people.txt
 ```
 
 Use `git reset` as instructed:
 
 ```bash
-$> git reset HEAD hi.txt
+$> git reset HEAD people.txt
 Unstaged changes after reset:
-M       hi.txt
+M       people.txt
 ```
 
 The changes will still be in the file in the working directory.
