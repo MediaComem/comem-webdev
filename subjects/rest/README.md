@@ -243,7 +243,7 @@ Content-Type: text/html; charset=UTF-8
   </head>
   <body>
     ...
-  </body>
+  &lt;/body&gt;
 </html>
 ```
 
@@ -513,7 +513,7 @@ HTTP/1.1 200 OK
       <li>6 seasons</li>
       <li>60 episodes</li>
     </ul>
-  </body>
+  &lt;/body&gt;
 </html>
 ```
 
