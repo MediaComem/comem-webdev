@@ -669,18 +669,6 @@ $> git pull origin master
 
 
 
-### TODO
-
-* slide 4: change text to mention and explain trees, refer to blue box in diagram
-* slide 4: fix contents of commit description: mention date
-* slide 17: specify that files will change when checkout
-* slide 18: monospace master branch name?
-* slide 20: monospace branch names
-* slide 21 & 22: monospace excercise paragraph
-* slide 23: monospace master
-
-
-
 [distributed-workflows]: https://git-scm.com/book/en/v2/Distributed-Git-Distributed-Workflows
 [git]: https://git-scm.com
 [git-tutorial]: ../git/
