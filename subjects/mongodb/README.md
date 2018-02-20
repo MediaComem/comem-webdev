@@ -69,7 +69,7 @@ Learn the basics of [MongoDB][mongodb], one of the most populars document-orient
 
 ### Document-oriented database
 
-Instead SQL rows, you store [**JSON-like**][bson] documents in MongoDB:
+Instead of SQL rows, you store [**JSON-like**][bson] documents in MongoDB:
 
 ```json
 {
