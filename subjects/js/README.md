@@ -25,7 +25,7 @@ and one of the three core technologies of the web.
   - [JavaScript is **untyped**](#javascript-is-untyped)
   - [Comparing values with `==` or `===`](#comparing-values-with--or-)
   - [Falsy values](#falsy-values)
-- [JavaScript supports [first-class functions][first-class-functions]](#javascript-supports-first-class-functionsfirst-class-functions)
+- [JavaScript supports first-class functions](#javascript-supports-first-class-functions)
   - [Storing functions in variables or data structures](#storing-functions-in-variables-or-data-structures)
   - [Returning functions from a function](#returning-functions-from-a-function)
   - [Passing functions as arguments](#passing-functions-as-arguments)

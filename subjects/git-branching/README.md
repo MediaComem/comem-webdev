@@ -26,10 +26,12 @@ Learn how to work on isolated, parallel lines of development with [Git][git] bra
   - [Create a new branch](#create-a-new-branch)
   - [Switch branches](#switch-branches)
   - [Commit on a branch](#commit-on-a-branch)
-  - [Switch back to master](#switch-back-to-master)
+  - [Switch back to `master`](#switch-back-to-master)
   - [Create another branch](#create-another-branch)
   - [Work on a separate branch](#work-on-a-separate-branch)
   - [Merging](#merging)
+  - [Merge a branch](#merge-a-branch)
+  - [Fast-forward](#fast-forward)
   - [Delete a branch](#delete-a-branch)
   - [Continue working on a feature branch](#continue-working-on-a-feature-branch)
   - [Merge a divergent history](#merge-a-divergent-history)
@@ -43,11 +45,12 @@ Learn how to work on isolated, parallel lines of development with [Git][git] bra
   - [Conflict markers](#conflict-markers)
   - [Mark the conflict as resolved](#mark-the-conflict-as-resolved)
 - [Merge file conflicts](#merge-file-conflicts)
+  - [Make a conflicting file change](#make-a-conflicting-file-change)
   - [Merge the conflicting branch](#merge-the-conflicting-branch-1)
   - [Check the status of the file conflict](#check-the-status-of-the-file-conflict)
   - [Resolving the file conflict](#resolving-the-file-conflict)
+  - [Final state](#final-state)
 - [Resources](#resources)
-- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
