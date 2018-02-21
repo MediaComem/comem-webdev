@@ -373,8 +373,9 @@ const fs = require('fs');
 
 console.log('Hello');
 
-fs.readFile('random.txt', 'utf-8', function(err, result) {
-  console.log('Result: ' + result);
+// List the files at the root of the file system
+fs.readdir('/', 'utf-8', function(err, result) {
+  console.log('Files: ' + result.join(', '));
   console.log('Done');
 });
 
@@ -411,6 +412,13 @@ The third argument is a **callback function**:
 Under the hood, Node.js will read the file in a separate thread,
 then execute your callback function when it's ready.
 
+This is called **non-blocking I/O**, because all I/O operations are executed in separate threads and are therefore non-blocking:
+
+* Database access
+* File system access
+* HTTP requests
+* Etc.
+
 
 
 ### Your Node.js code is single-threaded
@@ -419,23 +427,22 @@ Although I/O operations are non-blocking, **your code always executes in a singl
 
 ```js
 const fs = require('fs');
-let value = 1;
+let fileCount = 0;
 
-fs.readFile('five.txt', 'utf-8', function(err, result) {
-  `value = value + parseFloat(result)`;
-  console.log(value);
+fs.readdir('/', 'utf-8', function(err, result) {
+  `fileCount = fileCount + result.length`;
+  console.log('Files listed:', fileCount);
 });
 
-`value = value * 2`;
-console.log(value);
+console.log('End of program:', fileCount);
 ```
 
-This will always log **2** first, then **7** (i.e. first * 2, then + 5).
+This will **always** log `End of program: 0` first, then `Files listed: N`.
 
-Even if the file is read instantaneously and the contents of the file is ready immediately,
-Node.js **guarantees** that `value = value * 2` will be executed first.
+Even if the operating system is very fast and the directory is listed *instantaneously*,
+Node.js **guarantees** that the last line, `console.log('End of program:', fileCount)`, will be executed first.
 
-Callback functions will always wait for the blocking code to finish executing.
+Callback functions will always wait for **blocking code** to finish executing.
 
 
 
@@ -468,13 +475,23 @@ Similar mechanisms are used in other frameworks and tools:
 
 ## Node.js callback convention
 
+<runkit disabled></runkit>
+
 Node.js callback functions usually have this signature:
 
 ```
   function(err, result)
 ```
 
-There are two ways that the function can be called back:
+Like the previous example:
+
+```js
+fs.readdir('/', 'utf-8', `function(err, result) {`
+  // ...
+`}`);
+```
+
+There are two ways that the function can be called back by Node.js:
 
 1. The operation **failed**:
   * `err` contains an error describing the problem
@@ -588,18 +605,18 @@ const salutation = `fs.readFile`('hello.txt', 'utf-8', function(err, data) {
 
 Second, even if there was no asynchronous issue, the assignment of `const salutation` would still be `undefined`:
 
-* You are calling `fs.readFile()`, which **always** returns `undefined`, and that is what is stored in the `name` variable.
+* You are calling `fs.readFile()`, which **always** returns `undefined`, and that is what is stored in the `salutation` variable.
 * **When** Node.js is done reading the file in a separate thread, **it will call your callback function (later)**.
 * The `return data;` of your callback function is **not going anywhere**.
 
 ```js
 // Read the salutation from hello.txt
-const salutation = `fs.readFile`('hello.txt', 'utf-8', function(err, data) {
+`const salutation = fs.readFile`('hello.txt', 'utf-8', function(err, data) {
   if (err) {
     return console.warn('Could not read file because: ' + err.message);
   }
 
-  return data;
+  `return data;`
 });
 ```
 
