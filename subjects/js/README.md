@@ -511,7 +511,7 @@ console.log(square(5)); // 25
 Though JavaScript doesn't really have classes **(until ES6)**, any function can behave like a **constructor** and create an object.
 
 For a function to act as a constructor, you don't have to declare it differently than any other function.
-All you have to do is call the function with `new` like in mose object-oriented languages:
+All you have to do is call the function with `new` like in most object-oriented languages:
 
 ```js
 function Starship() {
