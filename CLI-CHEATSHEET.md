@@ -30,7 +30,7 @@ the default shell for most Linux distributions and macOS.
 
 
 
-## Getting help
+## Getting help (`man`, `--help`)
 
 * `man ls` displays the manual of the `ls` command
 * `help ls` displays the help of the `ls` command in Git Bash on Windows
