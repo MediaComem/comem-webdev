@@ -27,26 +27,27 @@ You will find detailed installation instructions for all platforms [in the docum
 
 ## MongoDB on macOS
 
-Run the following commands to download and uncompress the binary distribution of MongoDB **in the current working directory of your CLI**:
+Run the following commands to download and uncompress the binary distribution of MongoDB.
+(These instructions assume that you have a `~/Downloads` directory.
+Use another path if that is not the case.)
 
 ```bash
-$> pwd
-/Users/jdoe/Downloads
+$> cd ~/Downloads
 
-$> curl -O https://fastdl.mongodb.org/osx/mongodb-osx-x86_64-3.4.2.tgz
+$> curl -O https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-3.6.2.tgz
 
-$> tar -zxvf mongodb-osx-x86_64-3.4.2.tgz
+$> tar -zxvf mongodb-osx-ssl-x86_64-3.6.2.tgz
 
-$> ls mongodb-osx-x86_64-3.4.2
+$> ls mongodb-osx-ssl-x86_64-3.6.2
 GNU-AGPL-3.0   MPL-2   README   THIRD-PARTY-NOTICES   bin
 ```
 
-Move and/or rename the `mongodb-osx-x86_64-3.4.2` directory where you want it (you can do that in the CLI or manually in your Finder/Desktop).
+Move and/or rename the `mongodb-osx-ssl-x86_64-3.6.2` directory where you want it (you can do that in the CLI or manually in your Finder/Desktop).
 
 For example, you could move it to your home directory (**_only if_ your username doesn't have any spaces/accents**, otherwise move it somewhere else):
 
 ```bash
-$> mv mongodb-osx-x86_64-3.4.2 ~/mongodb
+$> mv mongodb-osx-ssl-x86_64-3.6.2 ~/mongodb
 ```
 
 
@@ -71,20 +72,20 @@ To run the MongoDB server, you will need to launch the `mongod` executable.
 (The `d` in `mongod` means [daemon][daemon]: a program that runs as a background process and is not interactive).
 There are **three ways** you can run MongoDB, assuming you have it at `~/mongodb` (adapt the instructions otherwise):
 
-1. Go in `~/mongodb/bin` and run `./mongod`:
+* Go in MongoDB's `bin` directory and run `./mongod`:
 
   ```bash
   $> cd ~/mongodb/bin
   $> ./mongod
   ```
 
-2. Run `mongod` by its **absolute path** (from anywhere):
+* Run `mongod` by its **absolute path** (from anywhere):
 
   ```bash
   $> /Users/jdoe/mongodb/bin/mongod
   ```
 
-3. Add the line `export PATH=~/mongodb/bin:$PATH` to your `.bash_profile` and re-launch your CLI so you can run it by simply typing `mongod`:
+* Add the line `export PATH=~/mongodb/bin:$PATH` to your `.bash_profile` and re-launch your CLI so you can run it by simply typing `mongod`:
 
    ```bash
    $> mongod
@@ -145,7 +146,7 @@ Download and install [MongoDB Community Edition][mongodb-download].
 
 You need to create a directory for the MongoDB server to store its databases in (it looks in `C:\data\db` by default).
 
-For MongoDB on Windows, you **MUST use the Windows command line** (not a Unix shell like Git Bash), otherwise you will have problems.
+For MongoDB on Windows, you **SHOULD use the Windows command line** (not a Unix shell like Git Bash), otherwise you may have problems.
 Open the **Launch menu** and type `cmd` to launch it.
 
 Run the following command in the Windows CLI to **create the data directory**:
