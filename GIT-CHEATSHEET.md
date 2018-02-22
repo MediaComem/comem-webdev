@@ -25,11 +25,12 @@ If you want to learn more about Git, read the [Pro Git book](https://git-scm.com
   Additionally, having periodic checkpoints means that you can understand how you broke something.
 
 * Choose a **branching workflow**:
+  * [Create a short-lived branch for each feature](http://dymitruk.com/blog/2012/02/05/branch-per-feature/).
+  * [A successful branching model](http://nvie.com/posts/a-successful-git-branching-model/) (for large teams).
 
-  * [Create a short-lived branch for each feature](http://dymitruk.com/blog/2012/02/05/branch-per-feature/)
-  * [A successful branching model](http://nvie.com/posts/a-successful-git-branching-model/) (for large teams)
+* Use a [Git-aware prompt](https://github.com/magicmonty/bash-git-prompt).
 
-* Use a [Git-aware prompt](https://github.com/magicmonty/bash-git-prompt)
+* Enable [Git Rerere](https://git-scm.com/book/en/v2/Git-Tools-Rerere).
 
 
 
