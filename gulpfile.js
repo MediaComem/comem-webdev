@@ -10,7 +10,7 @@ const util = require('gulp-util');
 const generatePdfFromSlides = require('./pdf');
 
 const src = {
-  doctoc: [ 'README.md', 'CONTRIBUTING.md', 'GIT-CHEATSHEET.md', 'subjects/**/*.md', '!subjects/**/node_modules/**/*.md' ],
+  doctoc: [ 'README.md', 'CONTRIBUTING.md', 'CLI-CHEATSHEET.md', 'GIT-CHEATSHEET.md', 'subjects/**/*.md', '!subjects/**/node_modules/**/*.md' ],
   pdfSource: 'build/subjects/*/**/index.html'
 };
 
