@@ -24,6 +24,7 @@ the default shell for most Linux distributions and macOS.
 - [Finding (`find`)](#finding-find)
 - [Environment variables](#environment-variables)
   - [`$PATH`](#path)
+  - [Do I have that command? (`which`)](#do-i-have-that-command-which)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -252,7 +253,7 @@ export PATH="/foo:$PATH"
 export PATH="/opt/local/bin:$PATH"
 ```
 
-#### Do I have that command? (`which`)
+### Do I have that command? (`which`)
 
 Locate an executable in the `$PATH` with the `which` command:
 
