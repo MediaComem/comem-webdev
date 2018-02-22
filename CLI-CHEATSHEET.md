@@ -3,8 +3,29 @@
 Useful commands for [Bash][bash] (**B**ourne-**a**gain **sh**ell),
 the default shell for most Linux distributions and macOS.
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Getting help](#getting-help)
+- [Navigating](#navigating)
+  - [Where am I? (`pwd`)](#where-am-i-pwd)
+  - [What is there? (`ls`)](#what-is-there-ls)
+  - [Move around (`cd`)](#move-around-cd)
+  - [Special paths (`.`, `..`, `~`)](#special-paths---)
+- [Reading](#reading)
+  - [What's in this file? (`cat`, `head`, `tail`, `less`)](#whats-in-this-file-cat-head-tail-less)
+- [Writing](#writing)
+  - [Create a directory (`mkdir`)](#create-a-directory-mkdir)
+  - [Create a file (`echo`, `touch`)](#create-a-file-echo-touch)
+  - [Copy stuff (`cp`)](#copy-stuff-cp)
+  - [Move stuff (`mv`)](#move-stuff-mv)
+  - [Delete stuff (`rm`)](#delete-stuff-rm)
+- [Finding (`find`)](#finding-find)
+- [Environment variables](#environment-variables)
+  - [`$PATH`](#path)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 

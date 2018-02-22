@@ -52,7 +52,6 @@ Learn how to collaborate on [GitHub][github] with [Git][git].
   - [Alice: check the state of branches](#alice-check-the-state-of-branches-1)
   - [Alice: push the changes](#alice-push-the-changes)
   - [Bob: pull the changes](#bob-pull-the-changes)
-  - [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

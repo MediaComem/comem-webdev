@@ -31,7 +31,7 @@ Learn how to use [npm][npm], the most popular [Node.js][node] package manager, a
   - [Installing packages](#installing-packages)
   - [Using installed packages](#using-installed-packages)
   - [Tracking installed packages](#tracking-installed-packages)
-  - [The --save option](#the---save-option)
+  - [npm saves the dependencies to package.json](#npm-saves-the-dependencies-to-packagejson)
   - [npm install with a package.json](#npm-install-with-a-packagejson)
   - [The --save-dev option](#the---save-dev-option)
   - [The --production option](#the---production-option)

@@ -30,7 +30,7 @@ and one of the three core technologies of the web.
   - [Returning functions from a function](#returning-functions-from-a-function)
   - [Passing functions as arguments](#passing-functions-as-arguments)
   - [Transforming data with functions](#transforming-data-with-functions)
-  - [Arrow functions *(ES6)*](#arrow-functions-es6)
+  - [Arrow functions *(ES6+)*](#arrow-functions-es6)
 - [Constructors](#constructors)
   - [The `this` keyword](#the-this-keyword)
 - [Variables](#variables)
