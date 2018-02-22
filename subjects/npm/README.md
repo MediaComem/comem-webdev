@@ -361,7 +361,7 @@ the install command will **read** the `package.json` and **install the dependenc
 <!-- slide-column 40 -->
 
 The `package-lock.json` also contains the precise versions of the packages you installed.
-That way, your entire team can reproduce the same package structure as on your machine.
+That way, your entire team can reproduce the exact same package structure as on your machine.
 
 <!-- slide-column -->
 
@@ -585,8 +585,8 @@ Statement                 | What is required
 The npm registry has many packages, some small, some big.
 Let's install [Express][express], a web application framework:
 
-```js
-$> npm install --save express
+```bash
+$> npm install express
 ```
 
 Create a `server.js` file with the following content:
