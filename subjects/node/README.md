@@ -374,7 +374,7 @@ const fs = require('fs');
 console.log('Hello');
 
 // List the files at the root of the file system
-fs.readdir('/', 'utf-8', function(err, result) {
+fs.readdir('/', function(err, result) {
   console.log('Files: ' + result.join(', '));
   console.log('Done');
 });
@@ -429,7 +429,7 @@ Although I/O operations are non-blocking, **your code always executes in a singl
 const fs = require('fs');
 let fileCount = 0;
 
-fs.readdir('/', 'utf-8', function(err, result) {
+fs.readdir('/', function(err, result) {
   `fileCount = fileCount + result.length`;
   console.log('Files listed:', fileCount);
 });
@@ -486,7 +486,7 @@ Node.js callback functions usually have this signature:
 Like the previous example:
 
 ```js
-fs.readdir('/', 'utf-8', `function(err, result) {`
+fs.readdir('/', `function(err, result) {`
   // ...
 `}`);
 ```
@@ -494,12 +494,12 @@ fs.readdir('/', 'utf-8', `function(err, result) {`
 There are two ways that the function can be called back by Node.js:
 
 1. The operation **failed**:
-  * `err` contains an error describing the problem
+  * `err` contains an **error** describing the problem
   * `result` is `null` or `undefined`
 
 2. The operation **succeeded**:
   * `err` is `null` or `undefined`
-  * `result` contains the result of the operation
+  * `result` contains the **result** of the operation
 
 
 
