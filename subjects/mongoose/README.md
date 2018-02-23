@@ -319,7 +319,7 @@ const personSchema = new Schema({
     minlength: [ 3, 'Name is too short' ], // Minimum length
     maxlength: 20 // Maximum length
   },
-  address {
+  address: {
     city: {
       type: String,
       required: true
