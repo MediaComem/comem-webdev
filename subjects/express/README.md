@@ -491,7 +491,7 @@ Host: localhost:3000
 #### Serving static files
 
 ```http
-GET /style.css HTTP/1.1
+GET /stylesheets/style.css HTTP/1.1
 Host: localhost:3000
 ```
 
