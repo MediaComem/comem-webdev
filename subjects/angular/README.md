@@ -33,10 +33,22 @@ which you should both read to gain a deeper understanding of Angular.
   - [Modules](#modules)
   - [Components](#components)
   - [Data binding](#data-binding)
-  - [User input](#user-input)
-  - [Directives](#directives)
-  - [Models](#models)
-  - [Pipes](#pipes)
+- [User input](#user-input)
+  - [`ngModel`](#ngmodel)
+  - [Two-way data binding](#two-way-data-binding)
+- [Directives](#directives)
+  - [Structural directives](#structural-directives)
+  - [Attribute directives](#attribute-directives)
+  - [Common directives](#common-directives)
+- [Models](#models)
+  - [Using models](#using-models)
+  - [Using `ngFor`](#using-ngfor)
+  - [Using `ngPlural`](#using-ngplural)
+- [Pipes](#pipes)
+  - [Implementing a pipe](#implementing-a-pipe)
+  - [Using a pipe](#using-a-pipe)
+  - [Pipe parameters](#pipe-parameters)
+  - [Angular built-in pipes](#angular-built-in-pipes)
 - [Services](#services)
   - [The joke service](#the-joke-service)
   - [Providing the joke service](#providing-the-joke-service)
@@ -502,7 +514,7 @@ Now use that function in the template (`src/app/app.component.html`):
 
 
 
-### User input
+## User input
 
 One of the things you will need to do is **react to user input** (e.g. through forms).
 Let's make our greeting **dynamic** by adding an input field to customize the name.
@@ -529,7 +541,7 @@ Now interpolate that new property into the function in the template:
 </p>
 ```
 
-#### `ngModel`
+### `ngModel`
 
 Add an input field to the template above the greeting:
 
@@ -578,7 +590,7 @@ export class AppModule { }
 
 Once you've done that, the field should display correctly.
 
-#### Two-way data binding
+### Two-way data binding
 
 <!-- slide-column -->
 
@@ -599,7 +611,7 @@ it does not care about DOM manipulation or rendering concerns.
 
 
 
-### Directives
+## Directives
 
 A **directive** is a class with a `@Directive` decorator.
 
@@ -608,7 +620,7 @@ A `@Component` decorator is actually a `@Directive` decorator extended with temp
 
 Two other kinds of directives exist: **structural** and **attribute** directives.
 
-#### Structural directives
+### Structural directives
 
 Structural directives are responsible for HTML layout.
 They shape or reshape the **DOM's structure**, typically by **adding, removing, or manipulating elements**.
@@ -627,7 +639,7 @@ It is added back as soon as `greeting` has a value.
 Read the [documentation][angular-structural-directives] to learn more about structural directives.
 Many more such directives are provided by Angular out of the box, like [`ngFor`][angular-docs-ng-for] (which we'll use later) and [`ngSwitch`][angular-docs-ng-switch].
 
-#### Attribute directives
+### Attribute directives
 
 An **attribute** directive changes the **appearance or behavior of a DOM element**.
 
@@ -651,7 +663,7 @@ Similarly to a component, a directive is a JavaScript class, this time annotated
 The selector, `[appHighlight]` is an [attribute selector][css-attribute-selector].
 Also note that it is good practice to prefix the selector with your application name ("app" for this example) to avoid **naming collisions** with other directives.
 
-##### Using an attribute directive
+#### Using an attribute directive
 
 To use your new attribute directive, you must **declare** it in your module's `declarations` array in `src/app/app.module.ts`:
 
@@ -680,7 +692,7 @@ Let's add it to the greeting.
 
 You should see the directive being used in the console after entering some text in the input field.
 
-##### Modifying the DOM
+#### Modifying the DOM
 
 Now add an `ElementRef` argument to the directive's constructor:
 
@@ -702,7 +714,7 @@ Doing this **injects** a reference to the host DOM element, the element to which
 `ElementRef` grants direct access to the host DOM element through its `nativeElement` property.
 In this example we set the background color to yellow.
 
-#### Common directives
+### Common directives
 
 These common directives are provided by Angular out of the box:
 
@@ -716,7 +728,7 @@ These common directives are provided by Angular out of the box:
 
 
 
-### Models
+## Models
 
 Let's make our application funny by adding some jokes.
 
@@ -740,7 +752,7 @@ export class Joke {
 }
 ```
 
-#### Using models
+### Using models
 
 Let's add some jokes to our component:
 
@@ -770,7 +782,7 @@ export class AppComponent {
 }
 ```
 
-#### Using `ngFor`
+### Using `ngFor`
 
 Now that we have some jokes, let's display them.
 We want a `<ul>` list, with a `<li>` item for each joke.
@@ -787,7 +799,7 @@ Add this at the bottom of the component's template:
 The directive handles repeating the `<li>` element for us.
 No need to write it multiple times, or to manually build and concatenate DOM elements in the component's TypeScript code.
 
-#### Using `ngPlural`
+### Using `ngPlural`
 
 While we're at it, let's also add a header above the list:
 
@@ -812,7 +824,7 @@ The [`ngPlural`][angular-docs-ng-plural] directive comes to the rescue:
 
 
 
-### Pipes
+## Pipes
 
 When primitive values or objects are interpolated into a template, they are serialized by Angular using their `toString()` method.
 
@@ -825,7 +837,7 @@ That's fine for strings, but not for everything:
 Clearly, some values benefit from a bit of editing.
 Pipes allow you to define **reusable value transformations** that you can apply in your HTML templates.
 
-#### Implementing a pipe
+### Implementing a pipe
 
 Let's implement an (amazing) pipe that adds an exclamation point to the end of a string:
 
@@ -848,7 +860,7 @@ export class ExclamationPipe implements PipeTransform {
 }
 ```
 
-#### Using a pipe
+### Using a pipe
 
 Note that Angular automatically registered our pipe in the module's `declarations` array.
 This is necessary to be able to use it in a template:
@@ -875,7 +887,7 @@ Using the pipe is as simple as "piping" an interpolated value into it with the p
 </p>
 ```
 
-#### Pipe parameters
+### Pipe parameters
 
 Pipe can also take **parameters**.
 Let's add a number parameter to allow customizing the number of exclamation points:
@@ -902,7 +914,7 @@ Parameters are passed to pipes by appending `:value` to them in the template:
 </p>
 ```
 
-#### Angular built-in pipes
+### Angular built-in pipes
 
 Angular provides [a few pipes][angular-docs-pipes] out of the box.
 Here's some of them:
