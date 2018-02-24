@@ -758,7 +758,7 @@ You have to escape all other double quotes, and use `+` to concatenate.
 
 ```js
 // With backticks (template literals): `
-let string = `I'm your "Wurst" nightmare: ${worstNightmare}`;
+let string = \`I'm your "Wurst" nightmare: ${worstNightmare}`;
 ```
 
 You have to escape all other backticks, but you can use single and double quotes without escaping.

@@ -76,7 +76,7 @@ Here's a few examples with the basic types:
 let isDone: boolean = false;
 let value: number = 6;
 let name: string = 'World';
-let hello: string = `Hello ${name}!`;
+let hello: string = \`Hello ${name}!`;
 
 // Arrays
 let digits: number[] = [ 1, 2, 3 ];
@@ -278,10 +278,10 @@ You can use a **type guard** to *narrow* a value to a specific type:
 ```ts
 function lower(value: string | number): string {
   if (typeof(value) == 'string') {
-    // In this block, TypeScript knows that `value` is a string
+    // In this block, TypeScript knows that "value" is a string
     return value.toLowerCase();
   } else {
-    // In this block, TypeScript knows that `value` is a number
+    // In this block, TypeScript knows that "value" is a number
     // (since it's not a string, and it's either a string or a number)
     return (value - 1).toString();
   }
@@ -363,7 +363,7 @@ let result2 = buildName("Bob", "Adams", "Sr.");
 let result3 = buildName("Bob", "Adams");
 console.log(result3); // "Bob Adams"
 
-// You can also give `null` or `undefined`:
+// You can also give null or undefined:
 let result4 = buildName("Bob", null);
 console.log(result4); // "Bob null"
 ```
@@ -424,7 +424,7 @@ class Greeter {
 
   // Specify the type of method parameters and/or their return value.
   greet(): void {
-    return `Hello ${this.name}!`;
+    return \`Hello ${this.name}!`;
   }
 }
 
@@ -509,7 +509,7 @@ class Cat extends Animal {
   }
 
   describe() {
-    return `I am a ${this.name}`;
+    return \`I am a ${this.name}`;
   }
 }
 
@@ -584,7 +584,7 @@ abstract class Animal {
   abstract getCry(): string;
 
   cry(): void {
-    console.log(`I sound like this: ${this.getCry()}`);
+    console.log(\`I sound like this: ${this.getCry()}`);
   }
 }
 
@@ -607,7 +607,7 @@ abstract class Animal {
   abstract getCry(): string;
 
   cry(): void {
-    console.log(`I sound like this: ${this.getCry()}`);
+    console.log(\`I sound like this: ${this.getCry()}`);
   }
 }
 
@@ -630,7 +630,7 @@ abstract class Animal {
   abstract getCry(): string;
 
   cry(): void {
-    console.log(`I sound like this: ${this.getCry()}`);
+    console.log(\`I sound like this: ${this.getCry()}`);
   }
 }
 
@@ -733,9 +733,9 @@ interface Greeter {
 
 let value: Greeter;
 
-// OK, this object has a `greet` function.
+// OK, this object has a "greet" function.
 value = {
-  greet: (name: string) => `Hi ${name}!`
+  greet: (name: string) => \`Hi ${name}!`
 };
 
 console.log(value.greet('Bob')); // "Hi Bob!"
@@ -759,7 +759,7 @@ interface Greeter {
 
 class Person implements Greeter {
   greet(name: string): string {
-    return `Hello ${name}!`;
+    return \`Hello ${name}!`;
   }
 }
 
