@@ -53,6 +53,8 @@ which you should both read to gain a deeper understanding of Angular.
   - [Making a GET call](#making-a-get-call)
   - [Transforming data](#transforming-data)
   - [Transforming Observable streams](#transforming-observable-streams)
+  - [Reacting to errors in observable streams](#reacting-to-errors-in-observable-streams)
+  - [Getting the HTTP response](#getting-the-http-response)
 - [Component interaction](#component-interaction)
   - [Adding votes to the model](#adding-votes-to-the-model)
   - [Creating a child component](#creating-a-child-component)
@@ -508,7 +510,7 @@ Make the following changes to the component:
 
 ```ts
 export class AppComponent {
-  title: string;
+  // ...
   `greeting: string;`
 
   constructor() {
@@ -523,7 +525,7 @@ Now interpolate that new property into the function in the template:
 
 ```html
 <p>
-  {{ `hello(greeting)` }}
+  {{ hello(`greeting`) }}
 </p>
 ```
 
@@ -536,7 +538,7 @@ Add an input field to the template above the greeting:
 * <input type='text' placeholder='Who are you?' [(ngModel)]='greeting' />
 *</p>
 <p>
-  {{ `hello(greeting)` }}
+  {{ hello(greeting) }}
 </p>
 ```
 
@@ -801,10 +803,10 @@ It will say "1 jokes" instead of "1 joke".
 The [`ngPlural`][angular-docs-ng-plural] directive comes to the rescue:
 
 ```html
-<h2 [ngPlural]='jokes.length'>
+<h2 `[ngPlural]='jokes.length'`>
   {{ jokes.length }}
-  <ng-template ngPluralCase='=1'>joke</ng-template>
-  <ng-template ngPluralCase='other'>jokes</ng-template>
+* <ng-template ngPluralCase='=1'>joke</ng-template>
+* <ng-template ngPluralCase='other'>jokes</ng-template>
 </h2>
 ```
 
@@ -869,7 +871,7 @@ Using the pipe is as simple as "piping" an interpolated value into it with the p
 
 ```html
 <p>
-  {{ hello("World")` | exclamation` }}
+  {{ hello(greeting)` | exclamation` }}
 </p>
 ```
 
@@ -896,7 +898,7 @@ Parameters are passed to pipes by appending `:value` to them in the template:
 
 ```html
 <p>
-  {{ hello("World") | exclamation`:3` }}
+  {{ hello(greeting) | exclamation`:3` }}
 </p>
 ```
 
@@ -1344,6 +1346,78 @@ To use it, you need to import it and use the Observable's `pipe` method:
 *     .pipe(map(convertJokeResponseToJoke));
   }
 ```
+
+### Reacting to errors in observable streams
+
+An observable stream may emit an **error**.
+You can be notified of that error by passing a second callback function to `subscribe`:
+
+```ts
+getJoke(): Observable<Joke> {}
+  this.jokeService.getJoke().subscribe(joke => {
+    this.jokes.push(joke);
+  }`, err => {`
+    `console.warn('Could not get new joke', err);`
+  `}`);
+}
+```
+
+For the purpose of testing this new behavior, you can produce an error by changing the URL in `JokeService`, so that the call fails:
+
+```ts
+getJoke(): Observable<Joke> {
+  return this.httpClient
+    .get<JokeResponse>('https://`foo.example.com`/jokes/random')
+    .pipe(map(convertJokeResponseToJoke));
+}
+```
+
+### Getting the HTTP response
+
+We've seen that by default, Angular's `HttpClient` returns only the **body of the response**:
+
+```ts
+function getJoke(): Observable<JokeResponse> {
+  return this.httpClient
+    .get<JokeResponse>('https://api.icndb.com/jokes/random');
+}
+
+getJoke().subscribe(jokeResponse => {
+  // "jokeResponse" has type JokeResponse
+  console.log(jokeResponse.value.joke);
+  // "Chuck Norris can make a class that is both abstract and final."
+});
+```
+
+That's nice, but in some cases we might need access to the **HTTP status** or **headers** sent by the server in the response.
+
+#### Observing the response
+
+To get Angular's `HttpClient` to give you the full [`HttpResponse`][angular-docs-http-response] object,
+you need to pass an additional options object to your HTTP call,
+with the `observe` property set to `"response"`:
+
+```ts
+function getJoke(): Observable<`HttpResponse<JokeResponse>`> {
+  `const options = { observe: 'response' };`
+  return this.httpClient
+    .get<JokeResponse>('https://api.icndb.com/jokes/random'`, options`);
+}
+
+getJoke().subscribe(httpResponse => {
+  // "httpResponse" has type HttpResponse<JokeResponse>
+  console.log(httpResponse.status); // 200
+  // "httpResponse.body" has type JokeResponse
+  console.log(httpResponse.body.value.joke);
+  // "Chuck Norris can make a class that is both abstract and final."
+});
+```
+
+Now, you no longer get an Observable of `JokeResponse` objects,
+but instead get an Observable of `HttpResponse<JokeResponse>` objects.
+That is, the full HTTP response, with its `body` already parsed as a `JokeResponse` object.
+
+Read [the documentation of the `HttpResponse` class][angular-docs-http-response] to see what information you can extract from the response.
 
 
 
@@ -1905,7 +1979,6 @@ You can find a full example [in the documentation][angular-custom-validators].
 * Get HTTP response
 * Mention async validators
 * Mention reactive forms
-* Observable error example
 * Prune references at bottom
 
 
@@ -1934,6 +2007,7 @@ You can find a full example [in the documentation][angular-custom-validators].
 [angular-docs-email-validator]: https://angular.io/api/forms/EmailValidator
 [angular-docs-event-emitter]: https://angular.io/api/core/EventEmitter
 [angular-docs-http-client]: https://angular.io/guide/http
+[angular-docs-http-response]: https://angular.io/api/common/http/HttpResponse
 [angular-docs-injectable]: https://angular.io/api/core/Injectable
 [angular-docs-input]: https://angular.io/api/core/Input
 [angular-docs-lowercase-pipe]: https://angular.io/api/common/LowerCasePipe
