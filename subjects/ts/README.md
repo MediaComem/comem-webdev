@@ -23,6 +23,7 @@ This tutorial is a summary of some of the [TypeScript Handbook][typescript-handb
   - [Union types](#union-types)
   - [Enums](#enums)
   - [Void](#void)
+  - [Type aliases](#type-aliases)
 - [Functions](#functions)
   - [Mandatory parameters](#mandatory-parameters)
   - [Optional parameters](#optional-parameters)
@@ -35,7 +36,17 @@ This tutorial is a summary of some of the [TypeScript Handbook][typescript-handb
   - [Optional properties](#optional-properties)
   - [Interface functions](#interface-functions)
   - [Extending interfaces](#extending-interfaces)
-- [TODO](#todo)
+- [Generics](#generics)
+  - [Generic functions](#generic-functions)
+  - [Generic type syntax](#generic-type-syntax)
+  - [Generic type argument inference](#generic-type-argument-inference)
+  - [Generic classes & interfaces](#generic-classes--interfaces)
+  - [Generic constraints](#generic-constraints)
+- [Decorators](#decorators)
+  - [What is a decorator?](#what-is-a-decorator)
+  - [Decorator factory](#decorator-factory)
+  - [Class decorator example](#class-decorator-example)
+  - [Method decorator example](#method-decorator-example)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

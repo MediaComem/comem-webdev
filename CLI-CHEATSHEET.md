@@ -7,7 +7,7 @@ the default shell for most Linux distributions and macOS.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Getting help](#getting-help)
+- [Getting help (`man`, `--help`)](#getting-help-man---help)
 - [Navigating](#navigating)
   - [Where am I? (`pwd`)](#where-am-i-pwd)
   - [What is there? (`ls`)](#what-is-there-ls)
