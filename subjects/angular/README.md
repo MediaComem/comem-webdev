@@ -2,7 +2,8 @@
 
 Get started with and understand the basics of [Angular][angular], the JavaScript front-end web application framework.
 
-This is a 
+This tutorial is a condensed version of Angular's [Tour of Heroes][angular-tour-of-heroes] tutorial and some of its [Fundamentals][angular-fundamentals] documentation,
+which you should both read to gain a deeper understanding of Angular.
 
 <!-- slide-include ../../BANNER.md -->
 
@@ -31,6 +32,7 @@ This is a
   - [Overview](#overview)
   - [Modules](#modules)
   - [Components](#components)
+  - [Data binding](#data-binding)
   - [User input](#user-input)
   - [Directives](#directives)
   - [Models](#models)
@@ -64,7 +66,7 @@ This is a
   - [HTML validations](#html-validations)
   - [Creating a form](#creating-a-form)
   - [Checking the validation state](#checking-the-validation-state)
-  - [Default Angular validators](#default-angular-validators)
+  - [Angular validators](#angular-validators)
 - [Resources](#resources)
 - [TODO](#todo)
 
@@ -216,7 +218,7 @@ import { AppComponent } from './app.component';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class `AppModule` { }
+export `class AppModule` { }
 ```
 
 A module is a way to help organize related things (components, services, etc) together.
@@ -344,7 +346,9 @@ They apply only *within the template of that component*.
 
 Read the [Component Styles][angular-component-styles] documentation to learn more.
 
-#### Data binding
+
+
+### Data binding
 
 You can display data by **binding** parts of an HTML template to properties of a component.
 
@@ -363,6 +367,107 @@ Enclosing a component's property name in double curly braces in the template is 
 ```html
 <h1>
   Welcome to `{{ title }}`!
+</h1>
+```
+
+#### Attribute binding
+
+Let's see what else we can interpolate.
+Add a `titleComment` property to the component:
+
+```ts
+export class AppComponent {
+  title: string;
+  `titleComment: string;`
+
+  constructor() {
+    this.title = 'app';
+    `this.titleComment = 'This is awesome!';`
+  }
+}
+```
+
+Angular's `[]` syntax allows you to bind the value of a DOM element's **attribute** to one of the component's variables:
+
+```html
+<h1 `[title]='titleComment'`>
+  Welcome to {{ title }}!
+</h1>
+```
+
+##### To bind, or not to bind
+
+Note the two ways to interpolate attributes.
+Here, as in the previous example, the `[]` syntax **binds the the `title` attribute** to the `titleComment` variable:
+
+```html
+<h1 `[title]='titleComment'`>
+  Welcome to {{ title }}!
+</h1>
+```
+
+Here, the `title` attribute itself is not bound, but its **value is interpolated** with the `{{  }}` syntax.
+The behavior will be the same as the previous example:
+
+```html
+<h1 title='`{{ titleComment }}`'>
+  Welcome to {{ title }}!
+</h1>
+```
+
+Here, we made a **mistake**.
+We neither bound the attribute, nor used interpolation in its value,
+so the value of the attribute will be the string `"titleComment"`,
+not the value of the corresponding variable:
+
+```html
+<h1 title='titleComment'>
+  Welcome to {{ title }}!
+</h1>
+```
+
+#### Binding to events
+
+Let's imagine that we want to log something when the user clicks on the title.
+Add an `onTitleClicked()` function to the component:
+
+```ts
+export class AppComponent {
+  // ...
+
+* onTitleClicked() {
+*   console.log('The title was clicked');
+* }
+}
+```
+
+Angular's `()` syntax allows you to **bind functions to events** from a DOM element:
+
+```html
+<h1 [title]='titleComment' `(click)='onTitleClicked()'`>
+  Welcome to {{ title }}!
+</h1>
+```
+
+##### Getting at the event
+
+You might need the actual [event object][dom-event] to get some data out of it (e.g. the click coordinates):
+
+```ts
+export class AppComponent {
+  // ...
+
+  onTitleClicked(`event`) {
+    console.log('The title was clicked'`, event`);
+  }
+}
+```
+
+Simply add the `$event` variable to your function call, and Angular will pass the event object to your function:
+
+```html
+<h1 [title]='titleComment' (click)='onTitleClicked(`$event`)'>
+  Welcome to {{ title }}!
 </h1>
 ```
 
@@ -1599,7 +1704,9 @@ input.ng-invalid.ng-dirty {
 }
 ```
 
-### Default Angular validators
+
+
+### Angular validators
 
 These are some of the validators provided **out of the box** by Angular:
 
@@ -1672,7 +1779,6 @@ You can find a full example [in the documentation][angular-custom-validators].
 
 ## TODO
 
-* Explain `[attr]` & `(event)`
 * Move directive section
 * Pipes
 * Get HTTP response
@@ -1726,6 +1832,7 @@ You can find a full example [in the documentation][angular-custom-validators].
 [angular-form-control-status-classes]: https://angular.io/guide/form-validation#control-status-css-classes
 [angular-form-controller]: https://docs.angularjs.org/api/ng/type/form.FormController
 [angular-forms]: https://docs.angularjs.org/guide/forms
+[angular-fundamentals]: https://angular.io/guide/architecture
 [angular-guide]: https://docs.angularjs.org/guide
 [angular-input]: https://docs.angularjs.org/api/ng/directive/input
 [angular-ng-model-controller]: https://docs.angularjs.org/api/ng/type/ngModel.NgModelController
@@ -1735,12 +1842,14 @@ You can find a full example [in the documentation][angular-custom-validators].
 [angular-structural-directives]: https://angular.io/guide/structural-directives
 [angular-template-reference-variable]: https://angular.io/guide/template-syntax#ref-vars
 [angular-testing]: https://angular.io/guide/testing
+[angular-tour-of-heroes]: https://angular.io/tutorial
 [angular-2-series-components]: http://blog.ionic.io/angular-2-series-components/
 [blur-event]: https://developer.mozilla.org/en-US/docs/Web/Events/blur
 [chrome]: https://www.google.com/chrome/
 [chrome-dev]: https://developers.google.com/web/tools/chrome-devtools/console/
 [css-attribute-selector]: https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors
 [di]: https://en.wikipedia.org/wiki/Dependency_injection
+[dom-event]: https://developer.mozilla.org/en-US/docs/Web/API/Event
 [html-history-api]: https://developer.mozilla.org/en-US/docs/Web/API/History_API
 [html-input]: https://www.w3schools.com/tags/tag_input.asp
 [intro-to-reactive-programming]: https://gist.github.com/staltz/868e7e9bc2a7b8c1f754
