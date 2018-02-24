@@ -259,8 +259,6 @@ let numerals: (string | number)[] = [ 1, 2, 3 ];
 numerals.push('forty-two');
 ```
 
-
-
 #### Type guards
 
 Sometimes you will have a function parameter that can be of one type or another.
@@ -293,6 +291,8 @@ console.log(lower('HEY'));  // "hey"
 console.log(lower(43));     // "42"
 ```
 
+
+
 ### Enums
 
 You can define [enumerations][typescript-enums] with TypeScript:
@@ -319,6 +319,8 @@ if (value === Direction.South) {
 }
 ```
 
+
+
 ### Void
 
 `void` indicates the **absence of any type** at all.
@@ -333,6 +335,26 @@ let foo: string = warnUser();
 //                ^^^^^^^^ ERROR!
 //                Type 'void' is not assignable to type 'string'.
 ```
+
+
+
+### Type aliases
+
+Type aliases create a **new name for a type**.
+They can be used to "rename" primitives, unions, tuples, and any other types that you'd otherwise have to write by hand:
+
+```ts
+type GitHash = string;
+type StringOrNumber = string | number;
+
+let hash: GitHash = '9e91aa6c05f96251c20507f9068d177019af2742';
+
+let value: StringOrNumber = 'foo';
+value = 42;
+```
+
+Aliasing doesn’t actually create a new type—it creates a new name to refer to that type.
+It can be used as a form of documentation, e.g. to improve readability.
 
 
 
@@ -1023,14 +1045,129 @@ logLengthAndReturn(42);
 
 
 
-## TODO
+## Decorators
 
-* Decorators
-* Declaring custom types (`type StringOrNumber = string | number`)
+<!-- slide-front-matter class: center, middle -->
+
+Modify existing classes.
+
+
+
+### What is a decorator?
+
+Decorators are an experimental feature ([stage 2 proposal][js-decorators-proposal]) of JavaScript that is available in TypeScript.
+
+They provide a way to add **annotations** to class declarations, methods, accessors, properties and parameters.
+An annotation takes the form `@expression`, where `expression` must evaluate to a function that will be called at runtime with information about the decorated declaration.
+
+```ts
+`@classDecorator`
+class Person {
+  constructor(private name: string) {}
+
+  `@methodDecorator`
+  getName() {
+    return this.name;
+  }
+}
+```
+
+#### Implementing a decorator
+
+Any function can be used as a decorator by applying it with `@` before a class, method, accessor, property or parameter.
+In this example, we **decorate a class**.
+
+```ts
+function `classDecorator`(target: Function) {
+  console.log(\`Class "${target.name}" is decorated`);
+}
+
+`@classDecorator`
+class Person {}
+// Class "Person" is decorated
+```
+
+The function is called at runtime with the class being decorated as an argument,
+
+
+
+### Decorator factory
+
+If we want to customize how a decorator is applied to a declaration, we can write a **decorator factory**.
+It's simply a function that builds and returns the actual decorator:
+
+```ts
+function color(value: string) { // This is the decorator factory.
+  return function (target) { // This is the decorator.
+    // Do something with "target" and "value"...
+  };
+}
+```
+
+For example, this is how you would use it on a class:
+
+```ts
+@color('blue')
+class Whale {}
+```
+
+You **apply the factory** with `@`, and the **resulting decorator** will be applied to the class.
+
+
+
+### Class decorator example
+
+Class decorators can be used to apply **modifications to an existing class** and return the updated class.
+
+For example, this is used in the [Angular][angular] framework to add functionality to **component classes**:
+
+```ts
+*@Component({
+* selector: 'greet',
+* template: '<strong>Hello {{ name }}!</strong>'
+*})
+class GreetComponent {
+  name: string = 'World';
+}
+```
+
+In this example, the decorator defines that `GreetComponent` is used with the `<greet>` tag and specifies its HTML template.
+
+
+
+### Method decorator example
+
+This example shows how it's possible to **override methods** on an existing class with a **method decorator**:
+
+```ts
+function `logCalls`(target, key, descriptor) {
+
+  const originalMethod = target[key];
+  descriptor.value = function(...args: any[]) {
+    console.log(\`Method "${key}" was called`);
+    return originalMethod.apply(this, args);
+  };
+
+  return descriptor;
+}
+
+class Person {
+  constructor(private name: string) {}
+
+  `@logCalls`
+  getName() {
+    return this.name;
+  }
+}
+
+const jdoe = new Person('John Doe');
+const name = jdoe.getName(); // Method "getName" was called
+```
 
 
 
 [angular]: https://angular.io
+[js-decorators-proposal]: https://github.com/tc39/proposal-decorators
 [typescript]: https://www.typescriptlang.org
 [typescript-enums]: https://www.typescriptlang.org/docs/handbook/enums.html
 [typescript-handbook]: https://www.typescriptlang.org/docs/handbook/basic-types.html
