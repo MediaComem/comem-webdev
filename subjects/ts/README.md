@@ -5,6 +5,8 @@ Learn the basics of [TypeScript][typescript], a typed superset of JavaScript tha
 TypeScript is also the language recommended by the Angular team to develop [Angular][angular] applications
 (but it can be used with any framework or library).
 
+This tutorial is a summary of some of the [TypeScript Handbook][typescript-handbook]'s chapters.
+
 <!-- slide-include ../../BANNER.md -->
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -805,9 +807,224 @@ square = {
 
 
 
+## Generics
+
+<!-- slide-front-matter class: center, middle -->
+
+Work on the data of today as well as the data of tomorrow.
+
+
+
+### Generic functions
+
+Let's take a look at this logging function which logs the specified value and returns it:
+
+```ts
+function logAndReturnValue(arg: `number`): `number` {
+  console.log(arg);
+  return arg;
+}
+
+const n = logAndReturnValue(42); // 42
+
+console.log(n.toUpperCase());
+//           ^^^^^^^^^^^^^^ ERROR!
+// Property 'toUppercase' does not exist on type 'number'.
+```
+
+It's typed and returns the value as a `number`, which is good,
+because then TypeScript won't let us use properties or methods that should not be available.
+
+**However,** this "log and return" functionality could be **generic** and take **any type of value**.
+
+#### Pseudo-generic function with `any`
+
+You could rewrite the function using the `any` type:
+
+```ts
+function logAndReturnValue(arg: `any`): `any` {
+  console.log(arg);
+  return arg;
+}
+
+const n = logAndReturnValue(42);       // 42
+const s = logAndReturnValue('Hello');  // Hello
+
+console.log(s.toUpperCase());
+
+// No error in editor at compile time.
+// TypeError at runtime: n.toUpperCase is not a function
+console.log(n.toUpperCase());
+```
+
+It now takes and returns any type of value,
+but you **lose the information** about **what type of value** the function **returns**.
+
+#### Using generics in a function
+
+Instead, we need a way of **capturing the type** of the argument in such a way that we can also use it to denote what is being returned:
+
+```ts
+function logAndReturnValue`<T>`(arg: `T`): `T` {
+  console.log(arg);
+  return arg;
+}
+
+const n = logAndReturnValue<number>(42); // 42
+
+console.log(n.toUpperCase());
+//           ^^^^^^^^^^^^^^ ERROR!
+// Property 'toUppercase' does not exist on type 'number'.
+```
+
+We've now added a type variable `T` to the identity function.
+This `T` allows us to capture the type the user provides (e.g. number), so that we can use that information later.
+Here, we use `T` again as the return type.
+This allows us to use the function's **input type** to describe its **output type**.
+
+The function is now **generic**.
+It works over a range of types, **without losing the type information** of its return value.
+
+
+
+### Generic type syntax
+
+You may name the **type variable** however you want.
+It's often named `T` when there is only one, but that's not mandatory:
+
+```ts
+function logAndReturnValue`<ValueType>`(arg: `ValueType`): `ValueType` {
+  console.log(arg);
+  return arg;
+}
+```
+
+You may specify **multiple type variables** if your function needs to have multiple generic type arguments:
+
+```ts
+function logAndReturnFirst`<T, U>`(arg1: `T`, arg2: `U`): `T` {
+  console.log(arg1);
+  console.log(arg2);
+  return arg1;
+}
+```
+
+
+
+### Generic type argument inference
+
+You may have noticed that we specified the **input type** of the generic function **when calling it**:
+
+```ts
+function logAndReturnValue<T>(arg: T): T {
+  console.log(arg);
+  return arg;
+}
+
+const n = logAndReturnValue`<number>`(42); // 42
+```
+
+This is not mandatory.
+If you don't specify a type argument, TypeScript will automatically **infer the type** based on the argument you pass in:
+
+```ts
+// TypeScript automatically infers that 42 is a number.
+const n = logAndReturnValue(42); // 42
+
+console.log(n.toUpperCase());
+//           ^^^^^^^^^^^^^^ ERROR!
+// Property 'toUppercase' does not exist on type 'number'.
+```
+
+However, in some cases it may improve the **readability** of your code to explicity specify the type.
+
+
+
+### Generic classes & interfaces
+
+Generic type arguments can also be used on **classes**:
+
+```ts
+`class` GenericValueLogger`<T>` {
+
+  constructor(private value: `T`) {}
+
+  logAndReturn(): `T` {
+    console.log(this.value);
+    return this.value;
+  }
+}
+
+const logger = new GenericValueLogger`<number>`(42);
+
+const n = logger.logAndReturn(); // 42
+
+console.log(n.toUpperCase());
+//           ^^^^^^^^^^^^^^ ERROR!
+// Property 'toUppercase' does not exist on type 'number'.
+```
+
+And on **interfaces**:
+
+```ts
+`interface` GenericLogger`<T>` {
+  logValueAndReturn(arg: `T`): `T`;
+}
+```
+
+
+
+### Generic constraints
+
+What if we wanted to create a generic logging function that logs an object's **length**.
+It should work with **any type of object that has a length**, such as an **array** or **string**.
+
+```ts
+function logLengthAndReturn<T>(arg: T): T {
+  console.log(arg`.length`);
+  //             ^^^^^^^ ERROR!
+  // Property 'length' does not exist on type 'T'.
+  return arg;
+}
+```
+
+In this example we simply use `T` as a type argument.
+TypeScript will refuse to compile the function, because `T` could be **any type**, not just a string or an array.
+
+#### Adding a generic type argument constraint
+
+By using the `extends` keyword, you can specify that a type argument **must match a constraint**.
+In this case, we require that the argument of type `T` must match an interface that requires a `length` property:
+
+```ts
+interface HasLength {
+  length: number;
+}
+
+function logLengthAndReturn<`T extends HasLength`>(arg: T): T {
+  console.log(arg.length);
+  return arg;
+}
+
+const a = logLengthAndReturn([ 1, 2, 3 ]);  // 3
+const s = logLengthAndReturn('abcdef');     // 5
+
+console.log(a.reverse());      // [ 3, 2, 1 ]
+console.log(s.toUpperCase());  // "ABCDEF"
+```
+
+This generic function **now only accepts matching types**:
+
+```ts
+logLengthAndReturn(42);
+//                 ^^ ERROR!
+// Argument of type '42' is not assignable to parameter of type 'WithLength'.
+```
+
+
+
 ## TODO
 
-* Generics
 * Decorators
 * Declaring custom types (`type StringOrNumber = string | number`)
 

@@ -30,6 +30,8 @@
 ## Subjects
 
 * JavaScript
+  * classes
+  * import/export, modules
   * async/await
   * spread operator
 * Ionic
