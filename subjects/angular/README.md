@@ -82,6 +82,9 @@ which you should both read to gain a deeper understanding of Angular.
   - [Creating a form](#creating-a-form)
   - [Checking the validation state](#checking-the-validation-state)
   - [Angular validators](#angular-validators)
+  - [Custom validators](#custom-validators)
+- [Reactive forms](#reactive-forms)
+  - [Which is better, reactive or template-driven?](#which-is-better-reactive-or-template-driven)
 - [Resources](#resources)
 - [TODO](#todo)
 
@@ -1935,33 +1938,118 @@ Here's a few usage examples:
 <input type='text' name='occupation' `required` />
 ```
 
-#### Custom validators
+
+
+### Custom validators
 
 These validators are nice, but you might need **more complex validations**.
 
 That's why Angular allows you to implement [custom validators][angular-custom-validators].
-Here's an example of a validator that checks whether a string is all uppercase or all lowercase:
+Here's an example of a validator that ensures a string is not in a list of forbidden values:
 
 ```ts
-export function uniformCaseValidator(upper: boolean): ValidatorFn {
-  return (control: AbstractControl): {[key: string]: any} => {
+import { AbstractControl, ValidatorFn } from '@angular/forms';
 
-    const lowercase = control.value.toLowerCase() === control.value;
-    const uppercase = control.value.toUpperCase() === control.value;
-    if (upper && !uppercase) || (!upper && !lowercase)) {
-      // The value is invalid.
-      return { // Return an error named after the validator.
-        uniformCase: { value: control.value }
+export function notInValidator(notIn: string[]): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } => {
+
+    // Check if the value is invalid.
+    if (notIn.indexOf(control.value) >= 0) {
+      // Return an error named after the validator if that is the case.
+      return {
+        notIn: { value: control.value }
       };
     }
 
-    return null; // All is well, there is no error.
+    // Otherwise, all is well, there is no error.
+    return null;
   };
 }
 ```
 
-It takes a bit more code than that to register the validator in order to use it in templates.
-You can find a full example [in the documentation][angular-custom-validators].
+#### Registering a custom validator
+
+To use your validation function in a form, you need to wrap it in a directive:
+
+```ts
+import { Directive, Input } from '@angular/core';
+import { AbstractControl, NG_VALIDATORS, Validator } from '@angular/forms';
+
+import { notInValidator } from './not-in-validator';
+
+@Directive({
+  selector: '[notIn]',
+  providers: [
+    {
+      provide: NG_VALIDATORS,
+      useExisting: NotInValidatorDirective,
+      multi: true
+    }
+  ]
+})
+export class NotInValidatorDirective implements Validator {
+
+  @Input('notIn')
+  notIn: string[];
+
+  validate(control: AbstractControl): {[key: string]: any} {
+    return notInValidator(this.notIn)(control);
+  }
+}
+```
+
+#### Using a custom validator
+
+You must register the new directive in the module's `declarations` array:
+
+```ts
+// Other imports...
+*import { NotInValidatorDirective } from './validators/not-in-validator-directive';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    ExclamationPipe,
+    `NotInValidatorDirective`
+  ],
+  // ...
+})
+export class AppModule { }
+```
+
+You can then finally use it in the template:
+
+```html
+<input type='text' placeholder='Who are you?' [(ngModel)]='greeting'
+  name='greeting' required `[notIn]='["Bob"]'` #greetingInput='ngModel' />
+```
+
+
+
+## Reactive forms
+
+The form we have seen so far is a **template-driven form**.
+In contrast, **reactive forms** are an Angular technique for creating forms in a **reactive programming** style.
+They are provided by a separate module, the [`ReactiveFormsModule`][angular-docs-reactive-forms-module].
+
+* In **template-driven forms**, form structure and validation are specified and handled in the **template**.
+  * Creation of form controls is delegated to directives and asynchronous.
+  * Angular handles data updates with two-way binding.
+  * Hard to test with automated tests.
+* In **reactive forms**, a tree of form control objects and validations is managed in the **component** and bound in to elements in the template.
+  * The component class has immediate access to both the data model and the form control structure.
+  * Changes can be subscribed to in the form of Observables.
+  * Data and validity updates are synchronous and under your control.
+  * Easier to test with automated tests.
+
+### Which is better, reactive or template-driven?
+
+Neither is "better".
+They're two different architectural paradigms, with their own strengths and weaknesses.
+Choose the approach that works best for you.
+You may decide to use both in the same application.
+
+Read the documentation on [reactive forms][angular-reactive-forms] to learn more.
 
 
 
@@ -1988,9 +2076,7 @@ You can find a full example [in the documentation][angular-custom-validators].
 
 ## TODO
 
-* Get HTTP response
 * Mention async validators
-* Mention reactive forms
 * Prune references at bottom
 
 
@@ -2040,6 +2126,7 @@ You can find a full example [in the documentation][angular-custom-validators].
 [angular-docs-pattern-validator]: https://angular.io/api/forms/PatternValidator
 [angular-docs-percent-pipe]: https://angular.io/api/common/PercentPipe
 [angular-docs-pipes]: https://angular.io/api?type=pipe
+[angular-docs-reactive-forms-module]: https://angular.io/api/forms/ReactiveFormsModule
 [angular-docs-required-validator]: https://angular.io/api/forms/RequiredValidator
 [angular-docs-titlecase-pipe]: https://angular.io/api/common/TitleCasePipe
 [angular-docs-uppercase-pipe]: https://angular.io/api/common/UpperCasePipe
