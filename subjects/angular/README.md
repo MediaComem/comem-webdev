@@ -2,7 +2,7 @@
 
 Get started with and understand the basics of [Angular][angular], the JavaScript front-end web application framework.
 
-This tutorial is a condensed version of Angular's [Tour of Heroes][angular-tour-of-heroes] tutorial and some of its [Fundamentals][angular-fundamentals] documentation,
+This tutorial is a condensed version of Angular's [Tour of Heroes][angular-tour-of-heroes] tutorial and some of its [Development Guide][angular-guide],
 which you should both read to gain a deeper understanding of Angular.
 
 <!-- slide-include ../../BANNER.md -->
@@ -36,6 +36,7 @@ which you should both read to gain a deeper understanding of Angular.
   - [User input](#user-input)
   - [Directives](#directives)
   - [Models](#models)
+  - [Pipes](#pipes)
 - [Services](#services)
   - [The joke service](#the-joke-service)
   - [Providing the joke service](#providing-the-joke-service)
@@ -193,6 +194,7 @@ You should keep your [developer console][chrome-dev] open throughout this tutori
 * Interpolation
 * Data binding
 * Dependency injection
+* Observables & reactive programming
 * Form validation
 
 
@@ -483,7 +485,7 @@ export class AppComponent {
   // ...
 
 * hello(name: string): string {
-*   return 'Hello ' + name + '!';
+*   return \`Hello ${name}`;
 * }
 }
 ```
@@ -599,7 +601,7 @@ it does not care about DOM manipulation or rendering concerns.
 
 A **directive** is a class with a `@Directive` decorator.
 
-The **component** that we've seen before is a *directive-with-a-template*
+The **component** that we've seen before is a *directive-with-a-template*.
 A `@Component` decorator is actually a `@Directive` decorator extended with template-oriented features.
 
 Two other kinds of directives exist: **structural** and **attribute** directives.
@@ -705,6 +707,7 @@ These common directives are provided by Angular out of the box:
 * [`ngClass`][angular-docs-ng-class] - Adds and removes **CSS classes** on an HTML element.
 * [`ngFor`][angular-docs-ng-for] - Instantiates a template **once per item** from an iterable.
 * [`ngIf`][angular-docs-ng-if] - **Conditionally includes** a template based on the value of an expression.
+* [`ngModel`][angular-docs-ng-model] - **Two-way binding** between a form's input field and a component's variable.
 * [`ngPlural`][angular-docs-ng-plural] - Adds/removes DOM sub-trees based on a numeric value. (Tailored for **pluralization**.)
 * [`ngStyle`][angular-docs-ng-style] - Update an HTML element's **styles**.
 * [`ngSwitch`][angular-docs-ng-switch] - Adds/removes DOM sub-trees when the nest match expressions matches the **switch** expression.
@@ -804,6 +807,126 @@ The [`ngPlural`][angular-docs-ng-plural] directive comes to the rescue:
   <ng-template ngPluralCase='other'>jokes</ng-template>
 </h2>
 ```
+
+
+
+### Pipes
+
+When primitive values or objects are interpolated into a template, they are serialized by Angular using their `toString()` method.
+
+That's fine for strings, but not for everything:
+
+* What about **numbers**? You might not want to display all their decimals.
+* What about **currencies**? They are usually displayed in a specific format.
+* What about **dates**? You might want to use a simple format like `April 15, 1988` rather than the default `Fri Apr 15 1988 00:00:00 GMT-0700 (Pacific Daylight Time)`.
+
+Clearly, some values benefit from a bit of editing.
+Pipes allow you to define **reusable value transformations** that you can apply in your HTML templates.
+
+#### Implementing a pipe
+
+Let's implement an (amazing) pipe that adds an exclamation point to the end of a string:
+
+```bash
+$> ng generate pipe --spec false pipes/exclamation
+```
+
+Implement the transformation in the generated file (`src/app/pipes/exclamation.pipe.ts`):
+
+```ts
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'exclamation'
+})
+export class ExclamationPipe implements PipeTransform {
+  transform(value: any, args?: any): any {
+*   return \`${value}!`;
+  }
+}
+```
+
+#### Using a pipe
+
+Note that Angular automatically registered our pipe in the module's `declarations` array.
+This is necessary to be able to use it in a template:
+
+```ts
+// Other imports...
+import { ExclamationPipe } from './pipes/exclamation.pipe';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    `ExclamationPipe`
+  ],
+  // ...
+})
+export class AppModule { }
+```
+
+Using the pipe is as simple as "piping" an interpolated value into it with the pipe (`|`) character in the template:
+
+```html
+<p>
+  {{ hello("World")` | exclamation` }}
+</p>
+```
+
+#### Pipe parameters
+
+Pipe can also take **parameters**.
+Let's add a number parameter to allow customizing the number of exclamation points:
+
+```ts
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'exclamation'
+})
+export class ExclamationPipe implements PipeTransform {
+  transform(value: any`, strength: number = 1`): any {
+*   const exclamation = '!'.repeat(strength);
+*   return \`${value}${exclamation}`;
+  }
+}
+```
+
+Parameters are passed to pipes by appending `:value` to them in the template:
+
+```html
+<p>
+  {{ hello("World") | exclamation`:3` }}
+</p>
+```
+
+#### Angular built-in pipes
+
+Angular provides [a few pipes][angular-docs-pipes] out of the box.
+Here's some of them:
+
+* [`CurrencyPipe`][angular-docs-currency-pipe]
+* [`DatePipe`][angular-docs-date-pipe]
+* [`DecimalPipe`][angular-docs-decimal-pipe]
+* [`LowerCasePipe`][angular-docs-lowercase-pipe], [`UpperCasePipe`][angular-docs-uppercase-pipe] & [`TitleCasePipe`][angular-docs-titlecase-pipe]
+* [`PercentPipe`][angular-docs-percent-pipe]
+
+Here's few usage examples for [`DatePipe`][angular-docs-date-pipe]:
+
+```html
+<!-- Output: Jun 15, 2015 -->
+<p>Today is {{ dateValue | date }}</p>
+
+<!-- Output: Monday, June 15, 2015 -->
+<p>Or if you prefer, {{ dateValue | date:'fullDate' }}</p>
+
+<!-- Output: 9:43 AM -->
+<p>The time is {{ dateValue | date:'shortTime' }}</p>
+```
+
+Read [more about pipes][angular-pipes] in the development guide.
+
+
 
 
 
@@ -1779,8 +1902,6 @@ You can find a full example [in the documentation][angular-custom-validators].
 
 ## TODO
 
-* Move directive section
-* Pipes
 * Get HTTP response
 * Mention async validators
 * Mention reactive forms
@@ -1806,12 +1927,16 @@ You can find a full example [in the documentation][angular-custom-validators].
 [angular-directives]: https://docs.angularjs.org/guide/directive
 [angular-directives-list]: https://docs.angularjs.org/api/ng/directive
 [angular-docs-component]: https://angular.io/api/core/Component
+[angular-docs-currency-pipe]: https://angular.io/api/common/CurrencyPipe
+[angular-docs-date-pipe]: https://angular.io/api/common/DatePipe
+[angular-docs-decimal-pipe]: https://angular.io/api/common/DecimalPipe
 [angular-docs-directive]: https://angular.io/api/core/Directive
 [angular-docs-email-validator]: https://angular.io/api/forms/EmailValidator
 [angular-docs-event-emitter]: https://angular.io/api/core/EventEmitter
 [angular-docs-http-client]: https://angular.io/guide/http
 [angular-docs-injectable]: https://angular.io/api/core/Injectable
 [angular-docs-input]: https://angular.io/api/core/Input
+[angular-docs-lowercase-pipe]: https://angular.io/api/common/LowerCasePipe
 [angular-docs-max-length-validator]: https://angular.io/api/forms/MaxLengthValidator
 [angular-docs-min-length-validator]: https://angular.io/api/forms/MinLengthValidator
 [angular-docs-max-validator]: https://angular.io/api/forms/Validators#max
@@ -1827,15 +1952,19 @@ You can find a full example [in the documentation][angular-custom-validators].
 [angular-docs-ng-switch]: https://angular.io/api/common/NgSwitch
 [angular-docs-output]: https://angular.io/api/core/Output
 [angular-docs-pattern-validator]: https://angular.io/api/forms/PatternValidator
+[angular-docs-percent-pipe]: https://angular.io/api/common/PercentPipe
+[angular-docs-pipes]: https://angular.io/api?type=pipe
 [angular-docs-required-validator]: https://angular.io/api/forms/RequiredValidator
+[angular-docs-titlecase-pipe]: https://angular.io/api/common/TitleCasePipe
+[angular-docs-uppercase-pipe]: https://angular.io/api/common/UpperCasePipe
 [angular-element]: https://docs.angularjs.org/api/ng/function/angular.element
 [angular-form-control-status-classes]: https://angular.io/guide/form-validation#control-status-css-classes
 [angular-form-controller]: https://docs.angularjs.org/api/ng/type/form.FormController
 [angular-forms]: https://docs.angularjs.org/guide/forms
-[angular-fundamentals]: https://angular.io/guide/architecture
-[angular-guide]: https://docs.angularjs.org/guide
+[angular-guide]: https://angular.io/guide/architecture
 [angular-input]: https://docs.angularjs.org/api/ng/directive/input
 [angular-ng-model-controller]: https://docs.angularjs.org/api/ng/type/ngModel.NgModelController
+[angular-pipes]: https://angular.io/guide/pipes
 [angular-promises]: ../angular-promises/
 [angular-reactive-forms]: https://angular.io/guide/reactive-forms
 [angular-starter]: https://github.com/MediaComem/comem-angular-starter#readme
