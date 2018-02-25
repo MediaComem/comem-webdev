@@ -2,7 +2,7 @@
 
 Get started with and understand the basics of [Angular][angular], the JavaScript front-end web application framework.
 
-This tutorial is a condensed version of Angular's [Tour of Heroes][angular-tour-of-heroes] tutorial and some of its [Development Guide][angular-guide],
+This tutorial is a condensed version of Angular's [Tour of Heroes][angular-tour-of-heroes] tutorial and some of its [Developer Guide][angular-guide],
 which you should both read to gain a deeper understanding of Angular.
 
 <!-- slide-include ../../BANNER.md -->
@@ -83,10 +83,14 @@ which you should both read to gain a deeper understanding of Angular.
   - [Checking the validation state](#checking-the-validation-state)
   - [Angular validators](#angular-validators)
   - [Custom validators](#custom-validators)
+  - [Displaying different messages for different errors](#displaying-different-messages-for-different-errors)
+  - [Asynchronous validators](#asynchronous-validators)
 - [Reactive forms](#reactive-forms)
+  - [Using reactive forms in the component](#using-reactive-forms-in-the-component)
+  - [Using reactive forms in the template](#using-reactive-forms-in-the-template)
+  - [Reactive form validations](#reactive-form-validations)
   - [Which is better, reactive or template-driven?](#which-is-better-reactive-or-template-driven)
 - [Resources](#resources)
-- [TODO](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -941,7 +945,7 @@ Here's few usage examples for [`DatePipe`][angular-docs-date-pipe]:
 <p>The time is {{ dateValue | date:'shortTime' }}</p>
 ```
 
-Read [more about pipes][angular-pipes] in the development guide.
+Read [more about pipes][angular-pipes] in the developer guide.
 
 
 
@@ -1778,7 +1782,7 @@ Update the component's template to reflect the fact that we now want to display 
 
 ```html
 <p *ngIf='displayedGreeting'>
-  {{ hello(displayedGreeting) }}
+  {{ hello(displayedGreeting) | exclamation:3 }}
 </p>
 ```
 
@@ -1948,10 +1952,10 @@ That's why Angular allows you to implement [custom validators][angular-custom-va
 Here's an example of a validator that ensures a string is not in a list of forbidden values:
 
 ```ts
-import { AbstractControl, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export function notInValidator(notIn: string[]): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } => {
+  return (control: AbstractControl): ValidationErrors | null => {
 
     // Check if the value is invalid.
     if (notIn.indexOf(control.value) >= 0) {
@@ -1973,7 +1977,8 @@ To use your validation function in a form, you need to wrap it in a directive:
 
 ```ts
 import { Directive, Input } from '@angular/core';
-import { AbstractControl, NG_VALIDATORS, Validator } from '@angular/forms';
+import { AbstractControl, NG_VALIDATORS, ValidationErrors,
+         Validator } from '@angular/forms';
 
 import { notInValidator } from './not-in-validator';
 
@@ -1992,7 +1997,7 @@ export class NotInValidatorDirective implements Validator {
   @Input('notIn')
   notIn: string[];
 
-  validate(control: AbstractControl): {[key: string]: any} {
+  validate(control: AbstractControl): ValidationErrors | null {
     return notInValidator(this.notIn)(control);
   }
 }
@@ -2026,30 +2031,258 @@ You can then finally use it in the template:
 
 
 
+### Displaying different messages for different errors
+
+There's a little problem now.
+Since our error message is displayed as soon as there's an error on the `greetingInput` field,
+it always displays `Name is required`, even if the error is due to our new custom validator.
+
+```html
+<p *ngIf='`greetingInput.invalid` && greetingInput.dirty'>
+  Name is required
+</p>
+```
+
+To fix that, use `greetingInput.errors` which is an object containing a key for each type of error.
+That way you can react separately to the `required` validator's error and to the custom validator's `notIn` error:
+
+```html
+<p *ngIf='`greetingInput.errors?.required` && greetingInput.dirty'>
+  Name is required
+</p>
+*<p *ngIf='greetingInput.errors?.notIn && greetingInput.dirty'>
+* Name is forbidden
+*</p>
+```
+
+The special `.errors?.required` syntax with an interrogation mark is here to avoid an error if `.errors` returns `null` or `undefined`,
+in which case it will simply ignore the rest of the expression.
+
+
+
+### Asynchronous validators
+
+The validator we implemented is actually a function that matches Angular's [`ValidatorFn`][angular-docs-validator-fn] interface.
+It is **synchronous**, i.e. it performs no I/O operation to validate its value and immediately returns its errors (or `null`):
+
+```ts
+(control: AbstractControl): ValidationErrors | null
+```
+
+It's also possible to create **asynchronous validators**.
+For example, to check whether a **username is already taken**, you might have to **call your API**, which is an asynchronous operation.
+
+In that case, your validator function must match the [`AsyncValidatorFn`][angular-docs-async-validator-fn] interface instead.
+That is, instead of returning an object of validation errors, it must return either a **Promise or an Observable** of that object:
+
+```ts
+(control: AbstractControl): Promise<ValidationErrors | null>
+                            | Observable<ValidationErrors | null>
+```
+
+That way, Angular will wait for the Promise to be resolved or for the Observable to emit the errors before updating the template.
+
+
+
 ## Reactive forms
 
 The form we have seen so far is a **template-driven form**.
 In contrast, **reactive forms** are an Angular technique for creating forms in a **reactive programming** style.
-They are provided by a separate module, the [`ReactiveFormsModule`][angular-docs-reactive-forms-module].
+They are provided by a separate module, the [`ReactiveFormsModule`][angular-docs-reactive-forms-module]:
 
-* In **template-driven forms**, form structure and validation are specified and handled in the **template**.
-  * Creation of form controls is delegated to directives and asynchronous.
-  * Angular handles data updates with two-way binding.
-  * Hard to test with automated tests.
-* In **reactive forms**, a tree of form control objects and validations is managed in the **component** and bound in to elements in the template.
-  * The component class has immediate access to both the data model and the form control structure.
-  * Changes can be subscribed to in the form of Observables.
-  * Data and validity updates are synchronous and under your control.
-  * Easier to test with automated tests.
+```ts
+// Other imports...
+import { FormsModule`, ReactiveFormsModule` } from '@angular/forms';
+
+@NgModule({
+  // ...
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    `ReactiveFormsModule`
+  ],
+  // ...
+})
+export class AppModule { }
+```
+
+
+
+### Using reactive forms in the component
+
+With reactive forms, the form structure is also defined with code in the component:
+
+```ts
+// Other imports...
+*import { FormBuilder, FormGroup, NgForm } from '@angular/forms';
+
+// ...
+export class AppComponent {
+  // ...
+  `greetingForm: FormGroup;`
+
+  constructor(
+    `private formBuilder: FormBuilder,`
+    private jokeService: JokeService
+  ) {
+    // ...
+*   this.greetingForm = formBuilder.group({
+*     // Define the "greeting" field and its default value
+*     greeting: [ '' ]
+*   });
+  }
+
+  // ...
+}
+```
+
+#### Getting the form from the component
+
+Since the form is built directly in the component,
+you no longer have to retrieve it from the template.
+
+You can update the `displayGreeting()` method to use the new form group:
+
+```ts
+// ...
+export class AppComponent {
+  // ...
+
+  displayGreeting`()` {
+    if (`this.greetingForm`.valid) {
+      this.displayedGreeting = this.greeting;
+      console.log('Greeting displayed');
+    }
+  }
+
+  // ...
+}
+```
+
+#### Reacting to form value changes
+
+Reactive forms do not use `ngModel`, so there won't be two-way binding with the template any longer.
+There will only be **one-way binding** from the form group in the component to the template.
+
+To be notified of changes in the form group, you can subscribe to its `valueChanges` property, which is an Observable:
+
+```ts
+// ...
+export class AppComponent {
+  // ...
+  constructor(/* ... */) {
+    // ...
+*   this.greetingForm.valueChanges.subscribe(value => {
+*     console.log(`Greeting changed to "${value.greeting}"`);
+*     this.greeting = value.greeting;
+*   });
+  }
+  // ...
+}
+```
+
+
+
+### Using reactive forms in the template
+
+With reactive forms, your **template** is somewhat **simplified**.
+Remove `ngModel`, the validations, `#greetingForm` and `#greetingInput`.
+You simply have to pass the form group created in the component to the `<form>` tag with the `formGroup` directive,
+and use the `formControlName` directive on the `<input>` tag:
+
+```html
+<form `[formGroup]='greetingForm'` (submit)='`displayGreeting()`'>
+  <!-- ... -->
+  <input type='text' placeholder='Who are you?' `formControlName='greeting'` />
+  <!-- ... -->
+</form>
+```
+
+You must also update your error messages to get the input field from the form group with `greetingForm.get("greeting")`
+instead of using the `#greetingInput` template reference variable you just removed:
+
+```html
+<p *ngIf='`greetingForm.get("greeting")`.errors?.required
+          && `greetingForm.get("greeting")`.dirty'>
+  Name is required
+</p>
+<p *ngIf='`greetingForm.get("greeting")`.errors?.notIn
+          && `greetingForm.get("greeting")`.dirty'>
+  Name is forbidden
+</p>
+```
+
+
+
+### Reactive form validations
+
+The validations are no longer applied since we removed them from the template.
+With reactive forms, **validation is configured in the component**:
+
+```ts
+// Other imports...
+import { FormBuilder, FormGroup, NgForm`, Validators` } from '@angular/forms';
+*import { notInValidator } from './validators/not-in-validator';
+
+export class AppComponent {
+  // ...
+  constructor(/* ... */) {
+    // ...
+    this.greetingForm = formBuilder.group({
+      // Define the "greeting" field and its default value
+*     greeting: [
+*       '',
+*       Validators.compose([ // Add validators to the field.
+*         Validators.required, // Use the built-in "required" validator.
+*         notInValidator([ 'Bob' ]) // Use our custom validator function.
+*       ])
+*     ]
+    });
+  }
+  // ...
+}
+```
+
+#### Custom validators in reactive forms
+
+Note that we use our custom validator function (`notInValidator`) directly,
+instead of using the `NotInValidatorDirective` wrapper like before:
+
+```ts
+Validators.compose([ // Add validators to the field.
+  Validators.required, // Use the built-in "required" validator.
+  `notInValidator([ 'Bob' ])` // Use our custom validator function.
+])
+```
+
+This is an advantage of reactive forms over template-driven forms:
+validators can be **simple functions** that do not require an additional directive to be applied in the template.
+
+You can remove the directive (e.g. delete `src/app/validators/not-in-validator-directive.ts` and remove it from `declarations` in `src/app/app.module.ts`),
+and the form will keep working.
+
+
 
 ### Which is better, reactive or template-driven?
 
+In [**template-driven forms**][angular-forms], form structure and validation are specified and handled **in the template**:
+
+* Creation of form controls is delegated to directives and asynchronous.
+* Angular handles data updates with two-way binding.
+* Hard to test with automated tests.
+
+In [**reactive forms**][angular-reactive-forms], a tree of form control objects and validations is managed **in the component** and bound to elements in the template:
+
+* The component class has immediate access to both the data model and the form control structure.
+* Changes can be subscribed to in the form of Observables.
+* Data and validity updates are synchronous and under your control.
+* Easier to test with automated tests.
+
 Neither is "better".
 They're two different architectural paradigms, with their own strengths and weaknesses.
-Choose the approach that works best for you.
-You may decide to use both in the same application.
-
-Read the documentation on [reactive forms][angular-reactive-forms] to learn more.
+You may even use both in the same application.
+Read the documentation to learn more.
 
 
 
@@ -2057,46 +2290,30 @@ Read the documentation on [reactive forms][angular-reactive-forms] to learn more
 
 **Documentation**
 
-* [Angular developer guide][angular-guide]
-  * [Angular Forms][angular-forms]
+* [Angular Tour of Heroes Tutorial][angular-tour-of-heroes]
+* [Angular Developer Guide][angular-guide]
+  * [Template-driven Forms][angular-forms]
+  * [Reactive Forms][angular-reactive-forms]
+  * [Automated Testing][angular-testing]
 * [Angular API reference][angular-api]
-  * [Angular Components][angular-components]
-  * [Angular Directives][angular-directives] ([built-in][angular-directives-list])
-  * [Angular input][angular-input]
-* [HTML input tag][html-input]
 
 **Further reading**
 
 * [A guide to web components][a-guide-to-web-components]
 * [Angular 2 components][angular-2-series-components]
-* [JavaScript promises][js-promises-subject]
-* [Promises in Angular][angular-promises]
-
-
-
-## TODO
-
-* Mention async validators
-* Prune references at bottom
+* [Understanding, creating and subscribing to observables in Angular][understanding-angular-observables]
+* [The Introduction to Reactive Programming You've Been Missing][intro-to-reactive-programming]
 
 
 
 [a-guide-to-web-components]: https://css-tricks.com/modular-future-web-components/
 [ajax]: https://developer.mozilla.org/en-US/docs/AJAX/Getting_Started
 [angular]: https://angular.io
-[angularjs]: https://angularjs.org/
-[angular-api]: https://docs.angularjs.org/api
-[angular-built-in-filters]: https://docs.angularjs.org/api/ng/filter
-[angular-codepen]: http://codepen.io/AlphaHydrae/pen/LxoRze?editors=1010#0
-[angular-codepen-form-validation]: http://codepen.io/AlphaHydrae/pen/EWZOOR?editors=1011
-[angular-codepen-scope-hierarchy]: http://codepen.io/AlphaHydrae/pen/ryjaXN?editors=1010#0
-[angular-codepen-scope-components]: http://codepen.io/AlphaHydrae/pen/LWxVzj?editors=1010#0
+[angular-api]: https://angular.io/api
 [angular-component-interaction]: https://angular.io/guide/component-interaction
 [angular-component-styles]: https://angular.io/guide/component-styles
-[angular-components]: https://docs.angularjs.org/guide/component
 [angular-custom-validators]: https://angular.io/guide/form-validation#custom-validators
-[angular-directives]: https://docs.angularjs.org/guide/directive
-[angular-directives-list]: https://docs.angularjs.org/api/ng/directive
+[angular-docs-async-validator-fn]: https://angular.io/api/forms/AsyncValidatorFn
 [angular-docs-component]: https://angular.io/api/core/Component
 [angular-docs-currency-pipe]: https://angular.io/api/common/CurrencyPipe
 [angular-docs-date-pipe]: https://angular.io/api/common/DatePipe
@@ -2130,15 +2347,11 @@ Read the documentation on [reactive forms][angular-reactive-forms] to learn more
 [angular-docs-required-validator]: https://angular.io/api/forms/RequiredValidator
 [angular-docs-titlecase-pipe]: https://angular.io/api/common/TitleCasePipe
 [angular-docs-uppercase-pipe]: https://angular.io/api/common/UpperCasePipe
-[angular-element]: https://docs.angularjs.org/api/ng/function/angular.element
+[angular-docs-validator-fn]: https://angular.io/api/forms/ValidatorFn
 [angular-form-control-status-classes]: https://angular.io/guide/form-validation#control-status-css-classes
-[angular-form-controller]: https://docs.angularjs.org/api/ng/type/form.FormController
-[angular-forms]: https://docs.angularjs.org/guide/forms
+[angular-forms]: https://angular.io/guide/forms
 [angular-guide]: https://angular.io/guide/architecture
-[angular-input]: https://docs.angularjs.org/api/ng/directive/input
-[angular-ng-model-controller]: https://docs.angularjs.org/api/ng/type/ngModel.NgModelController
 [angular-pipes]: https://angular.io/guide/pipes
-[angular-promises]: ../angular-promises/
 [angular-reactive-forms]: https://angular.io/guide/reactive-forms
 [angular-starter]: https://github.com/MediaComem/comem-angular-starter#readme
 [angular-structural-directives]: https://angular.io/guide/structural-directives
@@ -2161,11 +2374,10 @@ Read the documentation on [reactive forms][angular-reactive-forms] to learn more
 [js-classes]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
 [js-closures]: ../js-closures/
 [js-promise]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[js-promises-subject]: ../js-promises/
 [ioc]: https://en.wikipedia.org/wiki/Inversion_of_control
-[minification]: https://en.wikipedia.org/wiki/Minification_(programming)
 [observable-map]: http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-map
 [rxjs]: http://reactivex.io/rxjs/
 [ts]: https://www.typescriptlang.org
 [ts-subject]: ../ts
+[understanding-angular-observables]: https://hackernoon.com/understanding-creating-and-subscribing-to-observables-in-angular-426dbf0b04a3
 [web-components]: https://developer.mozilla.org/en-US/docs/Web/Web_Components
