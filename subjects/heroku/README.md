@@ -9,7 +9,7 @@ Learn to deploy an [Express][express] web application on the [Heroku][heroku] cl
 * [Git][git]
 * A free [Heroku][heroku] account
 * The [Heroku CLI][heroku-cli]
-* [Node.js][node] 6+
+* [Node.js][node] 8+
 
 **Recommended reading**
 

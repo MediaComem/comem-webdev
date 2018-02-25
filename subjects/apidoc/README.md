@@ -4,7 +4,7 @@ Learn to generate HTML documentation for your RESTful API from annotations in yo
 
 **You will need**
 
-* [Node.js][node] 6+
+* [Node.js][node] 8+
 
 **Recommended reading**
 

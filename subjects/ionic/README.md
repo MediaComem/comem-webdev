@@ -4,7 +4,7 @@ Learn about [Ionic][ionic], an open source framework to build hybrid mobile appl
 
 **You will need**
 
-* [Node.js][node] 6+
+* [Node.js][node] 8+
 * A free [Ionic account][ionic-account] (if you want to run your app with Ionic View)
 
 **Recommended reading**
