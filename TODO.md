@@ -36,6 +36,10 @@
   * spread operator
 * Ionic
   * Navigation
+  * Geolocation
+  * Map
+  * Camera
+  * Image upload
 
 ## Ideas for new subjects
 
