@@ -34,6 +34,8 @@
   * import/export, modules
   * async/await
   * spread operator
+* Angular
+  * promise single vs observable multiple
 * Ionic
   * Navigation
   * Geolocation
