@@ -218,7 +218,9 @@ You can document **validation constraints** on request parameters:
 ### Reusing annotations
 
 Let's say you have several API operations where the request body has the same request parameters.
-You can define those **once** in an `@apiDefine` block:
+You can define those **once** in an `@apiDefine` block.
+You can put this block **anywhere you want**.
+It doesn't even have to be next to any code.
 
 ```js
 /**
@@ -229,7 +231,7 @@ You can define those **once** in an `@apiDefine` block:
  */
 ```
 
-And **reuse** these annotations in other blocks with `@apiUse`:
+You can then **reuse** these annotations in other blocks with `@apiUse`:
 
 <!-- slide-column -->
 
