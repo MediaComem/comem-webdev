@@ -1741,14 +1741,14 @@ Let's turn our lonely greeting input field into a proper form:
 * Add a submit `<button>` tag to complete the form.
 
 ```html
-`<form>`
+*<form>
   <p>
     <input type='text' placeholder='Who are you?' [(ngModel)]='greeting'
       `name='greeting' required` />
 
     `<button type='submit'>Submit</button>`
   </p>
-`</form>`
+*</form>
 ```
 
 #### Updating the component
