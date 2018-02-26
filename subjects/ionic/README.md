@@ -267,9 +267,9 @@ Ionic has many [UI components][ionic-components] you can use out of the box:
 
 Many of these components are actually [**Angular components**][angular-components].
 They not only look pretty, but they also bring **functionality**.
-Here's an code example for an Ionic list:
+Here's a code example for an Ionic list:
 
-```js
+```html
 <ion-list>
   <ion-item-sliding `ng-repeat='let person of people'`>
     <ion-item>
