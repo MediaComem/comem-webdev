@@ -437,7 +437,7 @@ Link: <https://example.com/api/movies?`page=1`&pageSize=50>; rel="`first prev`",
 
 #### What's the link format?
 
-Multiple links in the `Link` header are comma-separated.
+Multiple links in the header are comma-separated.
 Each link looks like this:
 
 ```
@@ -457,6 +457,11 @@ You can use your own custom relation types but instead of single words, they sho
 ```
   <http://example.com/manual>; rel="http://example.com/my-rels/rtfm"
 ```
+
+You don't have to build this format by hand.
+You can probably find a package that does it for you.
+For example, a quick [search for "link header"][npm-search-link-header] in the npm registry suggests several packages:
+[format-link-header][npm-format-link-header], [parse-link-header][npm-parse-link-header], [http-link-header][npm-http-link-header], and more.
 
 
 
@@ -562,4 +567,8 @@ Content-Type: application/json; charset=utf-8
 [haters-gonna-hateoas]: http://timelessrepo.com/haters-gonna-hateoas
 [link-header-rels]: http://www.iana.org/assignments/link-relations/link-relations.xhtml
 [link-header-rfc]: https://tools.ietf.org/html/rfc5988
+[npm-http-link-header]: https://www.npmjs.com/package/http-link-header
+[npm-format-link-header]: https://www.npmjs.com/package/format-link-header
+[npm-parse-link-header]: https://www.npmjs.com/package/parse-link-header
+[npm-search-link-header]: https://www.npmjs.com/search?q=link+header
 [understanding-hateoas]: https://spring.io/understanding/HATEOAS
