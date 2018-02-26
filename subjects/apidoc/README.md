@@ -261,10 +261,29 @@ This works for most apiDoc annotations, not just request parameters.
 
 ## Resources
 
+**Documentation**
+
 * [apiDoc documentation][apidoc]
 
+**Generic alternatives**
+
+* Plain [Markdown][markdown]
+* [GitBook][gitbook] (Markdown, not API-specific)
+
+**API-specific alternatives**
+
+* [RAML][raml] (YAML-based schema, large community with many tools)
+* [Slate][slate] (Markdown)
+* [Swagger][swagger] (OpenAPI specification, large community with many tools)
 
 
+
+[apiary]: https://apiary.io
 [apidoc]: http://apidocjs.com
 [apidoc-param]: http://apidocjs.com/#param-api-param
+[gitbook]: https://www.gitbook.com
+[markdown]: https://daringfireball.net/projects/markdown/syntax
 [node]: https://nodejs.org/
+[raml]: https://raml.org
+[slate]: https://github.com/lord/slate
+[swagger]: https://swagger.io
