@@ -149,7 +149,7 @@ Annotation    | Purpose
 :---          | :---
 `@apiName`    | The name under which the comment block will appear in the left-side menu
 `@apiGroup`   | All comment blocks in the same group will be grouped together in the left-side menu, with the group name as a header
-`@apiDefine`  | Defines a reusable documentation block that you can included into other comments with `@apiUse`
+`@apiDefine`  | Defines a reusable documentation block that you can include into other comments with `@apiUse`
 `@apiUse`     | Re-use the annotations from another documentation block defined with `@apiDefine`
 
 
