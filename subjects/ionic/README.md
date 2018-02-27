@@ -26,6 +26,7 @@ Learn about [Ionic][ionic], an open source framework to build hybrid mobile appl
 - [Basics of Ionic](#basics-of-ionic)
   - [Components](#components)
   - [Angular components](#angular-components)
+- [Navigation](#navigation)
 - [Running apps on your mobile device](#running-apps-on-your-mobile-device)
   - [Ionic Dev App](#ionic-dev-app)
 - [Resources](#resources)

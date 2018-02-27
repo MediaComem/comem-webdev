@@ -4,8 +4,28 @@ Learn about JavaScript module systems.
 
 <!-- slide-include ../../BANNER.md -->
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Why are modules needed?](#why-are-modules-needed)
+  - [Traditional client-side JavaScript dependencies](#traditional-client-side-javascript-dependencies)
+  - [Traditional client-side JavaScript encapsulation](#traditional-client-side-javascript-encapsulation)
+  - [Problems of traditional dependency & encapsulation](#problems-of-traditional-dependency--encapsulation)
+- [Modern JavaScript module systems](#modern-javascript-module-systems)
+  - [JavaScript module systems compabitility](#javascript-module-systems-compabitility)
+- [ECMAScript modules](#ecmascript-modules)
+  - [What's in a module?](#whats-in-a-module)
+  - [The `export` statement](#the-export-statement)
+  - [The `import` statement](#the-import-statement)
+  - [Exporting and importing values](#exporting-and-importing-values)
+  - [Default exports](#default-exports)
+  - [Renaming exports and imports](#renaming-exports-and-imports)
+  - [Transitive exports](#transitive-exports)
+- [Why should I use ECMAScript modules?](#why-should-i-use-ecmascript-modules)
+- [Resources](#resources)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 

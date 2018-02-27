@@ -8,6 +8,7 @@ Materials for the COMEM+ web development courses.
 
 - [Courses](#courses)
 - [Subjects](#subjects)
+- [Outdated](#outdated)
 - [Contributing](#contributing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
