@@ -45,8 +45,8 @@ Learn to use promises for asynchronous computation.
 
 <img src='images/promises-logo.png' />
 
-> "A promise represents the **eventual result of an asynchronous operation**.
-> It is a placeholder into which the **successful result value or reason for failure** will materialize."
+> A promise represents the **eventual result of an asynchronous operation**.
+> It is a placeholder into which the **successful result value or reason for failure** will materialize.
 
 
 
@@ -84,7 +84,7 @@ fs.readFile('hello.txt', 'utf-8', function(err, result) {
 
 Promises are another way to organize asynchronous code.
 
-All promises follow the [Promises/A+ specification](promises-spec).
+All promises follow the [Promises/A+ specification][promises-spec].
 Basically, a promise is an object with a `then()` function that has the following signature:
 
 ```js
@@ -132,25 +132,26 @@ A promise has 3 states; it can be:
 Here's the same scenario in **ES6** JavaScript:
 
 ```js
-// Mom might be happy (or not)
-var isMomHappy = Math.random() < 0.5;
-
 // Make a promise
 // We are given two functions to resolve or reject the promise with
-var phonePromise = `new Promise(function(resolve, reject) {`
+let phonePromise = `new Promise(function(resolve, reject) {`
 
-  var oneWeek = 1000 * 60 * 60 * 24 * 7;
+  let oneWeek = 1000 * 60 * 60 * 24 * 7; // One week in milliseconds.
 
   // In one week...
   setTimeout(function() {
+
+    // Mom might be happy (or not)
+    let isMomHappy = Math.random() < 0.5;
+
     if (`isMomHappy`) {
-      var phone = {
+      let phone = {
         brand: 'Samsung',
         color: 'black'
       };
 *     resolve(phone); // Resolve the promise (if mom is happy)
     } else {
-      var reason = new Error('mom is very disappointed');
+      let reason = new Error('mom is very disappointed');
 *     reject(reason); // Reject the promise (if mom is not happy)
     }
   }, oneWeek);
@@ -173,7 +174,7 @@ function onRejected(reason) {
   console.log("I didn't get a phone because " + reason);
 }
 
-phonePromise.then(onResolved, onRejected);
+phonePromise`.then(onResolved, onRejected)`;
 ```
 
 * If a promise is **resolved**, the **first callback** will be called with the **resolved value** (the one passed to `resolve()` in the promise function)
@@ -181,37 +182,49 @@ phonePromise.then(onResolved, onRejected);
 
 #### Let's try it
 
-You could test this code with an interval to see that the promise is really **pending** until it is either **resolved or rejected**:
+<runkit></runkit>
 
 ```js
-var interval = setInterval(function() {
-  console.log("I still don't know if I'll get it...");
+let phonePromise = new Promise(function(resolve, reject) {
+  setTimeout(function() {
+    let isMomHappy = Math.random() < 0.5;
+    if (isMomHappy) {
+      resolve({ brand: 'Samsung', color: 'black' });
+    } else {
+      reject(new Error('mom is very disappointed'));
+    }
+  }, 5000);
+});
+
+let i = 0;
+let interval = setInterval(function() {
+  console.log(\`I still don't know if I'll get it (${i++})...`);
 }, 1000);
 
 function onResolved(phone) {
-  console.log("I got a new phone! It's a " + phone.brand);
+  console.log(\`I got a new phone! It's a ${phone.brand}`);
   clearInterval(interval);
 }
 
 function onRejected(reason) {
-  console.log("I didn't get a phone because " + reason);
+  console.log(\`I didn't get a phone because ${reason.message}`);
   clearInterval(interval);
 }
 
 phonePromise.then(onResolved, onRejected);
 ```
 
-[See it in action here.][promises-codepen]
-
 
 
 ### Promises are resolved with one and only one value
+
+<runkit></runkit>
 
 **Only one value** can be passed whenusing `resolve()` in a promise.
 Additional values will be ignored:
 
 ```js
-var fruitsPromise = new Promise(function(resolve, reject) {
+let fruitsPromise = new Promise(function(resolve, reject) {
   resolve('apple', 'banana', 'orange');
 });
 
@@ -222,7 +235,7 @@ If you need to send multiple values to the next callback,
 use an **array or object**:
 
 ```js
-var fruitsPromise = new Promise(function(resolve, reject) {
+let fruitsPromise = new Promise(function(resolve, reject) {
   resolve([ 'apple', 'banana', 'orange' ]);
 });
 
@@ -231,12 +244,42 @@ fruitsPromise.then(console.log); // [ "apple", "banana", "orange" ]
 
 
 
+### Promise utilities
+
+<runkit></runkit>
+
+Quickly create a resolved promise with `Promise.resolve`:
+
+```js
+const resolvedPromise = `Promise.resolve`('foo');
+resolvedPromise.then(function onResolved(value) {
+* console.log(value); // "foo"
+}, function onRejected(err) {
+  console.warn(\`Oops: ${err.message}`); // not called
+});
+```
+
+Quickly create a rejected promise with `Promise.reject`:
+
+```js
+const rejectedPromise = `Promise.reject`(new Error('bug'));
+rejectedPromise.then(function onResolved(value) {
+  console.log(value); // not called
+}, function onRejected(err) {
+* console.warn(\`Oops: ${err.message}`); // "Oops: bug"
+});
+```
+
+
+
 ## Chaining promises
+
+<runkit except='0'></runkit>
 
 Promises are chainable; the `then()` function also **returns a promise**:
 
 ```js
-var promise2 = phonePromise.then(onResolved, onRejected);
+let promise2 = phonePromise.then(onResolved, onRejected);
 ```
 
 Will `promise2` be resolved or rejected?
@@ -245,7 +288,14 @@ That depends on `phonePromise`, `onResolved` and `onRejected`.
 The simplest case is this one:
 
 ```js
-var promise2 = phonePromise.then();
+let phonePromise = Promise.resolve('Samsung');
+*let promise2 = phonePromise.then();
+
+promise2.then(function onResolved(value) {
+* console.log(value); // "Samsung"
+}, function onRejected(err) {
+  console.warn(\`Oops: ${err.message}`);
+});
 ```
 
 If neither `onResolved` nor `onRejected` is given, `promise2` will have the same state as `phonePromise`
@@ -258,7 +308,7 @@ If neither `onResolved` nor `onRejected` is given, `promise2` will have the same
 What if `phonePromise` is **resolved** and `onResolved` is called?
 
 ```js
-var promise2 = phonePromise.then(`onResolved`, onRejected);
+let promise2 = phonePromise.then(`onResolved`, onRejected);
 ```
 
 * If `onResolved` returns **a value**, `promise2` will be resolved with that value
@@ -268,7 +318,7 @@ var promise2 = phonePromise.then(`onResolved`, onRejected);
 Similarly if `phonePromise` is **rejected** and `onRejected` is called:
 
 ```js
-var promise2 = phonePromise.then(onResolved, `onRejected`);
+let promise2 = phonePromise.then(onResolved, `onRejected`);
 ```
 
 * If `onRejected` returns **a value**, `promise2` will be resolved with that value
@@ -286,7 +336,7 @@ Let's write it!
 ```js
 function showOff(phone) {
   return new Promise(function(`resolve`, reject) {
-    var message = 'Hey friend, I have a new ' +
+    let message = 'Hey friend, I have a new ' +
         phone.color + ' ' + phone.brand + ' phone';
 
     `resolve`(message);
@@ -311,7 +361,7 @@ Note that we **didn't call reject** in that second promise:
 ```js
 function showOff(phone) {
   return new Promise(function(`resolve`, reject) {
-    var message = 'Hey friend, I have a new ' +
+    let message = 'Hey friend, I have a new ' +
         phone.color + ' ' + phone.brand + ' phone';
 
     `resolve`(message);
@@ -336,7 +386,7 @@ All we're doing is resolving it with a message.
 ```js
 function showOff(phone) {
   return new Promise(function(`resolve`, reject) {
-    var message = 'Hey friend...';
+    let message = 'Hey friend...';
     `resolve`(message);
   });
 }
@@ -353,7 +403,7 @@ It will create a promise that is automatically resolved with the passed value.
 
 ```js
 function showOff(phone) {
-  var message = 'Hey friend...';
+  let message = 'Hey friend...';
   return `Promise.resolve`(message);
 }
 ```
@@ -394,7 +444,7 @@ Maybe you broke your leg and can't show off.
 ```js
 function showOff(phone) {
   return new Promise(function(resolve, `reject`) {
-    var reason = new Error('I broke my leg');
+    let reason = new Error('I broke my leg');
     `reject`(reason);
   });
 }
@@ -410,7 +460,7 @@ You can also use the `Promise.reject` shortcut.
 
 ```js
 function showOff(phone) {
-  var reason = new Error('I broke my leg');
+  let reason = new Error('I broke my leg');
   return `Promise.reject`(message);
 }
 ```
@@ -544,7 +594,7 @@ phonePromise.then(showOff).then(onResolved).catch(`onRejected`);
 Remember the promise resolution procedure when a promise is **rejected**:
 
 ```js
-var promise2 = phonePromise.then(onResolved, `onRejected`);
+let promise2 = phonePromise.then(onResolved, `onRejected`);
 ```
 
 * **If `onRejected` returns a value, `promise2` will be resolved with that value**
@@ -640,7 +690,7 @@ With jQuery, you could write it like this:
 ```js
 $.post('/api/users', userData, function(createdUser) {
   $.post('/api/auth', userData, function(authData) {
-    var query = { userId: createdUser.id, token: authData.token };
+    let query = { userId: createdUser.id, token: authData.token };
     $.get('/api/stats', query, function(statsData) {
       // Do something with statsData...
     });
@@ -670,7 +720,7 @@ function authenticateUser(createdUser) {
 }
 
 function retrieveUserStats(createdUser, authData) {
-  var query = { userId: createdUser.id, token: authData.token };
+  let query = { userId: createdUser.id, token: authData.token };
   $.get('/api/stats', { userId: createdUser.id }, function(statsData) {
     // Do something with statsData...
   });
@@ -699,7 +749,7 @@ function authenticateUser(createdUser) {
 }
 
 function retrieveUserStats(data) {
-  var query = { userId: data.createdUser.id, token: data.authData.token };
+  let query = { userId: data.createdUser.id, token: data.authData.token };
   return $.get('/api/stats', { userId: createdUser.id });
 }
 
@@ -753,6 +803,8 @@ Promises are a **powerful abstraction** that make it **easy to compose asynchron
 
 ## Asynchronicity
 
+<runkit></runkit>
+
 A promise is **always asynchronous**:
 
 ```js
@@ -762,7 +814,7 @@ function `onResolved`(phone) {
 
 console.log('Before promising a phone');
 
-var phonePromise = new Promise(function(`resolve`, reject) {
+let phonePromise = new Promise(function(`resolve`, reject) {
   // Immediately resolve the promise
   `resolve`({ brand: 'Samsung' });
 });
@@ -807,18 +859,20 @@ the new promise **is also rejected** with the same reason as the first promise t
 
 ### Successful parallel execution
 
+<runkit></runkit>
+
 Here's an example of parallel promise execution where **both are resolved**:
 
 ```js
-var phonePromise = new Promise(function(resolve, reject) {
+let phonePromise = new Promise(function(resolve, reject) {
   resolve({ brand: 'Samsung' });
 });
 
-var cakePromise = new Promise(function(resolve, reject) {
+let cakePromise = new Promise(function(resolve, reject) {
   resolve('Yummy');
 });
 
-var promises = [ phonePromise, cakePromise ];
+let promises = [ phonePromise, cakePromise ];
 
 Promise.all(promises).then(function(results) {
   console.log(results.length); // 2
@@ -833,18 +887,20 @@ Promise.all(promises).then(function(results) {
 
 ### Failed parallel execution
 
+<runkit></runkit>
+
 Here's an example of parallel promise execution where **one is rejected**:
 
 ```js
-var phonePromise = new Promise(function(resolve, reject) {
+let phonePromise = new Promise(function(resolve, reject) {
   resolve({ brand: 'Samsung' });
 });
 
-var cakePromise = new Promise(function(resolve, reject) {
+let cakePromise = new Promise(function(resolve, reject) {
   reject(new Error('The cake is a lie'));
 });
 
-var promises = [ phonePromise, cakePromise ];
+let promises = [ phonePromise, cakePromise ];
 
 Promise.all(promises).then(function(results) {
   // not called
@@ -883,7 +939,6 @@ Promise.all(promises).then(function(results) {
 [javascript-promises-an-introduction]: https://developers.google.com/web/fundamentals/getting-started/primers/promises
 [javascript-promises-for-dummies]: https://scotch.io/tutorials/javascript-promises-for-dummies
 [mdn-promises]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[promises-codepen]: http://codepen.io/AlphaHydrae/pen/PpJNXb?editors=1010
 [promise-nuggets]: https://promise-nuggets.github.io/
 [promises-spec]: https://promisesaplus.com
 [q]: https://github.com/kriskowal/q
