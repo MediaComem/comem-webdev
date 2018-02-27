@@ -30,9 +30,10 @@
 ## Subjects
 
 * JavaScript
-  * classes
+  * prototypes: subclass example
   * async/await
   * spread operator
+  * getters & setters
 * Angular
   * promise single vs observable multiple
   * view childs
