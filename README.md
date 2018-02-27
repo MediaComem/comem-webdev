@@ -33,30 +33,22 @@ Materials for the COMEM+ web development courses.
 
 **Languages & Frameworks**
 
-* [Bootstrap](subjects/bootstrap)
-  * [Bootstrap Layout management](subjects/bootstrap-layout-management)
 * [JavaScript](subjects/js/)
+  * [JavaScript Asynchronous Browser/Server Interaction (AJAX)](subjects/js-ajax/)
+  * [JavaScript Classes](subjects/js-classes/)
+  * [JavaScript Closures](subjects/js-closures/)
+  * [JavaScript Modules](subjects/js-modules/)
   * [JavaScript DOM API](subjects/js-dom/)
-  * [JavaScript Asynchronous browser/server interaction (AJAX)](subjects/js-ajax/)
-  * [JavaScript closures](subjects/js-closures/)
-  * [JavaScript prototypes](subjects/js-prototypes/)
-  * [JavaScript promises](subjects/js-promises/)
+  * [JavaScript Promises](subjects/js-promises/)
 * [TypeScript](subjects/ts/)
-* [jQuery - DOM](subjects/jquery-dom)
+* [jQuery DOM Manipulation](subjects/jquery-dom)
 * [Angular](subjects/angular/)
-  * [Promises in Angular](subjects/angular-promises/)
-  * [Angular UI Router](subjects/angular-ui-router/)
-  * [Angular UI Bootstrap](subjects/angular-ui-bootstrap/)
-  * [Angular Auth Starter](subjects/angular-auth-starter/)
-  * [Angular Leaflet](subjects/angular-leaflet)
-  * [Angular Geolocation](subjects/angular-geolocation)
 * [Node.js](subjects/node/)
-  * [npm (package manager)](subjects/npm/)
-  * [Express (Node.js web framework)](subjects/express/)
+  * [npm (Package Manager)](subjects/npm/)
+  * [Express (Node.js Web Framework)](subjects/express/)
     * [Express Best Practices](subjects/express-best-practices/)
-    * [Using Mongoose](subjects/express-mongoose/)
+    * [Using Mongoose with Express](subjects/express-mongoose/)
 * [Ionic](subjects/ionic/)
-  * [Ionic Extras](subjects/ionic-extras/) (geolocation, maps, camera)
 
 **Web Services**
 
@@ -67,7 +59,7 @@ Materials for the COMEM+ web development courses.
 **Databases**
 
 * [MongoDB](subjects/mongodb/) ([installation instructions](subjects/mongodb/install/))
-  * [Mongoose (Node.js client)](subjects/mongoose/)
+  * [Mongoose (Node.js Client)](subjects/mongoose/)
 
 **Cloud**
 
@@ -79,6 +71,22 @@ Materials for the COMEM+ web development courses.
 * [Advanced Frontend Development](subjects/masrad-intro)
   * [Project Setup](subjects/masrad-project-setup)
   * [Bootstrap Practice](subjects/masrad-bootstrap-practice)
+
+
+
+## Outdated
+
+* Angular 1
+  * [Angular 1 Auth Starter](subjects/angular-auth-starter/)
+  * [Angular 1 Geolocation](subjects/angular-geolocation)
+  * [Angular 1 Leaflet](subjects/angular-leaflet)
+  * [Angular 1 Promises](subjects/angular-promises/)
+  * [Angular 1 UI Bootstrap](subjects/angular-ui-bootstrap/)
+  * [Angular 1 UI Router](subjects/angular-ui-router/)
+* [Bootstrap 3](subjects/bootstrap)
+  * [Bootstrap 3 Layout management](subjects/bootstrap-layout-management)
+* Ionic 1
+  * [Ionic 1 Extras](subjects/ionic-extras/) (geolocation, maps, camera)
 
 
 

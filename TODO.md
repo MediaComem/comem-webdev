@@ -31,17 +31,17 @@
 
 * JavaScript
   * classes
-  * import/export, modules
   * async/await
   * spread operator
 * Angular
   * promise single vs observable multiple
+  * view childs
 * Ionic
   * Navigation
   * Geolocation
   * Map
   * Camera
-  * Image upload
+  * Image upload (qimg)
 
 ## Ideas for new subjects
 
