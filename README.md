@@ -41,6 +41,7 @@ Materials for the COMEM+ web development courses.
   * [JavaScript Modules](subjects/js-modules/)
   * [JavaScript DOM API](subjects/js-dom/)
   * [JavaScript Promises](subjects/js-promises/)
+  * [JavaScript Prototypes](subjects/js-prototypes/)
 * [TypeScript](subjects/ts/)
 * [jQuery DOM Manipulation](subjects/jquery-dom)
 * [Angular](subjects/angular/)
