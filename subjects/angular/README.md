@@ -14,7 +14,8 @@ which you should both read to gain a deeper understanding of Angular.
 **Recommended reading**
 
 * [JavaScript][js]
-* [JavaScript closures][js-closures]
+* [JavaScript classes][js-classes]
+* [JavaScript modules][js-modules]
 * [TypeScript][ts-subject]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -2371,8 +2372,9 @@ Read the documentation to learn more.
 [jquery]: http://jquery.com
 [js]: ../js/
 [js-array-map]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-[js-classes]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
+[js-classes]: ../js-classes/
 [js-closures]: ../js-closures/
+[js-modules]: ../js-modules/
 [js-promise]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [ioc]: https://en.wikipedia.org/wiki/Inversion_of_control
 [observable-map]: http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-map

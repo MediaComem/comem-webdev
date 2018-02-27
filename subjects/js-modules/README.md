@@ -1,8 +1,16 @@
 # JavaScript Modules
 
-Learn about JavaScript module systems.
+Learn about JavaScript module systems and ECMAScript modules.
 
 <!-- slide-include ../../BANNER.md -->
+
+**You will need**
+
+* [Google Chrome][chrome] (recommended, any browser with developer tools will do)
+
+**Recommended reading**
+
+* [JavaScript][subject-js]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -448,6 +456,13 @@ However:
 
 ## Resources
 
+**Documentation**
+
+* [`export`][esm-export]
+* [`import`][esm-import]
+
+**Further reading**
+
 * [Brief History of JavaScript Modules][js-modules-history]
 * [JavaScript Module Systems Showdown: CommonJS vs AMD vs ES2015][js-module-systems-showdown]
 
@@ -455,6 +470,7 @@ However:
 
 [amd]: https://github.com/amdjs/amdjs-api/blob/master/AMD.md
 [babel]: https://babeljs.io
+[chrome]: https://www.google.com/chrome/
 [commonjs]: http://www.commonjs.org
 [esm]: http://2ality.com/2014/09/es6-modules-final.html
 [esm-export]: https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/export
@@ -464,6 +480,7 @@ However:
 [js-modules-history]: https://medium.com/sungthecoder/javascript-module-module-loader-module-bundler-es6-module-confused-yet-6343510e7bde
 [node-esm]: https://nodejs.org/api/esm.html#esm_ecmascript_modules
 [revealing-module-pattern]: https://addyosmani.com/resources/essentialjsdesignpatterns/book/#revealingmodulepatternjavascript
+[subject-js]: ../js/
 [systemjs]: https://github.com/systemjs/systemjs
 [tc39]: https://github.com/tc39
 [ts]: https://www.typescriptlang.org
