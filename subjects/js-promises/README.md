@@ -1307,12 +1307,202 @@ Promise.all(promises).then(function(results) {
 
 
 
+## `async`/`await`
+
+<!-- slide-front-matter class: center, middle -->
+
+> With [ECMAScript 2017 (or ES8)][es8], JavaScript brings a new powerful way of working with promises: **`async` functions** and the **`await`** operator.
+
+
+
+### The problem with promises
+
+<runkit></runkit>
+
+Promises are powerful, but they're still an **asynchronous construct** that's hard to reason about:
+
+<!-- slide-column 55 -->
+
+```js
+function multiplyAsync(value, by) {
+  return new Promise((resolve, rej) => {
+    setTimeout(function() {
+      resolve(value * by);
+    }, 1500);
+  })
+}
+
+function computeAllTheThings() {
+* Promise
+*   .resolve()
+*   .then(() => multiplyAsync(2, 3))
+*   .then(r1 => multiplyAsync(r1, 4))
+*   .then(console.log);
+}
+
+console.log('Computing in progress...');
+computeAllTheThings(); // 24 (3s later)
+```
+
+<!-- slide-column -->
+
+```js
+function multiply(value, by) {
+  return value * by;
+}
+
+function computeAllTheThings() {
+* const r1 = multiply(2, 3);
+* const r2 = multiply(r1, 4);
+* console.log(r2);
+}
+
+computeAllTheThings(); // 24
+```
+
+<!-- slide-container -->
+
+It's still **better than traditional callbacks** because it helps us **avoid nesting** and has **error-handling**,
+but it's just easier to understand **synchronous execution**.
+
+
+
+### Async functions and the `await` operator
+
+<runkit></runkit>
+
+By declaring a function with the `async` keyword,
+we can use the `await` operator inside it to **pause the execution of the function and wait for the promise to be resolved**.
+
+<!-- slide-column 55 -->
+
+```js
+function multiplyAsync(value, by) {
+  return new Promise((resolve, rej) => {
+    setTimeout(function() {
+      resolve(value * by);
+    }, 1500);
+  })
+}
+
+`async` function computeAllTheThings() {
+  const r1 = `await` multiplyAsync(2, 3);
+  const r2 = `await` multiplyAsync(r1, 4);
+  console.log(r2);
+}
+
+console.log('Computing in progress...');
+computeAllTheThings(); // 24 (3s later)
+```
+
+<!-- slide-column -->
+
+```js
+function multiply(value, by) {
+  return value * by;
+}
+
+function computeAllTheThings() {
+  const r1 = multiply(2, 3);
+  const r2 = multiply(r1, 4);
+  console.log(r2);
+}
+
+computeAllTheThings(); // 24
+```
+
+<!-- slide-container -->
+
+Our **asynchronous code** on the left now **looks synchronous** and is much easier to understand.
+At the same time, it **retains its asynchronous and non-blocking properties**.
+
+
+
+### `await` and rejected promises
+
+<runkit></runkit>
+
+When the promise being awaited is **rejected**,
+the function behaves as if the rejection error had been **thrown** on the line where the `await` statement is:
+
+<!-- slide-column 55 -->
+
+```js
+function multiplyAsync(value, by) {
+  return new Promise((res, reject) => {
+    setTimeout(function() {
+*     reject(new Error('bug'));
+    }, 1500);
+  })
+}
+
+async function computeAllTheThings() {
+* const r1 = await multiplyAsync(2, 3);
+  const r2 = await multiplyAsync(r1, 4);
+  console.log(r2);
+}
+
+console.log('Computing in progress...');
+
+computeAllTheThings()
+  .catch(err => console.warn(err));
+*// Error: bug (1.5s later)
+```
+
+<!-- slide-column -->
+
+```js
+function multiply(value, by) {
+* throw new Error('bug');
+}
+
+function computeAllTheThings() {
+* const r1 = multiply(2, 3);
+  const r2 = multiply(r1, 4);
+  console.log(r2);
+}
+
+computeAllTheThings();
+*// Error: bug
+```
+
+
+
+### Async functions always return promises
+
+<runkit></runkit>
+
+```js
+async function multiplyAsync(value, by) {
+  return value * by;
+}
+
+const result = multiplyAsync(2, 4);
+
+console.log('before');
+console.log(result);
+result.then(value => console.log(value));
+console.log('after');
+```
+
+The output will be:
+
+```
+before
+Promise {}
+after
+8
+```
+
+
+
 ## Resources
 
 **Documentation**
 
 * [Promises/A+ specification][promises-spec]
 * [Promises][mdn-promises]
+* [`async`][async] & [`await`][await]
 
 **Further reading**
 
@@ -1328,14 +1518,11 @@ Promise.all(promises).then(function(results) {
 
 
 
-## TODO
-
-* async/await
-
-
-
 [arent-promises-just-callbacks]: http://stackoverflow.com/questions/22539815/arent-promises-just-callbacks
+[async]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
+[await]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await
 [bluebird]: http://bluebirdjs.com/docs/getting-started.html
+[es8]: http://2ality.com/2016/02/ecmascript-2017.html
 [javascript-promises-an-introduction]: https://developers.google.com/web/fundamentals/getting-started/primers/promises
 [javascript-promises-for-dummies]: https://scotch.io/tutorials/javascript-promises-for-dummies
 [mdn-promises]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
