@@ -1162,7 +1162,7 @@ An observable is an **asynchronous data stream**, meaning that it allows you to 
 <p class='center'><img src='images/promises-observables.png' class='w80' /></p>
 
 For example, a user's **mouse clicks** on a website could be easily be modeled as an observable:
-there will be several of them and they will happen in the future.
+there will be several of them and they will happen at different times in the future.
 
 ### What (the hell) is reactive programming?
 
