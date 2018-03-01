@@ -1466,6 +1466,74 @@ computeAllTheThings();
 *// Error: bug
 ```
 
+#### Handling rejected promises with `await`
+
+<runkit></runkit>
+
+Since a **rejected promise** behaves like a `throw` when using `await`,
+you can simply catch that error using a **traditional try/catch**:
+
+```js
+function multiplyAsync(value, by) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => reject(new Error('bug')), 1500);
+  })
+}
+
+async function computeAllTheThings() {
+  let r1;
+  `try {`
+    r1 = `await` multiplyAsync(2, 3);
+  `} catch (err) {`
+    console.warn(\`Oops, first multiplication failed: ${err.message}`);
+    return 0;
+  `}`
+
+  const r2 = await multiplyAsync(r1, 4);
+  console.log(r2);
+}
+
+console.log('Computing in progress...');
+
+computeAllTheThings().then(console.log) // 0
+  .catch(err => console.warn(err));
+*// Oops, first multiplication failed: bug (1.5s later)
+```
+
+
+
+### Awaiting the result of parallel executions
+
+<runkit></runkit>
+
+`Promise.all` is used to wait for the results of multiple promises executing in parallel.
+Since that also returns a promise, you can simply `await` that:
+
+```js
+function multiplyAsync(value, by) {
+  return new Promise(function(resolve, reject) {
+    setTimeout(function() {
+      resolve(value * by);
+    }, 2000);
+  })
+}
+
+async function computeAllTheThingsInParallel() {
+  const promise1 = multiplyAsync(2, 3);
+  const promise2 = multiplyAsync(3, 4);
+  const results = `await Promise.all`([ promise1, promise2 ]);
+  console.log(results);
+}
+
+console.log('Computing in progress...');
+
+computeAllTheThingsInParallel()
+  .catch(err => console.warn(err));
+// [ 6, 12 ] (after 2s)
+```
+
+In this example, the 2 computations are executed in parallel and both results are available after 2 seconds (instead of 4).
+
 
 
 ### Async functions always return promises
@@ -1485,7 +1553,7 @@ result.then(value => console.log(value));
 console.log('after');
 ```
 
-The output will be:
+The output will **always** be:
 
 ```
 before
