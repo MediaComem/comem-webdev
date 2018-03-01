@@ -13,8 +13,21 @@ Learn about JavaScript classes (ES6+).
 * [JavaScript][subject-js]
 * [JavaScript Prototypes][subject-js-prototypes]
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [What are JavaScript classes?](#what-are-javascript-classes)
+- [The new class syntax](#the-new-class-syntax)
+  - [Syntactical sugar](#syntactical-sugar)
+- [Static methods](#static-methods)
+- [Sub-classing](#sub-classing)
+  - [Using `super` in the constructor](#using-super-in-the-constructor)
+  - [Using `super` in methods](#using-super-in-methods)
+- [Getters and setters](#getters-and-setters)
+- [Resources](#resources)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 

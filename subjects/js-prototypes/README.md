@@ -12,8 +12,21 @@ Learn about prototypal inheritance in JavaScript.
 
 * [JavaScript][subject-js]
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Prototypal inheritance](#prototypal-inheritance)
+  - [The prototype chain](#the-prototype-chain)
+  - [Creating plain JavaScript objects](#creating-plain-javascript-objects)
+  - [Creating objects with `Object.create`](#creating-objects-with-objectcreate)
+  - [Creating objects with a constructor function](#creating-objects-with-a-constructor-function)
+  - [What does this mean?](#what-does-this-mean)
+- [Implementing a class-like structure with prototypes](#implementing-a-class-like-structure-with-prototypes)
+  - [The value of `this`](#the-value-of-this)
+- [Resources](#resources)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 
