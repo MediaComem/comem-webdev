@@ -1154,7 +1154,16 @@ Another solution is to return an **Observable**.
 Angular includes the [RxJS][rxjs] library for reactive programming using Observables,
 to make it easier to compose asynchronous or callback-based code.
 
-### What is reactive programming?
+### What (the hell) is an observable?
+
+An observable is an **asynchronous data stream**, meaning that it allows you to observe **multiple events over time**.
+
+<p class='center'><img src='images/promises-observables.png' class='w80' /></p>
+
+For example, a user's **mouse clicks** on a website could be easily be modeled as an observable:
+there will be several of them and they will happen in the future.
+
+### What (the hell) is reactive programming?
 
 Basically, **reactive programming** is programming with **asynchronous** data **streams**.
 
