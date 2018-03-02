@@ -376,6 +376,7 @@ Read the [Component Styles][angular-component-styles] documentation to learn mor
 ### Data binding
 
 You can display data by **binding** parts of an HTML template to properties of a component.
+There is already a `title` property in `AppComponent` in `src/app/app.component.ts`:
 
 ```ts
 export class AppComponent {
@@ -387,7 +388,8 @@ export class AppComponent {
 }
 ```
 
-Enclosing a component's property name in double curly braces in the template is called **interpolation**:
+Enclosing a component's property name in double curly braces in the template is called **interpolation**.
+This is already done in the `AppComponent`'s template in `src/app/app.component.html`:
 
 ```html
 <h1>
@@ -398,7 +400,7 @@ Enclosing a component's property name in double curly braces in the template is 
 #### Attribute binding
 
 Let's see what else we can interpolate.
-Add a `titleComment` property to the component:
+Add a `titleComment` property to the component in `src/app/app.component.ts`:
 
 ```ts
 export class AppComponent {
@@ -412,7 +414,8 @@ export class AppComponent {
 }
 ```
 
-Angular's `[]` syntax allows you to bind the value of a DOM element's **attribute** to one of the component's variables:
+Angular's `[]` syntax allows you to bind the value of a DOM element's **attribute** to one of the component's variables.
+You can do this in `src/app/app.component.html`:
 
 ```html
 <h1 `[title]='titleComment'`>
@@ -454,7 +457,7 @@ not the value of the corresponding variable:
 #### Binding to events
 
 Let's imagine that we want to log something when the user clicks on the title.
-Add an `onTitleClicked()` function to the component:
+Add an `onTitleClicked()` function to the component in `src/app/app.component.ts`:
 
 ```ts
 export class AppComponent {
@@ -466,7 +469,8 @@ export class AppComponent {
 }
 ```
 
-Angular's `()` syntax allows you to **bind functions to events** from a DOM element:
+Angular's `()` syntax allows you to **bind functions to events** from a DOM element.
+Let's bind the function we just added to click events on the `<h1>` tag in `src/app/app.component.html`:
 
 ```html
 <h1 [title]='titleComment' `(click)='onTitleClicked()'`>
@@ -474,9 +478,12 @@ Angular's `()` syntax allows you to **bind functions to events** from a DOM elem
 </h1>
 ```
 
+You should now see the message being logged in the console when clicking on the title.
+
 ##### Getting at the event
 
-You might need the actual [event object][dom-event] to get some data out of it (e.g. the click coordinates):
+You might need the actual [event object][dom-event] to get some data out of it (e.g. the click coordinates).
+Let's update `onTitleClicked()` in `src/app/app.component.ts` to also log the event object:
 
 ```ts
 export class AppComponent {
@@ -488,7 +495,8 @@ export class AppComponent {
 }
 ```
 
-Simply add the `$event` variable to your function call, and Angular will pass the event object to your function:
+To make it work, simply add the special `$event` variable to your function call in `src/app/app.component.html`,
+and Angular will pass the event object to your function:
 
 ```html
 <h1 [title]='titleComment' (click)='onTitleClicked(`$event`)'>
@@ -501,7 +509,7 @@ Simply add the `$event` variable to your function call, and Angular will pass th
 Interpolation is not limited to simple properties.
 You can also use a component's **methods** in the template.
 
-Add the following method to the component (`src/app/app.component.ts`):
+Add the following method to the component in `src/app/app.component.ts`:
 
 ```ts
 export class AppComponent {
@@ -513,7 +521,7 @@ export class AppComponent {
 }
 ```
 
-Now use that function in the template (`src/app/app.component.html`):
+Now use that function in the template in `src/app/app.component.html`:
 
 ```html
 <p>
@@ -527,7 +535,7 @@ Now use that function in the template (`src/app/app.component.html`):
 
 One of the things you will need to do is **react to user input** (e.g. through forms).
 Let's make our greeting **dynamic** by adding an input field to customize the name.
-Make the following changes to the component:
+Make the following changes to the component in `src/app/app.component.ts`:
 
 ```ts
 export class AppComponent {
@@ -542,7 +550,7 @@ export class AppComponent {
 }
 ```
 
-Now interpolate that new property into the function in the template:
+Now interpolate that new property into the `hello` function in the template in `src/app/app.component.html`:
 
 ```html
 <p>
@@ -552,7 +560,7 @@ Now interpolate that new property into the function in the template:
 
 ### `ngModel`
 
-Add an input field to the template above the greeting:
+Add an input field to the template above the greeting in `src/app/app.component.html`:
 
 ```html
 *<p>
@@ -580,8 +588,8 @@ This is because `[(ngModel)]` belongs to the optional `FormsModule`, which you h
 To **import** the module into your application, you must add it to the `imports` array of your own module in `src/app/app.module.ts`:
 
 ```ts
-*import { FormsModule } from '@angular/forms';
 // Other imports...
+*import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -598,6 +606,9 @@ export class AppModule { }
 ```
 
 Once you've done that, the field should display correctly.
+
+Note that as you type in the input field, the `greeting` variable is **automatically kept up-to-date**,
+and Angular **updates the template** to reflect its new value.
 
 ### Two-way data binding
 
@@ -634,7 +645,7 @@ Two other kinds of directives exist: **structural** and **attribute** directives
 Structural directives are responsible for HTML layout.
 They shape or reshape the **DOM's structure**, typically by **adding, removing, or manipulating elements**.
 
-Let's add the [`ngIf`][angular-docs-ng-if] directive to our template as an example:
+Let's add the [`ngIf`][angular-docs-ng-if] directive to our template in `src/app/app.component.html` as an example:
 
 ```html
 <p `*ngIf='greeting'`>
@@ -694,7 +705,7 @@ Now all you need to do is add the attribute to an element in `src/app/app.compon
 Let's add it to the greeting.
 
 ```html
-<h1 `appHighlight`>
+<h1 [title]='titleComment' (click)='onTitleClicked($event)' `appHighlight`>
   Welcome to {{ title }}!
 </h1>
 ```
@@ -703,7 +714,7 @@ You should see the directive being used in the console after entering some text 
 
 #### Modifying the DOM
 
-Now add an `ElementRef` argument to the directive's constructor:
+Now add an `ElementRef` argument to the directive's constructor in `src/app/highlight.directive.ts`:
 
 ```ts
 import { Directive, `ElementRef` } from '@angular/core';
@@ -746,9 +757,11 @@ A TypeScript class with clearly defined fields and types will help us avoid mist
 Let's start with a very simple one.
 
 Angular CLI comes with scaffolding tools to help you create files.
-You can generate a model class with the following command:
+Install it, then generate a model class
+(the second command must be run in the project's directory):
 
 ```bash
+$> npm install -g @angular/cli
 $> ng generate class models/joke
 ```
 
@@ -763,7 +776,7 @@ export class Joke {
 
 ### Using models
 
-Let's add some jokes to our component:
+Let's add some jokes to our component in `src/app/app.component.ts`:
 
 ```ts
 // Other imports...
@@ -797,7 +810,7 @@ Now that we have some jokes, let's display them.
 We want a `<ul>` list, with a `<li>` item for each joke.
 That's a job for the [`ngFor`][angular-docs-ng-for] directive.
 
-Add this at the bottom of the component's template:
+Add this at the bottom of the component's template in `src/app/app.component.html`:
 
 ```html
 <ul>
@@ -871,12 +884,12 @@ export class ExclamationPipe implements PipeTransform {
 
 ### Using a pipe
 
-Note that Angular automatically registered our pipe in the module's `declarations` array.
+Note that Angular automatically registered our pipe in the module's `declarations` array in `src/app/app.module.ts`.
 This is necessary to be able to use it in a template:
 
 ```ts
 // Other imports...
-import { ExclamationPipe } from './pipes/exclamation.pipe';
+*import { ExclamationPipe } from './pipes/exclamation.pipe';
 
 @NgModule({
   declarations: [
@@ -888,7 +901,8 @@ import { ExclamationPipe } from './pipes/exclamation.pipe';
 export class AppModule { }
 ```
 
-Using the pipe is as simple as "piping" an interpolated value into it with the pipe (`|`) character in the template:
+Using the pipe is as simple as "piping" an interpolated value into it with the pipe (`|`) character in a template.
+You can do that in `src/app/app.component.html`, then type some text in the input field to see it:
 
 ```html
 <p>
@@ -899,7 +913,7 @@ Using the pipe is as simple as "piping" an interpolated value into it with the p
 ### Pipe parameters
 
 Pipe can also take **parameters**.
-Let's add a number parameter to allow customizing the number of exclamation points:
+Let's add a number parameter to allow customizing the number of exclamation points in `src/app/pipes/exclamation.pipe.ts`:
 
 ```ts
 import { Pipe, PipeTransform } from '@angular/core';
@@ -915,7 +929,7 @@ export class ExclamationPipe implements PipeTransform {
 }
 ```
 
-Parameters are passed to pipes by appending `:value` to them in the template:
+Parameters are passed to pipes by appending `:value` to them in the template in `src/app/app.component.html`:
 
 ```html
 <p>
@@ -1026,11 +1040,15 @@ export class AppModule { }
 
 ### Injecting the joke service
 
-Once you've done that, you can **inject** it into your component.
+Once you've done that, you can **inject** it into your component in `src/app/app.component.ts`.
+
 You just have to add a **constructor parameter property**.
 While you're at it, also add a **method to add a joke**:
 
 ```ts
+// Other imports...
+*import { JokeService } from './services/joke.service';
+
 export class AppComponent {
   // ...
   constructor(`private jokeService: JokeService`) {
@@ -1044,7 +1062,10 @@ export class AppComponent {
 }
 ```
 
-And add a button to use that method in the template:
+#### Calling a method from a button
+
+To use our new method,
+you can add a button in the template in `src/app/app.component.html`:
 
 ```html
 <p>
@@ -1090,7 +1111,6 @@ Angular relies on [dependency injection][di] to plug components, services and ot
 
 Dependency injection is a form of [inversion of control][ioc],
 meaning that parts of your code **receive** the flow of control instead of driving it like in classic procedural programming.
-
 The general goal is to:
 
 * **Decouple** the execution of a task from implementation.
@@ -1148,7 +1168,7 @@ const joke = jokeService.getJoke();
 
 This will **not** work when fetching jokes from a **remote server**, which is inherently an **asynchronous** operation.
 
-The `getJoke()` method must be modified to not immediately return a joke, but to have an asynchronous signature.
+The `getJoke()` method must be modified to not immediately return a joke, but to have an asynchronous signature instead.
 It could take a **callback** or return a [**Promise**][js-promise].
 
 Another solution is to return an **Observable**.
@@ -1183,12 +1203,13 @@ you may want to read ["The introduction to Reactive Programming you've been miss
 
 Since Angular's `HttpClient` returns **Observables**, that's what we'll use.
 
-For now, let's modify the `getJoke()` method's signature to return an Observable,
+For now, let's modify the signature of our `getJoke()` method in `JokeService` in `src/app/services/joke.service.ts` to return an Observable,
 without actually making an HTTP call yet:
 
 ```ts
 // Other imports...
-*import { Observable } from 'rxjs/Rx';
+*import { Observable } from 'rxjs/Observable';
+*import 'rxjs/add/observable/of';
 
 @Injectable()
 export class JokeService {
@@ -1201,6 +1222,8 @@ export class JokeService {
 
 `Observable.of` allows us to create a stream which will simply emit the specified value (or values) and complete.
 
+In this case, we created an Observable which will emit one joke.
+
 ### Subscribing to an Observable
 
 Of course, the code in our component no longer works now,
@@ -1212,7 +1235,7 @@ ERROR in src/app/app.component.ts(26,21): error TS2345:
   Property 'text' is missing in type 'Observable<Joke>'.
 ```
 
-Use the `subscribe` method of the Observable to be notified when a Joke is emitted on the stream:
+Use the `subscribe` method of the Observable to be notified when a Joke is emitted on the stream in `AppComponent` in `src/app/app.component.ts`:
 
 ```ts
 addJoke() {
@@ -1224,7 +1247,7 @@ addJoke() {
 
 We now have our **asynchronous** implementation:
 
-* The call to `subscribe` is made immediately when `addJoke` is called.
+* We **subscribe** to the Observable when `addJoke` is called.
 * But the **callback** adding the new joke into the array will be called **later**,
   after the data has been fetched from the remote server.
 
@@ -1235,7 +1258,7 @@ We now have our **asynchronous** implementation:
 Time to actually fetch some jokes from the internet.
 We'll need Angular's [`HttpClient`][angular-docs-http-client].
 It is part of `HttpClientModule`,
-so we need to provide that to our own application module:
+so we need to provide that to our own application module, `AppModule`, in `src/app/app.module.ts`:
 
 ```ts
 // Other imports...
@@ -1259,7 +1282,7 @@ Earlier we annotated `JokeService` with the [`@Injectable`][angular-docs-injecta
 This not only makes it available to the **injector** for creation,
 but also allows it to **inject dependencies of its own**.
 
-Now that `HttpClientModule` is available, you can inject `HttpClient` into `JokeService`:
+Now that `HttpClientModule` is available, you can inject `HttpClient` into `JokeService` in `src/app/services/joke.service.ts`:
 
 ```ts
 // Other imports...
@@ -1297,7 +1320,8 @@ Let's create a new `JokeResponse` model that we can use with this API:
 $> ng generate class models/joke-response
 ```
 
-Update the generated model to reflect the **structure** of the API response.
+This generates a new model file in `src/app/models/joke-response.ts`.
+Update it to reflect the **structure** of the API response.
 Since it's a nested structure, we'll need **2 classes**:
 
 ```ts
@@ -1315,7 +1339,7 @@ export class JokeResponseValue {
 
 ### Making a GET call
 
-We can now update `addJoke()` to make an actual HTTP call:
+We can now update `getJoke()` in `src/app/services/joke.service.ts` to make an actual HTTP call:
 
 ```ts
 // Other imports...
@@ -1333,7 +1357,6 @@ export class JokeService {
 
 As you can see, [`HttpClient`][angular-docs-http-client]'s `get` method is **generic**,
 and Angular will take care of parsing the response body and giving us an object of the right type.
-
 But we're still left with one problem: we need an Observable of `Joke` objects, and have one of `JokeResponse` objects instead:
 
 ```
@@ -1346,7 +1369,7 @@ ERROR in src/app/services/joke.service.ts(15,5): error TS2322:
 ### Transforming data
 
 We need to be able to transform a `JokeResponse` object into a `Joke`.
-Let's add a utility function at the bottom of the file:
+Let's add a utility function at the bottom of the file in `src/app/services/joke.service.ts`:
 
 ```ts
 function convertJokeResponseToJoke(response: JokeResponse): Joke {
@@ -1363,7 +1386,7 @@ which allows you to transform each item emitted in the stream:
 
 <p class='center'><img src='images/observable-map.png' class='w50' /></p>
 
-To use it, you need to import it and use the Observable's `pipe` method:
+To use it, you need to import it and use the Observable's `pipe` method in `JokeService` in `src/app/services/joke.service.ts`:
 
 ```ts
 // Other imports...
@@ -1380,10 +1403,10 @@ To use it, you need to import it and use the Observable's `pipe` method:
 ### Reacting to errors in observable streams
 
 An observable stream may emit an **error**.
-You can be notified of that error by passing a second callback function to `subscribe`:
+You can be notified of that error by passing a second callback function to `subscribe` in `AppComponent` in `src/app/app.component.ts`:
 
 ```ts
-getJoke(): Observable<Joke> {}
+addJoke() {
   this.jokeService.getJoke().subscribe(joke => {
     this.jokes.push(joke);
   }`, err => {`
@@ -1392,7 +1415,10 @@ getJoke(): Observable<Joke> {}
 }
 ```
 
-For the purpose of testing this new behavior, you can produce an error by changing the URL in `JokeService`, so that the call fails:
+For the purpose of testing this new behavior,
+you can produce an error by changing the URL in `JokeService`in `src/app/services/joke.service.ts`,
+so that the call fails.
+You should then see an error in the console when adding a joke:
 
 ```ts
 getJoke(): Observable<Joke> {
@@ -1402,9 +1428,12 @@ getJoke(): Observable<Joke> {
 }
 ```
 
+You can then change it back to the correct URL.
+
 ### Getting the HTTP response
 
-We've seen that by default, Angular's `HttpClient` returns only the **body of the response**:
+We've seen that by default, Angular's `HttpClient` returns only the **body of the response**
+(this is a *generic example*; do **not** make this change to the project):
 
 ```ts
 function getJoke(): Observable<JokeResponse> {
@@ -1425,7 +1454,7 @@ That's nice, but in some cases we might need access to the **HTTP status** or **
 
 To get Angular's `HttpClient` to give you the full [`HttpResponse`][angular-docs-http-response] object,
 you need to pass an additional options object to your HTTP call,
-with the `observe` property set to `"response"`:
+with the `observe` property set to `"response"` (this is also a *generic example*):
 
 ```ts
 function getJoke(): Observable<`HttpResponse<JokeResponse>`> {
@@ -1474,7 +1503,7 @@ it's good practice to **isolate each part into a component**:
 
 ### Adding votes to the model
 
-Update the `Joke` model to have an additional `votes` property:
+Update the `Joke` model in `src/app/models/joke.ts` to have a `votes` property:
 
 ```ts
 export class Joke {
@@ -1519,7 +1548,7 @@ with its own TypeScript definition, HTML template and CSS styles.
 The responsibility of the new `JokeComponent` will be to display a `Joke` object,
 and to provide a button to vote on the joke.
 
-Let's add a `joke` property to the new component:
+Let's add a `joke` property to the new component in `src/app/components/joke/joke.component.ts`:
 
 ```ts
 // Other imports...
@@ -1536,7 +1565,7 @@ export class JokeComponent implements OnInit {
 }
 ```
 
-And update the component's template to display the joke's text:
+And update the component's template in `src/app/components/joke/joke.component.html` to display the joke's text:
 
 ```html
 {{ joke.text }}
@@ -1544,9 +1573,10 @@ And update the component's template to display the joke's text:
 
 ### Passing data from parent to child with input binding
 
-We want the joke to be provided by the parent component (`AppComponent`).
+We want the joke to be provided by the parent component, `AppComponent`.
 It's an **input** of the `JokeComponent`.
-Annotating a component's property with the [`@Input`][angular-docs-input] decorator marks it as an **input property** which can be set by a parent component:
+Annotating a component's property with the [`@Input`][angular-docs-input] decorator marks it as an **input property** which can be set by a parent component.
+You can do this in `src/app/components/joke/joke.component.ts`:
 
 ```ts
 // Other imports...
@@ -1560,7 +1590,7 @@ export class JokeComponent implements OnInit {
 }
 ```
 
-You can now use the `JokeComponent` in the main component's template.
+You can now use the `JokeComponent` in the main component's template in `src/app/app.component.html`.
 You need to create an `<app-joke>` tag (matching the component's selector),
 and to set the `joke` input property:
 
@@ -1572,7 +1602,9 @@ and to set the `joke` input property:
 
 ### Voting on jokes
 
-Add a `vote()` method to `JokeComponent`:
+Now that `JokeComponent` is working, we can use it to **handle the logic related to one joke**, like voting.
+
+Add a `vote()` method to `JokeComponent` in `src/app/components/joke/joke.component.ts`:
 
 ```ts
 vote() {
@@ -1580,11 +1612,12 @@ vote() {
 }
 ```
 
-Add these 2 lines to the component's template:
+Add these 2 lines to the component's template in `src/app/components/joke/joke.component.html`:
 
 ```html
-({{ joke.votes }} votes)
-<button type='button' (click)='vote()'>+1</button>
+{{ joke.text }}
+*({{ joke.votes }} votes)
+*<button type='button' (click)='vote()'>+1</button>
 ```
 
 You can now vote!
@@ -1592,10 +1625,10 @@ You can now vote!
 ### Displaying global voting information
 
 Let's now display the **total number of votes** and the **best vote** on the page.
-That's the job of the main component, since a `JokeComponent` only knows about its own joke,
+That's the job of the **main component**, since a `JokeComponent` only knows about its own joke,
 so it can't know the total number of votes or whether its number of votes is the highest.
 
-Add this information to the component:
+Add this information to `AppComponent` in `src/app/app.component.ts`:
 
 ```ts
 export class AppComponent {
@@ -1612,7 +1645,7 @@ export class AppComponent {
 }
 ```
 
-And display it in the template:
+And display it in the template in `src/app/app.component.html`:
 
 ```html
 <p>Total votes: {{ totalVotes }}, best vote: {{ bestVote }}</p>
@@ -1624,11 +1657,11 @@ The vote button is in the child component's template, so `AppComponent` can't pu
 Instead, we need our `JokeComponent` to have an **output** that its parent can listen to.
 
 Annotating a component's property with the [`@Output`][angular-docs-output] decorator marks it as an **output property**.
-An output property must be an [`EventEmitter`][angular-docs-event-emitter] (or an Observable).
-Let's add one to `JokeComponent` now:
+It must be an [`EventEmitter`][angular-docs-event-emitter] (or an Observable).
+Let's add one to `JokeComponent` in `src/app/components/joke/joke.component.ts` now:
 
 ```ts
-import { Component, `EventEmitter`, Input, OnInit, Output } from '@angular/core';
+import { Component, `EventEmitter`, Input, OnInit, `Output` } from '@angular/core';
 
 // ...
 export class JokeComponent implements OnInit {
@@ -1649,7 +1682,7 @@ export class JokeComponent implements OnInit {
 
 ### Listening to child component events from a parent
 
-Let's add an `onJokeVoted()` method to `AppComponent`:
+Let's add an `onJokeVoted()` method to `AppComponent` in `src/app/app.component.ts`:
 
 ```ts
 onJokeVoted(joke: Joke) {
@@ -1662,8 +1695,9 @@ onJokeVoted(joke: Joke) {
 
 We want this method to be called every time a vote button is clicked in a child `JokeComponent`.
 
-From the parent's point of view, an **output property** of a child component is **just like any other event**.
-You bind to it using Angular's `(event)='expression'` syntax, exactly like you bind to `(click)` on a `<button>` tag:
+From the parent's point of view, an **output property** of a child component is **just like any other DOM event**.
+You bind to it using Angular's `(event)='expression'` syntax, exactly like you bind to `(click)` on a `<button>` tag.
+Do that in `src/app/app.component.html`:
 
 ```html
 <app-joke [joke]='joke' `(voted)='onJokeVoted(joke)'`></app-joke>
@@ -1673,8 +1707,7 @@ You bind to it using Angular's `(event)='expression'` syntax, exactly like you b
 
 Now that our components are already plugged together,
 adding the functionality to **clear the votes** is trivial.
-
-Add the `clearVotes()` method to the main component.
+Add a `clearVotes()` method to the main component in `src/app/app.component.ts`.
 It simply resets all votes to zero, including the jokes':
 
 ```ts
@@ -1685,7 +1718,7 @@ clearVotes() {
 }
 ```
 
-And add a button to call it in the template:
+And add a button to call it in the template in `src/app/app.component.html`:
 
 ```html
 <button type='button' (click)='clearVotes()'>Clear votes</button>
@@ -1694,7 +1727,7 @@ And add a button to call it in the template:
 It just works!
 
 The `Joke` objects in the `JokeComponent` children are the same objects as the ones in the main component's `jokes` array, bound through Angular's input properties.
-When you modify them in any component, Angular automatically updates all the relevant templates.
+When you modify them in any component, Angular **automatically updates all the relevant templates**.
 
 ### More component interaction
 
