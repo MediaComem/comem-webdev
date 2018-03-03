@@ -34,11 +34,11 @@
   * spread operator
   * getters & setters
 * Angular
-  * promise single vs observable multiple
   * view childs
 * apiDoc
   * add to `.gitignore`
 * Ionic
+  * Lifecycle hooks
   * Navigation
   * Geolocation
   * Map

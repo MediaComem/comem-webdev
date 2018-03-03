@@ -4,13 +4,13 @@ Useful tools to add to an Ionic application.
 
 **You will need**
 
-* [Bower][bower]
 * [Cordova][cordova]
-* A running [Ionic][ionic] application (v1, with Angular 1)
+* A running [Ionic][ionic] application
 
 **Recommended reading**
 
 * [Ionic](../ionic/)
+* [Angular](../angular/)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -44,60 +44,108 @@ Useful tools to add to an Ionic application.
 ## Geolocation
 
 The [HTML Geolocation API][html-geolocation] allows the user to provide their geographical location to web applications.
-Since an Ionic app is a web app, we can use it.
+Since an Ionic app is a web app, you can use it directly.
 
-You could use it directly, but there are also several Angular wrapper libraries ready to use.
-In this tutorial, we'll use [angularjs-geolocation][angularjs-geolocation].
+However, you can also use the [Cordova Geolocation plugin][cordova-geolocation] and the [Ionic Native Geolocation][ionic-native-geolocation] plugin.
+It's already ready for Angular and has the added benefit of working even on platforms where the HTML Geolocation API might not be available in the browser.
 
-Install it with Bower:
+Install the Cordova plugin with `ionic cordova` and the Ionic plugin with `npm`:
 
 ```bash
-$> bower install --save angularjs-geolocation
+$> ionic cordova plugin add \
+   cordova-plugin-geolocation \
+   --variable GEOLOCATION_USAGE_DESCRIPTION="To locate you"
+
+$> npm install --save @ionic-native/geolocation
 ```
 
-Add a `<script>` tag to include it in `www/index.html`:
 
-```js
-<script src='lib/angularjs-geolocation/dist/angularjs-geolocation.min.js'>
-</script>
+
+### Registering the Geolocation service with Angular
+
+The `@ionic-native/geolocation` plugin provides an **Angular service** named `Geolocation` that you can use to locate the user.
+To be able to **inject** it in your application's components or services, you must add that service to your module's **providers**.
+
+For example, you may add it to `AppModule` in `src/app/app.module.ts` in a standard starter project:
+
+```ts
+// Other imports...
+*import { Geolocation } from '@ionic-native/geolocation';
+
+@NgModule({
+  // ...
+  providers: [
+    // Other providers...
+*   Geolocation
+  ]
+})
+export class AppModule {}
 ```
 
-Also add the new Angular module as a dependency of your application in `www/js/app.js`:
 
-```js
-angular.module('my-app', [ '...', `'geolocation'` ])
+
+### Injecting the Geolocation service
+
+Now that the `Geolocation` service is registered, you can inject it in one of your components or services.
+
+Here's an example of how you would inject it in a sample `ExamplePage` component:
+
+```ts
+// Other imports...
+*import { Geolocation } from '@ionic-native/geolocation';
+
+@Component({
+  selector: 'page-example',
+  templateUrl: 'example.html',
+})
+export class ExamplePage {
+  // ...
+  constructor(
+    // Other injections...
+*   private geolocation: Geolocation
+  ) {}
+  // ...
+}
 ```
 
 
 
 ### Getting the user's location
 
-Obtaining the user's current geographic coordinates is as simple as injecting the `geolocation` service in any of your controllers or services,
-and calling its `getLocation()` function:
+Once that's done, obtaining the user's current geographic coordinates is as simple as calling the service's `getCurrentPosition()` method:
 
-```js
-angular.module('my-app').controller('MyCtrl', function(`geolocation`, $log) {
-  var myCtrl = this;
-  `geolocation.getLocation()`.then(function(`data`){
-    myCtrl.latitude = `data.coords.latitude`;
-    myCtrl.longitude = `data.coords.longitude`;
-  }).catch(function(err) {
-    $log.error('Could not get location because: ' + err.message);
-  });
-});
+```ts
+// ...
+export class ExamplePage {
+  // ...
+  ionViewDidLoad() {
+    // ...
+
+*   const geolocationPromise = this.geolocation.getCurrentPosition();
+*   geolocationPromise.then(position => {
+*     const coords = position.coords;
+*     console.log(\`User is at ${coords.longitude}, ${coords.latitude}`);
+*   }).catch(err => {
+*     console.warn(\`Could not retrieve user position because: ${err.message}`);
+*   });
+  }
+  // ...
+}
 ```
 
-It's an **asynchronous** operation which returns a promise, so you call `.then()` to be notified when the location is available.
-You can also call `.catch()` to be notified if there's a problem retrieving the location.
+It's an **asynchronous** operation which returns a promise,
+so you have to call `.then()` to be notified when the location is available.
+You should also call `.catch()` to be notified if there's a problem retrieving the location
+(e.g. the position cannot be determined because the user is indoors).
 
-<!-- slide-column -->
+
+
+### Allowing the brower to retrieve the user's location
 
 When developing locally with `ionic serve`, the browser will ask for permission to get the user's location.
-Click **Allow**.
+Click **Allow**:
 
-<!-- slide-column -->
-
-<img src='images/browser-allow-geolocation.png' class='w100' />
+<p class='center'><img src='images/browser-allow-geolocation.png' class='w50' /></p>
 
 
 
@@ -111,21 +159,15 @@ If you get the following warning:
 *secure origin, such as HTTPS. See https://goo.gl/rStTGz for more details.
 ```
 
-It's because your Ionic app is not running on localhost but on your IP address,
+It's because your Ionic app is not running on localhost but on your IP address
+(e.g. you are on `http://192.168.1.100:8100` in your browser's address bar),
 and getting the user's location over unencrypted HTTP is **no longer allowed on insecure origins**.
+
 You should run your Ionic app on localhost to solve this issue:
 
 ```bash
 $> ionic serve --address localhost
 ```
-
-
-
-### Geolocation doesn't work on my device
-
-When running on an actual mobile device, some versions of some platforms don't have the HTML geolocation API available.
-
-Install [cordova-plugin-geolocation][cordova-geolocation] to solve the issue.
 
 
 
@@ -574,7 +616,7 @@ for example using Ionic's `$ionicPopup` service:
 
 * [angular-leaflet-directive][angular-leaflet-directive] ([examples][angular-leaflet-directive-examples])
 * [cordova-plugin-camera][cordova-camera]
-* [cordova-plugin-geolocation][cordova-geolocation]
+* [Cordova Geolocation plugin][cordova-geolocation] & [Ionic Native Geolocation plugin][ionic-native-geolocation]
 * [Ionic v1 documentation][ionic-docs]
 
 
@@ -582,13 +624,12 @@ for example using Ionic's `$ionicPopup` service:
 [angular-leaflet-directive]: https://github.com/tombatossals/angular-leaflet-directive
 [angular-leaflet-directive-events]: http://tombatossals.github.io/angular-leaflet-directive/#!/examples/events
 [angular-leaflet-directive-examples]: http://tombatossals.github.io/angular-leaflet-directive/#!/examples/simple-map
-[angularjs-geolocation]: https://github.com/arunisrael/angularjs-geolocation/
-[bower]: https://bower.io
 [cordova]: https://cordova.apache.org
 [cordova-camera]: https://github.com/apache/cordova-plugin-camera
 [cordova-geolocation]: https://github.com/apache/cordova-plugin-geolocation
 [ionic]: http://ionicframework.com
 [ionic-docs]: http://ionicframework.com/docs/v1/
+[ionic-native-geolocation]: https://ionicframework.com/docs/native/geolocation/
 [html-geolocation]: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation
 [leaflet]: http://leafletjs.com
 [mapbox]: https://www.mapbox.com/

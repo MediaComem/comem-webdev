@@ -51,6 +51,7 @@ Materials for the COMEM+ web development courses.
     * [Express Best Practices](subjects/express-best-practices/)
     * [Using Mongoose with Express](subjects/express-mongoose/)
 * [Ionic](subjects/ionic/)
+  * [Ionic Extras](subjects/ionic-extras/) (geolocation, maps, camera)
 
 **Web Services**
 
@@ -87,8 +88,6 @@ Materials for the COMEM+ web development courses.
   * [Angular 1 UI Router](subjects/angular-ui-router/)
 * [Bootstrap 3](subjects/bootstrap)
   * [Bootstrap 3 Layout management](subjects/bootstrap-layout-management)
-* Ionic 1
-  * [Ionic 1 Extras](subjects/ionic-extras/) (geolocation, maps, camera)
 
 
 
