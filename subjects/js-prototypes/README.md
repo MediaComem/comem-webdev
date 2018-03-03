@@ -376,6 +376,8 @@ In the second example, only one `getValue` function is defined and attached to t
 * [A Plain English Guide to JavaScript Prototypes](http://sporto.github.io/blog/2013/02/22/a-plain-english-guide-to-javascript-prototypes/)
 * [Prototypes in JavaScript](https://hackernoon.com/prototypes-in-javascript-5bba2990e04b)
 * [Understanding Prototypes and Inheritance in JavaScript](https://www.digitalocean.com/community/tutorials/understanding-prototypes-and-inheritance-in-javascript)
+* [The Modern JavaScript Tutorial: Mixins](https://javascript.info/mixins)
+* [A fresh look at JavaScript mixins](https://javascriptweblog.wordpress.com/2011/05/31/a-fresh-look-at-javascript-mixins/)
 
 
 
