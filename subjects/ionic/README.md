@@ -5,7 +5,7 @@ Learn about [Ionic][ionic], an open source framework to build hybrid mobile appl
 **You will need**
 
 * [Node.js][node] 8+
-* A free [Ionic account][ionic-account] (if you want to run your app with Ionic View)
+* [Google Chrome][chrome] (recommended, any browser with developer tools will do)
 
 **Recommended reading**
 
@@ -381,6 +381,7 @@ It may find it automatically, or you may have to manually enter your computer's 
 
 [angular]: https://angular.io
 [angular-components]: https://angular.io/guide/architecture#components
+[chrome]: https://www.google.com/chrome/
 [cordova]: https://cordova.apache.org
 [cordova-requirements]: http://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html
 [geolocation-api]: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation
