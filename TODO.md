@@ -40,7 +40,6 @@
 * Ionic
   * Lifecycle hooks
   * Navigation
-  * Camera
   * Image upload (qimg)
 
 ## Ideas for new subjects

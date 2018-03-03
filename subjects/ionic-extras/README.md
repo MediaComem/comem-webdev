@@ -46,17 +46,17 @@ Useful tools to add to an Ionic application.
 The [HTML Geolocation API][html-geolocation] allows the user to provide their geographical location to web applications.
 Since an Ionic app is a web app, you can use it directly.
 
-However, you can also use the [Cordova Geolocation plugin][cordova-geolocation] and the [Ionic Native Geolocation][ionic-native-geolocation] plugin.
-It's already ready for Angular and has the added benefit of working even on platforms where the HTML Geolocation API might not be available in the browser.
+However, you can also use the [Cordova geolocation plugin][cordova-geolocation] and the [Ionic native geolocation][ionic-native-geolocation] plugin.
+The latter is already ready for Angular and the former gives you the added benefit of working even on platforms where the HTML Geolocation API might not be available in the browser.
 
-Install the Cordova plugin with `ionic cordova` and the Ionic plugin with `npm`:
+Install both:
 
 ```bash
 $> ionic cordova plugin add \
    cordova-plugin-geolocation \
    --variable GEOLOCATION_USAGE_DESCRIPTION="To locate you"
 
-$> npm install --save @ionic-native/geolocation
+$> npm install @ionic-native/geolocation
 ```
 
 
@@ -474,122 +474,113 @@ export class ExamplePage {
 
 The camera is part of your mobile device's hardware,
 so you'll need Cordova to access it for you.
-
-Install [cordova-plugin-camera][cordova-camera] with the following command in your app's directory:
+Install the [Cordova Camera plugin][cordova-camera] and the [Ionic native camera plugin][ionic-native-camera]:
 
 ```bash
-$> cd /path/to/projects/my-app
-$> cordova plugin add cordova-plugin-camera
+$> ionic cordova plugin add cordova-plugin-camera
+$> npm install @ionic-native/camera
 ```
 
-This plugin adds a `navigator.camera` object that you can use to take pictures
-(only when running your app on an actual mobile device).
+The Ionic native camera plugin has a `Camera` service which you need to add to your application's module,
+typically in `src/app/app.module.ts` in a starter project:
 
+```ts
+// Other imports...
+*import { Camera } from '@ionic-native/camera';
 
-
-### Create an Angular service for the camera
-
-Instead of using the camera object directly, it's a good idea to put it into an Angular service.
-We'll create a `CameraService` service with a `getPicture()` function which returns a promise:
-
-```js
-angular.module('my-app').factory(`'CameraService'`, function($q) {
-
-  var service = {
-    `getPicture`: function() {
-      var deferred = $q.defer();
-      var options = { // Return the raw base64 PNG data
-        destinationType: navigator.camera.DestinationType.DATA_URL,
-        correctOrientation: true
-      };
-
-      `navigator.camera.getPicture`(function(result) {
-        deferred.resolve(result);
-      }, function(err) {
-        deferred.reject(err);
-      }, options);
-
-      return deferred.promise;
-    }
-  };
-
-  return service;
-});
+@NgModule({
+  // ...
+  providers: [
+    // Other providers...
+*   Camera
+  ]
+})
+export class AppModule {}
 ```
 
 
 
-### Calling the camera service
+### Injecting the camera service
 
-You can now inject and use the `CameraService` in your controllers.
-Let's add a `takePicture()` function to a controller:
+Now that you have registered the `Camera` service,
+you can inject it into one of your components.
 
-```js
-angular.module('my-app').controller('MyCtrl', function(`CameraService`, $log) {
-  var myCtrl = this;
+Here's how you would do it in a sample `ExamplePage` component:
 
-  `myCtrl.takePicture` = function() {
-    `CameraService.getPicture()`.then(function(result) {
-      $log.debug('Picture taken!');
-      `myCtrl.pictureData` = result;
-    }).catch(function(err) {
-      $log.error('Could not get picture because: ' + err.message);
-    });
-  };
-});
+```ts
+// Other imports...
+*import { Camera } from '@ionic-native/camera';
+
+// ...
+export class ExamplePage {
+  // ...
+  constructor(
+    // Other constructor parameters...
+*   private camera: Camera
+  ) {
+    // ...
+  }
+  // ...
+}
 ```
 
-Call it in the view and display the result:
+
+
+### Taking a picture
+
+Time to use that `Camera` service to take a picture.
+Add this `takePicture()` method to the component,
+along with the `pictureData` field to store the data:
+
+```ts
+// Other imports...
+import { Camera, `CameraOptions` } from '@ionic-native/camera';
+
+// ...
+export class ExamplePage {
+* pictureData: string;
+  // ...
+* takePicture() {
+*   const options: CameraOptions = {
+*     quality: 100,
+*     destinationType: this.camera.DestinationType.DATA_URL,
+*     encodingType: this.camera.EncodingType.JPEG,
+*     mediaType: this.camera.MediaType.PICTURE
+*   };
+*
+*   this.camera.getPicture(options).then(pictureData => {
+*     this.pictureData = pictureData;
+*   }, err => {
+*     console.warn(\`Could not take picture because: ${err.message}`);
+*   });
+* }
+
+}
+```
+
+
+
+### Displaying the picture in the template
+
+Add a `<button>` tag in the component's template to call our `takePicture()` method,
+and an `<img>` tag to display the picture once it's taken:
 
 ```html
-<button type='button button-positive' ng-click='`myCtrl.takePicture()`'>
-  Take picture
-</button>
-<img ng-if='`myCtrl.pictureData`' width='100%'
-     ng-src='data:image/png;base64,{{ `myCtrl.pictureData` }}' />
+<ion-content padding>
+  <!-- ... -->
+* <button ion-button (click)='takePicture()'>Button</button>
+* <img *ngIf='pictureData' src='data:image/jpeg;base64,{{ pictureData }}' />
+</ion-content>
 ```
 
+It should work **on your device** now!
 
+(Of course, it will not work in the browser when developing on your computer because it requires the mobile device's actual camera.)
 
-### The camera and `ionic serve`
-
-The camera and the `navigator.camera` object will only be available on physical devices,
-so your code will produce errors during local development with `ionic serve`.
-
-To mitigate this issue, you can add a function to your service to test if the camera is available:
-
-```js
-angular.module('my-app').factory('CameraService', function($q) {
-  var service = {
-*   isSupported: function() {
-*     return navigator.camera !== undefined;
-*   },
-    // ...
-  };
-  return service;
-});
-```
-
-#### Notifying the user that the feature is unsupported
-
-That way you can display some kind of notification to tell the user that he won't be able to use the camera,
-for example using Ionic's `$ionicPopup` service:
-
-```js
-.controller('MyCtrl', function(CameraService, `$ionicPopup`, $log) {
-  var myCtrl = this;
-
-  myCtrl.takePicture = function() {
-*   if (!CameraService.isSupported()) {
-*     return $ionicPopup.alert({
-*       title: 'Not supported',
-*       template: 'You cannot use the camera on this platform'
-*     });
-*   }
-    // ...
-  };
-});
-```
+Note that because we called `Camera.getPicture()` with a `destinationType` set to `DestinationType.DATA_URL`,
+the `pictureData` variable we get back contains the picture's base64-encoded raw data,
+but you can also save it to a file or customize other camera parameters.
+Read the documentation of the [Ionic native camera plugin][ionic-native-camera] for more information.
 
 
 
@@ -597,10 +588,10 @@ for example using Ionic's `$ionicPopup` service:
 
 **Documentation**
 
-* [cordova-plugin-camera][cordova-camera]
-* [Cordova Geolocation plugin][cordova-geolocation] & [Ionic Native Geolocation plugin][ionic-native-geolocation]
-* [ngx-leaflet][ngx-leaflet]
 * [Ionic documentation][ionic-docs]
+* [Ionic native geolocation plugin][ionic-native-geolocation] & [Cordova geolocation plugin][cordova-geolocation]
+* [Leaflet][leaflet] & [ngx-leaflet][ngx-leaflet]
+* [Ionic native camera plugin][ionic-native-camera] & [Cordova camera plugin][cordova-camera]
 
 
 
@@ -610,6 +601,7 @@ for example using Ionic's `$ionicPopup` service:
 [definitely-typed]: http://definitelytyped.org
 [ionic]: http://ionicframework.com
 [ionic-docs]: https://ionicframework.com/docs/
+[ionic-native-camera]: https://ionicframework.com/docs/native/camera/
 [ionic-native-geolocation]: https://ionicframework.com/docs/native/geolocation/
 [html-geolocation]: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation
 [leaflet]: http://leafletjs.com
