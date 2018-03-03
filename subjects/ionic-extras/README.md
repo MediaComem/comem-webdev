@@ -174,316 +174,299 @@ $> ionic serve --address localhost
 ## Leaflet
 
 There are many JavaScript map libraries, each with their own advantages.
-For this tutorial, we'll use [Leaflet][leaflet] as it's one of the most popular,
-and it has a pretty good Angular library: [angular-leaflet-directive][angular-leaflet-directive].
+For this tutorial, we'll use [Leaflet][leaflet] as it's one of the most popular open source libraries.
+We'll also use [ngx-leaflet][ngx-leaflet], which is an Angular wrapper around Leaflet.
 
-You can install both with Bower (it will automatically install Leaflet as well):
+You can install both with npm:
 
 ```bash
-$> bower install --save angular-leaflet-directive
+$> npm install leaflet @asymmetrik/ngx-leaflet
 ```
 
-There are 3 files you need to include in `www/index.html`;
-Leaflet's stylesheet, and the JavaScript files for Leaflet and the Angular directive:
+As we are in a TypeScript project and Leaflet is not written in TypeScript,
+you'll also need to install its [type definitions][definitely-typed]:
 
-```html
-<link href='lib/leaflet/dist/leaflet.css' rel='stylesheet'>
-<script src='lib/leaflet/dist/leaflet-src.js'></script>
-<script src='lib/angular-leaflet-directive/dist/angular-leaflet-directive.js'>
-</script>
+```bash
+$> npm install --save-dev @types/leaflet
 ```
 
-Also add the `leaflet-directive` module as a dependency of your application in `www/js/app.js`:
+
+
+### Importing Leaflet styles
+
+It's easy to use Leaflet's JavaScript components, as we just have to `import` them,
+but it's a little bit harder to include Leaflet's CSS, as the Ionic build chain doesn't include it by default.
+
+You need to add a new `copy.config.js` file to your project.
+This file configures Ionic to copy Leaflet's stylesheet and images to its build directory (`www`):
 
 ```js
-angular.module('my-app', [ '...', `'leaflet-directive'` ])
-```
-
-
-
-### Your map state
-
-We'll assume you have a **map state** defined with Angular UI router,
-and that this state has a template and a controller.
-It could look something like this:
-
-```js
-.state('map', {
-  url: '/map',
-  controller: 'MapCtrl',
-  controllerAs: 'mapCtrl',
-  templateUrl: 'templates/map.html'
-})
-```
-
-If you're using **tabs**, it could look like this instead:
-
-```js
-.state('tab.map', {
-  url: '/map',
-  views: {
-    'tab-map': {
-      controller: 'MapCtrl',
-      controllerAs: 'mapCtrl',
-      templateUrl: 'templates/map.html'
-    }
+module.exports = {
+  copyLeaflet: {
+    src: ['{{ROOT}}/node_modules/leaflet/dist/leaflet.css'],
+    dest: '{{WWW}}/assets/leaflet/'
+  },
+  copyLeafletAssets: {
+    src: ['{{ROOT}}/node_modules/leaflet/dist/images/**/*'],
+    dest: '{{WWW}}/assets/leaflet/images/'
   }
-})
-```
-
-
-
-### Adding a map
-
-Let's attach some data to our controller.
-The map will need it:
-
-```js
-angular.module('my-app').controller('MapCtrl', function() {
-  var mapCtrl = this;
-
-* mapCtrl.defaults = {};
-* mapCtrl.markers = [];
-* mapCtrl.center = {
-*   lat: 51.48,
-*   lng: 0,
-*   zoom: 14
-* };
-});
-```
-
-Use the `<leaflet>` directive from the angular-leaflet-directive library to display a map in the template:
-
-```html
-<ion-content scroll='false' data-tap-disabled='true'>
-* <leaflet width='100%' height='100%'
-*          defaults='mapCtrl.defaults'
-*          center='mapCtrl.center'
-*          markers='mapCtrl.markers'>
-* </leaflet>
-</ion-content>
-```
-
-#### Leaflet maps and Ionic
-
-Be sure not to forget to add `scroll='false'` and `data-tap-disabled='true'` to your map's enclosing element:
-
-```html
-<ion-content `scroll='false'` `data-tap-disabled='true'`>
-```
-
-This prevents Ionic's mobile gestures from interfering with controlling the map.
-
-Also do not forget to give your map a width and height:
-
-```html
-<leaflet `width='100%'` `height='100%'` ...>
-```
-
-
-
-### Adding markers to your map
-
-You can add a marker simply by adding it to the `mapCtrl.markers` array we defined earlier.
-Angular's two-way binding will do the rest:
-
-<!-- slide-column -->
-
-```js
-mapCtrl.markers.push({
-  lat: 51.48,
-  lng: 0
-});
-```
-
-<!-- slide-column -->
-
-<img src='images/leaflet-marker.png' class='w100' />
-
-#### Marker tooltips
-
-If you want a tooltip to open when the marker is clicked, you can simply add a `message` property:
-
-<!-- slide-column -->
-
-```js
-mapCtrl.markers.push({
-  lat: 51.48,
-  lng: 0,
-  message: 'Hello World!'
-});
-```
-
-<!-- slide-column -->
-
-<img src='images/leaflet-marker-tooltip.png' class='w100' />
-
-#### Dynamic marker tooltips
-
-If you want to display dynamic data in the marker,
-you must create an Angular scope for the marker with `getMessageScope()`:
-
-<!-- slide-column -->
-
-```js
-var record = {
-  title: 'Lorem ipsum'
 };
+```
 
-*var msg = '<p>Hello World!</p>';
-*msg += '<p>{{ record.title }}</p>';
+#### Adding a copy configuration file to Ionic
 
-mapCtrl.markers.push({
-  lat: 51.48,
-  lng: 0,
-  message: `msg`,
-* getMessageScope: function() {
-*   var scope = $scope.$new();
-*   scope.record = record;
-*   return scope;
-* }
-});
+You must tell Ionic to use this configuration file by adding this to your `package.json` file:
+
+```json
+{
+  "...": "...",
+* "config": {
+*   "ionic_copy": "copy.config.js"
+* },
+  "...": "..."
+}
+```
+
+Once that's done, start (or restart) your `ionic serve` command.
+
+You should see that Leaflet's stylesheet and images have been copied under the `www/assets/leaflet` directory:
+
+```bash
+$> ls www/assets/leaflet
+images   leaflet.css
+```
+
+#### Adding the Leaflet stylesheet
+
+Now that the stylesheet is available in your project's build directory,
+you can add it to `src/index.html` with a new `<link>` tag:
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <!-- ... -->
+* <link href='assets/leaflet/leaflet.css' rel='stylesheet'>
+  <link href='build/main.css' rel='stylesheet'>
+</head>
+<body>
+  <!-- ... -->
+&lt;/body&gt;
+</html>
+```
+
+Leaflet's styles are now loaded.
+
+
+
+### Registering the Leaflet module with Angular
+
+To use the [ngx-leaflet][ngx-leaflet] library,
+you must add its `LeafletModule` to your application's module in `src/app/app.module.ts`:
+
+```ts
+// Other imports...
+*import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+
+@NgModule({
+  // ...
+  imports: [
+    // Other imports...
+*   LeafletModule.forRoot()
+  ]
+  // ...
+})
+export class AppModule {}
+```
+
+
+
+### Displaying a map
+
+To display map, you need to define some basic map options.
+Here's how you could add them to a sample `ExamplePage` component:
+
+```ts
+// Other imports...
+*import { latLng, MapOptions, tileLayer } from 'leaflet';
+
+@Component({
+  selector: 'page-example',
+  templateUrl: 'example.html',
+})
+export class ExamplePage {
+* mapOptions: MapOptions;
+
+  constructor(/* ... */) {
+    // ...
+*   const tileLayerUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+*   const tileLayerOptions = { maxZoom: 18 };
+*   this.mapOptions = {
+*     layers: [
+*       tileLayer(tileLayerUrl, tileLayerOptions)
+*     ],
+*     zoom: 13,
+*     center: latLng(46.778186, 6.641524)
+*   };
+  }
+}
+```
+
+#### Adding the map to the component's template
+
+You can now add the map to the component's HTML template.
+Assuming you want the map to fill the entire page,
+you can replace the entire contents of the template with this:
+
+```html
+<div class='map' leaflet [leafletOptions]='mapOptions'></div>
 ```
 
 <!-- slide-column -->
 
-<img src='images/leaflet-marker-tooltip-scope.png' class='w100' />
+The `leaflet` attribute instructs the ngx-leaflet library to create a map in this DOM element,
+with our previously defined `mapOptions` bound through the `[leafletOptions]` attribute.
+
+The map will have no height by default,
+so add the following to the component's stylesheet to make it visible:
+
+```scss
+page-example {
+  .map {
+    height: 100%;
+  }
+}
+```
+
+You should now have a working Leaflet map!
+
+<!-- slide-column 30 -->
+
+<img src='images/leaflet-map.png' class='w100' />
+
+
+
+### Markers
+
+Adding markers to the map is quite simple.
+
+First, you need to create some markers.
+Let's add them to the component:
+
+```ts
+// Other imports...
+import { latLng, MapOptions, `marker, Marker`, tileLayer } from 'leaflet';
+
+// ...
+export class ExamplePage {
+  // ...
+* mapMarkers: Marker[];
+
+  constructor(/* ... */) {
+    // ...
+*   this.mapMarkers = [
+*     marker([ 46.778186, 6.641524 ]),
+*     marker([ 46.780796, 6.647395 ]),
+*     marker([ 46.784992, 6.652267 ])
+*   ];
+  }
+}
+```
+
+#### Adding the markers to the map
+
+<!-- slide-column -->
+
+Now all you need to do is bind the array of markers you just defined to the `leaflet` directive in the component's template with `[leafletLayers]`:
+
+```html
+<div class='map' leaflet
+     [leafletOptions]='mapOptions'
+     `[leafletLayers]='mapMarkers'`>
+</div>
+```
+
+<!-- slide-column 30 -->
+
+<img src='images/leaflet-map-markers.png' class='w100' />
+
+#### Adding a tooltip to a marker
+
+<!-- slide-column -->
+
+The markers you created in the `mapMarkers` array in the component are regular Leaflet [Marker][leaflet-marker] objects.
+
+Check out the Leaflet documentation to see what you can do with them.
+
+<!-- slide-column 30 -->
+
+<img src='images/leaflet-map-marker-tooltip.png' class='w100' />
 
 <!-- slide-container -->
 
-Do not forget to inject `$scope` in your controller for this example to work.
+For example, you could add a [Tooltip][leaflet-tooltip]:
 
-#### Complex marker templates
+```ts
+this.mapMarkers = [
+  marker([ 46.778186, 6.641524 ])`.bindTooltip('Hello')`,
+  marker([ 46.780796, 6.647395 ]),
+  marker([ 46.784992, 6.652267 ])
+];
+```
 
-It's hard to maintain a marker template when you have to construct it manually like in the previous example.
-If your marker template becomes too complex, save it in a file like `templates/mapTooltip.html`.
 
-Then, when creating your marker, use the `ng-include` directive to load that template:
 
-```js
-var record = {
-  title: 'Lorem ipsum'
-};
+### Getting a reference to the map
 
-mapCtrl.markers.push({
-  lat: 51.48,
-  lng: 0,
-* message: '<div ng-include="\'templates/mapTooltip.html\'" />',
-  getMessageScope: function() {
-    var scope = $scope.$new();
-    scope.record = record;
-    return scope;
+You might need to get direct access to the Leaflet [Map][leaflet-map] object to register events or whatever.
+The `leaflet` directive will emit a `leafletMapReady` event when it's done initializing the map.
+You can bind to this event to retrieve the map object created by Leaflet:
+
+```html
+<div class='map' leaflet
+     [leafletOptions]='mapOptions' [leafletLayers]='mapMarkers'
+     `(leafletMapReady)='onMapReady($event)'`>
+</div>
+```
+
+Now all you need to do is retrieve the map in your component:
+
+```ts
+// Other imports...
+import { latLng, `Map`, MapOptions, marker, Marker, tileLayer } from 'leaflet';
+
+// ...
+export class ExamplePage {
+* map: Map;
+  // ...
+* onMapReady(map: Map) {
+*   this.map = map;
+* }
+}
+```
+
+
+
+### Listening to map events
+
+You got a hold of the Leaflet [Map][leaflet-map] instance with the previous example,
+so you have access to [all its events][leaflet-map-events].
+
+For example, you could listen to its `moveend` event to check the new coordinates every time the user moves the map:
+
+```ts
+// ...
+export class ExamplePage {
+  // ...
+  onMapReady(map: Map) {
+    this.map = map;
+*   this.map.on('moveend', () => {
+*     const center = this.map.getCenter();
+*     console.log(\`Map moved to ${center.lng}, ${center.lat}`);
+*   });
   }
-});
+}
 ```
-
-
-
-### Leaflet events
-
-Leaflet broadcasts several [events][angular-leaflet-directive-events] on the Angular scope.
-You can react to them by injecting `$scope` and using its `$on()` function.
-
-For example, the `leafletDirectiveMap.dragend` event is fired after the user drags the map:
-
-```js
-$scope.$on('`leafletDirectiveMap.dragend`', function(event, map){
-  console.log('Map was dragged');
-});
-```
-
-The `leafletDirectiveMarker.click` event is fired when the user clicks on a marker:
-
-```js
-$scope.$on('`leafletDirectiveMarker.click`', function(event, marker) {
-  var coords = marker.model.lng + '/' + marker.model.lat;
-  console.log('Marker at ' + coords + ' was clicked');
-});
-```
-
-
-
-## Mapbox
-
-[Mapbox][mapbox] is a mapping platform you can use to design maps.
-You can integrate it into Leaflet to have a better looking map than the default one.
-
-Create an account, log in and go to the Mapbox studio:
-
-<p class='center'><img src='images/mapbox-menu.png' class='w90' /></p>
-
-
-
-### Mapbox tilesets
-
-Choose a **map tileset** for your app:
-
-<p class='center'><img src='images/mapbox-tilesets.png' class='w80' /></p>
-
-
-
-### Mapbox map ID
-
-Copy the **map ID** of your tileset, which you will need it to tell Leaflet to use it:
-
-<p class='center'><img src='images/mapbox-tileset-map-id.png' class='w100' /></p>
-
-
-
-### Mapbox access tokens
-
-Go into your **Account** settings and generate a new API access token:
-
-<p class='center'><img src='images/mapbox-access-tokens.png' class='w80' /></p>
-
-#### New mapbox access token
-
-<!-- slide-column -->
-
-You can leave the basic settings untouched and click on **Generate**:
-
-<!-- slide-column 60-->
-
-<img src='images/mapbox-new-access-token.png' class='w100' />
-
-#### Copy the mapbox access token
-
-Once you're done, copy the access token:
-
-<p class='center'><img src='images/mapbox-copy-access-token.png' class='w70' /></p>
-
-
-
-### Using a Mapbox tileset with Leaflet
-
-To use your Mapbox tileset with angular-leaflet-directive, you have to construct a **tile layer URL**
-containing both your **Mapbox tileset map ID** and your **Mapbox access token**:
-
-```js
-var `mapboxMapId` = 'mapbox.satellite';  // Use your favorite tileset here
-var `mapboxAccessToken` = 'changeme';    // Use your access token here
-
-// Build the tile layer URL
-var mapboxTileLayerUrl = 'http://api.tiles.mapbox.com/v4/' + `mapboxMapId`;
-mapboxTileLayerUrl = mapboxTileLayerUrl + '/{z}/{x}/{y}.png';
-mapboxTileLayerUrl = mapboxTileLayerUrl + '?access_token=' + `mapboxAccessToken`;
-```
-
-You can then add this URL to the Leaflet map's configuration object in the `mapCtrl.defaults` variable in your map controller:
-
-```js
-mapCtrl.defaults = {
-  tileLayer: mapboxTileLayerUrl
-};
-```
-
-
-
-### Mapbox and Leaflet
-
-Your map should now be using your Mapbox tileset:
-
-<p class='center'><img src='images/mapbox-leaflet.png' class='w50' /></p>
 
 
 
@@ -614,22 +597,24 @@ for example using Ionic's `$ionicPopup` service:
 
 **Documentation**
 
-* [angular-leaflet-directive][angular-leaflet-directive] ([examples][angular-leaflet-directive-examples])
 * [cordova-plugin-camera][cordova-camera]
 * [Cordova Geolocation plugin][cordova-geolocation] & [Ionic Native Geolocation plugin][ionic-native-geolocation]
-* [Ionic v1 documentation][ionic-docs]
+* [ngx-leaflet][ngx-leaflet]
+* [Ionic documentation][ionic-docs]
 
 
 
-[angular-leaflet-directive]: https://github.com/tombatossals/angular-leaflet-directive
-[angular-leaflet-directive-events]: http://tombatossals.github.io/angular-leaflet-directive/#!/examples/events
-[angular-leaflet-directive-examples]: http://tombatossals.github.io/angular-leaflet-directive/#!/examples/simple-map
 [cordova]: https://cordova.apache.org
 [cordova-camera]: https://github.com/apache/cordova-plugin-camera
 [cordova-geolocation]: https://github.com/apache/cordova-plugin-geolocation
+[definitely-typed]: http://definitelytyped.org
 [ionic]: http://ionicframework.com
-[ionic-docs]: http://ionicframework.com/docs/v1/
+[ionic-docs]: https://ionicframework.com/docs/
 [ionic-native-geolocation]: https://ionicframework.com/docs/native/geolocation/
 [html-geolocation]: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation
 [leaflet]: http://leafletjs.com
-[mapbox]: https://www.mapbox.com/
+[leaflet-map]: http://leafletjs.com/reference-1.3.0.html#map-example
+[leaflet-map-events]: http://leafletjs.com/reference-1.3.0.html#map-event
+[leaflet-marker]: http://leafletjs.com/reference-1.3.0.html#marker
+[leaflet-tooltip]: http://leafletjs.com/reference-1.3.0.html#tooltip
+[ngx-leaflet]: https://github.com/Asymmetrik/ngx-leaflet#readme

@@ -40,8 +40,6 @@
 * Ionic
   * Lifecycle hooks
   * Navigation
-  * Geolocation
-  * Map
   * Camera
   * Image upload (qimg)
 
