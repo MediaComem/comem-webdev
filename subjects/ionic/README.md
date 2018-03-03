@@ -323,14 +323,6 @@ For example, the list component automatically enables you to [slide in][ionic-sl
 
 
 
-## Navigation
-
-* [Navigation][ionic-nav-tutorial]
-* [Navigation Component][ionic-nav-component]
-* [NavController][ionic-nav-controller]
-
-
-
 ## Running apps on your mobile device
 
 There are several ways to run your Ionic application on a mobile device.
@@ -394,9 +386,6 @@ It may find it automatically, or you may have to manually enter your computer's 
 [ionic-docs]: https://ionicframework.com/docs/
 [ionic-macos-setup]: https://ionicframework.com/docs/developer-resources/platform-setup/mac-setup.html
 [ionic-market]: https://market.ionicframework.com/
-[ionic-nav-component]: https://ionicframework.com/docs/components/#navigation
-[ionic-nav-controller]: https://ionicframework.com/docs/api/navigation/NavController/
-[ionic-nav-tutorial]: https://ionicframework.com/docs/intro/tutorial/navigation/
 [ionic-resources]: https://ionicframework.com/docs/developer-resources/
 [ionic-sliding-list]: https://ionicframework.com/docs/components/#sliding-list
 [ionic-windows-setup]: https://ionicframework.com/docs/developer-resources/platform-setup/windows-setup.html
