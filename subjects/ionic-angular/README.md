@@ -155,6 +155,38 @@ Note that a back button should appear to allow you to pop the new page off the n
 
 
 
+### Passing parameters
+
+You can **pass parameters to another page** by simply providing them as a second argument to `NavController`'s `push` method:
+
+```ts
+goToDetails() {
+  this.navCtrl.push(DetailsPage, `{ id: 23 }`);
+}
+```
+
+To retrieve these parameters in the details page, you simply need to inject a `NavParams` object and retrieve its `data` property:
+
+```ts
+export class DetailsPage {
+  constructor(public navCtrl: NavController, `public navParams: NavParams`) {
+*   console.log(this.navParams.data); // { id: 23 }
+  }
+}
+```
+
+You can also display parameters in the template:
+
+```html
+<!-- ... -->
+<ion-content padding>
+  Details`: {{ navParams.data.id }}`
+</ion-content>
+```
+
+
+
+
 ## Resources
 
 **Documentation**

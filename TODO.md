@@ -39,7 +39,6 @@
   * add to `.gitignore`
 * Ionic
   * Lifecycle hooks
-  * Navigation
   * Image upload (qimg)
 
 ## Ideas for new subjects
