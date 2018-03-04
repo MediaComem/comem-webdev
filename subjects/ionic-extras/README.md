@@ -548,7 +548,7 @@ export class ExamplePage {
 *
 *   this.camera.getPicture(options).then(pictureData => {
 *     this.pictureData = pictureData;
-*   }, err => {
+*   }).catch(err => {
 *     console.warn(\`Could not take picture because: ${err.message}`);
 *   });
 * }
