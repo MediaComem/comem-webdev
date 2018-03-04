@@ -14,6 +14,8 @@ Learn to work with [Angular][angular] in an [Ionic][ionic] project.
 - [Scaffolding](#scaffolding)
 - [Navigation](#navigation)
   - [Navigating to a page](#navigating-to-a-page)
+  - [Passing parameters](#passing-parameters)
+  - [Lifecycle hooks](#lifecycle-hooks)
 - [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
