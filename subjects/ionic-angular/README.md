@@ -186,6 +186,33 @@ You can also display parameters in the template:
 
 
 
+### Lifecycle hooks
+
+Any component pushed on the navigation stack may implement any of these lifecycle methods
+to be notified of navigation events:
+
+Method              | Called when
+:---                | :---
+`ionViewDidLoad`    | The page has loaded. This event only happens once per page being created. If a page leaves but is cached, then this event will not fire again on a subsequent viewing. It is a good place to put your setup code for the page.
+`ionViewWillEnter`  | The page is about to enter and become the active page.
+`ionViewDidEnter`   | The page has fully entered and is now the active page. This event will fire, whether it was the first load or a cached page.
+`ionViewWillLeave`  | The page is about to leave and no longer be the active page.
+`ionViewDidLeave`   | The page has finished leaving and is no longer the active page.
+`ionViewWillUnload` | The page is about to be destroyed and have its elements removed.
+
+#### Authentication hooks
+
+Additionally, these 2 hooks can be used to perform **authentication** before allowing the user to view a component:
+
+Method            | Return type            | Called when
+:---              | :---                   | :---
+`ionViewCanEnter` | `boolean` or `Promise` | Before the view can enter. This can be used as a sort of "guard" in authenticated views where you need to check permissions before the view can enter.
+`ionViewCanLeave` | `boolean` or `Promise` | Before the view can leave. This can be used as a sort of "guard" in authenticated views where you need to check permissions before the view can leave.
+
+You may return a Promise from these hooks if you need to perform some **asynchronous** checks.
+
+
+
 
 ## Resources
 
