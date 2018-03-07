@@ -566,7 +566,7 @@ and an `<img>` tag to display the picture once it's taken:
 ```html
 <ion-content padding>
   <!-- ... -->
-* <button ion-button (click)='takePicture()'>Button</button>
+* <button ion-button (click)='takePicture()'>Take picture</button>
 * <img *ngIf='pictureData' src='data:image/jpeg;base64,{{ pictureData }}' />
 </ion-content>
 ```
