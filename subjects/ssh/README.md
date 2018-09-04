@@ -1,8 +1,21 @@
 # Secure Shell (SSH)
 
-Learn to use the SSH cryptographic network protocol to connect to other computers and different ways to authenticate.
+Learn to use the SSH cryptographic network protocol to connect to other computers.
 
 <!-- slide-include ../../BANNER.md -->
+
+<!-- START doctoc -->
+<!-- END doctoc -->
+
+
+
+## What is SSH?
+
+<!-- slide-front-matter class: center, middle -->
+
+> SSH is a **cryptographic network protocol** for operating network services **securely over an unsecured network**.
+
+> Its main uses are **remote command-line login** and **securing network services like Git or FTP**.
 
 
 

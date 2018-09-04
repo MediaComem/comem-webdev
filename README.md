@@ -31,6 +31,7 @@ Materials for the COMEM+ web development courses.
 * [Git](subjects/git/)
   * [Git Branching](subjects/git-branching/)
   * [Collaborating with Git on GitHub](subjects/git-collaborating/)
+* [SSH](subjects/ssh/)
 
 **Languages & Frameworks**
 
