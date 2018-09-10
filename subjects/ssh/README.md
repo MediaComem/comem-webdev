@@ -272,19 +272,129 @@ between the two parties to **intercept and relay all communications**.
 
 ### Asymmetric digital signature
 
-TODO
+One of the other main uses of asymmetric cryptography is performing **digital signatures**.
+A signature proves that the message came from a particular sender.
 
-#### Example: digital signature with RSA
+<!-- slide-column -->
 
-TODO
+* Assuming **Alice wants to send a message to Bob**,
+  she can **use her private key to create a digital signature based on the message**,
+  and send both the message and the signature to Bob.
+* Anyone with **Alice's public key can prove that Alice sent that message**
+  (only the corresponding private key could have generated a valid signature for that message).
+* **The message cannot be tampered with without detection**,
+  as the digital signature will no longer be valid
+  (since it based on both the private key and the message).
+
+<!-- slide-column 30 -->
+
+<img class='w100' src='images/asymmetric-cryptography-signature.png' />
+
+<!-- slide-container -->
+
+> Note that a digital signature **does not provide confidentiality**.
+> Although the message is protected from tampering, it is **not encrypted**.
+
+#### Example: digital signature with RSA (signing)
+
+In the same directory as the previous example (asymmetric encryption with RSA),
+create a `message.txt` file with the message that we want to digitally sign:
+
+```bash
+$> echo "Hello Bob, I like you" > message.txt
+```
+
+The following OpenSSL command will use the private key file `private.pem` (from the previous example)
+and generate a digital signature based on the message file `message.txt`.
+The signature will be stored in the file `signature.rsa`.
+
+```bash
+$> openssl dgst -sha256 -sign private.pem -out signature.rsa message.txt
+```
+
+If you open the file, you can see that it's simly binary data.
+You can see it base64-encoded with the following command:
+
+```bash
+$> openssl base64 -in signature.rsa
+```
+
+#### Example: digital signature with RSA (verifying)
+
+The following command uses the public key to check that the signature is valid for the message:
+
+```bash
+$> openssl dgst -sha256 -verify public.pem -signature signature.rsa message.txt
+Verified OK
+```
+
+If you modify the message file and run the command again,
+it will detect that the digital signature no longer matches the message:
+
+```bash
+$> openssl dgst -sha256 -verify public.pem -signature signature.rsa message.txt
+Verification Failure
+```
+
+### Cryptographic hash functions
+
+<!-- slide-column -->
+
+A [cryptographic hash function][hash] is a [hash function][hash-non-crypto] that has the following properties:
+
+* The same message always results in the same hash (deterministic).
+* Computing the hash value of any message is quick.
+* It is infeasible to generate a message from its hash value except by trying all possible messages (one-way).
+
+<!-- slide-column 45 -->
+
+<img class='w100' src='images/hash.png' />
+
+<!-- slide-container -->
+
+* A small change to a message should change the hash value so extensively that the new hash value appears uncorrelated with the old hash value.
+* It is infeasible to find two different messages with the same hash value (collisions).
+
+SSH uses [Message Authentication Codes (MAC)][mac], which are based on cryptographic hash functions,
+to protect both the data integrity and authenticity of all messages sent through the secure channel.
 
 ### Combining it all together in SSH
 
-TODO
+SSH uses most of the previous cryptographic techniques together to achieve as secure a channel as possible:
+
+<img class='w100' src='images/ssh-crypto.png' />
 
 #### Man-in-the-Middle attack on SSH
 
-TODO
+<img class='w100' src='images/ssh-mitm.png' />
+
+#### Threats countered
+
+SSH counters the following threats:
+
+* **Eavesdropping:** an attacker can intercept but not decrypt communications going through SSH's secure channel.
+* **Connection hijacking:** an active attacker can hijack TCP connections due to a weakness in TCP.
+  SSH's integrity checking detects this and shuts down the connection without using the corrupted data.
+* **DNS and IP spoofing:** an attacker may hack your naming service to direct you to the wrong machine.
+* **Man-in-the-Middle attack:** an attacker may intercept all traffic between you and the real target machine.
+
+The last two are countered by the asymmetric digital signature performed by the server on the DH key exchange,
+**as long as the client actually checks the server-supplied public key**.
+Otherwise, there is no guarantee that the server is genuine.
+
+#### Threats not countered
+
+SSH does not counter the following threats
+
+* **Password cracking:** if password authentication is enabled,
+  a weak password might be easily brute-forced or obtained through [side-channel attacks][side-channel].
+  Consider using public key authentication instead to mitigate some of these risks.
+* **IP/TCP denial of service:** since SSH operates on top of TCP,
+  it is vulnerable to some attacks against weaknesses in TCP and IP,
+  such as [SYN flood][syn-flood].
+* **Traffic analysis:** although the encrypted traffic cannot be read,
+  an attacker can still glean a great deal of information by simply analyzing
+  the amount of data, the source and target addresses, and the timing.
 
 
 
@@ -572,19 +682,242 @@ This has advantages over password authentication:
 > If you publish that file anywhere or allow your local machine to be compromised,
 > the attacker will be able to impersonate you on any server or service where you put your public key.
 
-### Generate a private-public key pair
+### Do I already have a key pair?
+
+By default, SSH keys are stored in the `.ssh` directory in your home directory.
+You can list its contents with this `ls` command:
+
+```bash
+$> ls ~/.ssh
+id_rsa  id_rsa.pub
+```
+
+If you have the `id_rsa` and `id_rsa.pub` files, you're good to go,
+since SSH expects to find your main RSA private key at `~/.ssh/id_rsa`.
+(You might also have a default key pair using another algorithm,
+such as an ECDSA key pair with files named `id_ecdsa` and `id_ecdsa.pub`.)
+
+If the directory doesn't exist or is empty, you don't have a key pair yet.
+
+You may have a key with a different name, e.g. `github_rsa` & `github_rsa.pub`,
+as is sometimes generated by some software.
+You can use this key if you want, but since it doesn't have the default name,
+you will have to add a `-i ~/.ssh/github_rsa` option to all your SSH commands.
+Generating a new key with the default name for command line use would probably be easier.
+
+> On Windows, you can display hidden files to access your `.ssh` directory manually.
+> On macOS, type `open ~/.ssh` in your Terminal.
+
+### The `ssh-keygen` command
 
 The `ssh-keygen` command is usually installed along with SSH and can generate a key pair for you.
+It will ask you a couple of questions about the key:
+
+* Where do you want to save it?
+  Simply press enter to use the proposed default location (`~/.ssh/id_rsa` for an RSA key).
+* What password do you want to protect the key with?
+  Enter a password or simply press enter to use no password.
+
+> **Should I protect my key with a password?**
+>
+> If you enter no password, your key will be stored in the clear.
+> This will be convenient as you will not have to enter a password when you use it.
+> However, any malicious code you allow to run on your machine could easily steal it.
+>
+> If your key is protected by a password,
+> you can run an [SSH agent][ssh-agent] to unlock it only once per session instead of every time you use it.
+
+#### Generate a private-public key pair
+
+Simply running `ssh-keygen` with no arguments will ask you the required information and generate a new RSA key pair:
+
+```bash
+$> ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/jdoe/.ssh/id_rsa):
+Created directory '/home/jdoe/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/jdoe/.ssh/id_rsa.
+Your public key has been saved in /home/jdoe/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:MmwL9n4KOUCuLoyvGJ7nWRDXjTSGAXO8AcCNVqmDJH0 jdoe@497820feb22a
+The key's randomart image is:
++---[RSA 2048]----+
+|.o===oo+         |
+|.=.oE++ +        |
+|= oo .oo .       |
+|.=  oo           |
+|  +.o = S        |
+| . o.= +         |
+|=   +.o          |
+|*o..o+  .        |
+|+*+o  oo         |
++----[SHA256]-----+
+```
+
+### How does public key authentication work?
+
+To authenticate you, the server will need your **public key**.
+That way, you will be able to prove, using your **private key**, that you are the owner of that public key.
+
+> Remember, **your private key MUST remain private** (i.e. the `id_rsa` file).
+> You should **never** give it to any person, server or web service.
+> Only give your public key (i.e. the `id_rsa.pub` file).
+
+### The `authorized_keys` file
+
+To authenticate you, the SSH server will look for the **authorized keys** file for your user account (there is one for each user).
+By default, the path to this file is `~/.ssh/authorized_keys` on the computer where the SSH server is running (not your local machine).
+
+This file is simply a list of the public keys that should be granted access to that account
+(provided that you can prove ownership of the key):
+
+```
+ssh-rsa AAAAB3NzaC1yc2E... key1
+ssh-rsa fE2deXdtagpHXsa... key2
+...
+```
+
+You can see its contents by running `cat ~/.ssh/authorized_keys` on the target machine.
+
+It may not exist yet if you have never authenticated with a public key.
+
+#### Using `ssh-copy-id`
+
+The `ssh-copy-id` uses the same syntax as the `ssh` command to connect to another computer (e.g. `ssh-copy-id jdoe@192.168.50.4`).
+Instead of opening a new shell, however, it will **copy your local public key(s) to your user account's
+`authorized_keys` file** on the target computer.
+
+You will probably have to enter your password, so `ssh-copy-id` can log in and copy your key.
+But once that is done, **SSH should switch to public key authentication** and you should not have to enter your password again to log in.
+SSH will use your private key to authenticate you instead.
+(You may have to enter your private key's password though, if it is protected by one.)
+
+Log out and connect again with `ssh` to see it in action.
+
+> You can also create the `authorized_keys` file manually.
+> Note that both the file and its parent directory must have permissions that make it accessible only to your user account,
+> or the SSH server will refuse to use it for security reasons.
+> The following commands can set up the file on the target machine:
+>
+>     $> mkdir -p ~/.ssh && chmod 700 ~/.ssh
+>     $> touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
+
+### Using multiple keys
+
+You may have multiple key pairs:
+
+* Some key pairs may have been generated by other programs or web services.
+  For example, some Git user interfaces generate a key pair to access GitHub,
+  or Amazon Web Services' Elastic Compute Cloud (EC2) generates key pairs to give you access to their virtual machines.
+* You may manually generate a key pair with a non-default name by specifying a different filename when running `ssh-keygen`.
+
+Having multiple key pairs may be part of a security strategy to limit the access an attacker might gain if one of them is compromised.
+
+To use a specific key pair, use the `ssh` command's `-i` option,
+which allows you to choose the private key file you want to use:
+
+```bash
+$> ssh -i ~/.ssh/custom_key_rsa jdoe@192.168.50.4
+```
+
+> Note: it is the private key file you want to use with the `-i` option, not the public key,
+> as the private key is the one your SSH client will use to prove that it owns the public key.
+
+### Key management
+
+A few tips on managing your key pairs:
+
+* You may disseminate your **public key** freely to authenticate to other computers or services.
+* **NEVER give your private key to anyone**.
+* Conversely, you may copy your private key to another computer of yours if you want it to have the same access to other computers or services.
+* You may want to **back up your private and public key files** (`id_rsa` and `id_rsa.pub`)
+  so that you don't have to regenerate a pair if you lose your computer or switch to another computer.
+  (You would then have to replace the old public key with the new one everywhere you used it.)
+* Use `ssh-copy-id` to copy your public key to other computers to use public key authentication instead of password authentication.
+* For web services using public key authentication (e.g. GitHub),
+  you usually have to manually copy the public key file's contents (`id_rsa.pub`) and provide it to them in your account's settings.
+* **If a private key is compromised** (e.g. your computer is stolen),
+  you should **remove the corresponding public key** from computers and web services you have copied it to.
+
+
+
+## SSH for other network services
+
+As mentionned initially, SSH is a network protocol.
+It can be used not only for command line login, but to secure other network services.
+
+A few examples are:
+
+* [Secure Copy (`scp`)][scp] - A means of securely transferring computer files between a local and remote host.
+* [rsync][rsync] - Utility for efficiently transferring and synchronizing files across computer systems.
+* [SSH File Transfer Protocol (SFTP)][sftp] - Network protocol that provides file access, file transfer and file management.
+* [Git][git] - Version control system that can use SSH (among other protocols) to transfer versioned data.
+
+### Using `scp`
+
+In principle, the `scp` command works like the Unix `cp` (copy) command, except that it can copy files to and from other computers that have an SSH server running,
+using the SSH syntax for connection:
+
+```bash
+$> echo bar > foo.txt
+$> scp foo.txt jdoe@192.168.50.4:foo.txt
+foo.txt 100% 4 0.6KB/s 00:00
+```
+
+This command copies your local `foo.txt` file to the home directory of the `jdoe` user account on the remote computer.
+You can check that the file was indeed copied with a quick SSH command:
+
+```bash
+$> ssh jdoe@192.168.50.4 cat foo.txt
+bar
+```
+
+You can also copy files from the remote computer to your local computer:
+
+```bash
+$> scp jdoe@10.192.167.228:foo.txt foo2.txt
+foo.txt 100% 4 5.7KB/s 00:00
+
+$> cat foo2.txt
+bar
+```
+
+#### Secure copy tips
+
+Here's a few additional examples of how to use the `scp` command:
+
+* `scp foo.txt jdoe@192.168.50.4:bar.txt`
+
+  Copy the local file `foo.txt` to a file named `bar.txt` in `jdoe`'s home directory on the remote computer.
+* `scp foo.txt jdoe@192.168.50.4:`
+
+  Copy the file to `jdoe`'s home directory with the same filename.
+* `scp foo.txt jdoe@192.168.50.4:/tmp/foo.txt`
+
+  Copy the file to the absolute path `/tmp/foo.txt` on the remote computer.
+* `scp jdoe@192.168.50.4:foo.txt jsmith@192.168.50.5:bar.txt`
+
+  Copy the file from one remote computer to another.
+* `scp -r foo jdoe@192.168.50.4:foo`
+
+  Recursively copy the contents of directory `foo` to the remote computer.
+
+### Using SFTP
+
+[SFTP][sftp] is an alternative to the original [FTP][ftp] protocol to transfer files.
+Since FTP is [insecure][ftp-security] (e.g. passwords are sent unencrypted),
+SFTP is an alternative that goes through SSH's secure channel and therefore poses fewer security risks.
+
+Most modern FTP clients support SFTP.
+Many code editors also have SFTP support available through plugins.
 
 
 
 ## TODO
 
-* Introduction
-  * What is SSH? (remote login & network services, e.g. Git, SCP, SFTP)
-* Authentication methods
-  * Public key
-* Key management (local & remote)
+* SSH agent
 * Other uses (tunneling)
 
 
@@ -595,10 +928,12 @@ The `ssh-keygen` command is usually installed along with SSH and can generate a 
 * [Demystifying Symmetric and Asymmetric Methods of Encryption](https://www.cheapsslshop.com/blog/demystifying-symmetric-and-asymmetric-methods-of-encryption)
 * [Diffie-Hellman Key Exchange][dh]
 * [Simplest Explanation of the Math Behind Public Key Cryptography][pubkey-math]
+* [SSH, The Secure Shell: The Definitive Guide](https://books.google.ch/books/about/SSH_The_Secure_Shell_The_Definitive_Guid.html?id=9FSaScltd-kC&redir_esc=y)
 
 
 
 [aes]: https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
+[authorized_keys]: https://www.ssh.com/ssh/authorized_keys/openssh
 [bash]: https://en.wikipedia.org/wiki/Bash_(Unix_shell)
 [brute-force]: https://en.wikipedia.org/wiki/Brute-force_attack
 [dh]: https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange
@@ -609,13 +944,24 @@ The `ssh-keygen` command is usually installed along with SSH and can generate a 
 [enigma-operating-shortcomings]: https://en.wikipedia.org/wiki/Cryptanalysis_of_the_Enigma#Operating_shortcomings
 [entropy]: https://en.wikipedia.org/wiki/Password_strength#Entropy_as_a_measure_of_password_strength
 [forward-secrecy]: https://en.wikipedia.org/wiki/Forward_secrecy
+[ftp]: https://en.wikipedia.org/wiki/File_Transfer_Protocol
+[ftp-security]: https://en.wikipedia.org/wiki/File_Transfer_Protocol#Security
 [github-fingerprints]: https://help.github.com/articles/github-s-ssh-key-fingerprints/
+[git]: https://git-scm.com
 [hash]: https://en.wikipedia.org/wiki/Cryptographic_hash_function
+[hash-non-crypto]: https://en.wikipedia.org/wiki/Hash_function
 [integer-factorization]: https://en.wikipedia.org/wiki/Integer_factorization
 [key-exchange]: https://en.wikipedia.org/wiki/Key_exchange
+[mac]: https://en.wikipedia.org/wiki/Message_authentication_code
 [mitm]: https://en.wikipedia.org/wiki/Man-in-the-middle_attack
 [openssl]: https://www.openssl.org
 [pubkey]: https://en.wikipedia.org/wiki/Public-key_cryptography
 [pubkey-math]: https://www.onebigfluke.com/2013/11/public-key-crypto-math-explained.html
 [rsa]: https://en.wikipedia.org/wiki/RSA_(cryptosystem)
+[rsync]: https://en.wikipedia.org/wiki/Rsync
+[scp]: https://en.wikipedia.org/wiki/Secure_copy
+[sftp]: https://en.wikipedia.org/wiki/SSH_File_Transfer_Protocol
 [shell]: https://en.wikipedia.org/wiki/Shell_(computing)
+[ssh-agent]: https://kb.iu.edu/d/aeww
+[side-channel]: https://en.wikipedia.org/wiki/Cryptanalysis#Side-channel_attacks
+[syn-flood]: https://en.wikipedia.org/wiki/SYN_flood
