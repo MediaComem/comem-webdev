@@ -919,6 +919,7 @@ Many code editors also have SFTP support available through plugins.
 
 * SSH agent
 * Other uses (tunneling)
+* Threats: carelessness and coffee spills
 
 
 
