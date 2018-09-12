@@ -17,6 +17,7 @@ Learn the basics of the Linux operating system and how to manage it from the com
 * Useful commands
   * Inspect storage, cpu, memory, processes
   * Find files
+  * whoami
 * Pipes & Unix philosophy
 * Output (stdout/stderr, redirection)
 * Package management
@@ -134,6 +135,140 @@ d     rwx          r-x          r-x          root   root   ... some-directory
 -     rw-          r--          ---          bob    bob    ... some-file
 ```
 
+
+
+## Administrative access
+
+Many administrative tasks such as installing packages, managing users or changing file permissions
+can only be performed by the `root` user.
+
+If you have the `root` user's password (or an authorized public key), you can **log in as root** directly.
+But **you should avoid it** as often as possible.
+
+It is **dangereous to log in as `root`**.
+One wrong move and you could irreversibly damage the system.
+For example:
+
+* Delete a system-critical file or files.
+* Change permissions on system-critical executables.
+* Lock yourself out of the system (e.g. by disabling SSH on a server).
+
+### The `sudo` command
+
+The `sudo` command (which means "**s**uper**user** **do**") offers another approach to giving users administrative access.
+
+When **trusted users** precede an administrative command with `sudo`,
+they are prompted for **their own password**.
+Once authenticated, the administrative command is **executed as if by the `root` user**.
+
+```bash
+$> ls -la /root
+ls: cannot open directory '/root': Permission denied
+
+$> sudo ls -la /root
+[sudo] password for jdoe:
+drwx------  4 root root 4096 Sep 12 14:53 .
+drwxr-xr-x 24 root root 4096 Sep 12 14:44 ..
+-rw-------  1 root root  137 Sep 11 09:51 .bash_history
+-rw-r--r--  1 root root 3106 Apr  9 11:10 .bashrc
+...
+```
+
+> Only trusted users can use `sudo`.
+> Unauthorized usage will be [reported][xkcd-incident].
+> The relevant logs can be checked with `sudo journalctl $(which sudo)`
+> (if you are a trusted user).
+
+#### The sudoers file
+
+The `/etc/sudoers` file defines which users are trusted to use sudo.
+This is a classic example (the basic syntax is [described here][sudoers]):
+
+```
+Defaults        env_reset
+Defaults        secure_path="/usr/local/sbin:/usr/local/bin:..."
+
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
+# Members of the admin group may gain root privileges
+%admin ALL=(ALL) ALL
+# Allow members of group sudo to execute any command
+%sudo   ALL=(ALL:ALL) ALL
+```
+
+> **WARNING:** **NEVER edit this file by hand**,
+> as you will break the `sudo` command if you introduce syntax errors into the file.
+> Use the `visudo` command which will not let you save unless the file is valid.
+
+> With these defaults settings common to most Linux distributions,
+> you can simply add a user to the `sudo` group to make them trusted `sudo` users.
+
+### The `su` command
+
+The `su` command (which means "**s**witch **u**ser") is also a common administrative tool.
+As its name indicates, it can be used to log in as another user.
+If you are a trusted sudoer, you can use it to become another user:
+
+```bash
+$> whoami
+bob
+
+$> sudo su -l alice
+[sudo] password for bob:
+
+$> whoami
+alice
+```
+
+> The `-l` option of the `su` command makes sure you get a **login shell**,
+> i.e. an environment similar to what you get when actually logging in.
+> If you don't use it, you will have a minimal shell environment that might be missing some things.
+
+#### Performing tasks as another user
+
+The previous `su` command opens a new shell in which you are logged in as `alice`.
+You can do whatever you need to do with the files accessible only to `alice`,
+then go back to your previous shell with `exit`:
+
+```bash
+$> ls -la /home/alice
+total 20
+drwxr-x--- 2 alice alice 4096 Sep 12 16:35 .
+drwxr-xr-x 6 root  root  4096 Sep 12 16:35 ..
+-rw-r--r-- 1 alice alice  220 Apr  4 18:30 .bash_logout
+...
+
+$> exit
+
+$> whoami
+bob
+```
+
+#### Performing administrative tasks as root
+
+You can also use the `su` command to log in as `root`.
+You can perform any necessary administrative tasks without `sudo` (since you are `root`),
+then again go back to your previous shell with `exit`:
+
+```bash
+$> sudo su -l root
+
+$> whoami
+root
+
+$> journalctl $(which sudo)
+...
+
+$> exit
+
+$> whoami
+bob
+```
+
+> **WARNING:** as mentionned before, be careful not to break the system when you are `root`.
+
+
+
 ### User database files
 
 These files define what user accounts and groups are available on a Linux system:
@@ -183,10 +318,10 @@ vip:x:512:bob,eve
 #### The shadow files
 
 Both `/etc/passwd` and `/etc/group` must be **readable by anyone** on a Linux system,
-because they are used to perform the translation from username to UID and from group name to GID.
+because they are used by many programs to perform the translation from username to UID and from group name to GID.
 
 It is therefore bad practice to store passwords in these files, even encrypted or hashed.
-Any user might copy them to a separate, more powerful infrastructure and attempt to brute-force them.
+Any user might copy them and attempt a brute-force attack (which could be done on a separate, dedicated infrastructure).
 
 Therefore, the corresponding shadow files exist:
 
@@ -200,10 +335,14 @@ These files are only readable by the `root` user
 
 ## References
 
-* [Introduction to System Administration (Red Hat Enterprise Linux 4)](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/4/html/Introduction_To_System_Administration/)
+* [Red Hat Enterprise Linux - Introduction to System Administration](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/4/html/Introduction_To_System_Administration/)
+* [Red Hat Enterprise Linux - Security Guide](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/4/html/Security_Guide/)
+
 
 
 [etc-group]: https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/4/html/Introduction_To_System_Administration/s3-acctspgrps-group.html
 [etc-gshadow]: https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/4/html/Introduction_To_System_Administration/s3-acctsgrps-gshadow.html
 [etc-passwd]: https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/4/html/Introduction_To_System_Administration/s2-acctsgrps-files.html
 [etc-shadow]: https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/4/html/Introduction_To_System_Administration/s3-acctsgrps-shadow.html
+[sudoers]: http://toroid.org/sudoers-syntax
+[xkcd-incident]: https://xkcd.com/838/
