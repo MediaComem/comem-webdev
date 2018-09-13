@@ -8,14 +8,10 @@ Learn the basics of the Linux operating system and how to manage it from the com
 
 ## TODO
 
-* Processes (exit codes, signals)
 * Ports
 * Useful commands
-  * Inspect storage, cpu, memory, processes
   * Find files
   * whoami
-* Pipes & Unix philosophy
-* Output (stdout/stderr, redirection)
 * Package management
 
 

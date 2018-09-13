@@ -917,6 +917,7 @@ Many code editors also have SFTP support available through plugins.
 
 ## TODO
 
+* secure channel vs authentication (at beginning)
 * SSH agent
 * Other uses (tunneling)
 * Threats: carelessness and coffee spills
