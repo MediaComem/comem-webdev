@@ -195,21 +195,84 @@ Swap:             0           0           0
 
 
 
+## Exit status
+
+The **exit status** of a process is a small number (typically from 0 to 255) passed
+from a child process to its parent process when it has finished executing.
+
+It is meant to allow the child process to indicate how or why it exited.
+
+It's common practice for the exit status of Unix/Linux programs to be **0 to indicate success**,
+and **greater than 0 to indicate an error**
+(it is sometimes also called an *error level*).
+
+### Retrieving the exit status in a shell
+
+In a typical shell like [Bash][bash],
+you can retrieve the exit status of last executed command from the special variable `$?`:
+
+```bash
+$> ls /
+...
+
+$> echo $?
+0
+
+$> ls file-that-does-not-exist
+ls: cannot access 'file-that-does-not-exist': No such file or directory
+
+$> echo $?
+2
+```
+
+### Retrieving the exit status in code
+
+This is not a feature that is limited to command line use.
+When running a program from an application, you can also obtain the exit status.
+
+For example:
+
+* By using the `&$return_var` reference when calling PHP's [`exec` function][php-exec].
+* By calling the [`Process#exitValue()` method][java-process-exit-value] after calling `Runtime#exec(String command)` in Java.
+* By listening to the `close` event when calling Node.js's [`spawn` function][node-spawn].
+
+### Meaning of exit statuses
+
+The meaning of exit statuses is unique to the program you are running.
+For example, the manual of the `ls` command documents the following values:
+
+```bash
+Exit status:
+  0      if OK,
+  1      if minor problems (e.g., cannot access subdirectory),
+  2      if serious trouble (e.g., cannot access command-line argument).
+```
+
+But this will be different for other programs or applications.
+
+The only thing you can rely on for the majority of programs
+is that **0 is good, anything else is probably bad**.
+
+
+
 ## TODO
 
-* Processes (exit codes, signals)
-* Useful commands: inspect cpu, memory, processes
-* Pipes & Unix philosophy
-* Output (stdout/stderr, redirection)
+* Streams (redirection)
+* Pipelines (unix philosophy)
+* Signals
 
 
 
+[bash]: https://en.wikipedia.org/wiki/Bash_(Unix_shell)
 [daemon]: https://en.wikipedia.org/wiki/Daemon_(computing)
 [exit-status]: https://en.wikipedia.org/wiki/Exit_status
 [free]: https://www.howtoforge.com/linux-free-command/
 [htop]: https://hisham.hm/htop/
 [init]: https://en.wikipedia.org/wiki/Init
 [ipc]: https://en.wikipedia.org/wiki/Inter-process_communication
+[java-process-exit-value]: https://docs.oracle.com/javase/7/docs/api/java/lang/Process.html#exitValue()
+[node-spawn]: https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
+[php-exec]: http://php.net/manual/en/function.exec.php
 [pid]: https://en.wikipedia.org/wiki/Process_identifier
 [pipes]: https://en.wikipedia.org/wiki/Pipeline_(Unix)
 [process]: https://en.wikipedia.org/wiki/Process_(computing)
