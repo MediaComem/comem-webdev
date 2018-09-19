@@ -17,23 +17,58 @@ Learn to use the SSH cryptographic network protocol to connect to other computer
 
 > Its main uses are **remote command-line login** and **securing network services like Git or FTP**.
 
+### How does it work?
+
+SSH is a **client-server** protocol.
+
+<p class='center'><img class='w70' src='images/client-server.jpg' /></p>
+
+Using an SSH client, a user (or application) on machine A can connect to an SSH server running on machine B,
+either to log in (with a command line shell) or to execute programs.
+
+### How is it secure?
+
+<!-- slide-column -->
+
+**Step 1:** SSH establishes a **secure channel** using various **cryptographic techniques**.
+This is handled automatically by the SSH client and server.
+
+<!-- slide-column 50 -->
+
+<p class='center'><img class='w100' src='images/ssh-secure-channel-establishment.jpg' /></p>
+
+<!-- slide-container -->
+
+<!-- slide-column -->
+
+**Step 2:** The user or service that wants to connect to the SSH server must **authenticate** to gain access,
+for example with a password.
+
+<p class='center'><img class='w65' src='images/ssh-authentication.jpg' /></p>
+
+**Step 3:** The logged-in user or service can do stuff on the server.
+
+> Note that steps 1 and 2 are **separate and unrelated processes**.
+
 
 
 ## Secure channel
 
 SSH establishes a **secure channel** between two computers **over an insecure network** (e.g. a local network or the internet).
 
-<img class='w100' src='images/ssh-secure-channel.png' />
+<p class='center'><img class='w70' src='images/ssh-secure-channel.png' /></p>
 
-It's a **client-server** protocol.
-Using an SSH client, a user (or application) on machine A can connect to an SSH server running on machine B,
-either to log in to machine B (with a command line shell) or to execute simple commands.
+Establishing and using this secure channel requires a combination of:
 
-Establishing and using the secure channel requires a combination of **symmetric encryption**, **asymmetric cryptography** (including a **key exchange** method and **digital signatures**) and **hashing**.
+* [**Symmetric encryption**][symmetric-encryption]
+* [**Asymmetric cryptography**][pubkey]
+  * A **key exchange** method
+  * **Digital signatures**
+* [**Hash-based Message Authentication Codes (HMAC)**][hmac]
 
 ### Symmetric encryption
 
-Symmetric-key algorithms can be used to encrypt communications between two or more parties using a **shared secret**.
+[Symmetric-key algorithms][symmetric-encryption] can be used to encrypt communications between two or more parties using a **shared secret**.
 [AES][aes] is one such algorithm.
 
 <p class='center'><img class='w80' src='images/symmetric-encryption.png' /></p>
@@ -46,37 +81,47 @@ An attacker who intercepts the data **cannot decrypt it without the key** (unles
 > **Windows users using Git Bash** may want to open a new shell with the command `winpty bash` before attempting to reproduce these examples.
 > This is because of a [bug in Git Bash](https://github.com/mintty/mintty/issues/540) which causes problems with some interactive commands.
 
-You may encrypt a **plaintext**, in this example the words "too many secrets",
-with the [OpenSSL library][openssl] (installed on most computers).
-Executing the following command pipeline will prompt you for an encryption key.
-They key "changeme" was used in this example:
+Create a **plaintext** file containing the words "too many secrets":
 
 ```bash
-$> echo "too many secrets" | openssl aes-256-cbc | openssl enc -base64
-enter aes-256-cbc encryption password:
-Verifying - enter aes-256-cbc encryption password:
-U2FsdGVkX1+Mfeh5m81iMlA7JwiLnq2V2bhJM0yVJqKDjbxLbLLfjJfxtgg2szg3
+$> cd /path/to/projects
+
+$> mkdir aes-example
+
+$> cd aes-example
+
+$> echo 'too many secrets' > plaintext.txt
 ```
 
-The resulting **ciphertext** cannot be decrypted without the key.
+You may encrypt that file with the [OpenSSL library][openssl] (installed on most computers).
+Executing the following command pipeline will prompt you for an encryption key:
+
+```bash
+$> cat plaintext.txt | openssl aes-256-cbc > ciphertext.aes
+enter aes-256-cbc encryption password:
+Verifying - enter aes-256-cbc encryption password:
+```
+
+#### Example: symmetric encryption with AES (decryption)
+
+The resulting `ciphertext.aes` file cannot be decrypted without the key.
 Executing the following command pipeline and entering the same key as before ("changeme") when prompted will decrypt it:
 
 ```bash
-$> echo "U2FsdGVkX1+Mfeh5m81iMlA7JwiLnq2V2bhJM0yVJqKDjbxLbLLfjJfxtgg2szg3" \
-   | openssl enc -d -base64 | openssl aes-256-cbc -d
+$> cat ciphertext.aes | openssl aes-256-cbc -d
 enter aes-256-cbc decryption password:
 too many secrets
 ```
 
 #### Symmetric encryption over an insecure network
 
-Both parties must possess the shared encryption key.
+Both parties must already possess the shared encryption key to perform symmetric cryptography.
 It used to be **physically transferred**,
 for example in the form of the codebooks used to operate the German [Enigma machine][enigma] during World War II.
 But that is **impractical for modern computer networks**.
 And **sending the key over the insecure network risks it being compromised** by a [Man-in-the-Middle attack][mitm].
 
-<img class='w100' src='images/symmetric-encryption-insecure-network.png' />
+<p class='center'><img class='w90' src='images/symmetric-encryption-insecure-network.png' /></p>
 
 ### Asymmetric cryptography
 
@@ -141,6 +186,8 @@ The following commands will generate first a private key in a file named `privat
 then a corresponding public key in a file named `public.pem`:
 
 ```bash
+$> cd /path/to/projects
+
 $> mkdir rsa-example
 
 $> cd rsa-example
@@ -240,24 +287,26 @@ even if an attacker is monitoring the communication channel.
 
 #### Diffie-Hellman key exchange
 
-<!-- slide-column -->
-
 This conceptual diagram illustrates the general idea behind the protocol:
 
-* The two parties, Alice and Bob, agree on an **arbitrary starting color** that is different every time,
-  but does not need to be kept secret. Yellow, in this example.
-* Each of them selects a **secret color known only to themselves**, in this case orange and blue-green.
-* Alice and Bob then **mix their own secret color with the mutually shared color**,
-  resulting in orange-tan and light-blue respectively, and **publicly exchange** the two mixed colors.
-* Finally, Alice and Bob **mix the color he or she received** from each other **with his or her own private color**.
-  The result is a final color mixture (yellow-brown in this case) that is **identical to the partner's final color mixture**,
-  and which was never shared publicly.
+<!-- slide-column -->
 
-<!-- slide-column 30 -->
+* Alice and Bob choose a **random, public starting color** (yellow).
+* Then they choose a **secret color known only to themselves** (orange and blue-green).
+* Then they **mix their own secret color with the mutually shared color**,
+  (resulting in orange-tan and light-blue), and **publicly exchange** the two mixed colors.
+* Finally, Alice and Bob **mix the color he or she received** from each other **with his or her own private color** (yellow-brown).
+
+<!-- slide-column 35 -->
 
 <img class='w100' src='images/dh.png' />
 
-When using large numbers rather than colors, it would be computationally difficult for a third party to determine the secret numbers.
+<!-- slide-container -->
+
+The result is a final color mixture that is **identical to the partner's final color mixture**,
+and which was never shared publicly.
+When using large numbers rather than colors,
+it would be computationally difficult for a third party to determine the secret numbers.
 
 ### Man-in-the-Middle attack on Diffie-Hellman
 
@@ -588,7 +637,7 @@ You are now **connected to a Bash shell running on the server**.
 Anything you type is encrypted through SSH's secure channel and interpreted by that shell.
 Any data it outputs is sent back through the channel and displayed in your terminal.
 
-<p class='center'><img class='w95' src='images/ssh-channel-and-processes.png' /></p>
+<p class='center'><img class='w95' src='images/ssh-channel-and-processes.jpg' /></p>
 
 ### Disconnecting
 
@@ -952,6 +1001,7 @@ Many code editors also have SFTP support available through plugins.
 [git]: https://git-scm.com
 [hash]: https://en.wikipedia.org/wiki/Cryptographic_hash_function
 [hash-non-crypto]: https://en.wikipedia.org/wiki/Hash_function
+[hmac]: https://en.wikipedia.org/wiki/HMAC
 [integer-factorization]: https://en.wikipedia.org/wiki/Integer_factorization
 [key-exchange]: https://en.wikipedia.org/wiki/Key_exchange
 [mac]: https://en.wikipedia.org/wiki/Message_authentication_code
@@ -966,4 +1016,5 @@ Many code editors also have SFTP support available through plugins.
 [shell]: https://en.wikipedia.org/wiki/Shell_(computing)
 [ssh-agent]: https://kb.iu.edu/d/aeww
 [side-channel]: https://en.wikipedia.org/wiki/Cryptanalysis#Side-channel_attacks
+[symmetric-encryption]: https://en.wikipedia.org/wiki/Symmetric-key_algorithm
 [syn-flood]: https://en.wikipedia.org/wiki/SYN_flood
