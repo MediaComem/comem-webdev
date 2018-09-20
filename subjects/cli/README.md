@@ -46,7 +46,8 @@ For old time's sake.
 ### ENIAC (1946)
 
 At that time, there was no such thing as a stored computer program.
-Programs were **physically hard-coded using 1200 ten way switches**, which took weeks.
+Programs were **physically hard-coded**.
+On the [ENIAC][eniac], this was done using function tables with **hundreds of ten-way switches**, which took weeks.
 
 <p class='center'><img class='w75' src='images/eniac.jpg' /></p>
 
@@ -54,7 +55,7 @@ Programs were **physically hard-coded using 1200 ten way switches**, which took 
 
 <!-- slide-column -->
 
-Many early general-purpose digital computers used [punched cards][punched-card] for data input, output and storage.
+Later, many early general-purpose digital computers used [punched cards][punched-card] for data input, output and storage.
 
 <!-- slide-column 40 -->
 
@@ -64,9 +65,9 @@ Many early general-purpose digital computers used [punched cards][punched-card] 
 
 <!-- slide-column -->
 
-You had to use a keypunch machine to write your cards, then feed them to the computer.
+You had to use a [keypunch][keypunch] machine to write your cards, then feed them to the computer.
 
-This is what a program looked like:
+This is what a **program** looked like:
 
 <p class='center'><img class='w80' src='images/punched-cards-program.jpg' /></p>
 
@@ -77,6 +78,7 @@ This is what a program looked like:
 ### TeleTYpewriter (1960s)
 
 Teletypewriters (TTYs) became the most popular **computer terminals** in the 1960s.
+They were basically electromechanical typewriters adapted as a user interface for early computers.
 
 This is when the first **command line interfaces (CLI)** were created.
 As you typed commands, a program running on the computer would interpret that input,
@@ -86,15 +88,18 @@ and the output would be provided by printing it on physical paper.
 
 ### Video terminals (1970s)
 
-<!-- slide-column 40 -->
+<!-- slide-column -->
 
 As available memory increased, **video terminals** such as the [VT100][vt100] replaced TTYs in the 1970s.
 
-Initially they were fundamentally the same as TTYs: textual input/output device.
+Initially they were fundamentally the same as TTYs: textual input/output devices.
 
 It's also in this period that the [Unix][unix] operating system was developed,
-with a [**Unix shell**][unix-shell] as its command line interpreter
-(the program that interprets the input and sends back the output).
+the ancestor of [Linux][linux], also used as a basis for [macOS][macos] (since Mac OS X).
+
+In Unix-like systems, The program serving as the command line interpreter
+(handling input/output from the terminal) is called a [**shell**][unix-shell]
+(because it wraps and hides the lower-level kernel interface).
 
 <!-- slide-column -->
 
@@ -107,19 +112,41 @@ with a [**Unix shell**][unix-shell] as its command line interpreter
 Eventually, [graphical user interfaces (GUIs)][gui] were introduced
 in reaction to the perceived steep learning curve of command line interfaces.
 
-They are the most common end user computer interface today.
+They are one of the most common end user computer interface today.
 
 <!-- slide-column 60 -->
 
 <img class='w100' src='images/xerox-star.jpg' />
 
+### More User Interfaces
+
+Today:
+
+* [Touch user interface][tui]
+* [Voice user interface][vui]
+* [Motion sensing][motion-sensing]
+* [Augmented][augmented-reality] and [virtual][virtual-reality] reality
+
+Tomorrow:
+
+* [Brain-computer interface?][brain-interface]
 
 
-## What is a Command Line Interface (CLI)?
+
+## Back to the command line
+
+<!-- slide-front-matter class: center, middle -->
+
+[Command line interfaces][cli] are still in wide use today.
+
+
+
+### What is a Command Line Interface (CLI)?
 
 A CLI is a tool that allows you to use your computer by **writing** what you want to do (i.e. **commands**), instead of clicking on things.
 
-It's been installed on computers for a long time, but it has evolved "a little" since then. It usually looks something like this:
+It's been installed on computers for a long time, but it has evolved "a little" since then.
+It usually looks something like this:
 
 <p class='center'><img src='images/cli.jpg' width='100%' /></p>
 
@@ -133,7 +160,9 @@ A CLI is not very user-friendly or visually appealing but it has several advanta
 * It can be easily **automated** through scripting.
 * Is is ultimately **more powerful and efficient** than any GUI for many computing tasks.
 
-For these reasons, a lot of tools, **especially development tools**, don't have any GUI and are only usable through a CLI.
+For these reasons, a lot of tools, **especially development tools**,
+don't have any GUI and are only usable through a CLI.
+Or they have a limited GUI that does not have as many options as the CLI.
 
 **Thus, using a CLI is a requirement for any developer today.**
 
@@ -145,7 +174,7 @@ For these reasons, a lot of tools, **especially development tools**, don't have 
 
 <!-- slide-column 50 -->
 
-On **Unix-like** systems _(like macOS or Linux)_, it's called the **Terminal**.
+On **Unix-like** systems _(like macOS or Linux)_, it's an application called the **Terminal**.
 
 You can use it right away, as it's the _de-facto_ standard.
 
@@ -157,11 +186,16 @@ However, it does not use the same syntax as Unix-like CLIs _(plus, it's bad)_.
 
 > **You'll need to install an alternative.**
 
+<!-- slide-container -->
+
+> Software terminals are an emulation of old physical terminals like [TTYs][tty] or the [VT100][vt100].
+> You will still find references to the term "TTY" in the documentation of some modern command line tools.
+
 
 
 ### Install Git Bash (Windows users only)
 
-You're going to install **Git Bash**, an alternative CLI that emulates a Unix-like CLI on Windows.
+You're going to install **Git Bash**, a software terminal that emulates the popular [Bourne-again shell (Bash)][bash] on Windows.
 
 <!-- slide-column 30 -->
 
@@ -199,7 +233,7 @@ These symbols represent **the prompt** and are used to indicate that you have th
 <!-- slide-column -->
 
 The prompt is not always `$>`.
-For example, by default on macOS, the prompt is `bash-3.2$`.
+For example, by default on macOS, the prompt is `bash-3.2$` (at the time of writing).
 
 <!-- slide-column 30 -->
 
@@ -228,8 +262,8 @@ $> name arg1 arg2 arg3 ...
 ```
 Note the use of **spaces** to separate the differents **arguments** of a command.
 
-* `name` represents the **name of the command** you want to execute
-* `arg1 arg2 arg3 ...` represent the **arguments of the command**, each of them **separated by a space**
+* `name` represents the **command** you want to execute.
+* `arg1 arg2 arg3 ...` represent the **arguments of the command**, each of them **separated by a space**.
 
 
 
@@ -239,16 +273,17 @@ There are two types of arguments to use with a command (if needed):
 
 <!-- slide-column -->
 
-**Options** usually specify **how** the command will behave
-and are preceded by `-` or `--`:
+**Options** usually specify **how** the command will behave.
+By convention, they are preceded by `-` or `--`:
 
 ```bash
 $> ls `-l` `--all`
 ```
 
 We use the `ls` command to list the content of the current directory. The options tell `ls` **how** it should do so:
-* `--all` tells it to print all elements (including hidden ones)
-* `-l` tells it to print elements in a list format, rather than on one line
+
+* `--all` tells it to print all elements (including hidden ones).
+* `-l` tells it to print elements in a list format, rather than on one line.
 
 <!-- slide-column -->
 
@@ -257,6 +292,7 @@ We use the `ls` command to list the content of the current directory. The option
 ```bash
 $> cd `/Users/Batman`
 ```
+
 Here, we use the `cd` command to move to another directory.
 
 And the argument `/Users/Batman` tells the command **what** directory we want to move to.
@@ -264,8 +300,9 @@ And the argument `/Users/Batman` tells the command **what** directory we want to
 <!-- slide-notes -->
 
 In the **first example**, we use the `ls` command to list elements in the current directory. We also use options to tell `ls` how it should print elements:
-* `--all` tells it to print all elements
-* `-l` tells it to print elements in a list format, rather than on one line.
+
+* `--all` tells it to print all elements.
+* `-l` tells it to print elements in a list format, rather than on one line..
 
 #### Options with values
 
@@ -278,10 +315,10 @@ tar -c -v `-f compressed.tar.gz` file-to-compress
 `tar` is a command to bundle and compress files.
 In this example, it takes **three options**:
 
-* `-c` tells it to compress (instead of uncompressing)
-* `-v` tells it to be verbose (print more information to the CLI)
+* `-c` tells it to compress (instead of uncompressing).
+* `-v` tells it to be verbose (print more information to the CLI).
 * `-f` tells it where to store the compressed file;
-  this is followed **immediately** by `compressed.tar.gz` which is the **value** of that option
+  this is followed **immediately** by `compressed.tar.gz` which is the **value** of that option.
 
 It then takes **one argument**:
 
@@ -293,8 +330,8 @@ It then takes **one argument**:
 
 You should avoid the following characters in directories and file names you want to manipulate with the CLI:
 
-* **spaces** _(they're used to separate arguments in command)_
-* **accents** (e.g. `é`, `à`, `ç`, etc)
+* **spaces** _(they're used to separate arguments in command)_.
+* **accents** (e.g. `é`, `à`, `ç`, etc).
 
 They can cause **errors** in some scripts or tools, and will inevitably complicate using the CLI.
 If you have a `Why So Serious` directory, this **WILL NOT work**:
@@ -302,7 +339,7 @@ If you have a `Why So Serious` directory, this **WILL NOT work**:
 ```bash
 $> ls `Why` `So` `Serious`
 ```
-This command will be interpreted as a call to the `cd` command with **three arguments**: `Why`, `So` and `Serious`.
+This command will be interpreted as a call to the `ls` command with **three arguments**: `Why`, `So` and `Serious`.
 
 You **can** use arguments containing spaces, but you have to **escape** them first, either with **quotation marks** or **backslashes**:
 
@@ -359,9 +396,9 @@ tar --help
 Some commands don't respond to the `--help` option.
 To try and get help, depending on what operating system you're on:
 
-* On Linux or macOS, use `man ls` to display the **manual** for the `ls` command
+* On Linux or macOS, use `man ls` to display the **manual** for the `ls` command.
 * On Windows, use `help cd` to display help for the `cd` command;
-  you can also type `help` to list available commands (only system commands)
+  you can also type `help` to list available commands (only system commands).
 
 <p class='center'><img src='images/tar-help.png' width='70%' /></p>
 
@@ -371,9 +408,9 @@ Some helps or commands will take over the screen to display their content, hidin
 
 Usually, it means that these helps or commands have content that takes more than one screen to be shown.
 
-You can "scroll" down line-by-line using the `Enter` key, each stroke printing one more line at the bottom of the screen.
+You can "scroll" up and down line-by-line using the arrow keys or the `Enter` key.
 
-To quit these helps or commands, use the `q` key.
+To quit these helps or commands, use the `q` (**q**uit) key.
 
 <p class='center'><img src='images/interactive-help.png' width='80%' /></p>
 
@@ -384,13 +421,14 @@ you may find some strange syntax that make little sense to you, like:
 
 ```bash
 cd [-L|[-P [-e]] [-@]] [dir]
+ls [-ABCFGHLOPRSTUW@abcdefghiklmnopqrstuwx1] [file ...]
 ```
 
 Here are some explanations:
 
 * `[]`: Whatever's inside is **optionnal** (ex: `[-e]`).
 * `|`: You have to **chose between** options (ex: `-L|-P`).
-* `...`: Whatever's before can be **repeated** (ex: `[options ...]`).
+* `...`: Whatever's before can be **repeated** (ex: `[file ...]`).
 
 Depending on the documentation, you will also see symbols like this:
 
@@ -587,7 +625,7 @@ For example, on John Doe's macOS system, it could be `/Users/jdoe/Projects`.
 
 **IMPORTANT:** if your Windows/Linux/macOS username contains **spaces** or **accents**, you should **NOT** store your projects under your home directory.
 You should find a path elsewhere on your filesystem.
-This will save you **a lot of suffering**.
+This will save you **a lot of needless pain and suffering**.
 
 
 
@@ -595,7 +633,7 @@ This will save you **a lot of suffering**.
 
 You can create directories with the CLI.
 
-Use the `mkdir` command to create a new directory in the current directory:
+Use the `mkdir` (**m**a**k**e **dir**ectory) command to create a new directory in the current directory:
 
 ```bash
 $> mkdir BatmobileSchematics
@@ -604,14 +642,84 @@ $> mkdir BatmobileSchematics
 You can also create a directory elsewhere:
 
 ```bash
-$> mkdir /Users/Batman/Documents/TopSecret/BatmobileSchematics
+$> mkdir ~/Documents/TopSecret/BatmobileSchematics
 ```
 
 This will only work if all directories down to `TopSecret` already exist.
 To automatically create all intermediate directories, add the `-p` option:
 
 ```bash
-$> mkdir -p /Users/Batman/Documents/TopSecret/BatmobileSchematics
+$> mkdir -p ~/Documents/TopSecret/BatmobileSchematics
+```
+
+
+
+### The `touch` command
+
+The `touch` command updates the last modification date of a file.
+It also has the useful property of creating the file if it doesn't exist.
+
+Hence, it's a **quick way to create an empty file** in the CLI:
+
+```bash
+$> touch foo.txt
+
+$> ls
+foo.txt
+```
+
+
+
+### The `echo` command
+
+The `echo` command simply **echo**es its arguments back to you:
+
+```bash
+$> echo Hello World
+Hello World
+```
+
+This seems useless, but can be quite powerful when combined with Unix features like [redirection][redirection].
+For example, you can **redirect the output to a file**.
+
+This allows you to quickly create a simple text file:
+
+```bash
+$> echo foo > bar.txt
+
+$> ls
+bar.txt
+```
+
+You can also append content to the end of an existing file:
+
+```bash
+$> echo bar >> bar.txt
+```
+
+
+
+### The `cat` command
+
+The `cat` command can display one file or con**cat**enate multiple files.
+
+For example, this displays the contents of the previous example's file:
+
+```bash
+$> cat bar.txt
+foo
+bar
+```
+
+This creates a new `hello.txt` file and displays the result of concatenating the two files:
+
+```bash
+$> echo World > hello.txt
+
+$> cat bar.txt hello.txt
+foo
+bar
+World
 ```
 
 
@@ -644,7 +752,8 @@ Instead, Git Bash has two custom shortcuts:
 
 <!-- slide-front-matter class: center, middle -->
 
-**Vim** is an infamous CLI editor originally developed in 1976 (WHAT?!)
+> [**Vim**][vim] is an infamous CLI editor originally developed in 1976 (WHAT?!)
+> for the Unix operating system.
 
 
 
@@ -671,7 +780,7 @@ vim test.txt
 
 Vim can be unsettling at first, until you know how it works.
 
-Let go of your mouse, it's mostly useless in Vim.
+*Let go of your mouse*, it's mostly useless in Vim.
 You control Vim by **typing**.
 
 The first thing to understand whith Vim is that it has *3 modes*:
@@ -682,11 +791,11 @@ The first thing to understand whith Vim is that it has *3 modes*:
 
 To go into each mode use this keys :
 
-| From           | To      | Key   |
-| :------------- | :------ | :---- |
-| Normal         | Command | `:`   |
-| Normal         | Insert  | `i`   |
-| Command/Insert | Normal  | `Esc` |
+| From           | Type    | To go to |
+| :------------- | :------ | :----    |
+| Normal         | `:`     | Command  |
+| Normal         | `i`     | Insert   |
+| Command/Insert | `Esc`   | Normal   |
 
 
 
@@ -720,10 +829,10 @@ From there, you can use some commands:
 
 | Command     | Effect                                                     |
 | :---------- | :--------------------------------------------------------- |
-| `q`         | Quit Vim (will fail if you have unsaved modifications)     |
-| `w`         | Write (save) the file and all its modifications            |
+| `q`         | **Q**uit Vim (will fail if you have unsaved modifications) |
+| `w`         | **W**rite (save) the file and all its modifications        |
 | `q!`        | Force Vim to quit (any unsaved modification will be lost)  |
-| `wq` or `x` | Save the file then quit Vim.                               |
+| `wq` or `x` | **W**rite and **q**uit, i.e. save the file then quit Vim.  |
 
 <!-- TODO: add link http://www.openvim.com/ -->
 
@@ -745,8 +854,36 @@ You can print the content of your `PATH` variable to see this list:
 
 ```bash
 $> echo $PATH
-/usr/local/bin:/bin:/usr/bin:Users/Batman/BatRadar/bin
+/usr/local/bin:/bin:/usr/bin:/custom/dir
 ```
+
+
+
+### Understanding the `PATH`
+
+Assuming your `PATH` looks like this:
+
+```bash
+$> echo $PATH
+/usr/local/bin:/bin:/usr/bin:/custom/dir
+```
+
+What happens when you run the following command?
+
+```bash
+$> ls -a -l
+```
+
+1. The shell will look in the `/usr/local/bin` directory.
+   *There is no executable named `ls` there, moving on...*
+2.  The shell will look in the `/bin` directory.
+   **There is an executable named `ls` there!**
+   Execute it with arguments `-a` and `-l`.
+3. We're done here.
+   No need to look at the rest of the `PATH`.
+
+> Note that if there happens to be an `ls` executable in the `/custom/dir` directory which is last in the `PATH`,
+> it will **never be used since the first matching executable** is always selected.
 
 
 
@@ -760,19 +897,48 @@ Git and Node.js, for example, do this.
 
 However, sometimes you're downloading only an executable and saving it in a directory somewhere that is **not in the `PATH`**.
 
+#### Custom command example
+
+Run the following commands to download a simple Hello World shell script and make it into an executable:
+
+```bash
+$> mkdir -p ~/hello-program/bin
+$> curl -o ~/hello-program/bin/hello https://gist.githubusercontent.com/AlphaHydrae/8e09bf8790cbd6e3c7d9974988da3c28/raw/74372a1be35e973897c0a1fc946f3d18012a860c/hello.sh
+$> chmod 755 ~/hello-program/bin/hello
+```
+
+You should now be able to find it in the `~/hello-program/bin` directory:
+
+```bash
+$> ls ~/hello-program/bin
+hello
+```
+
+It's now installed, we can find it using the CLI, but it still cannot be run. Why?
+
+```bash
+$> hello
+command not found: hello
+```
+
 #### Executing a command in a directory that's not in the `PATH`
 
 To run such a command, you can **manually go to the directory** containing the executable and **run the command there**:
 
 ```bash
-$> cd ~/Applications/Batsignal
-$> ./batsignal
+$> cd ~/hello-program/bin
+$> ./hello
+Hello World
 ```
 
-You could also run the command from anywhere by writing **the absolute path to the executable**:
+> Because `./hello` starts with `./`, the shell interprets it as a path instead of a command.
+> It basically executes the `hello` file in the current directory (`.`).
+
+You can also run the command from anywhere by writing **the absolute path to the executable**:
 
 ```bash
-$> /Users/Batman/Application/Batsignal/batsignal
+$> ~/hello-program/bin/hello
+Hello World
 ```
 
 But, ideally, you want to be able to **just type the name of the command**, and have it be executed.
@@ -782,7 +948,8 @@ For this, you need to **add the directory containing the executable** to your `P
 
 ### Updating the `PATH` variable
 
-To add a new path in your `PATH` variable, you have to edit a special file, used by your CLI. This file depends upon the CLI you are using:
+To add a new path in your `PATH` variable, you have to edit a special file, used by your CLI interpreter (shell).
+This file depends upon the shell you are using:
 
 | CLI                 | File to edit                     |
 | :------------------ | :-----------                     |
@@ -794,44 +961,86 @@ Open the adequate file (`.bashrc` for this example) from the CLI with `vim` or y
 ```bash
 $> vim ~/.bashrc
 ```
-Add this line at the bottom of your file (use `i` to enter _insert_ mode if you're in Vim):
+
+Add this line at the bottom of your file
+(use `i` to enter _insert_ mode if you're in Vim):
 
 ```vim
-export PATH="/Users/Batman/Application/Batsignal:$PATH"
+export PATH="~/hello-program/bin:$PATH"
 ```
 
 If you're in Vim, press `Esc` when you're done typing, then `:wq` and `Enter` to save and quit.
+
+#### Does it work?
+
+> Remember to **close and re-open your CLI** to have the shell reload its configuration file.
+
+You should now be able to run the Hello World shell script as a command simply by typing `hello`:
+
+```bash
+$> hello
+Hello World
+```
+
+You don't even have to be in the correct directory:
+
+```bash
+$> cd
+
+$> pwd
+/Users/jdoe
+
+$> hello
+Hello World
+```
 
 #### What have I done?
 
 You have **added a directory to the `PATH`**:
 
 ```vim
-export PATH="/Users/Batman/Application/Batsignal:$PATH"
+export PATH="~/hello-program/bin:$PATH"
 ```
 
 This line says:
 
-* Modify the `PATH` variable
-* In it, put the new directory `/Users/Batman/Application/Batsignal` and the previous value of the `PATH`, separated by `:`
+* Modify the `PATH` variable.
+* In it, put the new directory `~/hello-program/bin` and the previous value of the `PATH`, separated by `:`.
 
-The next time you run a command, your CLI will **first look** in this directory for executables, then in the **rest of the `PATH`**.
+The next time you run a command, your shell will **first look** in this directory for executables, then in the **rest of the `PATH`**.
 
 **Common mistakes**
 
-* What you must put in the `PATH` is **NOT** the path to the executable, but the path to the **directory containing the executable**
+* What you must put in the `PATH` is **NOT** the path to the executable,
+  but the path to the **directory containing the executable**.
 
 * You must re-open your CLI for the change to take effect:
-  the CLI configuration file (e.g. `~/.bashrc`) is only applied when the CLI starts
+  the shell configuration file (e.g. `~/.bashrc`) is only applied when the shell starts.
 
 
 
+[augmented-reality]: https://en.wikipedia.org/wiki/Augmented_reality
+[bash]: https://en.wikipedia.org/wiki/Bash_(Unix_shell)
+[brain-interface]: https://en.wikipedia.org/wiki/Brain–computer_interface
+[cat]: https://en.wikipedia.org/wiki/Cat_(Unix)
+[cli]: https://en.wikipedia.org/wiki/Command-line_interface
+[eniac]: https://en.wikipedia.org/wiki/ENIAC
 [gitbash]: https://git-for-windows.github.io/
 [gui]: https://en.wikipedia.org/wiki/Graphical_user_interface
+[keypunch]: https://en.wikipedia.org/wiki/Keypunch
+[linux]: https://en.wikipedia.org/wiki/Linux
+[macos]: https://en.wikipedia.org/wiki/MacOS
+[motion-sensing]: https://en.wikipedia.org/wiki/Motion_detection
 [punched-card]: https://en.wikipedia.org/wiki/Punched_card
+[redirection]: https://en.wikipedia.org/wiki/Redirection_(computing)
 [slide-git]: ../git
+[tty]: https://en.wikipedia.org/wiki/Teleprinter
+[tui]: https://en.wikipedia.org/wiki/Touch_user_interface
 [unix]: https://en.wikipedia.org/wiki/Unix
 [unix-shell]: https://en.wikipedia.org/wiki/Unix_shell
+[vim]: https://en.wikipedia.org/wiki/Vim_(text_editor)
+[virtual-reality]: https://en.wikipedia.org/wiki/Virtual_reality
 [vt100]: https://en.wikipedia.org/wiki/VT100
+[vui]: https://en.wikipedia.org/wiki/Voice_user_interface
 [windows-subsystem-for-linux]: https://docs.microsoft.com/en-us/windows/wsl/about
 [zsh-site]: http://zsh.sourceforge.net/
