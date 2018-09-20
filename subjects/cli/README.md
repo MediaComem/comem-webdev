@@ -8,8 +8,16 @@ Learn the basics of navigating your filesystem in a Unix command line interface.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [What is a Command Line Interface (CLI)?](#what-is-a-command-line-interface-cli)
-  - [Why use it](#why-use-it)
+- [A short history of computer interfaces](#a-short-history-of-computer-interfaces)
+  - [ENIAC (1946)](#eniac-1946)
+  - [Punched cards for computers (1950)](#punched-cards-for-computers-1950)
+  - [TeleTYpewriter (1960s)](#teletypewriter-1960s)
+  - [Video terminals (1970s)](#video-terminals-1970s)
+  - [Graphical User Interfaces (1980s)](#graphical-user-interfaces-1980s)
+  - [More User Interfaces](#more-user-interfaces)
+- [Back to the command line](#back-to-the-command-line)
+  - [What is a Command Line Interface (CLI)?](#what-is-a-command-line-interface-cli)
+  - [Why use it?](#why-use-it)
   - [Open a CLI](#open-a-cli)
   - [Install Git Bash (Windows users only)](#install-git-bash-windows-users-only)
 - [How to use the CLI](#how-to-use-the-cli)
@@ -23,6 +31,10 @@ Learn the basics of navigating your filesystem in a Unix command line interface.
   - [The `ls` command](#the-ls-command)
   - [The `cd` command](#the-cd-command)
   - [The `mkdir` command](#the-mkdir-command)
+  - [The `touch` command](#the-touch-command)
+  - [The `echo` command](#the-echo-command)
+  - [The `cat` command](#the-cat-command)
+  - [Stopping running commands](#stopping-running-commands)
   - [Windows users](#windows-users)
 - [Vim](#vim)
   - [WHY?!](#why)
@@ -30,6 +42,7 @@ Learn the basics of navigating your filesystem in a Unix command line interface.
   - [Normal mode](#normal-mode)
   - [Command mode](#command-mode)
 - [The `PATH` variable](#the-path-variable)
+  - [Understanding the `PATH`](#understanding-the-path)
   - [Using non-system commands](#using-non-system-commands)
   - [Updating the `PATH` variable](#updating-the-path-variable)
 

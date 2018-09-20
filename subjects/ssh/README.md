@@ -1,6 +1,6 @@
 # Secure Shell (SSH)
 
-Learn to use the SSH cryptographic network protocol to connect to other computers.
+Learn about the SSH cryptographic network protocol and how to use the SSH command line tool to connect to other computers.
 
 <!-- slide-include ../../BANNER.md -->
 
@@ -154,7 +154,7 @@ Verifying - enter aes-256-cbc encryption password:
 #### Example: symmetric encryption with AES (decryption)
 
 The resulting `ciphertext.aes` file cannot be decrypted without the key.
-Executing the following command pipeline and entering the same key as before ("changeme") when prompted will decrypt it:
+Executing the following command pipeline and entering the same key as before when prompted will decrypt it:
 
 ```bash
 $> cat ciphertext.aes | openssl aes-256-cbc -d
