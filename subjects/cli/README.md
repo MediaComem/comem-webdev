@@ -37,23 +37,101 @@ Learn the basics of navigating your filesystem in a Unix command line interface.
 
 
 
+## A short history of computer interfaces
+
+<!-- slide-front-matter class: center, middle -->
+
+For old time's sake.
+
+### ENIAC (1946)
+
+At that time, there was no such thing as a stored computer program.
+Programs were **physically hard-coded using 1200 ten way switches**, which took weeks.
+
+<p class='center'><img class='w75' src='images/eniac.jpg' /></p>
+
+### Punched cards for computers (1950)
+
+<!-- slide-column -->
+
+Many early general-purpose digital computers used [punched cards][punched-card] for data input, output and storage.
+
+<!-- slide-column 40 -->
+
+<img class='w100' src='images/punched-card.jpg' />
+
+<!-- slide-container -->
+
+<!-- slide-column -->
+
+You had to use a keypunch machine to write your cards, then feed them to the computer.
+
+This is what a program looked like:
+
+<p class='center'><img class='w80' src='images/punched-cards-program.jpg' /></p>
+
+<!-- slide-column 40 -->
+
+<img class='w100' src='images/keypunch-machine.jpg' />
+
+### TeleTYpewriter (1960s)
+
+Teletypewriters (TTYs) became the most popular **computer terminals** in the 1960s.
+
+This is when the first **command line interfaces (CLI)** were created.
+As you typed commands, a program running on the computer would interpret that input,
+and the output would be provided by printing it on physical paper.
+
+<p class='center'><img class='w70' src='images/tty.jpg' /></p>
+
+### Video terminals (1970s)
+
+<!-- slide-column 40 -->
+
+As available memory increased, **video terminals** such as the [VT100][vt100] replaced TTYs in the 1970s.
+
+Initially they were fundamentally the same as TTYs: textual input/output device.
+
+It's also in this period that the [Unix][unix] operating system was developed,
+with a [**Unix shell**][unix-shell] as its command line interpreter
+(the program that interprets the input and sends back the output).
+
+<!-- slide-column -->
+
+<img src='images/vt102.jpg' />
+
+### Graphical User Interfaces (1980s)
+
+<!-- slide-column -->
+
+Eventually, [graphical user interfaces (GUIs)][gui] were introduced
+in reaction to the perceived steep learning curve of command line interfaces.
+
+They are the most common end user computer interface today.
+
+<!-- slide-column 60 -->
+
+<img class='w100' src='images/xerox-star.jpg' />
+
+
+
 ## What is a Command Line Interface (CLI)?
 
 A CLI is a tool that allows you to use your computer by **writing** what you want to do (i.e. **commands**), instead of clicking on things.
 
-It's been installed on computers since (almost) the beginning of time, but it has evolved "a little" since then. It usually looks something like this:
+It's been installed on computers for a long time, but it has evolved "a little" since then. It usually looks something like this:
 
 <p class='center'><img src='images/cli.jpg' width='100%' /></p>
 
 
 
-### Why use it
+### Why use it?
 
 A CLI is not very user-friendly or visually appealing but it has several advantages:
 
-* It requires very **few resources**
-* It can be easily **automated** through scripting
-* Is is ultimately **more powerful and efficient** than any GUI
+* It requires very **few resources**.
+* It can be easily **automated** through scripting.
+* Is is ultimately **more powerful and efficient** than any GUI for many computing tasks.
 
 For these reasons, a lot of tools, **especially development tools**, don't have any GUI and are only usable through a CLI.
 
@@ -67,7 +145,7 @@ For these reasons, a lot of tools, **especially development tools**, don't have 
 
 <!-- slide-column 50 -->
 
-On **UNIX-like** systems _(like macOS or Linux)_, it's called the **Terminal**.
+On **Unix-like** systems _(like macOS or Linux)_, it's called the **Terminal**.
 
 You can use it right away, as it's the _de-facto_ standard.
 
@@ -75,7 +153,7 @@ You can use it right away, as it's the _de-facto_ standard.
 
 On **Windows**, the default CLI is called **cmd** (or **Invite de commandes** in French)
 
-However, it does not use the same syntax as UNIX-like CLIs _(plus, it's bad)_.
+However, it does not use the same syntax as Unix-like CLIs _(plus, it's bad)_.
 
 > **You'll need to install an alternative.**
 
@@ -83,7 +161,7 @@ However, it does not use the same syntax as UNIX-like CLIs _(plus, it's bad)_.
 
 ### Install Git Bash (Windows users only)
 
-You're going to install **Git Bash**, an alternative CLI that emulates a UNIX-like CLI on Windows.
+You're going to install **Git Bash**, an alternative CLI that emulates a Unix-like CLI on Windows.
 
 <!-- slide-column 30 -->
 
@@ -749,6 +827,11 @@ The next time you run a command, your CLI will **first look** in this directory 
 
 
 [gitbash]: https://git-for-windows.github.io/
-[zsh-site]: http://zsh.sourceforge.net/
+[gui]: https://en.wikipedia.org/wiki/Graphical_user_interface
+[punched-card]: https://en.wikipedia.org/wiki/Punched_card
 [slide-git]: ../git
+[unix]: https://en.wikipedia.org/wiki/Unix
+[unix-shell]: https://en.wikipedia.org/wiki/Unix_shell
+[vt100]: https://en.wikipedia.org/wiki/VT100
 [windows-subsystem-for-linux]: https://docs.microsoft.com/en-us/windows/wsl/about
+[zsh-site]: http://zsh.sourceforge.net/
