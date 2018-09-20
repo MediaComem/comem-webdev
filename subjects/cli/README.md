@@ -82,7 +82,7 @@ They were basically electromechanical typewriters adapted as a user interface fo
 
 This is when the first **command line interfaces (CLI)** were created.
 As you typed commands, a program running on the computer would interpret that input,
-and the output would be provided by printing it on physical paper.
+and the output would be printed on physical paper.
 
 <p class='center'><img class='w70' src='images/tty.jpg' /></p>
 
@@ -226,9 +226,8 @@ When you open the CLI you should find a blank screen with something like this:
 $>
 ```
 
-These symbols represent **the prompt** and are used to indicate that you have the lead, that is the computer is waiting for you to type something for it to execute.
-
-> At anytime, hit the `Ctrl-C` command to stop any running task and get the lead back.
+These symbols represent **the prompt** and are used to indicate that you have the lead.
+**The computer is waiting for you to type something** for it to execute.
 
 <!-- slide-column -->
 
@@ -402,15 +401,15 @@ To try and get help, depending on what operating system you're on:
 
 <p class='center'><img src='images/tar-help.png' width='70%' /></p>
 
-#### Interactive helps
+#### Interactive help pages
 
-Some helps or commands will take over the screen to display their content, hiding the prompt and previous interactions.
+Some help pages or commands will take over the screen to display their content, hiding the prompt and previous interactions.
 
-Usually, it means that these helps or commands have content that takes more than one screen to be shown.
+Usually, it means that there is content that takes more than one screen to be shown.
 
 You can "scroll" up and down line-by-line using the arrow keys or the `Enter` key.
 
-To quit these helps or commands, use the `q` (**q**uit) key.
+To quit these interactive documentations, use the `q` (**q**uit) key.
 
 <p class='center'><img src='images/interactive-help.png' width='80%' /></p>
 
@@ -701,7 +700,7 @@ $> echo bar >> bar.txt
 
 ### The `cat` command
 
-The `cat` command can display one file or con**cat**enate multiple files.
+The `cat` command can display one file or con**cat**enate multiple files in the CLI.
 
 For example, this displays the contents of the previous example's file:
 
@@ -721,6 +720,27 @@ foo
 bar
 World
 ```
+
+
+
+### Stopping running commands
+
+Sometimes a command will take too long to execute.
+
+As an example, run this command which will wait one hour before exiting:
+
+```bash
+$> sleep 3600
+```
+
+As you can see, the command keeps executing and you **no longer have a prompt**.
+Anything you type is ignored, as it is no longer interpreted by the shell,
+but by the `sleep` command instead (which doesn't do anything with it).
+
+By convention in Unix shells, you can always terminate a running command by typing `Ctrl-C`.
+
+> Note that `Ctrl-C` **forces termination** of a running command.
+> It might not have finished what it was doing.
 
 
 
@@ -785,9 +805,9 @@ You control Vim by **typing**.
 
 The first thing to understand whith Vim is that it has *3 modes*:
 
-* **Normal** mode (the one you're in when Vim starts)
-* **Command** mode (the one to use to save or quit)
-* **Insert** mode (the one to use to insert text)
+* **Normal** mode (the one you're in when Vim starts).
+* **Command** mode (the one to use to save or quit).
+* **Insert** mode (the one to use to insert text).
 
 To go into each mode use this keys :
 
@@ -883,7 +903,7 @@ $> ls -a -l
    No need to look at the rest of the `PATH`.
 
 > Note that if there happens to be an `ls` executable in the `/custom/dir` directory which is last in the `PATH`,
-> it will **never be used since the first matching executable** is always selected.
+> it will **never be used** when typing `ls`, since the first matching executable is always selected.
 
 
 
