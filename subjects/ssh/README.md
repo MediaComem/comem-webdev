@@ -4,8 +4,57 @@ Learn to use the SSH cryptographic network protocol to connect to other computer
 
 <!-- slide-include ../../BANNER.md -->
 
-<!-- START doctoc -->
-<!-- END doctoc -->
+**You will need**
+
+* A Unix CLI
+
+**Recommended reading**
+
+* [Command Line Introduction](../cli/)
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [What is SSH?](#what-is-ssh)
+  - [How does it work?](#how-does-it-work)
+  - [How is it secure?](#how-is-it-secure)
+- [Secure channel](#secure-channel)
+  - [Symmetric encryption](#symmetric-encryption)
+  - [Asymmetric cryptography](#asymmetric-cryptography)
+  - [Asymmetric encryption](#asymmetric-encryption)
+  - [Asymmetric key exchange](#asymmetric-key-exchange)
+  - [Man-in-the-Middle attack on Diffie-Hellman](#man-in-the-middle-attack-on-diffie-hellman)
+  - [Asymmetric digital signature](#asymmetric-digital-signature)
+  - [Cryptographic hash functions](#cryptographic-hash-functions)
+  - [Combining it all together in SSH](#combining-it-all-together-in-ssh)
+- [The `ssh` command](#the-ssh-command)
+- [SSH known hosts](#ssh-known-hosts)
+  - [Are you really the SSH server I'm looking for?](#are-you-really-the-ssh-server-im-looking-for)
+  - [Known hosts file](#known-hosts-file)
+- [Password authentication](#password-authentication)
+- [Logging in with SSH](#logging-in-with-ssh)
+  - [Typing commands while connected through SSH](#typing-commands-while-connected-through-ssh)
+  - [Disconnecting](#disconnecting)
+  - [Where am I?](#where-am-i)
+- [Logging in or running a command](#logging-in-or-running-a-command)
+- [Public key authentication](#public-key-authentication)
+  - [How does it work?](#how-does-it-work-1)
+  - [Do I already have a key pair?](#do-i-already-have-a-key-pair)
+  - [The `ssh-keygen` command](#the-ssh-keygen-command)
+  - [How does public key authentication work?](#how-does-public-key-authentication-work)
+  - [The `authorized_keys` file](#the-authorized_keys-file)
+  - [Using multiple keys](#using-multiple-keys)
+  - [Key management](#key-management)
+- [SSH for other network services](#ssh-for-other-network-services)
+  - [Using `scp`](#using-scp)
+  - [Using SFTP](#using-sftp)
+- [SSH agent](#ssh-agent)
+  - [Running an SSH agent](#running-an-ssh-agent)
+  - [Using the SSH agent](#using-the-ssh-agent)
+- [References](#references)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 
@@ -263,7 +312,7 @@ but **only as long as the private keys remain private**.
 It does not provide **forward secrecy**, meaning that if the private keys are compromised in the future,
 all data encrypted in the past is also compromised.
 
-<img class='w100' src='images/asymmetric-encryption-forward-secrecy.png' />
+<img class='w100' src='images/asymmetric-encryption-forward-secrecy.jpg' />
 
 ### Asymmetric key exchange
 
@@ -287,9 +336,9 @@ even if an attacker is monitoring the communication channel.
 
 #### Diffie-Hellman key exchange
 
-This conceptual diagram illustrates the general idea behind the protocol:
-
 <!-- slide-column -->
+
+This conceptual diagram illustrates the general idea behind the protocol:
 
 * Alice and Bob choose a **random, public starting color** (yellow).
 * Then they choose a **secret color known only to themselves** (orange and blue-green).
@@ -435,15 +484,26 @@ Otherwise, there is no guarantee that the server is genuine.
 
 SSH does not counter the following threats
 
+<!-- slide-column -->
+
 * **Password cracking:** if password authentication is enabled,
   a weak password might be easily brute-forced or obtained through [side-channel attacks][side-channel].
   Consider using public key authentication instead to mitigate some of these risks.
+
+<!-- slide-column -->
+
+<img class='w100' src='images/xkcd-security.png' />
+
+<!-- slide-container -->
+
 * **IP/TCP denial of service:** since SSH operates on top of TCP,
   it is vulnerable to some attacks against weaknesses in TCP and IP,
   such as [SYN flood][syn-flood].
 * **Traffic analysis:** although the encrypted traffic cannot be read,
   an attacker can still glean a great deal of information by simply analyzing
   the amount of data, the source and target addresses, and the timing.
+* **Carelessness and coffee spills:** SSH doesn't protect you if you write
+  your password on a post-it note and paste it on your computer screen.
 
 
 
@@ -607,8 +667,8 @@ Warning: Permanently added '192.168.50.4' (ECDSA) to the list of known hosts.
 jdoe@192.168.50.4's password:
 ```
 
-(Most SSH clients will not display anything while you type your password.
-Simply press `Enter` when you're done to submit it.)
+> Most SSH clients will not display anything while you type your password.
+> Simply press `Enter` when you're done to submit it.
 
 
 
@@ -960,16 +1020,63 @@ Since FTP is [insecure][ftp-security] (e.g. passwords are sent unencrypted),
 SFTP is an alternative that goes through SSH's secure channel and therefore poses fewer security risks.
 
 Most modern FTP clients support SFTP.
+Here's a couple:
+
+* [Cyberduck][cyberduck]
+* [WinSCP][winscp]
+
 Many code editors also have SFTP support available through plugins.
 
 
 
-## TODO
+## SSH agent
 
-* secure channel vs authentication (at beginning)
-* SSH agent
-* Other uses (tunneling)
-* Threats: carelessness and coffee spills
+If you use a **private key that is password-protected**,
+you lose part of the convenience of public key authentication:
+you don't have to enter a password to authenticate to the server,
+but **you still have to enter the key's password** to unlock it.
+
+The `ssh-agent` command can help you there.
+It runs a helper program that will let you unlock your private key(s) once,
+then use it multiple times without entering the password again each time.
+
+### Running an SSH agent
+
+There are several ways to run an SSH agent.
+You can run it in the background:
+
+* [Single sign-on using SSH][ssh-agent-run]
+* [Generating a new SSH key and adding it to the ssh-agent (GitHub)][ssh-agent-run-github]
+
+Or you can run an agent and have it start a new shell for you:
+
+```bash
+$> ssh-agent bash
+```
+
+> The advantage of this last technique is that the agent will automatically quit when you exit the shell,
+> which is good since it's not necessarily a good idea to keep an SSH agent running forever [for security reasons][ssh-agent-security].
+
+### Using the SSH agent
+
+The associated `ssh-add` command will take your default private key (e.g. `~/.ssh/id_rsa`)
+and prompt you for your password to unlock it:
+
+```bash
+$> ssh-add
+Enter passphrase for /Users/jdoe/.ssh/id_rsa:
+Identity added: /Users/jdoe/.ssh/id_rsa (/Users/jdoe/.ssh/id_rsa)
+```
+
+The **unlocked key** is now **kept in memory by the agent**.
+The `ssh` command (and other SSH-related commands like `scp`)
+will not prompt you for that key's password as long as the agent keeps running.
+
+If you want to load another key than the default one, you can specify its path:
+
+```bash
+$> ssh-add /path/to/custom_id_rsa
+```
 
 
 
@@ -987,6 +1094,7 @@ Many code editors also have SFTP support available through plugins.
 [authorized_keys]: https://www.ssh.com/ssh/authorized_keys/openssh
 [bash]: https://en.wikipedia.org/wiki/Bash_(Unix_shell)
 [brute-force]: https://en.wikipedia.org/wiki/Brute-force_attack
+[cyberduck]: https://cyberduck.io/
 [dh]: https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange
 [discrete-logarithm]: https://en.wikipedia.org/wiki/Discrete_logarithm
 [ecdsa]: https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm
@@ -1015,6 +1123,10 @@ Many code editors also have SFTP support available through plugins.
 [sftp]: https://en.wikipedia.org/wiki/SSH_File_Transfer_Protocol
 [shell]: https://en.wikipedia.org/wiki/Shell_(computing)
 [ssh-agent]: https://kb.iu.edu/d/aeww
+[ssh-agent-run]: https://www.ssh.com/ssh/agent
+[ssh-agent-run-github]: https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
+[ssh-agent-security]: https://www.commandprompt.com/blog/security_considerations_while_using_ssh-agent/
 [side-channel]: https://en.wikipedia.org/wiki/Cryptanalysis#Side-channel_attacks
 [symmetric-encryption]: https://en.wikipedia.org/wiki/Symmetric-key_algorithm
 [syn-flood]: https://en.wikipedia.org/wiki/SYN_flood
+[winscp]: https://winscp.net/
