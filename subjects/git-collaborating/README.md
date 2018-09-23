@@ -92,8 +92,8 @@ Here we will use a simple **centralized workflow**:
 
 In this workflow:
 
-* A "shared" central repository hosted on GitHub
-* Each developer has a repository on their local machine
+* A **shared central repository** hosted on GitHub
+* Each developer has a **repository on their local machine**
   * Each developer will add the shared repository as a **remote**
 
 
@@ -210,6 +210,9 @@ and add the GitHub username of **Alice** as a collaborator:
 
 <img src='images/github-ssh-url.png' width='100%' />
 
+**WARNING:** be sure to select the **SSH** URL, not the **HTTPS** URL
+(which might be selected by default).
+
 
 
 ### Bob: add the remote to your local repository
@@ -282,6 +285,9 @@ It tells you where the **master** branch points to on the **origin** remote (the
 **Alice** can now go to the repository's page on GitHub (under **Bob**'s account) and copy the SSH URL:
 
 <img src='images/github-clone-url.png' width='100%' />
+
+**WARNING:** again, be sure to select the **SSH** URL, not the **HTTPS** URL
+(which might be selected by default).
 
 
 
@@ -484,14 +490,14 @@ $> git push origin master
 * Put the two last `<script>` tags on one line
 
 ```html
-<h2>Addition</h2>
+*<h2>Addition</h2>
 <p id="addition">...</p>
 
-<h2>Subtraction</h2>
+*<h2>Subtraction</h2>
 <p id="subtraction">...</p>
 
 <script src="calculations.js"></script>
-<script src="addition.js"></script><script src="subtraction.js"></script>
+*<script src="addition.js"></script><script src="subtraction.js"></script>
 ```
 
 
