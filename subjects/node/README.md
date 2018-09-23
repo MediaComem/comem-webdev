@@ -76,7 +76,7 @@ Learn how to use [Node.js][node], an asynchronous JavaScript runtime that can ru
 <p class='center'><img src='images/lts-schedule.png' width='80%' /></p>
 
 * Odd-numbered versions (e.g. v5, v7, v9) are **unstable** releases with the latest features, and will **no longer be supported after 6-9 months**.
-* Even-numbered versions (e.g. v4, v6, v8) have **long term support (LTS)**.
+* Even-numbered versions (e.g. v4, v6, v8, v10) have **long term support (LTS)**.
   They are actively developed for 6 months.
   They are supported for 18 months after that.
   They are still maintained (e.g. security fixes) for 12 months after that.
@@ -92,7 +92,7 @@ If the installation was successfull, you should be able to access Node.js in you
 
 ```bash
 $> node --version
-v8.9.4
+v10.11.0
 
 $> node
 > 1 + 2
@@ -320,7 +320,7 @@ A short summary on how to require files:
 
 Statement                     | Effect
 :---                          | :---
-`require('coreModule')`       | Require the core module (or npm package) named `coreModule`
+`require('coreModule')`       | Require the core module (or npm package, more on that later) named `coreModule`
 `require('./foo.js')`         | Require the `foo.js` file in the current directory (relative to the current file)
 `require('./foo/bar/baz.js')` | Require the `baz.js` file in the `foo/bar` directory (relative to the current file)
 `require('../../qux.js')`     | Require the `qux.js` file two directories above (relative to the current file)
@@ -431,10 +431,10 @@ let fileCount = 0;
 
 fs.readdir('/', function(err, result) {
   `fileCount = fileCount + result.length`;
-  console.log('Files listed:', fileCount);
+  console.log('Files listed: ' + fileCount);
 });
 
-console.log('End of program:', fileCount);
+console.log('End of program: ' + fileCount);
 ```
 
 This will **always** log `End of program: 0` first, then `Files listed: N`.
@@ -459,6 +459,55 @@ This is the mechanism that enables the behavior in the previous slides:
   * Get the next event in the queue
   * Invoke the registered callbacks in sequence
   * Delegate I/O operations to the Node platform (in separate, non-blocking threads)
+
+#### Magic 1
+
+```js
+function multiply(a, b) {
+  return a * b;
+}
+
+function square(a) {
+  return multiply(a, a);
+}
+
+function printSquare(a) {
+  const squared = square(a);
+  console.log(squared);
+}
+
+printSquare(4);
+```
+
+[Loupe](http://latentflip.com/loupe/?code=ZnVuY3Rpb24gbXVsdGlwbHkoYSwgYikgewogIHJldHVybiBhICogYjsKfQoKZnVuY3Rpb24gc3F1YXJlKGEpIHsKICByZXR1cm4gbXVsdGlwbHkoYSwgYSk7Cn0KCmZ1bmN0aW9uIHByaW50U3F1YXJlKGEpIHsKICBjb25zdCBzcXVhcmVkID0gc3F1YXJlKGEpOwogIGNvbnNvbGUubG9nKHNxdWFyZWQpOwp9CgpwcmludFNxdWFyZSg0KTs%3D!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D)
+
+#### Magic 2
+
+<!-- slide-column -->
+
+```js
+console.log('Start of program');
+
+setTimeout(function cb() {
+  console.log('Hello');
+}, 5000);
+
+console.log('End of program');
+```
+
+<!-- slide-column -->
+
+**Stack**
+
+```
+foo
+-
+-
+```
+
+**Node.js APIs**
+
+**Task queue**
 
 
 
