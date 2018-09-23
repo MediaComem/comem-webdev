@@ -228,7 +228,7 @@ my-project:
     file3.txt
 ```
 
-A Git project has three main sections:
+A Git project has three main parts:
 
 * The Git directory
 * The working directory
@@ -339,10 +339,13 @@ The rest of this documentation is a tutorial where you will learn how to:
 
 ### Installing Git
 
-There are a lot of different ways to use Git: the original command line tools and various GUIs of varying capabilities.
+There are a lot of different ways to use Git:
+the original **command line tools** and various **GUIs** of varying capabilities.
 But the command line is the only place you can run **all** Git commands with all their options.
 
-If you know how to run the command line version, you can probably also figure out how to run the GUI version, while the opposite is not necessarily true.
+If you know how to run the command line version,
+you can easily figure out how to use the GUI version,
+while the opposite is not necessarily true.
 So the **command line** is what we will use.
 
 Some of you may already have Git installed.
@@ -360,7 +363,7 @@ If you don't have it, follow these [installation instructions][install-git] to i
 ### First-time Git setup
 
 Now that you have Git, you must configure your **identity**: your user name and e-mail address.
-This is important because every Git commit uses this information, and it's *immutably* baked into every commit you make.
+This is important because **every Git commit uses this information**, and it's *immutably* baked into every commit you make.
 
 Use the `git config` command to do this:
 
@@ -377,9 +380,10 @@ user.name=John Doe
 user.email=john.doe@example.com
 ```
 
-Note that with the `--global` option, Git will store these settings in your user configuration file (`~/.gitconfig`),
-so you only need to do this **once on any given computer**.
-You can also change them at any time by running the commands again.
+> Note that with the `--global` option, Git will store these settings in your user configuration file (`~/.gitconfig`),
+> so you only need to do this **once on any given computer**.
+> You can also change them at any time by running the commands again.
+> Run `cat ~/.gitconfig` to display this file.
 
 
 
@@ -419,9 +423,12 @@ Initial commit
 nothing to commit (create/copy files and use "git add" to track)
 ```
 
-This means you have an empty repo with no commits, and a clean *working directory* – there is nothing there.
+This means you have an empty repo with no commits, and a **clean working directory** – there is nothing there.
 
 As you can see, Git often helps you by telling you what you can do next: you need to start adding some files.
+
+> **The `git status` command is your best friend when using Git.**
+> Do not hesitate to use it at any time to check in what state you are.
 
 
 
@@ -678,7 +685,7 @@ $> git commit -m "The world is beautiful"
 
 As expected, the changes we did not stage are still **uncommitted**.
 
-```
+```bash
 $> git status
 On branch master
 Changes not staged for commit:
@@ -841,7 +848,8 @@ Sometimes there are files you don't want to commit in your repository:
 * Dependencies
 * Build artifacts
 
-You can tell Git not to track them by adding a `.gitignore` file to your repository:
+You can tell Git not to track them by adding a `.gitignore` file to your repository.
+Create it now with this content:
 
 ```txt
  *.log
@@ -872,6 +880,9 @@ Do not forget to add and commit the `.gitignore` file:
 $> git add .gitignore
 $> git commit -m "Ignore file"
 ```
+
+> That way, when you start collaborating with the other developers in your team,
+> the same files will be ignored on their machine.
 
 
 
