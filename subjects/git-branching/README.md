@@ -425,7 +425,7 @@ $> git branch -d feature-sub
 ## Merge conflicts
 
 Occasionally, the merge process doesn't go smoothly:
-if the **same line(s)** was modified in two diverging branches and you merge them together,
+if the **same line(s) in the same file(s)** was modified in two diverging branches and you merge them together,
 Git can't know which is the correct version.
 
 Let's pretend that a colleague of yours also implemented the subtraction function but in a different way than you did.
