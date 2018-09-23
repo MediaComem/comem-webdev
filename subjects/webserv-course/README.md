@@ -1,12 +1,13 @@
 # COMEM+ Web Services Course
 
-The goal of this course is to teach the generic concept of **web service**, focusing on **REST**ful APIs as one way to expose such a service.
+The goal of this course is to teach the generic concept of **web service**,
+focusing on **REST**ful APIs as one way to expose such a service.
 You will:
 
-* Learn the **core principles** of the REST architectural style
-* Learn how to **implement** a RESTful API in JavaScript
-* Learn how to **manage** your source code on a collaborative platform
-* Learn how to **deploy** your RESTful API on a cloud application platform
+* Learn the **core principles** of the REST architectural style.
+* Learn how to **implement** a RESTful API in JavaScript.
+* Learn how to **manage** your source code on a collaborative platform.
+* Learn how to **deploy** your RESTful API on a cloud application platform.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -25,27 +26,36 @@ You will:
 
 
 
-## Theme
+## Free theme
 
-<img src='images/citizen-engagement-1.jpg' width='100%' />
+<!-- slide-column -->
 
-### Citizen Engagement
+You can design and implement your own web service idea,
+as long as it meets the [evaluation criteria][eval].
 
-<p class='center'><img src='images/citizen-engagement-2.jpg' width='90%' /></p>
+Or you can choose the default project that will be suggested.
+
+<!-- slide-column 40 -->
+
+<img class='w100' src='images/idea.jpg' />
 
 
 
 ## This course
 
-In this course, you will *develop* and *deploy* a **REST web service backend** for Citizen Engagement.
+In this course, you will *develop* and *deploy* a **REST web service backend**:
 
-<p class='center'><img src='images/course-scope.png' width='80%'></p>
-
-In the following Mobile Applications course, you will develop a hybrid mobile application frontend to a Citizen Engagement web service.
+<p class='center'><img class='w90' src='images/course-scope.png'></p>
 
 ### Next course
 
-<img src='images/citizen-engagement-mobile-app.jpg' width='100%' />
+In the **next Mobile Applications course**,
+you will develop a **hybrid mobile application frontend** to use your web service
+(or to use the web service that will be provided as a default).
+
+<p class='center'><img class='w90' src='images/citizen-engagement-mobile-app.jpg' /></p>
+
+
 
 ### Webcasts
 
@@ -55,6 +65,8 @@ Take a look at what was done in this course the previous years:
 * https://www.youtube.com/watch?v=ycZvdpfq_Qk&feature=youtu.be
 * https://www.youtube.com/watch?v=wki0t178x2k&feature=youtu.be
 * https://www.youtube.com/watch?v=Mu0KJCyIjf0
+
+<p class='center'><img class='w70' src='images/citizen-engagement-1.jpg' /></p>
 
 
 
@@ -73,3 +85,7 @@ Take a look at what was done in this course the previous years:
 <!-- slide-front-matter class: image-header -->
 
 <img src='images/source-code-management.png' width='100%' />
+
+
+
+[eval]: https://github.com/MediaComem/comem-webserv#evaluation
