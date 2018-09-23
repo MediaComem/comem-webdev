@@ -1,6 +1,7 @@
 # Command Line Introduction
 
-Learn the basics of navigating your filesystem in a Unix command line interface.
+Learn what a command line interface is
+and learn the basics of navigating and manipulating your filesystem in a Unix shell.
 
 <!-- slide-include ../../BANNER.md -->
 
@@ -88,10 +89,13 @@ This is what a **program** looked like:
 
 <img class='w100' src='images/keypunch-machine.jpg' />
 
+> Punched cards are much older than computers.
+> They were first invented around 1725.
+
 ### TeleTYpewriter (1960s)
 
 Teletypewriters (TTYs) became the most popular **computer terminals** in the 1960s.
-They were basically electromechanical typewriters adapted as a user interface for early computers.
+They were basically electromechanical typewriters adapted as a user interface for early [mainframe computers][mainframe].
 
 This is when the first **command line interfaces (CLI)** were created.
 As you typed commands, a program running on the computer would interpret that input,
@@ -105,18 +109,31 @@ and the output would be printed on physical paper.
 
 As available memory increased, **video terminals** such as the [VT100][vt100] replaced TTYs in the 1970s.
 
-Initially they were fundamentally the same as TTYs: textual input/output devices.
+Initially they only displayed text.
+Hence they were fundamentally the same as TTYs: textual input/output devices.
 
-It's also in this period that the [Unix][unix] operating system was developed,
-the ancestor of [Linux][linux], also used as a basis for [macOS][macos] (since Mac OS X).
+<!-- slide-column 65 -->
 
-In Unix-like systems, The program serving as the command line interpreter
-(handling input/output from the terminal) is called a [**shell**][unix-shell]
-(because it wraps and hides the lower-level kernel interface).
+<p class='center'><img class='w100' src='images/vt102.jpg' /></p>
+
+#### Unix & shells
+
+It's also in this period that the [Unix][unix] operating system was developed.
+Compared to earlier systems, Unix was the first **portable operating system**
+because it was written in the [C programming language][c], allowing it to be installed on multiple platforms.
+
+Unix is the ancestor of [Linux][linux].
+[FreeBSD][freebsd], a Unix-like system, is also used as the basis for [macOS][macos] (since Mac OS X).
 
 <!-- slide-column -->
 
-<img src='images/vt102.jpg' />
+In Unix-like systems, The program serving as the **command line interpreter**
+(handling input/output from the terminal) is called a [**shell**][unix-shell]
+(because it wraps and hides the lower-level kernel interface).
+
+<!-- slide-column 40 -->
+
+<img class='w100' src='images/shell.png' />
 
 ### Graphical User Interfaces (1980s)
 
@@ -131,7 +148,7 @@ They are one of the most common end user computer interface today.
 
 <img class='w100' src='images/xerox-star.jpg' />
 
-### More User Interfaces
+### More user interfaces
 
 Today:
 
@@ -169,7 +186,9 @@ It usually looks something like this:
 
 A CLI is not very user-friendly or visually appealing but it has several advantages:
 
-* It requires very **few resources**.
+* It requires very **few resources** (e.g. memory),
+  which is convenient where resources are scarce
+  (e.g. embedded systems, web servers).
 * It can be easily **automated** through scripting.
 * Is is ultimately **more powerful and efficient** than any GUI for many computing tasks.
 
@@ -289,13 +308,13 @@ There are two types of arguments to use with a command (if needed):
 By convention, they are preceded by `-` or `--`:
 
 ```bash
-$> ls `-l` `--all`
+$> ls `-a` `-l`
 ```
 
 We use the `ls` command to list the content of the current directory. The options tell `ls` **how** it should do so:
 
-* `--all` tells it to print all elements (including hidden ones).
-* `-l` tells it to print elements in a list format, rather than on one line.
+* `-a` tells it to print **a**ll elements (including hidden ones).
+* `-l` tells it to print elements in a **l**ist format, rather than on one line.
 
 <!-- slide-column -->
 
@@ -419,7 +438,6 @@ To try and get help, depending on what operating system you're on:
 Some help pages or commands will take over the screen to display their content, hiding the prompt and previous interactions.
 
 Usually, it means that there is content that takes more than one screen to be shown.
-
 You can "scroll" up and down line-by-line using the arrow keys or the `Enter` key.
 
 To quit these interactive documentations, use the `q` (**q**uit) key.
@@ -485,11 +503,12 @@ Use the `ls` command:
 $> ls
 (lots and lots of files)
 ```
-> `ls` means "list": it lists the files and directories that the current directory contains.
+> `ls` means "list": it lists the contents of a directory.
 
-By default, `ls` doesn't list **hidden elements** (i.e. elements that start with a `.`).
+By default, `ls` doesn't list **hidden elements**.
+By convention in Unix-like systems, files that start with `.` (a dot) are hidden.
 
-If you want it to do that, you need to pass the `--all` (or `-a`) option:
+If you want it to do that, you need to pass the `-a` (**a**ll) option:
 
 ```bash
 $> ls -a
@@ -585,7 +604,7 @@ $> cd
 $> cd /Users/Batman/Pictures/
 ```
 
-At anytime and from anywhere, you can return to your **home directory** with the `cd` command, without any argument (or with the `~`):
+At anytime and from anywhere, you can return to your **home directory** with the `cd` command, without any argument or with a `~` (tilde):
 
 <!-- slide-column -->
 
@@ -635,7 +654,7 @@ For example, on John Doe's macOS system, it could be `/Users/jdoe/Projects`.
 >
 > It will obviously fail, unless you happen to have a `path` directory that contains a `to` directory that contains a `projects` directory...
 
-**IMPORTANT:** if your Windows/Linux/macOS username contains **spaces** or **accents**, you should **NOT** store your projects under your home directory.
+**WARNING:** if your Windows/Linux/macOS username contains **spaces** or **accents**, you should **NOT** store your projects under your home directory.
 You should find a path elsewhere on your filesystem.
 This will save you **a lot of needless pain and suffering**.
 
@@ -694,19 +713,21 @@ Hello World
 This seems useless, but can be quite powerful when combined with Unix features like [redirection][redirection].
 For example, you can **redirect the output to a file**.
 
+The `>` operator means *"**write** the output of the previous command into a file"*.
 This allows you to quickly create a simple text file:
 
 ```bash
-$> echo foo > bar.txt
+$> echo foo `>` bar.txt
 
 $> ls
 bar.txt
 ```
 
-You can also append content to the end of an existing file:
+If the file already exists, it is overwritten.
+You can also use the `>>` operator, which means *"**append** the output of the previous command to the end of a file"*:
 
 ```bash
-$> echo bar >> bar.txt
+$> echo bar `>>` bar.txt
 ```
 
 
@@ -714,7 +735,6 @@ $> echo bar >> bar.txt
 ### The `cat` command
 
 The `cat` command can display one file or con**cat**enate multiple files in the CLI.
-
 For example, this displays the contents of the previous example's file:
 
 ```bash
@@ -956,7 +976,14 @@ command not found: hello
 
 #### Executing a command in a directory that's not in the `PATH`
 
-To run such a command, you can **manually go to the directory** containing the executable and **run the command there**:
+You can run a command from anywhere by writing **the absolute path to the executable**:
+
+```bash
+$> ~/hello-program/bin/hello
+Hello World
+```
+
+You can also **manually go to the directory** containing the executable and **run the command there**:
 
 ```bash
 $> cd ~/hello-program/bin
@@ -964,17 +991,10 @@ $> ./hello
 Hello World
 ```
 
-> Because `./hello` starts with `./`, the shell interprets it as a path instead of a command.
-> It basically executes the `hello` file in the current directory (`.`).
+> When the first word on the CLI starts with `/`, `~/`, `./` or `../`, the shell interprets it as a file path.
+> Instead of looking for a command in the `PATH`, it simply executes that file.
 
-You can also run the command from anywhere by writing **the absolute path to the executable**:
-
-```bash
-$> ~/hello-program/bin/hello
-Hello World
-```
-
-But, ideally, you want to be able to **just type the name of the command**, and have it be executed.
+But, ideally, you want to be able to **just type `hello`**, and have the script be executed.
 For this, you need to **add the directory containing the executable** to your `PATH` variable.
 
 
@@ -984,15 +1004,15 @@ For this, you need to **add the directory containing the executable** to your `P
 To add a new path in your `PATH` variable, you have to edit a special file, used by your CLI interpreter (shell).
 This file depends upon the shell you are using:
 
-| CLI                 | File to edit                     |
-| :------------------ | :-----------                     |
-| Terminal / Git Bash | `~/.bashrc` or `~/.bash_profile` |
-| [ZSH][zsh-site]     | `~/.zshrc`                       |
+| CLI                 | File to edit      |
+| :------------------ | :-----------      |
+| Terminal / Git Bash | `~/.bash_profile` |
+| [ZSH][zsh-site]     | `~/.zshrc`        |
 
 Open the adequate file (`.bashrc` for this example) from the CLI with `vim` or your favorite editor if it can display hidden files:
 
 ```bash
-$> vim ~/.bashrc
+$> vim ~/.bash_profile
 ```
 
 Add this line at the bottom of your file
@@ -1048,21 +1068,24 @@ The next time you run a command, your shell will **first look** in this director
   but the path to the **directory containing the executable**.
 
 * You must re-open your CLI for the change to take effect:
-  the shell configuration file (e.g. `~/.bashrc`) is only applied when the shell starts.
+  the shell configuration file (e.g. `~/.bash_profile`) is only applied when the shell starts.
 
 
 
 [augmented-reality]: https://en.wikipedia.org/wiki/Augmented_reality
 [bash]: https://en.wikipedia.org/wiki/Bash_(Unix_shell)
 [brain-interface]: https://en.wikipedia.org/wiki/Brain–computer_interface
+[c]: https://en.wikipedia.org/wiki/C_(programming_language)
 [cat]: https://en.wikipedia.org/wiki/Cat_(Unix)
 [cli]: https://en.wikipedia.org/wiki/Command-line_interface
 [eniac]: https://en.wikipedia.org/wiki/ENIAC
+[freebsd]: https://en.wikipedia.org/wiki/FreeBSD
 [gitbash]: https://git-for-windows.github.io/
 [gui]: https://en.wikipedia.org/wiki/Graphical_user_interface
 [keypunch]: https://en.wikipedia.org/wiki/Keypunch
 [linux]: https://en.wikipedia.org/wiki/Linux
 [macos]: https://en.wikipedia.org/wiki/MacOS
+[mainframe]: https://en.wikipedia.org/wiki/Mainframe_computer
 [motion-sensing]: https://en.wikipedia.org/wiki/Motion_detection
 [punched-card]: https://en.wikipedia.org/wiki/Punched_card
 [redirection]: https://en.wikipedia.org/wiki/Redirection_(computing)
