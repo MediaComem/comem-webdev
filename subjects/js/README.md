@@ -74,11 +74,10 @@ It has been standardized in the [ECMAScript][es] language specification.
 
 <img src='images/timeline.png' width='100%' />
 
-[**ECMAScript 2015** (also known as ECMAScript 6 or ES6)][es6] added iterators and for/of loops, Python-style [generators][js-generators] and generator expressions, [arrow functions][js-arrow-functions], binary data, typed arrays, collections (maps, sets and weak maps), [promises][js-promise], number and math enhancements, reflection, and [proxies][js-proxy].
-
-[**ECMAScript 2017** (ES8)][es8] added [async/await functions][js-async] and [shared memory and atomics][js-shared-memory].
-
-[**ECMAScript 2018** (ES9)][es9] will add [asynchronous iteration][js-async-iteration] and more.
+* [**ECMAScript 2015** (also known as ECMAScript 6 or ES6)][es6] added iterators and for/of loops, Python-style [generators][js-generators] and generator expressions, [arrow functions][js-arrow-functions], binary data, typed arrays, collections (maps, sets and weak maps), [promises][js-promise], number and math enhancements, reflection, and [proxies][js-proxy].
+* [**ECMAScript 2017** (ES8)][es8] added [async/await functions][js-async] and [shared memory and atomics][js-shared-memory].
+* [**ECMAScript 2018** (ES9)][es9] added [asynchronous iteration][js-async-iteration] and more.
+* [**ECMAScript 2019**][es2019] is still being drafted.
 
 
 
@@ -142,8 +141,8 @@ The types are:
 
 <!-- slide-container -->
 
-* Note that `null` is a type, but `typeof null === object`.
-  This is a [remnant][js-typeof-null] from the first version of JavaScript.
+> Note that `null` is a type, but `typeof null === object`.
+> This is a [remnant][js-typeof-null] from the first version of JavaScript.
 
 
 
@@ -168,7 +167,7 @@ person[property] = 1446;
 delete person.firstName;
 
 // And list them
-for (let key in person) {
+for (const key in person) {
   console.log(key + ': ' + person[key]);
 }
 ```
@@ -408,7 +407,7 @@ Open the **RunKit** and try to **implement it**!
 
 ### Transforming data with functions
 
-These properties of functions enable powerful **functional programming** patterns:
+These properties of functions enable powerful [**functional programming**][func-prog] patterns:
 
 ```js
 // Define an array of people objects
@@ -438,14 +437,14 @@ console.log(lastNames); // [ "Doe", "Smith", "Smith" ]
 
 <runkit disabled></runkit>
 
-While seaching for examples on the web, you will stumble upon some strange syntax:
+While seaching for examples on the web, you will stumble upon a strange syntax:
 
 ```js
 let divideFunc = (nb1, nb2) => nb1 / nb2;
 ```
 
 You are facing the new **ES6** syntax for functions called **arrow functions**.
-The example above is equivalent to writing:
+The example above is (mostly) equivalent to writing:
 
 ```js
 let divideFunc = function(nb1, nb2) {
@@ -460,7 +459,7 @@ let divideFunc = function(nb1, nb2) {
 Let's see how an arrow function is written:
 
 ```js
-(nb1, nb2) => nb1 / nb2
+`(nb1, nb2)` => nb1 / nb2
 ```
 
 The part left of the `=>` represents the **function's arguments**.
@@ -468,21 +467,23 @@ The part left of the `=>` represents the **function's arguments**.
 If your function has **only one** argument, you can **omit** the parentheses:
 
 ```js
-let squareroot = number => Math.sqrt(number);
+let squareroot = `number` => Math.sqrt(number);
 ```
 
 But if your function has **no arguments**, you **MUST** add **empty parentheses**:
 
 ```js
 // No argument
-let callback = () => console.log("Timeout finished");
+let callback = `()` => console.log("Timeout finished");
 setTimeout(callback, 1000);
 ```
 
 #### Body of arrow functions
 
-```
-(nb1, nb2) => nb1 / nb2
+<runkit except='0'></runkit>
+
+```js
+(nb1, nb2) => `nb1 / nb2`
 ```
 
 The part right of the `=>` is **the body** of the function; note the absence of brackets (`{}`).
@@ -491,17 +492,17 @@ The `return` keyword is **implicit** with one-line bodies that have no brackets:
 
 ```js
 // This arrow function will return the square root of the number
-let squareroot = number => Math.sqrt(number);
+let squareroot = number => `Math.sqrt(number)`;
 console.log(squareroot(4)); // 2
 ```
 
 If the body has **more than one line**, you **MUST add brackets** `{}` around it (_and use the `return` keyword if necessary_):
 
 ```js
-let square = number => {
-  let result = number * number;
-  return result;
-};
+let square = number => `{`
+  `let result = number * number;`
+  `return result;`
+`}`;
 
 console.log(square(5)); // 25
 ```
@@ -522,15 +523,15 @@ console.log(discovery); // {}
 console.log(discovery instanceof Starship); // true
 ```
 
-> The `discovery` variable stores a new (and empty) object, of type `Starship`.
+The `discovery` variable stores a new (and empty) object, of type `Starship`.
 
-Note that there's **nothing special** about this function: calling it with `new` is what makes it a constructor.
-It's simply a **convention** to put the first letter in uppercase.
+> Note that there's **nothing special** about this function: calling it with `new` is what makes it a constructor.
+> It's simply a **convention** to put the first letter in uppercase.
 
 ### The `this` keyword
 
-Calling a **constructor** function with `new` give you access to `this` in their body.
-This variable refers to the **object that is being created**.
+Calling a **constructor** function with `new` give you access to `this` in its body.
+That variable refers to the **object that is being created**.
 
 You can modify this object, for example to attach values you receive from arguments to it:
 
@@ -995,19 +996,19 @@ console.log('userId: ' + userId(user)); // "userId: 42"
 
 ### JSON who?
 
-JSON stands for **J**ava**S**cript **O**bject **N**otation.
+[JSON][json] stands for **J**ava**S**cript **O**bject **N**otation.
 It is a syntax that is used to **represent JavaScript objects** with **text**.
 
 JSON can only describe the following types:
 
 | Types    | Notation                                           |
 | :------- | :----------------------                            |
-| Object   | `{ "property1": "value1", "property2": "value2" }` |
-| Array    | `[ "value1", "value2" ]`                           |
-| Number   | `2`                                                |
 | String   | `"text"`                                           |
-| Null     | `null`                                             |
+| Number   | `2`                                                |
 | Boolean  | `true`, `false`                                    |
+| Null     | `null`                                             |
+| Array    | `[ "value1", "value2" ]`                           |
+| Object   | `{ "property1": "value1", "property2": "value2" }` |
 
 Object properties and strings **MUST be double-quoted**.
 
@@ -1111,14 +1112,6 @@ console.log(crew);
 
 
 
-## TODO
-
-* classes, static
-* getters/setters
-* import/export
-
-
-
 [array-functions]: https://www.w3schools.com/jsref/jsref_obj_array.asp
 [babel]: http://babeljs.io
 [chrome]: https://www.google.com/chrome/
@@ -1126,8 +1119,10 @@ console.log(crew);
 [es6]: http://es6-features.org/
 [es8]: http://2ality.com/2016/02/ecmascript-2017.html
 [es9]: http://2ality.com/2017/02/ecmascript-2018.html
+[es2019]: http://2ality.com/2018/02/ecmascript-2019.html
 [ex-function-as-argument]: http://codepen.io/AlphaHydrae/pen/dNBpPv?editors=0010
 [first-class-functions]: https://en.wikipedia.org/wiki/First-class_function
+[func-prog]: https://en.wikipedia.org/wiki/Functional_programming
 [js-arrow-functions]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
 [js-async]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
 [js-async-iteration]: http://2ality.com/2016/10/asynchronous-iteration.html
@@ -1141,6 +1136,7 @@ console.log(crew);
 [js-shared-memory]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer
 [js-typeof-null]: http://www.2ality.com/2013/10/typeof-null.html
 [js-symbol]: https://developer.mozilla.org/en-US/docs/Glossary/Symbol
+[json]: http://www.json.org/
 [foreach-doc]: https://www.w3schools.com/jsref/jsref_forEach.asp
 [concat-doc]: https://www.w3schools.com/jsref/jsref_concat_array.asp
 [find-doc]: https://www.w3schools.com/jsref/jsref_find.asp
