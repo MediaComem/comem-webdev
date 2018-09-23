@@ -36,7 +36,11 @@ Learn how to use [Node.js][node], an asynchronous JavaScript runtime that can ru
   - [Asynchronous code](#asynchronous-code)
   - [Non-blocking I/O](#non-blocking-io)
   - [Your Node.js code is single-threaded](#your-nodejs-code-is-single-threaded)
-  - [The event loop](#the-event-loop)
+- [The event loop](#the-event-loop)
+  - [A short reminder](#a-short-reminder)
+  - [The call stack](#the-call-stack)
+  - [Stack overflow](#stack-overflow)
+  - [Platform APIs](#platform-apis)
   - [Other event-driven, non-blocking I/O architectures](#other-event-driven-non-blocking-io-architectures)
 - [Node.js callback convention](#nodejs-callback-convention)
   - [**Always** check for errors](#always-check-for-errors)
@@ -446,11 +450,14 @@ Callback functions will always wait for **blocking code** to finish executing.
 
 
 
-### The event loop
 
-This is the mechanism that enables the behavior in the previous slides:
 
-<img src='images/event-loop.png' width='100%' />
+## The event loop
+
+The [event loop][event-loop] is the main component of JavaScript's concurrency model,
+and is what produces the behavior described in the previous slides.
+
+<p class='center'><img class='w95' src='images/event-loop.png' /></p>
 
 <!-- slide-notes -->
 
@@ -460,7 +467,80 @@ This is the mechanism that enables the behavior in the previous slides:
   * Invoke the registered callbacks in sequence
   * Delegate I/O operations to the Node platform (in separate, non-blocking threads)
 
-#### Magic 1
+### A short reminder
+
+Before explaining the event loop,
+you must be clear on something.
+
+You've probably often encountered something that looks like this while programming
+(not this specific message, but similar-looking blocks of lines in a console):
+
+```
+Error: Both arguments must be numbers
+    at add (/path/to/project/st-demo.js:3:11)
+    at compute (/path/to/project/st-demo.js:10:10)
+    at demo (/path/to/project/st-demo.js:14:17)
+    at Object.<anonymous> (/path/to/project/st-demo.js:18:1)
+    at Module._compile (internal/modules/cjs/loader.js:689:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:700:10)
+    at Module.load (internal/modules/cjs/loader.js:599:32)
+    at tryModuleLoad (internal/modules/cjs/loader.js:538:12)
+    at Function.Module._load (internal/modules/cjs/loader.js:530:3)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:742:12)
+```
+
+What is this called and what does it mean?
+
+#### Reading a stack trace
+
+```
+Error: Both arguments must be numbers
+    at `add` (/path/to/project/`st-demo.js:3`:11)
+    at `compute` (/path/to/project/`st-demo.js:10`:10)
+    at `demo` (/path/to/project/`st-demo.js:14`:17)
+    at Object.<anonymous> (/path/to/project/`st-demo.js:18`:1)
+```
+
+Here's the `st-demo.js` file:
+
+```js
+function add(a, b) {
+  if (typeof a !== 'number' || typeof b !== 'number') {
+*   throw new Error('Both arguments must be numbers');
+  }
+
+  return a + b;
+}
+
+function compute(a, b, op) {
+* return op(a, b);
+}
+
+function demo() {
+* const value = compute(2, 'foo', add);
+  console.log(value);
+}
+
+*demo();
+```
+
+
+
+### The call stack
+
+The [**call stack**][stack] is a mechanism for the JavaScript interpreter to keep track of its place in a script that calls multiple functions: what function is being run, which should be called next, etc.
+
+* When called, a function is added to the top of the stack.
+* Functions called by that function are added to the stack further up.
+* When a function finishes, the interpreter takes it off the stack and resumes where it left off in the last stack item.
+
+<!-- slide-column -->
+
+**What will the stack look like** as the following code is executed?
+
+[Check it out with Loupe](http://latentflip.com/loupe/?code=ZnVuY3Rpb24gbXVsdGlwbHkoYSwgYikgewogIHJldHVybiBhICogYjsKfQoKZnVuY3Rpb24gc3F1YXJlKGEpIHsKICByZXR1cm4gbXVsdGlwbHkoYSwgYSk7Cn0KCmZ1bmN0aW9uIHByaW50U3F1YXJlKGEpIHsKICBjb25zdCBzcXVhcmVkID0gc3F1YXJlKGEpOwogIGNvbnNvbGUubG9nKHNxdWFyZWQpOwp9CgpwcmludFNxdWFyZSg0KTs%3D!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D)
+
+<!-- slide-column 60 -->
 
 ```js
 function multiply(a, b) {
@@ -479,40 +559,94 @@ function printSquare(a) {
 printSquare(4);
 ```
 
-[Loupe](http://latentflip.com/loupe/?code=ZnVuY3Rpb24gbXVsdGlwbHkoYSwgYikgewogIHJldHVybiBhICogYjsKfQoKZnVuY3Rpb24gc3F1YXJlKGEpIHsKICByZXR1cm4gbXVsdGlwbHkoYSwgYSk7Cn0KCmZ1bmN0aW9uIHByaW50U3F1YXJlKGEpIHsKICBjb25zdCBzcXVhcmVkID0gc3F1YXJlKGEpOwogIGNvbnNvbGUubG9nKHNxdWFyZWQpOwp9CgpwcmludFNxdWFyZSg0KTs%3D!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D)
 
-#### Magic 2
 
-<!-- slide-column -->
+### Stack overflow
+
+Taking into account the fact that the call stack has a limited size
+(unfortunately, your computer does not have infinite memory),
+**what will happen to the call stack** when the following code is run?
 
 ```js
-console.log('Start of program');
+function eagerlyMultiply(a) {
+  return a * eagerlyMultiply(a);
+}
 
-setTimeout(function cb() {
-  console.log('Hello');
-}, 5000);
-
-console.log('End of program');
+eagerlyMultiply();
 ```
+
+[Check it out with Loupe](http://latentflip.com/loupe/?code=ZnVuY3Rpb24gZWFnZXJseU11bHRpcGx5KGEpIHsKICByZXR1cm4gYSAqIGVhZ2VybHlNdWx0aXBseShhKTsKfQoKZWFnZXJseU11bHRpcGx5KCk7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D)
+
+
+
+### Platform APIs
+
+The **JavaScript runtime** (whether in Node.js or a web browser) **can only run one thing at a time**.
+
+But some functions are not run by the Node.js runtime;
+they are run by the underlying platform: the v8 engine for Node.js or the web browser for a website.
+For example:
+
+* `readFile` (Node.js API)
+* `XMLHttpRequest` (Web API)
+* `setTimeout` (Node.js & Web API)
 
 <!-- slide-column -->
 
-**Stack**
+**What will happen** when the following code is run?
 
+[Check it out with Loupe](http://latentflip.com/loupe/?code=ZnVuY3Rpb24gcHJvZ3JhbSgpIHsKICBjb25zb2xlLmxvZygnU3RhcnQgb2YgcHJvZ3JhbScpOwoKICBzZXRUaW1lb3V0KGZ1bmN0aW9uIGNiKCkgewogICAgY29uc29sZS5sb2coJ0hlbGxvJyk7CiAgfSwgNTAwMCk7CgogIGNvbnNvbGUubG9nKCdFbmQgb2YgcHJvZ3JhbScpOwp9Cgpwcm9ncmFtKCk7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D)
+
+<!-- slide-column 60 -->
+
+```js
+function program() {
+  console.log('Start of program');
+
+  setTimeout(function cb() {
+    console.log('Hello');
+  }, 5000);
+
+  console.log('End of program');
+}
+
+program();
 ```
-foo
--
--
+
+#### The JavaScript runtime is single-threaded
+
+What does this mean?
+
+Let's use `setTimeout` as before, but this time set the value of the timeout to zero.
+It should call the function right away, right?
+
+<!-- slide-column -->
+
+**What will happen** when the following code is run?
+
+[Check it out with Loupe](http://latentflip.com/loupe/?code=ZnVuY3Rpb24gcHJvZ3JhbSgpIHsKICBjb25zb2xlLmxvZygnU3RhcnQgb2YgcHJvZ3JhbScpOwoKICBzZXRUaW1lb3V0KGZ1bmN0aW9uIGNiKCkgewogICAgY29uc29sZS5sb2coJ0hlbGxvJyk7CiAgfSwgMCk7CgogIGNvbnNvbGUubG9nKCdFbmQgb2YgcHJvZ3JhbScpOwp9Cgpwcm9ncmFtKCk7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D)
+
+<!-- slide-column 60 -->
+
+```js
+function program() {
+  console.log('Start of program');
+
+  setTimeout(function cb() {
+    console.log('Hello');
+  }, `0`);
+
+  console.log('End of program');
+}
+
+program();
 ```
-
-**Node.js APIs**
-
-**Task queue**
 
 
 
 ### Other event-driven, non-blocking I/O architectures
 
+Node.js is not the only tool to use an event-driven architecture with an event loop.
 Similar mechanisms are used in other frameworks and tools:
 
 * JavaScript running in the browser also runs on an event loop
@@ -868,22 +1002,27 @@ server.on('request', function(message) {
 
 **Documentation**
 
-* [Core modules (6.x)][node-6-api]
+* [Core modules (10.x)][node-10-api]
 
 **Further reading**
 
 * [What is Node.js][mixu-node-book]
-* [Understanding the Node.js Event Loop][event-loop]
+* [JavaScript Concurrency Model and Event Loop][event-loop]
+* [Understanding the Node.js Event Loop][event-loop-strongloop]
+* [Philip Roberts: What the heck is the event loop anyway? (YouTube)][event-loop-wth]
 * [Node.js Explained (video)][node-explained-video]
 
 
 
-[event-loop]: http://strongloop.com/strongblog/node-js-event-loop/
+[event-loop]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop
+[event-loop-strongloop]: http://strongloop.com/strongblog/node-js-event-loop/
+[event-loop-wth]: https://www.youtube.com/watch?v=8aGhZQkoFbQ
 [event-machine]: http://rubyeventmachine.com
 [mixu-node-book]: http://book.mixu.net/node/ch2.html
 [nginx]: https://www.nginx.com
 [node]: https://nodejs.org/en/
-[node-6-api]: https://nodejs.org/dist/latest-v6.x/docs/api/
+[node-10-api]: https://nodejs.org/dist/latest-v10.x/docs/api/
 [node-event-emitter]: https://nodejs.org/api/events.html
 [node-explained-video]: http://kunkle.org/talks/
+[stack]: https://developer.mozilla.org/en-US/docs/Glossary/Call_stack
 [twisted]: http://twistedmatrix.com/trac/
