@@ -13,8 +13,7 @@ You will:
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Theme](#theme)
-  - [Citizen Engagement](#citizen-engagement)
+- [Free theme](#free-theme)
 - [This course](#this-course)
   - [Next course](#next-course)
   - [Webcasts](#webcasts)

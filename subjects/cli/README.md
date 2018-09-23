@@ -15,7 +15,7 @@ and learn the basics of navigating and manipulating your filesystem in a Unix sh
   - [TeleTYpewriter (1960s)](#teletypewriter-1960s)
   - [Video terminals (1970s)](#video-terminals-1970s)
   - [Graphical User Interfaces (1980s)](#graphical-user-interfaces-1980s)
-  - [More User Interfaces](#more-user-interfaces)
+  - [More user interfaces](#more-user-interfaces)
 - [Back to the command line](#back-to-the-command-line)
   - [What is a Command Line Interface (CLI)?](#what-is-a-command-line-interface-cli)
   - [Why use it?](#why-use-it)
