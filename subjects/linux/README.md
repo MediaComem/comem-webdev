@@ -9,9 +9,15 @@ Learn the basics of the Linux operating system and how to manage it from the com
 ## TODO
 
 * Ports
+  * netcat
+  * HTTP request
+  * https://www.networkworld.com/article/2693416/unix-networking-basics-for-the-beginner.html
+* Magic files
+* POSIX (https://en.wikipedia.org/wiki/POSIX)
 * Useful commands
   * Find files
   * whoami
+  * id
 * Package management
 
 

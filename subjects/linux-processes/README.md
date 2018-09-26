@@ -255,28 +255,245 @@ is that **0 is good, anything else is probably bad**.
 
 
 
+## Standard streams
+
+<!-- slide-front-matter class: center, middle -->
+
+> **Standard streams** are preconnected input and output
+> communication channels between a process and its environment.
+
+### The good old days
+
+In **pre-Unix** systems, programs had to **explicitly connect to input and output devices**.
+This was done differently for each device (e.g. magnetic tape drive, disk drive, printer, etc) and operating system.
+For example, IBM mainframes used a [job control language (JCL)][jcl] to establish connections between programs and devices.
+
+<!-- slide-column 25 -->
+
+**Unix file copy**
+
+`cp a.txt b.txt`
+
+<!-- slide-column -->
+
+**JCL copy instructions for [OS/360][os360]**
+
+```
+//IS198CPY JOB (IS198T30500),'COPY JOB',CLASS=L,MSGCLASS=X
+//COPY01   EXEC PGM=IEBGENER
+//SYSPRINT DD SYSOUT=*
+//SYSUT1   DD DSN=a.txt,DISP=SHR
+//SYSUT2   DD DSN=b.txt,
+//            DISP=(NEW,CATLG,DELETE),
+//            SPACE=(CYL,(40,5),RLSE),
+//            DCB=(LRECL=115,BLKSIZE=1150)
+//SYSIN  DD DUMMY
+```
+
+### Unix streams
+
+Unix introduced **abstract devices** and the concept of a **data stream**:
+an ordered sequence of data bytes which can be read until the end of file (EOF).
+
+A program may also write bytes as desired and need not declare how many there will be or how to group them.
+The data going through a stream may be **text** with any encoding **or binary data**.
+
+This was groundbreaking at the time because a program no longer had to know or care what kind of device it is communicating with,
+as had been the case until then.
+
+#### stdin, stdout & stderr
+
+Any new Unix process is **automatically connected** to the following streams out of the box:
+
+Stream          | Shorthand | Description
+:---            | :---      | :---
+Standard input  | `stdin`   | Stream **data** (often text) **going into a program**.
+Standard output | `stdout`  | Stream where a program writes its **output data**.
+Standard error  | `stderr`  | Another output stream programs can use to output **error messages or diagnostics**. It is independent from standard output, allowing output and errors to be distinguished.
+
+> There are 2 output streams in order to solve the [semipredicate problem][semipredicate]:
+> it's difficult to distinguish between actual output data and error messages
+> if both are in the form of text and displayed in the same place.
+
+#### Streams, the keyboard, and the terminal
+
+<!-- slide-column 45 -->
+
+Another Unix breakthrough was to **automatically associate**:
+
+* The **input stream** with your **terminal keyboard**;
+* The **output and error streams** with your **terminal display**.
+
+This is done by default unless a program chooses to do otherwise.
+
+For example, when your favorite shell, e.g. [Bash][bash], is running,
+it automatically receives keyboard input, and its output data and errors are automatically displayed in the terminal.
+
+<!-- slide-column -->
+
+<img class='w100' src='images/streams-bash.jpg' />
+
+#### Stream inheritance
+
+A child will **automatically inherit the standard streams of its parent process**
+(unless redirected, more on that later).
+
+For example, when you run an `ls` command,
+you do not have to specify that the resulting list of directories should be displayed in the terminal.
+The standard output of the parent process, in this case your shell (e.g. Bash) is inherited by the `ls` process.
+
+Similarly, when you run an SSH client with the `ssh` command to communicate with another machine,
+you do not have to explicitly connect your keyboard input to this new process.
+As it's a child process of the shell, it inherits the same standard input.
+
+#### Optional input stream
+
+A process is not obligated to use its input or output streams.
+For example, **the `ls` command** produces output (or an error) but **takes no input**
+(it has arguments, but that does not come from the input data stream).
+
+<p class='center'><img class='w70' src='images/streams-ls.jpg' /></p>
+
+#### Optional output stream
+
+**The `cd` command** takes no input and **produces no output** either,
+although it can produce an error.
+
+<p class='center'><img class='w70' src='images/streams-cd.jpg' /></p>
+
+### Stream redirection
+
+The standard streams can be **redirected**.
+
+Redirection means capturing output from a file or command,
+and sending it as input to another file or command.
+
+Any Unix process has a number of [file descriptors][fd].
+They are an abstract indicator used to access a file or other input/output resource such as a pipe or socket.
+
+The first 3 file descriptors correspond to the standard streams by default:
+
+File descriptor | Stream
+:---            | :---
+`0`             | Standard input (`stdin`)
+`1`             | Standard output (`stdout`)
+`2`             | Standard error (`stderr`)
+
+#### Redirect standard output
+
+The `>` shell operator **redirects an output stream**.
+
+For example, the following line runs the `ls` command,
+but instead of displaying the result in the terminal,
+the **standard output stream (file descriptor `1`) is redirected** to the file `data.txt`.
+
+```bash
+$> ls -a 1> data.txt
+```
+
+You can do the same with any command that produces output:
+
+```bash
+$> echo Hello 1> data.txt
+```
+
+Note that the `>` operator **overwrites the file**.
+Use `>>` instead to **append to the end of the file**:
+
+```bash
+$> echo World 1>> data.txt
+```
+
+If you specify no file descriptor, **standard output is redirected by default**:
+
+```bash
+$> echo Hello > data.txt
+$> echo Again >> data.txt
+```
+
+#### Redirect standard error
+
+Note that error messages are not redirected using the redirect operator as in the previous example.
+They are still displayed in the terminal:
+
+```bash
+$> ls foo > error.txt
+ls: foo: No such file or directory
+
+$> cat error.txt
+```
+
+This is because **most commands send errors to the standard error stream (file descriptor `2`)** instead of the standard output stream.
+
+If you want to redirect the error message to a file, you must **redirect the standard error stream instead**:
+
+```bash
+$> ls foo 2> error.txt
+
+$> cat error.txt
+ls: foo: No such file or directory
+```
+
+#### Combined standard output and error
+
+Some commands will **send data to both output streams** (standard output and standard error).
+
+For example, the `curl` (**C**lient **URL**) command is used to make HTTP requests.
+By default, it only outputs the HTTP response body to the standard output stream,
+but with the `-v` option it also prints diagnostics information to the standard error stream:
+
+```bash
+$> curl -L -v https://git.io/fAp8D
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+ TCP_NODELAY set
+ Connected to git.io (54.152.127.232) port 443 (#0)
+...
+Hello World
+...
+```
+
+Here, `Hello World` is the output data, while the rest of the output is the diagnostics information on the standard error stream.
+
+#### Redirect both standard output and error
+
+1 & 2
+
+
+
 ## TODO
 
 * Streams (redirection)
 * Pipelines (unix philosophy)
 * Signals
 
+## References
+
+* [I/O Redirection (The Linux Documentation Project)](https://www.tldp.org/LDP/abs/html/io-redirection.html)
+* [Here Documents (The Linux Documentation Project)](http://tldp.org/LDP/abs/html/here-docs.html)
+* [Unix/Linux - Shell Input/Output Redirections](https://www.tutorialspoint.com/unix/unix-io-redirections.htm)
+
 
 
 [bash]: https://en.wikipedia.org/wiki/Bash_(Unix_shell)
 [daemon]: https://en.wikipedia.org/wiki/Daemon_(computing)
 [exit-status]: https://en.wikipedia.org/wiki/Exit_status
+[fd]: https://en.wikipedia.org/wiki/File_descriptor
 [free]: https://www.howtoforge.com/linux-free-command/
 [htop]: https://hisham.hm/htop/
 [init]: https://en.wikipedia.org/wiki/Init
 [ipc]: https://en.wikipedia.org/wiki/Inter-process_communication
 [java-process-exit-value]: https://docs.oracle.com/javase/7/docs/api/java/lang/Process.html#exitValue()
+[jcl]: https://en.wikipedia.org/wiki/Job_Control_Language
 [node-spawn]: https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
+[os360]: https://en.wikipedia.org/wiki/OS/360_and_successors
 [php-exec]: http://php.net/manual/en/function.exec.php
 [pid]: https://en.wikipedia.org/wiki/Process_identifier
 [pipes]: https://en.wikipedia.org/wiki/Pipeline_(Unix)
 [process]: https://en.wikipedia.org/wiki/Process_(computing)
 [ps-fields]: https://kb.iu.edu/d/afnv
+[semipredicate]: https://en.wikipedia.org/wiki/Semipredicate_problem#Multivalued_return
 [signals]: https://en.wikipedia.org/wiki/Signal_(IPC)
 [streams]: https://en.wikipedia.org/wiki/Standard_streams
 [top]: https://linux.die.net/man/1/top
