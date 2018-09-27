@@ -43,9 +43,20 @@ which have the following features:
 | [Pipelines][pipes]          | A way to chain processes in sequence by their standard streams, a form of [inter-process communication (IPC)][ipc]. |
 | [Signals][signals]          | Notifications sent to a process, a form of [inter-process communication (IPC)][ipc].                                |
 
+> These features have been standardized for Unix-like systems
+> as the [Portable Operating System Interface (POSIX)][posix].
+
 
 
 ## Process ID
+
+<!-- slide-front-matter class: center, middle -->
+
+> Identifying running processes.
+
+<p class='center'><img class='w60' src='images/pid.png' /></p>
+
+### What is a process identifier?
 
 Any process that is created in a Unix-like system is assigned an **identifier (or PID)**.
 This ID can be used to reference the process, for example to terminate it with the `kill` command.
@@ -176,10 +187,10 @@ UID        PID  PPID  C STIME TTY          TIME CMD
 ...
 jdoe      3350  1700  0 09:39 ?        00:00:00 sshd: jdoe@pts/0
 jdoe      3378  3350  0 09:39 pts/0    00:00:00  \_ -bash
-jdoe      3823  3378  0 16:41 pts/0    00:00:00      \_ ps -f -u vagrant --forest
+jdoe      3823  3378  0 16:41 pts/0    00:00:00      \_ ps -f -u jdoe --forest
 jdoe      3789  1700  0 15:32 ?        00:00:00 sshd: jdoe@pts/1
 jdoe      3791  3789  0 15:32 pts/1    00:00:00  \_ -bash
-jdoe      3812  3791  0 16:31 pts/1    00:00:00      \_ sleep 1000
+jdoe      3812  3791  0 16:31 pts/1    00:00:00      \_ `sleep 1000`
 ```
 
 You can indeed see the running process started with the `sleep` command.
@@ -206,6 +217,14 @@ Swap:             0           0           0
 
 
 ## Exit status
+
+<!-- slide-front-matter class: center, middle -->
+
+> How children indicate success to their parent.
+
+<p class='center'><img class='w40' src='images/exit-status.png' /></p>
+
+### What is an exit status?
 
 The **exit status** of a process is a small number (typically from 0 to 255) passed
 from a child process to its parent process when it has finished executing.
@@ -271,6 +290,8 @@ is that **0 is good, anything else is probably bad**.
 
 > **Standard streams** are preconnected input and output
 > communication channels between a process and its environment.
+
+<p class='center'><img class='w80' src='images/streams.jpg' /></p>
 
 ### The good old days
 
@@ -745,10 +766,215 @@ World
 
 
 
+## Pipelines
+
+<!-- slide-front-matter class: center, middle -->
+
+> The [**Unix philosophy**][unix-philosophy]: the power of a system comes more from the relationships among programs than from the programs themselves.
+
+<p class='center'><img class='w80' src='images/pipe.png' /></p>
+
+### What is a pipeline?
+
+Remember that all Unix systems standardize the following:
+
+* All processes have a standard input stream.
+* All processes have a standard output stream.
+* Data streams transport text or binary data.
+
+Therefore, the **standard output stream** of process A can be **connected to the standard input stream** of another process B.
+
+<p class='center'><img class='w70' src='images/pipe-stdout-stdin.png' /></p>
+
+Processes can be **chained into a pipeline, each process transforming data and passing it to the next process**.
+
+### A simple pipeline
+
+The `|` operator (a vertical pipe) is used to connect two processes together.
+
+Let's use two commands, one that prints text as output and one that reads text as input:
+
+<!-- slide-column -->
+
+* The `ls` (**l**i**s**t) command produces a list of files and directories.
+* The `wc` (**w**ord **c**ount) command can count words, lines, characters or bytes.
+  With the `-l` option, it counts the number of lines in its input.
+
+You can pipe them together like this:
+
+```bash
+$> ls -a | wc -l
+```
+
+This **redirects (pipes) the output of the `ls` command into the input of the `wc` command**.
+
+<!-- slide-column -->
+
+<img class='w100' src='images/pipes-ls-wc.jpg' />
+
+### The Unix philosophy
+
+Pipelines are one of the core features of Unix-like systems.
+
+Because **Unix programs** can be easily chained together,
+they **tend to be simpler and smaller**.
+Complex tasks can be achieved by chaining many small programs together.
+
+This is, in a few words, the [Unix philosophy][unix-philosophy]:
+
+* Write programs that **do one thing and do it well**.
+* Write programs to **work together**.
+* Write programs to **handle text streams**, because that is a universal interface.
+
+> Although many programs handle text streams, others also handle binary streams.
+> For example, the [ImageMagick][imagemagick] library can process images.
+
+### A more complex pipeline
+
+This command pipeline combines 5 different commands,
+processing the text data at each step and passing it along to the next command to arrive at the final result.
+**Each of these commands only knows how to do one thing**:
+
+<!-- slide-column 40 -->
+
+```bash
+$> `find . -type f | \`
+   `sed 's/.*\///' | \`
+   `egrep ".+\.[^\.]+$" | \`
+   `sed 's/.*\.//' | \`
+   `sort | \`
+   `uniq -c`
+
+ 147 jpg
+10925 js
+2158 json
+  15 less
+  45 map
+1515 md
+```
+
+<!-- slide-column -->
+
+* `find` is used to recursively list all files in the current directory.
+* `sed` (**s**tream **ed**itor) is used to obtain the files' basenames.
+* `egrep` is used to filter out names that do not have an extension.
+* `sed` is used again to transform basenames into just their extension.
+* `sort` is used to sort the resulting list alphabetically.
+* `uniq` is used to group identical adjacent lines and count them.
+
+The final result is a list of file extensions and the number of files with that extension.
+
+### Trying it out
+
+Here's a link to a file containing some text: https://git.io/fAjRa
+
+Download it to your computer with the following command:
+
+```bash
+$> curl -L https://git.io/fAjRa > rainbow.txt
+```
+
+#### Pipelines and redirections
+
+Start by simply displaying the file:
+
+```bash
+$> cat rainbow.txt
+Somewhere over the rainbow
+...
+```
+
+**Use command pipelines and stream redirections to**:
+
+* Count the number of lines and characters in the text.
+* Print the lines of the text containing the word `rainbow`.
+  * Do the same but without any duplicates
+* Print the second word of each line in the text.
+* Compress the text and save it to `rainbow.txt.gz`.
+* Count the number of times the letter `e` or the word `the` is used.
+* Display a list of the unique words in the text along with the number of times each word is used,
+  sorted from the least used to the most used.
+
+#### Your tools
+
+Here are commands you might find useful for the exercise.
+They all operate on the data received from their standard input stream,
+and print the result on their standard output stream,
+so they can be piped into each other:
+
+Command                             | Description
+:---                                | :---
+`cut -d ' ' -f <n>`                 | Select word in column `<n>` of each line (using one space as the delimiter).
+`fold -w 1`                         | Print one character by line.
+`grep <letterOrWord>`               | Select only lines that contain a given letter or word, e.g. `grep foo`.
+`gzip -c`                           | Compress data.
+`sort`                              | Sort lines alphabetically.
+`tr '[:upper:]' '[:lower:]'`        | Convert all uppercase characters to lowercase.
+`tr -s '[[:punct:][:space:]]' '\n'` | Split by word.
+`uniq [-c]`                         | Filter out repeated lines (`-c` also counts them).
+`wc [-l] [-w] [-m]`                 | Count lines, words or characters.
+
+
+
+## Signals
+
+<!-- slide-front-matter class: center, middle -->
+
+> Sending notifications to processes, and then killing them.
+
+<p class='center'><img class='w40' src='images/kill-9.jpg' /></p>
+
+### What is a signal?
+
+A signal is an **asynchronous notification sent to a process** to notify it that an event has occurred.
+
+<p class='center'><img class='w80' src='images/sighup-diagram.jpg' /></p>
+
+If the process has registered a **signal handler** for that specific signal, it is executed.
+Otherwise the **default signal handler** is executed.
+
+### Common Unix signals
+
+A signal is defined by the `SIG` prefix followed by a mnemonic name for the signal.
+Some signals also have a standard number assigned to them.
+Here are the most commonly encountered Unix signals:
+
+Signal     | Number | Default handler       | Description
+:---       | ---:   | :---                  | :---
+`SIGHUP`   | 1      | Terminate             | Hangup.
+`SIGINT`   | 2      | Terminate             | Terminal interrupt signal.
+`SIGKILL`  | 9      | Terminate             | Kill (cannot be caught or ignored).
+`SIGQUIT`  | 3      | Terminate (core dump) | Terminal quit signal.
+`SIGTERM`  | 15     | Terminate             | Termination signal.
+`SIGUSR1`  | -      | Terminate             | User-defined signal 1.
+`SIGUSR2`  | -      | Terminate             | User-defined signal 2.
+`SIGWINCH` | -      | Ignore                | Terminal window size changed.
+
+Here's a more complete list: [POSIX signals][signals-list].
+
+### The `kill` command
+
+The `kill` command sends a signal to a process.
+
+Since the default signal handler for most signals is to terminate the process,
+it often has that effect, hence the name "kill".
+
+Its syntax is:
+
+```
+kill -s <SIGNAL> <PID>
+```
+
+For example, the command `kill -s HUP 10000` would send the `SIGHUP` signal to the process with PID `10000`.
+
+
+
 ## TODO
 
-* Pipelines (unix philosophy)
-* Signals
+* signals: terminating processes, ctrl-c
+* process = program loaded into memory
+
+
 
 ## References
 
@@ -766,19 +992,24 @@ World
 [free]: https://www.howtoforge.com/linux-free-command/
 [here-document]: http://tldp.org/LDP/abs/html/here-docs.html
 [htop]: https://hisham.hm/htop/
+[imagemagick]: https://en.wikipedia.org/wiki/ImageMagick
 [init]: https://en.wikipedia.org/wiki/Init
 [ipc]: https://en.wikipedia.org/wiki/Inter-process_communication
 [java-process-exit-value]: https://docs.oracle.com/javase/7/docs/api/java/lang/Process.html#exitValue()
 [jcl]: https://en.wikipedia.org/wiki/Job_Control_Language
+[nginx-signals]: http://nginx.org/en/docs/control.html
 [node-spawn]: https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
 [null-device]: https://en.wikipedia.org/wiki/Null_device
 [os360]: https://en.wikipedia.org/wiki/OS/360_and_successors
 [php-exec]: http://php.net/manual/en/function.exec.php
 [pid]: https://en.wikipedia.org/wiki/Process_identifier
 [pipes]: https://en.wikipedia.org/wiki/Pipeline_(Unix)
+[posix]: https://en.wikipedia.org/wiki/POSIX
 [process]: https://en.wikipedia.org/wiki/Process_(computing)
 [ps-fields]: https://kb.iu.edu/d/afnv
 [semipredicate]: https://en.wikipedia.org/wiki/Semipredicate_problem#Multivalued_return
 [signals]: https://en.wikipedia.org/wiki/Signal_(IPC)
+[signals-list]: https://en.wikipedia.org/wiki/Signal_(IPC)#POSIX_signals
 [streams]: https://en.wikipedia.org/wiki/Standard_streams
 [top]: https://linux.die.net/man/1/top
+[unix-philosophy]: https://en.wikipedia.org/wiki/Unix_philosophy

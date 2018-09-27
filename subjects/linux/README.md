@@ -8,6 +8,7 @@ Learn the basics of the Linux operating system and how to manage it from the com
 
 ## TODO
 
+* https://en.wikipedia.org/wiki/Everything_is_a_file
 * Ports
   * netcat
   * HTTP request
