@@ -1,8 +1,18 @@
-# Linux Processes
+# Unix Processes
 
-Learn about processes and how to manage them and make them communicate.
+Learn about processes in Unix operating systems, as well as how to manage them and make them communicate.
 
 <!-- slide-include ../../BANNER.md -->
+
+**You will need**
+
+* A Unix CLI
+* An Ubuntu server to connect to
+
+**Recommended reading**
+
+* [Command Line Introduction](../cli/)
+* [Secure Shell (SSH)](../ssh/)
 
 
 
@@ -379,7 +389,7 @@ File descriptor | Stream
 `1`             | Standard output (`stdout`)
 `2`             | Standard error (`stderr`)
 
-#### Redirect standard output
+### Redirect standard output stream
 
 The `>` shell operator **redirects an output stream**.
 
@@ -388,37 +398,39 @@ but instead of displaying the result in the terminal,
 the **standard output stream (file descriptor `1`) is redirected** to the file `data.txt`.
 
 ```bash
-$> ls -a 1> data.txt
+$> ls -a `1> data.txt`
 ```
+
+#### How to use standard output redirection
 
 You can do the same with any command that produces output:
 
 ```bash
-$> echo Hello 1> data.txt
+$> echo Hello `1> data.txt`
 ```
 
 Note that the `>` operator **overwrites the file**.
 Use `>>` instead to **append to the end of the file**:
 
 ```bash
-$> echo World 1>> data.txt
+$> echo World `1>> data.txt`
 ```
 
 If you specify no file descriptor, **standard output is redirected by default**:
 
 ```bash
-$> echo Hello > data.txt
-$> echo Again >> data.txt
+$> echo Hello `> data.txt`
+$> echo Again `>> data.txt`
 ```
 
-#### Redirect standard error
+### Redirect standard error stream
 
-Note that error messages are not redirected using the redirect operator as in the previous example.
-They are still displayed in the terminal:
+Note that error messages are not redirected using the redirect operator like in the previous example.
+They are still displayed in the terminal and the file remains empty:
 
 ```bash
-$> ls foo > error.txt
-ls: foo: No such file or directory
+$> ls unknown-file `> error.txt`
+ls: unknown-file: No such file or directory
 
 $> cat error.txt
 ```
@@ -428,22 +440,23 @@ This is because **most commands send errors to the standard error stream (file d
 If you want to redirect the error message to a file, you must **redirect the standard error stream instead**:
 
 ```bash
-$> ls foo 2> error.txt
+$> ls unknown-file `2> error.txt`
 
 $> cat error.txt
-ls: foo: No such file or directory
+ls: unknown-file: No such file or directory
 ```
 
-#### Combined standard output and error
+### Both standard output and error streams
 
 Some commands will **send data to both output streams** (standard output and standard error).
+As we've seen, both are displayed in the terminal by default.
 
 For example, the `curl` (**C**lient **URL**) command is used to make HTTP requests.
 By default, it only outputs the HTTP response body to the standard output stream,
 but with the `-v` option it also prints diagnostics information to the standard error stream:
 
 ```bash
-$> curl -L -v https://git.io/fAp8D
+$> `curl -L -v https://git.io/fAp8D`
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
@@ -456,37 +469,309 @@ Hello World
 
 Here, `Hello World` is the output data, while the rest of the output is the diagnostics information on the standard error stream.
 
-#### Redirect both standard output and error
+#### Redirect standard output stream (curl)
 
-1 & 2
+This example demonstrates how the **standard output and error streams** can be **redirected separately**.
+
+The following version redirects standard output to the file `curl-output.txt`.
+As you can see, the `Hello World` output data is no longer displayed since it has been redirected to the file,
+but the diagnostics information printed on the standard error stream is still displayed:
+
+```bash
+$> curl -L -v https://git.io/fAp8D `> curl-output.txt`
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+ TCP_NODELAY set
+ Connected to git.io (54.152.127.232) port 443 (#0)
+...
+
+$> ls
+curl-output.txt
+
+$> cat curl-output.txt
+Hello World
+```
+
+#### Redirect standard error stream (curl)
+
+The following version redirects standard error to the file `curl-error.txt`.
+This time, the `Hello World` output data is displayed in the terminal as with the initial command,
+but the diagnostics information has been redirected to the file:
+
+```bash
+$> curl -L -v https://git.io/fAp8D `2> curl-error.txt`
+Hello World
+
+$> ls
+curl-error.txt curl-output.txt
+
+$> cat curl-error.txt
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+ TCP_NODELAY set
+ Connected to git.io (54.152.127.232) port 443 (#0)
+...
+```
+
+#### Redirect both standard output and error streams (curl)
+
+You can **perform both redirections at once** in one command:
+
+```bash
+$> curl -L -v https://git.io/fAp8D `> curl-output.txt 2> curl-error.txt`
+
+$> ls
+curl-error.txt curl-output.txt
+
+$> cat curl-error.txt
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+ TCP_NODELAY set
+ Connected to git.io (54.152.127.232) port 443 (#0)
+...
+
+$> cat curl-output.txt
+Hello World
+```
+
+#### Combine standard output and error streams (curl)
+
+In some situations, you might want to **redirect all of a command's output**
+(both the standard output stream and error stream) to the same file.
+
+You can do that with the `&>` operator:
+
+```bash
+$> curl -L -v https://git.io/fAp8D `&> curl-result.txt`
+
+$> cat curl-result.txt
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+ TCP_NODELAY set
+ Connected to git.io (54.152.127.232) port 443 (#0)
+...
+Hello World
+...
+```
+
+> `&> file.txt` is equivalent to using both `1> file.txt` and `2> file.txt`.
+
+### Discard an output stream
+
+Sometimes you might not be interested in one of the output streams.
+
+For example, let's say you want to display the diagnostics information from a `curl` command to identify a network issue,
+but you **don't care about the standard output**.
+You don't want to have to delete a useless file either.
+
+#### The `/dev/null` device
+
+The file `/dev/null` is available on all Unix-like systems and is a [**null device**][null-device] (sometimes also called a *black hole*).
+It's a [Unix device file][device-file] that you can write anything to, but that will discard all received data.
+
+It never contains anything:
+
+```bash
+$> cat /dev/null
+```
+
+Even after you write to it:
+
+```bash
+$> echo Hello World > /dev/null
+
+$> cat /dev/null
+```
+
+#### Redirect a stream to the null device
+
+When you don't care about an output stream, you can simply **redirect it to the null device**.
+In this example, the standard output stream is redirected to the null device, and therefore discarded,
+while the standard error stream is displayed normally:
+
+```bash
+$> curl -L -v https://git.io/fAp8D `> /dev/null`
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+ TCP_NODELAY set
+ Connected to git.io (54.152.127.232) port 443 (#0)
+...
+```
+
+> Please send complaints to `/dev/null`.
+
+#### Other redirections to the null device
+
+You can also redirect the standard error stream to the null device:
+
+```bash
+$> curl -L -v https://git.io/fAp8D `2> /dev/null`
+Hello World
+```
+
+Or you can redirect both output streams.
+In this case, all output, diagnostics information and error messages will be discarded:
+
+```bash
+$> curl -L -v https://git.io/fAp8D `&> /dev/null`
+```
+
+### Redirect one output stream to another
+
+You can also redirect one output stream into another output stream.
+
+<!-- slide-column -->
+
+For example, the `echo` command prints its data to the standard output stream by default:
+
+<!-- slide-column -->
+
+```bash
+$> echo Hello World
+Hello World
+
+$> echo Hello World > /dev/null
+
+$> echo Hello World 2> /dev/null
+Hello World
+```
+
+<!-- slide-container -->
+
+The `i>&j` operator redirects file descriptor `i` to file descriptor `j`.
+
+<!-- slide-column -->
+
+This `echo` command has its data redirected to the standard error stream:
+
+<!-- slide-column 60 -->
+
+```bash
+$> echo Hello World `1>&2`
+Hello World
+
+$> echo Hello World `> /dev/null 1>&2`
+Hello World
+
+$> echo Hello World `2> /dev/null 1>&2`
+```
+
+<!-- slide-container -->
+
+> This can be useful if you're writing a shell script
+and want to print error messages to the standard error stream.
+
+### Redirect standard input stream
+
+Just as a command's output can be redirected to a file, its **input can be redirected from a file**.
+
+Let's create a file for this example:
+
+```bash
+$> echo foo > bar.txt
+```
+
+<!-- slide-column -->
+
+The `cat` command can read a file by having it specified as an argument:
+
+<!-- slide-column -->
+
+```bash
+$> cat bar.txt
+foo
+```
+
+<!-- slide-container -->
+
+<!-- slide-column -->
+
+If given no argument, it will **read and display the data from its standard input stream** (as you type on your keyboard and press `Enter`):
+
+<!-- slide-column -->
+
+```bash
+$> cat
+Hello
+Hello
+World
+World
+```
+
+<!-- slide-container -->
+
+<!-- slide-column -->
+
+The `<` operator will **redirect a file into a command's standard input stream**:
+
+<!-- slide-column -->
+
+```bash
+$> cat `< bar.txt`
+foo
+```
+
+#### Here documents
+
+The `<<` operator also performs **standard input stream redirection** but is a bit different.
+It's called a [**here document**][here-document]
+and can be used to to send multiline input to a command,
+preserving line breaks and other whitespace.
+
+Typing the following command `cat` command starts a here document delimited by the string `EOF`:
+
+```bash
+$> cat `<< EOF`
+Hello
+World
+EOF
+```
+
+> After you type the first line, you won't get a prompt back.
+> The here document remains open and you can type more text.
+> Typing `EOF` again and pressing `Enter` closes the document.
+
+The same text you typed will be printed by `cat`, with line breaks preserved:
+
+```
+Hello
+World
+```
 
 
 
 ## TODO
 
-* Streams (redirection)
 * Pipelines (unix philosophy)
 * Signals
 
 ## References
 
 * [I/O Redirection (The Linux Documentation Project)](https://www.tldp.org/LDP/abs/html/io-redirection.html)
-* [Here Documents (The Linux Documentation Project)](http://tldp.org/LDP/abs/html/here-docs.html)
+* [Here Documents (The Linux Documentation Project)][here-document]
 * [Unix/Linux - Shell Input/Output Redirections](https://www.tutorialspoint.com/unix/unix-io-redirections.htm)
 
 
 
 [bash]: https://en.wikipedia.org/wiki/Bash_(Unix_shell)
 [daemon]: https://en.wikipedia.org/wiki/Daemon_(computing)
+[device-file]: https://en.wikipedia.org/wiki/Device_file
 [exit-status]: https://en.wikipedia.org/wiki/Exit_status
 [fd]: https://en.wikipedia.org/wiki/File_descriptor
 [free]: https://www.howtoforge.com/linux-free-command/
+[here-document]: http://tldp.org/LDP/abs/html/here-docs.html
 [htop]: https://hisham.hm/htop/
 [init]: https://en.wikipedia.org/wiki/Init
 [ipc]: https://en.wikipedia.org/wiki/Inter-process_communication
 [java-process-exit-value]: https://docs.oracle.com/javase/7/docs/api/java/lang/Process.html#exitValue()
 [jcl]: https://en.wikipedia.org/wiki/Job_Control_Language
 [node-spawn]: https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
+[null-device]: https://en.wikipedia.org/wiki/Null_device
 [os360]: https://en.wikipedia.org/wiki/OS/360_and_successors
 [php-exec]: http://php.net/manual/en/function.exec.php
 [pid]: https://en.wikipedia.org/wiki/Process_identifier
