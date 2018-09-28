@@ -851,9 +851,9 @@ Sometimes there are files you don't want to commit in your repository:
 You can tell Git not to track them by adding a `.gitignore` file to your repository.
 Create it now with this content:
 
-```txt
- *.log
- node_modules
+```
+**.log
+*node_modules
 ```
 
 
