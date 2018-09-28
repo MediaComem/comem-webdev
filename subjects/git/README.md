@@ -886,6 +886,32 @@ $> git commit -m "Ignore file"
 
 
 
+### Global ignore file
+
+There are **some files you might want to always ignore** for all projects on your machine.
+
+For example, macOS creates `.DS_Store` files in directories you open in the Finder.
+There is no reason to keep these files in your Git history,
+and they are useless on other operating systems.
+
+You can create a **global ignore file** in your home directory to ignore them:
+
+```bash
+$> echo ".DS_Store" >> ~/.gitignore
+```
+
+Run the following command to configure Git to use this file.
+You only have to do it once on each machine:
+
+```bash
+$> git config --global core.excludesfile ~/.gitignore
+```
+
+`.DS_Store` files will no longer show up in your `git status` output,
+and they will not be staged or committed.
+
+
+
 ## Undoing things
 
 There are several ways of undoing things with Git.
@@ -980,13 +1006,14 @@ You should not do this if you have already shared this commit with others.
 
 
 
-[rcs]: https://en.wikipedia.org/wiki/Revision_Control_System
 [cvs]: https://en.wikipedia.org/wiki/Concurrent_Versions_System
-[svn]: https://subversion.apache.org/
+[distributed-workflows]: https://git-scm.com/book/en/v2/Distributed-Git-Distributed-Workflows
+[dsstore]: https://en.wikipedia.org/wiki/.DS_Store
 [git]: https://git-scm.com/
 [git-log]: https://git-scm.com/book/en/v2/Git-Basics-Viewing-the-Commit-History
-[mercurial]: https://www.mercurial-scm.org/
-[distributed-workflows]: https://git-scm.com/book/en/v2/Distributed-Git-Distributed-Workflows
-[sha1]: https://en.wikipedia.org/wiki/SHA-1
-[install-git]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 [git-log-pretty-formats]: https://git-scm.com/docs/git-log#_pretty_formats
+[install-git]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+[mercurial]: https://www.mercurial-scm.org/
+[rcs]: https://en.wikipedia.org/wiki/Revision_Control_System
+[sha1]: https://en.wikipedia.org/wiki/SHA-1
+[svn]: https://subversion.apache.org/
