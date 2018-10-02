@@ -57,8 +57,10 @@ Materials for the COMEM+ web development courses.
   * [Angular in Ionic](subjects/ionic-angular/)
   * [Ionic Extras](subjects/ionic-extras/) (geolocation, maps, camera)
 
-**Web Services**
+**Cloud & Web Services**
 
+* [Cloud Computing](subjects/cloud/)
+  * [Heroku](subjects/heroku/)
 * [RESTful APIs](subjects/rest/)
   * [RESTful API Conventions](subjects/rest-conventions/)
   * [apiDoc](subjects/apidoc/)
@@ -67,10 +69,6 @@ Materials for the COMEM+ web development courses.
 
 * [MongoDB](subjects/mongodb/) ([installation instructions](subjects/mongodb/install/))
   * [Mongoose (Node.js Client)](subjects/mongoose/)
-
-**Cloud**
-
-* [Heroku](subjects/heroku/)
 
 **Course Introductions and Exercices**
 
