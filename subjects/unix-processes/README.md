@@ -20,12 +20,36 @@ Learn about processes in Unix operating systems, as well as how to manage them a
 
 A [process][process] is an **instance of a computer program that is being executed**.
 
-**Every time you run an executable** file or an application, **a process is created**.
+<!-- slide-column -->
 
+This is a C **program**.
+A program is a passive collection of **instructions stored on disk**:
+
+```c
+ #include <stdio.h>
+
+int main()
+{
+   printf("Hello, World!");
+   return 0;
+}
+```
+
+<!-- slide-column -->
+
+A **process** is the actual **execution of a program** that has been loaded into memory:
+
+<p class='center'>
+  <img class='w30' src='images/cpu.png' />
+  <img class='w30' src='images/ram.png' />
+</p>
+
+<!-- slide-container -->
+
+**Every time you run an executable** file or an application, **a process is created**.
 Simple programs only need one process.
-More complex applications also have one main process,
-but may launch other processes for greater performance
-(e.g. most modern browsers will run at least one sub-process for each tab).
+More complex applications may launch other child processes for greater performance.
+For example, most modern browsers will run at least one child process per tab.
 
 
 
@@ -65,10 +89,10 @@ Each new process gets the next available PID.
 PIDs are sometimes reused as processes die and are created again,
 but **at any given time, a PID uniquely identifies a specific process**.
 
-The process with PID 0 is the *system process*,
+The process with PID 0 is the **system process**,
 the most low-level process managed directly by the kernel.
 
-The first thing it does is run the **[init process][init]**, which naturally gets PID 1.
+The first thing it does is run the **[init process][init]**, which naturally gets PID 1 (the next available PID).
 The init process is responsible for initializing the system.
 Most other processes are either launched by the init process directly, or by one of its children.
 
@@ -100,7 +124,7 @@ root     15251 15237  0 17:48 pts/0    00:00:00 ps -f
 Of course, there are more than 2 processes running on your computer.
 Add the `-e` (every) option to see all running processes.
 The list will be much longer.
-This is only a partial example:
+This is an abbreviated example:
 
 ```bash
 $> ps -ef
@@ -115,10 +139,10 @@ root      1006     1  0 09:39 ?        00:00:00 /usr/sbin/cron -f
 root      1700     1  0 Sep11 ?        00:00:00 /usr/sbin/sshd -D
 jdoe      3350  1700  0 17:52 ?        00:00:00 sshd: jdoe@pts/0
 jdoe      3378  3350  0 15:32 pts/0    00:00:00 -bash
-jdoe      3567  3378  0 15:51 pts/0    00:00:00 ps -ef
+jdoe      3567  3378  0 15:51 pts/0    00:00:00 `ps -ef`
 ```
 
-> Note that the command we just ran, `ps -ef`, is in the process list (at the bottom in this example).
+> Note that the command you just ran, `ps -ef`, is in the process list (at the bottom in this example).
 > This is because it was running while it was listing the other processes.
 
 #### Process tree
@@ -902,6 +926,8 @@ They all operate on the data received from their standard input stream,
 and print the result on their standard output stream,
 so they can be piped into each other:
 
+.commands-table[
+
 Command                             | Description
 :---                                | :---
 `cut -d ' ' -f <n>`                 | Select word in column `<n>` of each line (using one space as the delimiter).
@@ -914,6 +940,8 @@ Command                             | Description
 `uniq [-c]`                         | Filter out repeated lines (`-c` also counts them).
 `wc [-l] [-w] [-m]`                 | Count lines, words or characters.
 
+]
+
 
 
 ## Signals
@@ -924,7 +952,7 @@ Command                             | Description
 
 <p class='center'><img class='w40' src='images/kill-9.jpg' /></p>
 
-### What is a signal?
+### What is a signal?
 
 A signal is an **asynchronous notification sent to a process** to notify it that an event has occurred.
 
@@ -952,9 +980,18 @@ Signal     | Number | Default handler       | Description
 
 Here's a more complete list: [POSIX signals][signals-list].
 
+#### The terminal interrupt signal (`SIGINT`)
+
+When you type `Ctrl-C` in your terminal to terminate a running process, you are actually using Unix signals.
+
+The shortcut is interpreted by your shell,
+which then sends a **terminal interrupt signal**, or **`SIGINT`**, to the running process.
+
+Most processes handle that signal by terminating (altough some don't respond to it, like some interactive helps, e.g. `man ls`).
+
 ### The `kill` command
 
-The `kill` command sends a signal to a process.
+The `kill` command **sends a signal to a process**.
 
 Since the default signal handler for most signals is to terminate the process,
 it often has that effect, hence the name "kill".
@@ -962,17 +999,85 @@ it often has that effect, hence the name "kill".
 Its syntax is:
 
 ```
-kill -s <SIGNAL> <PID>
+kill [-<SIGNAL>] <PID>
+kill [-s <SIGNAL>] <PID>
 ```
 
-For example, the command `kill -s HUP 10000` would send the `SIGHUP` signal to the process with PID `10000`.
+.commands-table[
 
+Command             | Effect
+:---                | :---
+`kill 10000`        | Send the **default `SIGTERM` signal** to process with PID `10000`.
+`kill -s HUP 10000` | Send the `SIGHUP` signal to that same process.
+`kill -HUP 10000`   | Equivalent to the previous command.
+`kill -1 10000`     | Equivalent to the previous command (1 is the official POSIX number for `SIGHUP`).
 
+]
 
-## TODO
+#### Trapping signals
 
-* signals: terminating processes, ctrl-c
-* process = program loaded into memory
+This command will run a
+[badly behaved script](https://gist.github.com/AlphaHydrae/162f28e3e2bd9355a95914e04cd4dd0c/91dda64d9e0ca26168d25195a189ca6a69a14ee6)
+which traps and ignores all signals sent to it:
+
+```bash
+$> curl -s -L https://git.io/fxTKY|sh -s
+Hi, I'm running with PID 10000
+Try and kill me!
+```
+
+Since it ignores the `SIGINT` signal among others,
+you will not be able to stop it with `Ctrl-C`.
+
+Open another terminal and try to kill the process by referring to its PID
+(which is `10000` in this example but will be different on your machine):
+
+```bash
+$> kill 10000
+$> kill -s HUP 10000
+$> kill -s QUIT 10000
+$> kill -s USR1 10000
+```
+
+The script will simply log that it is ignoring your signal and continue executing.
+
+#### The `KILL` signal
+
+There is one signal that cannot be ignored: **the `KILL` signal**.
+
+Although a process can detect the signal and attempt to perform additional operations,
+**the OS will permanently kill the process** shortly after it is received,
+and the process can do nothing to prevent it.
+
+Send a `KILL` signal to the process with the same PID as before:
+
+```bash
+$> kill -s KILL 10000
+```
+
+The script will finally have the decency to die.
+
+### Unix signals in the real world
+
+Many widely-used programs react to Unix signals, for example:
+
+* [Nginx][nginx-signals]
+* [PostgreSQL][postgres-signals]
+* [OpenSSH][sshd-signals]
+
+<!-- slide-column -->
+
+A common example is the `SIGHUP` signal.
+Originally it was meant to indicate that the modem hanged up.
+
+That's not relevant to programs not directly connected to a terminal, but some programs repurposed it for another use.
+
+Many background services like Nginx and PostgreSQL will reload their configuration (without shutting down) when receiving that signal.
+Many other tools follow this convention.
+
+<!-- slide-column 30 -->
+
+<img class='w100' src='images/sighup.jpg' />
 
 
 
@@ -1005,11 +1110,13 @@ For example, the command `kill -s HUP 10000` would send the `SIGHUP` signal to t
 [pid]: https://en.wikipedia.org/wiki/Process_identifier
 [pipes]: https://en.wikipedia.org/wiki/Pipeline_(Unix)
 [posix]: https://en.wikipedia.org/wiki/POSIX
+[postgres-signals]: https://www.postgresql.org/docs/current/static/app-postgres.html#id-1.9.5.13.9
 [process]: https://en.wikipedia.org/wiki/Process_(computing)
 [ps-fields]: https://kb.iu.edu/d/afnv
 [semipredicate]: https://en.wikipedia.org/wiki/Semipredicate_problem#Multivalued_return
 [signals]: https://en.wikipedia.org/wiki/Signal_(IPC)
 [signals-list]: https://en.wikipedia.org/wiki/Signal_(IPC)#POSIX_signals
+[sshd-signals]: https://linux.die.net/man/8/sshd
 [streams]: https://en.wikipedia.org/wiki/Standard_streams
 [top]: https://linux.die.net/man/1/top
 [unix-philosophy]: https://en.wikipedia.org/wiki/Unix_philosophy
