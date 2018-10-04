@@ -168,8 +168,78 @@ Model                                | Acronym     | What is provided           
 [Infrastructure as a Service][iaas]  | **`IaaS`**  | Virtual machines, servers, storage, load balancers, network, etc.   | [Amazon Web Services][aws], [Google Cloud][google-cloud], [Microsoft Azure][azure]
 [Platform as a Service][paas]        | **`PaaS`**  | Execution runtime, database, web server, development tools, etc.    | [Cloud Foundry][cloud-foundry], [Heroku][heroku], [OpenShift][openshift]
 [Function as a Service][faas]        | **`FaaS`**  | Event-based hosting of individual functions.                        | [AWS Lambda][aws-lambda], [Azure Functions][azure-functions], [Cloud Functions][cloud-functions]
-[Software as a Service][saas]        | **`SaaS`**  | Web applications such as CRM, email, games, etc.                    | [Dropbox][dropbox], [Gmail][gmail], [Slack][slack]
 [Mobile Backend as a Service][mbaas] | **`MBaaS`** | Cloud storage, computing services and APIs for mobile applications. | [CloudBoost][cloudboost], [Firebase][firebase]
+[Software as a Service][saas]        | **`SaaS`**  | Web applications such as CRM, email, games, etc.                    | [Dropbox][dropbox], [Gmail][gmail], [Slack][slack]
+
+### Infrastructure as a Service (IaaS)
+
+**IaaS** provides fundamental IT infrastructure like **storage, networks and virtual machines** from their data center(s).
+The consumer provides an **operating system image**, for example [Ubuntu][ubuntu],
+which is run in a virtual machine by the provider.
+
+The consumer does not manage the physical infrastructure but has **complete control over the operating system** and can run **arbitrary software**.
+
+Setting up the runtime environment (databases, web servers, monitoring, etc) for applications is the responsibility of the consumer.
+
+### Platform as a Service (PaaS)
+
+**PaaS** provides a platform allowing consumers to run and manage applications without the complexity of building and maintaining the associated infrastructure.
+All the consumer has to do is provide the **application or software**,
+which the platform will automatically run on the standard runtime environment it provides.
+
+PaaS deployments are quicker because the consumer can simply deploy an application with minimal configuration,
+without worrying about the complexity of setting up a database or web server.
+More time can be spent on the development of the application itself.
+
+However PaaS is less flexible since control of the runtime environment and its configuration is limited.
+It also tends to be more expensive at larger scales.
+
+### Function as a Service (FaaS)
+
+**FaaS** provides a way to store individual functions and run them in response to events.
+Consumers can write simple and upload simple functions,
+and define in which circumstances they are used or combined to respond to requests.
+
+This model completely abstracts away both the complexity of building an infrastructure,
+and the complexity of developing and launching an application.
+The consumer has no direct need to manage resources.
+
+In contrast with IaaS and PaaS, nothing is kept running if nothing happens.
+Functions are loaded and run in milliseconds as events occur.
+Pricing is based on execution time rather than application uptime.
+
+The consumer has little to no control over the infrastructure, runtime and application layers.
+
+### Mobile Backend as a Service (MBaas)
+
+**MBaas** provides cloud storage and APIs to power web and mobile applications,
+with features such as user management, push notifications and integration with social networks.
+
+A working backend infrastructure is provided out of the box with this model.
+The consumer only has to use the provided cloud APIs in their frontend application,
+and may provide business logic to handle data access and events.
+
+This is one of the least flexible solutions as the consumer must use the specific components and services provided by the platform.
+It also produces the most vendor lock-in: it would be next to impossible to switch a mobile application from one MBaaS platform to another.
+
+### Software as a Service (SaaS)
+
+**SaaS** provides on-demand software over the Internet.
+
+The software is fully developed, managed and run by the provider, so the consumer has nothing to do except pay and use it.
+
+This model offers the least flexibility, as the consumer has no control over the operation or deployment of the software,
+and limited control over its configuration.
+
+### Level of abstraction
+
+These models can be ordered by increasing level of abstraction,
+from IaaS being the lowest level but most flexible service model,
+to SaaS being the highest level and fastest-to-use service model.
+
+<p class='center'><img class='w100' src='images/cloud-abstraction.png' /></p>
+
+
 
 
 
@@ -177,11 +247,12 @@ Model                                | Acronym     | What is provided           
 
 ## TODO
 
+* Monolithic vs microservices vs FaaS
 * Public cloud: security and privacy
+* SOA, EaaS, https://en.wikipedia.org/wiki/Service-oriented_architecture
 * Service models: increasing abstraction & serverless computing
 * IaaS
   * CaaS
-* PaaS, SaaS, MBaaS, FaaS
 * Serverless computing
 
 
@@ -218,6 +289,7 @@ Model                                | Acronym     | What is provided           
 [server-types]: https://en.wikipedia.org/wiki/Server_(computing)#Purpose
 [shared-hosting]: https://en.wikipedia.org/wiki/Shared_web_hosting_service
 [slack]: https://slack.com/
+[ubuntu]: https://www.ubuntu.com/
 [virtual-hosting]: https://en.wikipedia.org/wiki/Virtual_private_server
 [virtualization]: https://en.wikipedia.org/wiki/Virtualization
 [web-hosting]: https://en.wikipedia.org/wiki/Web_hosting_service
