@@ -196,6 +196,12 @@ It also tends to be more expensive at larger scales.
 
 ### Function as a Service (FaaS)
 
+<!-- slide-column 35 -->
+
+<img class='w100' src='images/stack.png' />
+
+<!-- slide-column -->
+
 **FaaS** provides a way to store individual functions and run them in response to events.
 Consumers can write simple and upload simple functions,
 and define in which circumstances they are used or combined to respond to requests.
