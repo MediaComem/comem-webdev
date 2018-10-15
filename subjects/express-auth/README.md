@@ -18,6 +18,8 @@ Learn how to set up authentication with [JSON Web Tokens][jwt] an [Express][expr
 
 
 
+
+
 ## Security concepts
 
 Process        | Description
@@ -28,6 +30,8 @@ Authorization  | The process of **verifying that you have access to something**,
 
 In this presentation, we'll focus on setting up **authentication**
 with [bcrypt][bcrypt] and [JSON Web Tokens][jwt].
+
+
 
 
 
@@ -84,6 +88,8 @@ A [cryptographic hash function][hash] is a [hash function][hash-non-crypto] that
 * It is infeasible to generate a message from its hash value except by trying all possible messages (**one-way**).
 * A small change to a message should change the hash value so extensively that the new hash value appears uncorrelated with the old hash value.
 * It is infeasible to find two different messages with the same hash value (collisions).
+
+
 
 
 
@@ -216,6 +222,8 @@ router.post('/login', function(req, res, next) {
 
 
 
+
+
 ## Authentication tokens
 
 <!-- slide-front-matter class: center, middle -->
@@ -293,9 +301,11 @@ const jwt = require('jsonwebtoken');
 
 // Retrieve the secret key from your configuration.
 const secretKey = process.env.SECRET_KEY || 'changeme';
+// UNIX timstamp representing a date in 7 days.
+const exp = (new Date().getTime() + 7 * 24 * 3600 * 1000) / 1000;
 
 // Create and sign a token.
-*jwt.sign({ sub: 'userId42' }, secretKey, function(err, token) {
+*jwt.sign({ sub: 'userId42', exp: exp }, secretKey, function(err, token) {
 * // Use the signed token...
 *});
 ```
@@ -316,11 +326,181 @@ const secretKey = process.env.SECRET_KEY || 'changeme';
 
 
 
+
+
+## Authentication flow
+
+<!-- slide-front-matter class: center, middle -->
+
+How a typical API using JWTs for authentication could behave.
+
+#### Unauthorized client
+
+On the first try, the user does not provide any authentication:
+
+<img class='w100' src='images/auth-seq-401.png' />
+
+#### Login
+
+Since the server indicated that authentication is missing,
+the user will send his or her credentials to obtain a new JWT:
+
+<img class='w100' src='images/auth-seq-login.png' />
+
+#### Authenticated request
+
+Now that the user is in possession of a valid JWT token,
+he or she can send it as a bearer token in the `Authorization` header to authenticate:
+
+<img class='w100' src='images/auth-seq-valid.png' />
+
+#### Full flow
+
+This is a summary of the general principle:
+
+* The user sends his or her credentials to obtain a JWT.
+* The JWT is sent as authentication for all requests to protected resources.
+
+<img class='w100' src='images/auth-seq-full.png' />
+
+
+
+
+
+## Sample code
+
+<!-- slide-front-matter class: center, middle -->
+
+A little help.
+
+### Sample login route
+
+```js
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+const secretKey = process.env.SECRET_KEY || 'changeme';
+
+router.post('/login', function(req, res, next) {
+  // Find the user by name.
+  User.findOne({ name: req.body.name }).exec(function(err, `user`) {
+    if (err) { return next(err); }
+    else if (!user) { return res.sendStatus(401); }
+
+    // Validate the password.
+    bcrypt.compare(req.body.password, user.password, function(err, `valid`) {
+      if (err) { return next(err); }
+      else if (`!valid`) { return res.sendStatus(401); }
+
+      // Generate a valid JWT which expires in 7 days.
+      const exp = (new Date().getTime() + 7 * 24 * 3600 * 1000) / 1000;
+      const claims = { sub: `user._id.toString()`, exp: exp };
+      jwt.sign(claims, secretKey, function(err, token) {
+        if (err) { return next(err); }
+        res.send({ token: token }); // Send the token to the client.
+      });
+    });
+  })
+});
+```
+
+### Sample Express JWT authentication middleware
+
+```js
+const User = require('../models/user');
+const secretKey = process.env.SECRET_KEY || 'changeme';
+
+function authenticate(req, res, next) {
+
+  // Ensure the header is present.
+  const authorization = req.get('Authorization');
+  if (!authorization) {
+    return res.status(401).send('Authorization header is missing');
+  }
+
+  // Check that the header has the correct format.
+  const match = authorization.match(/^Bearer (.+)$/);
+  if (!match) {
+    return res.status(401).send('Authorization header is not a bearer token');
+  }
+
+  // Extract and verify the JWT.
+  const token = match[1];
+  jwt.verify(token, secretKey, function(err, payload) {
+    if (err) {
+      return res.status(401).send('Your token is invalid or has expired');
+    } else {
+      req.currentUserId = payload.sub;
+      next(); // Pass the ID of the authenticated user to the next middleware.
+    }
+  });
+}
+```
+
+#### Using the authentication middleware
+
+The previous middleware can simply be plugged into routes which require authentication:
+
+```js
+router.post('/things', `authenticate`, function(req, res, next) {
+
+  // If we reach this function, the previous authentication middleware
+  // has done its job, i.e. a valid JWT was in the Authorization header.
+  const currentUserId = req.currentUserId;
+
+  // Do what needs to be done...
+});
+```
+
+> If you need the whole user object, you can always find it from the ID with `User.findById` or `User.findOne`.
+
+#### Performing authorization
+
+Even once you have made sure the user is **authenticated**, your job is not necessarily done.
+You may still have to check whether the user is **authorized** to perform the action.
+
+For example, let's assume a user can only modify the things he or she created.
+Here's an example of how you could check that:
+
+```js
+router.post('/things/:id', `authenticate`, function(req, res, next) {
+
+  // Get the thing.
+  Thing.findById(req.params.id).exec(function(err, thing) {
+    if (err) {
+      return next(err);
+    }
+
+    // Check authorization: was this thing created by the authenticated
+    // user (good), or by another user (bad)?
+    if (`req.currentUserId !== thing.user.toString()`) {
+      return res.status(403).send('Please mind your own things.')
+    }
+
+    // Do what needs to be done...
+  });
+});
+```
+
+
+
+
+
 ## References
 
 * [Token-based authentication made easy](https://auth0.com/learn/token-based-authentication-made-easy/)
 * [JWT introduction](https://jwt.io/introduction/)
 * [We’re under attack! 23+ Node.js security best practices](https://medium.com/@nodepractices/were-under-attack-23-node-js-security-best-practices-e33c146cb87d)
+
+
+
+
+
+## TODO
+
+* Hash with salts
+* bcrypt cost factor
+* PBKDF2 alternative
 
 
 
