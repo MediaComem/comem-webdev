@@ -41,17 +41,17 @@ There are many [types of servers][server-types] depending on the scenario and th
 ### [Internet hosting][internet-hosting]
 
 Not every individual and organization has access to vast computer resources.
-Some companies provide Internet servers that can be owned or leased by clients.
+Some companies provide Internet servers that can be owned or leased by customers.
 
 One common example is [web hosting][web-hosting],
 where server space is provided to make websites accessible over the Internet.
 
 <!-- slide-column -->
 
-[**Managed/shared hosting**][shared-hosting]
+[**Dedicated hosting**][dedicated-hosting]
 
-Multiple websites (from a few to a few hundred) are placed on the same server and **share a common pool of resources** (e.g. CPU, RAM).
-This is the simplest but least performant model.
+Customers get their own **physical server(s)** and gain full control over it.
+They are responsible for the security and maintenance of the servers.
 
 <!-- slide-column -->
 
@@ -62,13 +62,16 @@ Customers may have root access to their own virtual space.
 
 <!-- slide-column -->
 
-[**Dedicated hosting**][dedicated-hosting]
+[**Managed/shared hosting**][shared-hosting]
 
-Customers get their own **physical server(s)** and gain full control over it.
-They are responsible for the security and maintenance of the servers.
+Multiple websites (from a few to a few hundred) are placed on the same server and **share a common pool of resources** (e.g. CPU, RAM).
+This is the simplest but least performant model.
 
 
-### Cloud computing
+
+
+
+## Cloud computing
 
 <!-- slide-column -->
 
@@ -105,9 +108,7 @@ Allows to more rapidly **adjust to fluctuating and unpredictable computing deman
 
 **Security and privacy** can be a concern depending on a business's legal requirements.
 
-
-
-## Deployment models
+### Deployment models
 
 <!-- slide-column -->
 
@@ -146,7 +147,7 @@ for example **distributed clouds** where computing power can be provided by volu
 
 ### Public clouds
 
-Most public **cloud computing providers** such as Amazon, Google and Microsoft **own and operate the infrastructure** at their data center,
+Most public **cloud computing providers** such as Amazon, Google and Microsoft **own and operate the infrastructure** at their data center(s),
 and **provide cloud resources via the Internet**.
 
 For example, the Amazon Web Services cloud was [initially developed internally][aws-history] to support Amazon's retail trade.
@@ -159,9 +160,17 @@ Today Amazon is one of the largest and most popular cloud services provider.
 
 
 
+
+
 ## Service models
 
-Cloud computing providers offer their services according to different models.
+<!-- slide-front-matter class: center, middle -->
+
+<img class='w45' src='images/xaas.jpg' />
+
+### What can I get?
+
+These are the main service models offered by cloud providers.
 
 Model                                | Acronym     | What is provided                                                    | Example
 :---                                 | :---        | :---                                                                | :---
@@ -171,95 +180,197 @@ Model                                | Acronym     | What is provided           
 [Mobile Backend as a Service][mbaas] | **`MBaaS`** | Cloud storage, computing services and APIs for mobile applications. | [CloudBoost][cloudboost], [Firebase][firebase]
 [Software as a Service][saas]        | **`SaaS`**  | Web applications such as CRM, email, games, etc.                    | [Dropbox][dropbox], [Gmail][gmail], [Slack][slack]
 
-### Infrastructure as a Service (IaaS)
+### On premise data center
 
-**IaaS** provides fundamental IT infrastructure like **storage, networks and virtual machines** from their data center(s).
-The consumer provides an **operating system image**, for example [Ubuntu][ubuntu],
-which is run in a virtual machine by the provider.
+<!-- slide-column 40 -->
 
-The consumer does not manage the physical infrastructure but has **complete control over the operating system** and can run **arbitrary software**.
-
-Setting up the runtime environment (databases, web servers, monitoring, etc) for applications is the responsibility of the consumer.
-
-### Platform as a Service (PaaS)
-
-**PaaS** provides a platform allowing consumers to run and manage applications without the complexity of building and maintaining the associated infrastructure.
-All the consumer has to do is provide the **application or software**,
-which the platform will automatically run on the standard runtime environment it provides.
-
-PaaS deployments are quicker because the consumer can simply deploy an application with minimal configuration,
-without worrying about the complexity of setting up a database or web server.
-More time can be spent on the development of the application itself.
-
-However PaaS is less flexible since control of the runtime environment and its configuration is limited.
-It also tends to be more expensive at larger scales.
-
-### Function as a Service (FaaS)
-
-<!-- slide-column 35 -->
-
-<img class='w100' src='images/stack.png' />
+<img class='w100' src='images/stack-on-premise.jpg' />
 
 <!-- slide-column -->
 
-**FaaS** provides a way to store individual functions and run them in response to events.
-Consumers can write simple and upload simple functions,
-and define in which circumstances they are used or combined to respond to requests.
+As an introduction to cloud service models,
+this is a representation of the various technological layers you need to put in place
+to deploy web applications in a modern cloud infrastructure.
 
-This model completely abstracts away both the complexity of building an infrastructure,
-and the complexity of developing and launching an application.
-The consumer has no direct need to manage resources.
+If you have your own data center, you need to install and configure all of these layers yourself.
+
+As you will see, the various **cloud service models abstract away part or all** of these layers,
+so that you don't have to worry about them.
+
+### Infrastructure as a Service (IaaS)
+
+<!-- slide-column 40 -->
+
+<img class='w100' src='images/stack-iaas.jpg' />
+
+<!-- slide-column -->
+
+[**IaaS**][iaas] provides fundamental IT infrastructure like **storage, networks and virtual machines** from the provider's data center(s).
+
+The customer provides an **operating system image**, for example [Ubuntu][ubuntu],
+which is run in a virtual machine by the provider.
+The VM is the **unit of scale**, meaning that the customer pays per virtual machine, usually hourly.
+
+The customer does not manage the physical infrastructure but has **complete control over the operating system** and can run **arbitrary software**.
+
+Setting up the runtime environment (databases, web servers, monitoring, etc) for applications is the responsibility of the customer.
+
+### Platform as a Service (PaaS)
+
+<!-- slide-column 40 -->
+
+<img class='w100' src='images/stack-paas.jpg' />
+
+<!-- slide-column -->
+
+[**PaaS**][paas] platforms provide a **standard runtime environment**
+where customers can run their applications without having to maintain the associated infrastructure.
+
+All the customer has to do is provide the **application or software**.
+The platform will run it with the necessary additional components (e.g. database).
+Pricing is per application, often hourly.
+
+This is **quicker** because applications can be deployed with minimal configuration,
+without the complexity of setting up the runtime.
+More time can be spent on developing the application.
+
+However PaaS is **less flexible** since control of the runtime environment and its configuration is limited.
+It also tends to be more expensive at larger scales.
+
+#### How does it work?
+
+<img class='w100' src='images/paas-workflow.jpg' />
+
+### Function as a Service (FaaS)
+
+<!-- slide-column 40 -->
+
+<img class='w100' src='images/stack-faas.jpg' />
+
+<!-- slide-column -->
+
+[**FaaS**][faas] platforms store **individual functions** and run them in response to events.
+Customers write simple functions which can access resources such as a database,
+then define in which circumstances they are run (e.g. in response to client requests).
+
+This model completely abstracts away both the infrastructure,
+and the complexity of structuring an application.
+The customer has no direct need to manage resources.
 
 In contrast with IaaS and PaaS, nothing is kept running if nothing happens.
-Functions are loaded and run in milliseconds as events occur.
-Pricing is based on execution time rather than application uptime.
+Functions are loaded and run as events occur.
+**Pricing is based on execution time** (per millisecond) rather than application uptime.
 
-The consumer has little to no control over the infrastructure, runtime and application layers.
+The customer has little to no control over infrastructure, runtime and application layers.
 
 ### Mobile Backend as a Service (MBaas)
 
-**MBaas** provides cloud storage and APIs to power web and mobile applications,
-with features such as user management, push notifications and integration with social networks.
+<!-- slide-column 40 -->
 
-A working backend infrastructure is provided out of the box with this model.
-The consumer only has to use the provided cloud APIs in their frontend application,
-and may provide business logic to handle data access and events.
+<img class='w100' src='images/stack-mbaas.jpg' />
 
-This is one of the least flexible solutions as the consumer must use the specific components and services provided by the platform.
-It also produces the most vendor lock-in: it would be next to impossible to switch a mobile application from one MBaaS platform to another.
+<!-- slide-column -->
+
+[**MBaaS**][mbaas] provides **cloud storage and APIs** to power web and mobile applications,
+with features such as user management, push notifications and social network integration.
+
+A working backend is provided out of the box with this model.
+The customer simply **uses the provided cloud APIs** in their frontend application,
+and may configure how to handle data access and events.
+
+This is the **quickest** solution to develop a frontend application,
+since much less work needs to be done on the backend.
+
+But it's also **less flexible** as you must use the specific services provided by the platform.
+It also produces the most **vendor lock-in**: it would be difficult to switch a mobile application from one MBaaS platform to another.
 
 ### Software as a Service (SaaS)
 
-**SaaS** provides on-demand software over the Internet.
+<!-- slide-column 40 -->
 
-The software is fully developed, managed and run by the provider, so the consumer has nothing to do except pay and use it.
+<img class='w100' src='images/stack-saas.jpg' />
 
-This model offers the least flexibility, as the consumer has no control over the operation or deployment of the software,
+<!-- slide-column -->
+
+[**SaaS**][saas] provides **on-demand** software over the Internet.
+
+The software is **fully developed, managed and run by the provider**, so the customer has nothing to do except pay and use it.
+Pricing is often per user and monthly.
+
+This model offers the **least flexibility**, as the customer has no control over the operation or deployment of the software,
 and limited control over its configuration.
 
 ### Level of abstraction
 
 These models can be ordered by increasing level of abstraction,
-from IaaS being the lowest level but most flexible service model,
+from IaaS being the lowest level and most flexible service model,
 to SaaS being the highest level and fastest-to-use service model.
 
 <p class='center'><img class='w100' src='images/cloud-abstraction.png' /></p>
 
 
 
+## Trends
 
+<!-- slide-front-matter class: center, middle -->
+
+<img class='w60' src='images/trends.png' />
+
+What's happening in the clouds?
+
+### Service-oriented architecture (SOA)
+
+[Service-oriented architecture][soa] is a software design style where services are provided by application components over a network.
+This is popular in the cloud as it is easy to provision resources to deploy new components,
+instead of having large monolithic applications.
+
+<p class='center'><img class='w80' src='images/soa.png' /></p>
+
+### Microservices
+
+There is a tendency in recent years to try to **decompose** monolithic applications into smaller, more flexible [microservices][microservices]
+(a variant of service-oriented architecture).
+The [Function-as-a-Service (FaaS)][faas] model is one more step in the same direction.
+
+<p class='center'><img class='w65' src='images/monolithic-microservices-faas.png' /></p>
+
+This allows development to be parallelized as teams can work autonomously on separate services, or even individual functions.
+It also faciliates [continous delivery][cd] as each component can be deployed independently.
+
+### Serverless computing
+
+The [Function-as-a-Service (FaaS)][faas] and [Mobile-Backend-as-a-Service (MBaaS)][mbaas]
+are often considered to be part of the [**serverless computing**][serverless] model.
+
+The name "serverless" does not mean that there is no server.
+It just means that **the server is abstracted** and managed by the platform provider.
+
+<!-- slide-column -->
+
+**Advantages**
+
+* **Productivity**: the developer can focus on developing functions or business logic.
+* **Cost-effective**: only the resources used are billed
+  (whereas PaaS or IaaS resources may be underutilized).
+* **Scalable**: the provider automatically scales resources to the demand.
+
+<!-- slide-column -->
+
+**Disadvantages**
+
+* **Performance**: infrequently-used code may be "shut down" when not in use,
+  resulting in greater latency.
+* **Resource limits**: not suited to some workloads like high-performance computing.
+* **Monitoring and debugging**: identifying performance problems may be more difficule than with traditional code.
 
 
 
 ## TODO
 
-* Monolithic vs microservices vs FaaS
+* Additional diagrams for PaaS + FaaS + MBaaS
 * Public cloud: security and privacy
 * SOA, EaaS, https://en.wikipedia.org/wiki/Service-oriented_architecture
-* Service models: increasing abstraction & serverless computing
-* IaaS
-  * CaaS
-* Serverless computing
+* Containers, CaaS
 
 
 
@@ -271,6 +382,7 @@ to SaaS being the highest level and fastest-to-use service model.
 [aws-lambda]: https://aws.amazon.com/lambda/
 [azure]: https://azure.microsoft.com/
 [azure-functions]: https://azure.microsoft.com/en-us/services/functions/
+[cd]: https://en.wikipedia.org/wiki/Continuous_delivery
 [client-server-model]: https://en.wikipedia.org/wiki/Client%E2%80%93server_model
 [cloud]: https://en.wikipedia.org/wiki/Cloud_computing
 [cloudboost]: https://www.cloudboost.io/
@@ -288,13 +400,16 @@ to SaaS being the highest level and fastest-to-use service model.
 [iaas]: https://en.wikipedia.org/wiki/Infrastructure_as_a_service
 [internet-hosting]: https://en.wikipedia.org/wiki/Internet_hosting_service
 [mbaas]: https://en.wikipedia.org/wiki/Mobile_backend_as_a_service
+[microservices]: https://en.wikipedia.org/wiki/Microservices
 [openshift]: https://www.openshift.com/
 [other-deployment-models]: https://en.wikipedia.org/wiki/Cloud_computing#Others
 [paas]: https://en.wikipedia.org/wiki/Platform_as_a_service
 [saas]: https://en.wikipedia.org/wiki/Software_as_a_service
 [server-types]: https://en.wikipedia.org/wiki/Server_(computing)#Purpose
+[serverless]: https://en.wikipedia.org/wiki/Serverless_computing
 [shared-hosting]: https://en.wikipedia.org/wiki/Shared_web_hosting_service
 [slack]: https://slack.com/
+[soa]: https://en.wikipedia.org/wiki/Service-oriented_architecture
 [ubuntu]: https://www.ubuntu.com/
 [virtual-hosting]: https://en.wikipedia.org/wiki/Virtual_private_server
 [virtualization]: https://en.wikipedia.org/wiki/Virtualization
