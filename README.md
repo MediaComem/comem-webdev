@@ -51,6 +51,7 @@ Materials for the COMEM+ web development courses.
 * [Node.js](subjects/node/)
   * [npm (Package Manager)](subjects/npm/)
   * [Express (Node.js Web Framework)](subjects/express/)
+    * [Express Authentication](subjects/express-auth/)
     * [Express Best Practices](subjects/express-best-practices/)
     * [Using Mongoose with Express](subjects/express-mongoose/)
 * [Ionic](subjects/ionic/)
