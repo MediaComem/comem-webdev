@@ -215,6 +215,14 @@ The customer does not manage the physical infrastructure but has **complete cont
 
 Setting up the runtime environment (databases, web servers, monitoring, etc) for applications is the responsibility of the customer.
 
+#### How does IaaS work?
+
+System administrators connect to virtual machines run by the provider in their data center.
+They have complete control over the operating system.
+To run a website, they must set up the runtime environment themselves.
+
+<img class='w100' src='images/iaas-workflow.jpg' />
+
 ### Platform as a Service (PaaS)
 
 <!-- slide-column 40 -->
@@ -223,7 +231,7 @@ Setting up the runtime environment (databases, web servers, monitoring, etc) for
 
 <!-- slide-column -->
 
-[**PaaS**][paas] platforms provide a **standard runtime environment**
+[**PaaS**][paas] platforms provide a **managed runtime environment**
 where customers can run their applications without having to maintain the associated infrastructure.
 
 All the customer has to do is provide the **application or software**.
@@ -237,7 +245,11 @@ More time can be spent on developing the application.
 However PaaS is **less flexible** since control of the runtime environment and its configuration is limited.
 It also tends to be more expensive at larger scales.
 
-#### How does it work?
+#### How does PaaS work?
+
+Developers send an application, for example a Laravel site written in PHP, to the provider, typically via Git.
+The managed runtime environment then detects the type of application and runs it, along with the necessary resources,
+and serves it over the Internet.
 
 <img class='w100' src='images/paas-workflow.jpg' />
 
@@ -367,7 +379,8 @@ It just means that **the server is abstracted** and managed by the platform prov
 
 ## TODO
 
-* Additional diagrams for PaaS + FaaS + MBaaS
+* Dedicated/physical vs. virtual server/hosting (virtual server)
+* Additional diagrams for IaaS + PaaS + FaaS + MBaaS
 * Public cloud: security and privacy
 * SOA, EaaS, https://en.wikipedia.org/wiki/Service-oriented_architecture
 * Containers, CaaS
