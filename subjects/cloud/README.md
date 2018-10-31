@@ -275,6 +275,13 @@ Functions are loaded and run as events occur.
 
 The customer has little to no control over infrastructure, runtime and application layers.
 
+#### How does FaaS work?
+
+Developers write individual functions and publish them to the provider.
+The platform provides various services to connect these functions together and to various resources for storage, communication, monitoring, etc.
+
+<img class='w100' src='images/faas-workflow.jpg' />
+
 ### Mobile Backend as a Service (MBaas)
 
 <!-- slide-column 40 -->
