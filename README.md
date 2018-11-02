@@ -33,6 +33,7 @@ Materials for the COMEM+ web development courses.
   * [Collaborating with Git on GitHub](subjects/git-collaborating/)
 * [SSH](subjects/ssh/)
 * [Linux](subjects/linux/)
+  * [Unix Administration](subjects/unix-admin/)
   * [Unix Processes](subjects/unix-processes/)
 
 **Languages & Frameworks**
