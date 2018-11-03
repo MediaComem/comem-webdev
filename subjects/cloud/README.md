@@ -18,6 +18,12 @@ In this model, **servers** share their resources with **clients**, who **request
 > The communication is not only one way.
 > In modern web applications, servers may also **push data to their clients**.
 
+### Server-side
+
+The **server** is what we will focus on.
+
+<img class='w100' src='images/client-server-backend-focus.jpg' />
+
 ### Types of servers
 
 A server can provide many different kinds of content or services:
@@ -37,6 +43,7 @@ A server can provide many different kinds of content or services:
 
 These are just a few examples.
 There are many [types of servers][server-types] depending on the scenario and the resources you want to provide.
+One computer may fulfill one or several of these roles.
 
 ### [Internet hosting][internet-hosting]
 
@@ -46,26 +53,79 @@ Some companies provide Internet servers that can be owned or leased by customers
 One common example is [web hosting][web-hosting],
 where server space is provided to make websites accessible over the Internet.
 
+<p class='center'><img class='w75' src='images/web-hosting.jpg' /></p>
+
+#### Types of web hosting
+
+<!-- slide-column -->
+
+[**Shared hosting**][shared-hosting]
+
+Multiple websites (from a few to a few hundred) are placed on the same server
+and **share a common pool of resources** (e.g. CPU, RAM).
+This is the least expensive and least flexible model.
+
+<p class='center'><img class='w95' src='images/shared-hosting.png' /></p>
+
 <!-- slide-column -->
 
 [**Dedicated hosting**][dedicated-hosting]
 
-Customers get their own **physical server(s)** and gain full control over it.
-They are responsible for the security and maintenance of the servers.
+Customers get full control over their own **physical server(s)**.
+They are responsible for the security and maintenance of the server(s).
+This offers the most flexibility and best performance.
+
+<p class='center'><img class='w75' src='images/dedicated-hosting.png' /></p>
 
 <!-- slide-column -->
 
 [**Virtual hosting**][virtual-hosting]
 
 Using [virtualization][virtualization], physical server resources can be divided into **virtual servers**.
-Customers may have root access to their own virtual space.
+Customers gain full access to their own virtual space.
+
+<p class='center'><img class='w90' src='images/virtualized-servers.png' /></p>
+
+### [Virtualization][virtualization]
 
 <!-- slide-column -->
 
-[**Managed/shared hosting**][shared-hosting]
+**Hardware virtualization** refers to the creation of a **virtual machine** that acts like a real computer with an operating system.
 
-Multiple websites (from a few to a few hundred) are placed on the same server and **share a common pool of resources** (e.g. CPU, RAM).
-This is the simplest but least performant model.
+A **hypervisor** is installed on the **host machine**.
+It virtualizes CPU, memory, network and storage.
+
+A virtual machine, also called the **guest machine**,
+runs another operating system **isolated** from the host machine.
+
+For example, a computer running Microsoft Windows may host a virtual machine running an Ubuntu Linux operating system.
+Ubuntu-based software can be run in the virtual machine.
+
+<!-- slide-column 55 -->
+
+<img class='w100' src='images/virtualization-host-guest.jpg' />
+
+Popular virtualization solutions: [Linux KVM][kvm], [Parallels][parallels], [VirtualBox][virtualbox], [VMWare][vmware].
+
+#### Virtualized server architecture
+
+Using virtual machines provides several advantages:
+applications can each run in an **isolated environment**
+custom-tailored to their needs (operating system, libraries, etc).
+**New virtual servers can be created in minutes.**
+**Resource utilization is maximized** instead of hardware running idle.
+
+<!-- slide-column -->
+
+On the other hand, virtual machines require **additional management effort**
+and their **performance is not as good** as dedicated servers.
+
+But for many use cases **the benefits outweight the costs**,
+which is why virtualization is heavily used in cloud computing.
+
+<!-- slide-column 70 -->
+
+<p class='center'><img class='w100' src='images/virtualized-server-architecture.png' /></p>
 
 
 
@@ -94,17 +154,17 @@ Companies using cloud computing can **focus on their core business** instead of 
 
 <!-- slide-column -->
 
-**Advantages**
+<p class='center'><img class='w30' src='images/pros.jpg' /></p>
 
 Pay-as-you-go models **minimize up-front computer infrastructure costs**.
 
-Allows to more rapidly **adjust to fluctuating and unpredictable computing demands**.
+They allow to more rapidly **adjust to fluctuating and unpredictable computing demands**.
 
 <!-- slide-column -->
 
-**Disadvantages**
+<p class='center'><img class='w30' src='images/cons.jpg' /></p>
 
-**Limited customization** options (since you do not have complete control over the infrastructure).
+**Customization options are limited** since you do not have complete control over the infrastructure.
 
 **Security and privacy** can be a concern depending on a business's legal requirements.
 
@@ -112,33 +172,39 @@ Allows to more rapidly **adjust to fluctuating and unpredictable computing deman
 
 <!-- slide-column -->
 
-**Private cloud**
+<p class='center'><img class='w70' src='images/private-cloud.png' /></p>
 
 Cloud infrastructure operated solely **for a single organization**,
 managed and hosted internally or by a third party.
 
-These clouds are very capital-intensive (they require physical space, hardware, etc).
+These clouds are very capital-intensive (they require physical space, hardware, etc)
+but are usually more customizable and secure.
 
 **Providers:** Microsoft, IBM, Dell, VMWare, HP, Cisco, Red Hat.
 
 <!-- slide-column -->
 
-**Public cloud**
+<p class='center'><img class='w70' src='images/public-cloud.png' /></p>
 
 Cloud services **open for public use**, provided over the Internet.
 
-There is little to no technical difference between private and public clouds,
-but security considerations might differ.
+Infrastructure is often shared through virtualization.
+Security guarantees are not as strong.
+However, costs are low and the solution is highly flexible.
 
 **Platforms:** [Amazon Web Services][aws], [Google Cloud Platform][google-cloud], [Microsoft Azure][azure].
 
+#### Other deployment models
+
 <!-- slide-column -->
 
-**Hybrid cloud**
-
-Composition of two or more clouds bound together to benefit from the advantages of multiple deployment models.
+There are also **hybrid clouds** composed of two or more clouds bound together to benefit from the advantages of multiple deployment models.
 
 For example, a platform may store sensitive data on a private cloud, but connect to other applications on a public cloud for greater flexibility.
+
+<!-- slide-column 55 -->
+
+<img class='w100' src='images/hybrid-cloud.png' />
 
 <!-- slide-container -->
 
@@ -147,8 +213,16 @@ for example **distributed clouds** where computing power can be provided by volu
 
 ### Public clouds
 
+<!-- slide-column -->
+
 Most public **cloud computing providers** such as Amazon, Google and Microsoft **own and operate the infrastructure** at their data center(s),
 and **provide cloud resources via the Internet**.
+
+<!-- slide-column 65 -->
+
+<p class='center'><img class='w100' src='images/data-center.jpg' /></p>
+
+<!-- slide-container -->
 
 For example, the Amazon Web Services cloud was [initially developed internally][aws-history] to support Amazon's retail trade.
 As their computing needs grew, they felt the need to build a computing infrastructure that was **completely standardized and automated**,
@@ -353,8 +427,24 @@ The [Function-as-a-Service (FaaS)][faas] model is one more step in the same dire
 
 <p class='center'><img class='w65' src='images/monolithic-microservices-faas.png' /></p>
 
-This allows development to be parallelized as teams can work autonomously on separate services, or even individual functions.
+#### [Microservice architecture][microservices-in-practice]
+
+<!-- slide-column -->
+
+Enterprise software often offers hundreds of functionalities piled into a single monolithic application.
+The deployment, troubleshooting, scaling and upgrading of such monsters is a nightmare.
+
+Isolating services allows development to be parallelized as teams can work autonomously on separate services,
+or even individual functions.
 It also faciliates [continous delivery][cd] as each component can be deployed independently.
+
+<!-- slide-column 25 -->
+
+<p class='center'><img class='w90' src='images/monolithic-soa.png' /></p>
+
+<!-- slide-container -->
+
+<p class='center'><img class='w90' src='images/microservices.png' /></p>
 
 ### Serverless computing
 
@@ -366,7 +456,7 @@ It just means that **the server is abstracted** and managed by the platform prov
 
 <!-- slide-column -->
 
-**Advantages**
+<p class='center'><img class='w30' src='images/pros.jpg' /></p>
 
 * **Productivity**: the developer can focus on developing functions or business logic.
 * **Cost-effective**: only the resources used are billed
@@ -375,22 +465,27 @@ It just means that **the server is abstracted** and managed by the platform prov
 
 <!-- slide-column -->
 
-**Disadvantages**
+<p class='center'><img class='w30' src='images/cons.jpg' /></p>
 
-* **Performance**: infrequently-used code may be "shut down" when not in use,
-  resulting in greater latency.
+* **Greater latency**: infrequently-used code may be "shut down" when not in use.
 * **Resource limits**: not suited to some workloads like high-performance computing.
 * **Monitoring and debugging**: identifying performance problems may be more difficule than with traditional code.
 
 
 
+## References
+
+* [Advantages and Disadvantages of Virtual Server](https://www.esds.co.in/kb/advantages-and-disadvantages-of-virtual-server/)
+* [Microservices in Practice][microservices-in-practice]
+
+
+
 ## TODO
 
-* Dedicated/physical vs. virtual server/hosting (virtual server)
-* Additional diagrams for IaaS + PaaS + FaaS + MBaaS
-* Public cloud: security and privacy
+* Additional diagrams for MBaaS & SaaS
 * SOA, EaaS, https://en.wikipedia.org/wiki/Service-oriented_architecture
 * Containers, CaaS
+* container pictures
 
 
 
@@ -419,11 +514,14 @@ It just means that **the server is abstracted** and managed by the platform prov
 [heroku]: https://www.heroku.com/
 [iaas]: https://en.wikipedia.org/wiki/Infrastructure_as_a_service
 [internet-hosting]: https://en.wikipedia.org/wiki/Internet_hosting_service
+[kvm]: https://www.linux-kvm.org/
 [mbaas]: https://en.wikipedia.org/wiki/Mobile_backend_as_a_service
 [microservices]: https://en.wikipedia.org/wiki/Microservices
+[microservices-in-practice]: https://medium.com/microservices-in-practice/microservices-in-practice-7a3e85b6624c
 [openshift]: https://www.openshift.com/
 [other-deployment-models]: https://en.wikipedia.org/wiki/Cloud_computing#Others
 [paas]: https://en.wikipedia.org/wiki/Platform_as_a_service
+[parallels]: https://www.parallels.com
 [saas]: https://en.wikipedia.org/wiki/Software_as_a_service
 [server-types]: https://en.wikipedia.org/wiki/Server_(computing)#Purpose
 [serverless]: https://en.wikipedia.org/wiki/Serverless_computing
@@ -431,7 +529,9 @@ It just means that **the server is abstracted** and managed by the platform prov
 [slack]: https://slack.com/
 [soa]: https://en.wikipedia.org/wiki/Service-oriented_architecture
 [ubuntu]: https://www.ubuntu.com/
+[virtualbox]: https://www.virtualbox.org
 [virtual-hosting]: https://en.wikipedia.org/wiki/Virtual_private_server
 [virtualization]: https://en.wikipedia.org/wiki/Virtualization
+[vmware]: https://www.vmware.com
 [web-hosting]: https://en.wikipedia.org/wiki/Web_hosting_service
 [web-server]: https://en.wikipedia.org/wiki/Web_server
