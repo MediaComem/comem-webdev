@@ -377,6 +377,22 @@ since much less work needs to be done on the backend.
 But it's also **less flexible** as you must use the specific services provided by the platform.
 It also produces the most **vendor lock-in**: it would be difficult to switch a mobile application from one MBaaS platform to another.
 
+#### How does MBaaS work?
+
+<!-- slide-column 60 -->
+
+Developers are provided a backend in the form of ready-made cloud APIs.
+Most of the time, they can simply apply configuration instead of writing code.
+For example, Google's [Firebase][firebase] platform provides a real-time database which automatically handles synchronization of updates to all devices.
+
+<!-- slide-column -->
+
+<p class='center'><img class='w100' src='images/firebase-features.png' /></p>
+
+<!-- slide-container -->
+
+<p class='center'><img class='w55' src='images/firebase.png' /></p>
+
 ### Software as a Service (SaaS)
 
 <!-- slide-column 40 -->

@@ -1,6 +1,6 @@
-# Linux
+# Unix Administration
 
-Learn the basics of the Linux operating system and how to manage it from the command line.
+Learn the basics of Unix and Unix-like operating systems like Linux, and how to manage them from the command line.
 
 <!-- slide-include ../../BANNER.md -->
 
@@ -703,6 +703,7 @@ $> sudo chmod 644 secret.txt
   * whoami
   * id
 * Package management
+* Environment variables
 
 
 
