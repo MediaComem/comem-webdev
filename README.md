@@ -18,6 +18,7 @@ Materials for the COMEM+ web development courses.
 ## Courses
 
 * [Advanced Frontend Development (MAS-RAD)](https://github.com/MediaComem/comem-masrad-dfa)
+* [Architecture & Deployment (COMEM+)](https://github.com/MediaComem/comem-archidep)
 * [Mobile Applications (COMEM+)](https://github.com/MediaComem/comem-appmob)
 * [Web Services (COMEM+)](https://github.com/MediaComem/comem-webserv)
 
