@@ -283,7 +283,10 @@ If you are a trusted sudoer, you can use it to become another user:
 $> whoami
 bob
 
-$> sudo su -l alice
+$> ls -la /home/alice
+ls: cannot open directory '/home/alice': Permission denied
+
+*$> sudo su -l alice
 [sudo] password for bob:
 
 $> whoami
@@ -307,6 +310,11 @@ drwxr-x--- 2 alice alice 4096 Sep 12 16:35 .
 drwxr-xr-x 6 root  root  4096 Sep 12 16:35 ..
 -rw-r--r-- 1 alice alice  220 Apr  4 18:30 .bash_logout
 ...
+
+$> echo foo > ~/bar.txt
+
+$> cat /home/alice/bar.txt
+foo
 
 $> exit
 
