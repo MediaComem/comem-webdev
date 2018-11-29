@@ -919,6 +919,8 @@ Somewhere over the rainbow
 * Display a list of the unique words in the text along with the number of times each word is used,
   sorted from the least used to the most used.
 
+> For example, `cat rainbow.txt | wc -w` counts the number of words in the text.
+
 #### Your tools
 
 Here are commands you might find useful for the exercise.
