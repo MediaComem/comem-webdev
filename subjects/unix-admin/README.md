@@ -647,7 +647,7 @@ $> sudo chmod u+rw file.txt
 The following command sets the permissions for `g` (the group of the file) to `r` (read) and `x` (execute):
 
 ```bash
-$> sudo chmod g=rx
+$> sudo chmod g=rx file.txt
 ```
 
 #### Octal modes
@@ -685,7 +685,7 @@ $> sudo chmod 755 script.sh
 The following command sets permissions `rw-r-----` to `secret.txt`:
 
 ```bash
-$> sudo chmod 644 secret.txt
+$> sudo chmod 640 secret.txt
 ```
 
 
