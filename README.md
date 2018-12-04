@@ -36,6 +36,7 @@ Materials for the COMEM+ web development courses.
 * [Linux](subjects/linux/)
   * [Unix Administration](subjects/unix-admin/)
   * [Unix Processes](subjects/unix-processes/)
+  * [Unix Networking](subjects/unix-networking/)
 
 **Languages & Frameworks**
 
