@@ -109,9 +109,9 @@ But in addition to these, it represents various other things as files.
 
 
 
-## Linux users
+## Unix users
 
-Linux is a multi-user system (as are all Unix-like operating systems),
+Unix and Unix-like systems like Linux are multi-user systems,
 meaning that more than one user can have access to the system at the same time.
 
 A **user** is **anyone who uses the system**.
@@ -120,11 +120,11 @@ This may be:
 * A **person**, like Alice or Bob.
 * A **system service**, like a MySQL database or an SSH server.
 
-Linux maintains a list of user accounts representing these people and system services,
+A Unix system maintains a list of user accounts representing these people and system services,
 each with a different **name** such as `alice`, `bob` or `sshd`.
 Each of these user accounts is also identified by a **numerical user ID (or UID)**.
 
-> Note that one person may have multiple user accounts on a Linux system,
+> Note that one person may have multiple user accounts on a Unix system,
 > as long as they each have a different name.
 
 ### User access
@@ -134,14 +134,14 @@ Managing users is done for the purpose of security by limiting access in certain
 The **superuser**, named `root`, has complete access to the system and its configuration.
 It is intended for administrative use only.
 
-Linux also has the notion of **groups**.
+Unix also has the notion of **groups**.
 Much like a user account, a group is identified by a **name** and by a **numerical group ID (or GID)**.
 Each user belongs to a **main group**, and can also be **added to other groups**,
 which grants that user all privileges assigned to each group.
 
 <!-- slide-column -->
 
-> Linux usually creates a main group for each user, with the same name as the user.
+> A Unix system usually creates a main group for each user, with the same name as the user.
 > For example, user `alice` has the `alice` group as its main group.
 >
 > This provides a quick way of giving `bob` access to `alice`'s files
@@ -153,8 +153,8 @@ which grants that user all privileges assigned to each group.
 
 ### Permissions
 
-Someone who logs in on a Linux system can use any file their user account is permitted to access.
-Linux determines whether or not a user or group can access a file based on the permissions assigned to it.
+Someone who logs in on a Unix system can use any file their user account is permitted to access.
+The system determines whether or not a user or group can access a file based on the permissions assigned to it.
 
 There are **three different permissions** for file, directories and executables.
 They are represented by one character:
@@ -270,7 +270,7 @@ This configuration allows members of the `sudo` group to execute any command
 > as you will break the `sudo` command if you introduce syntax errors into the file.
 > Use the `visudo` command which will not let you save unless the file is valid.
 
-> With these defaults settings common to most Linux distributions,
+> With these defaults settings common to most Unix systems,
 > you can simply add a user to the `sudo` group to make them trusted `sudo` users.
 
 ### The `su` command
@@ -349,7 +349,7 @@ bob
 
 ### User database files
 
-These files define what user accounts and groups are available on a Linux system:
+These files define what user accounts and groups are available on a Unix system:
 
 | File           | Contents                                                                                                                                              |
 | :---           | :---                                                                                                                                                  |
@@ -360,7 +360,7 @@ These files define what user accounts and groups are available on a Linux system
 
 You should **never edit these files by hand**.
 
-Linux provides various **system administration commands** for this purpose, such as `useradd`, `passwd` and `groupadd`.
+Unix systems provides various **system administration commands** for this purpose, such as `useradd`, `passwd` and `groupadd` for Linux.
 
 #### The `/etc/passwd` file
 
@@ -373,7 +373,7 @@ jdoe:x:500:500:jdoe:/home/jdoe:/bin/bash
 * **Username** (`jdoe`) - The name of the user account (used to log in).
 * **Password** (`x`) - User password (or `x` if the password is stored in `/etc/shadow`).
 * **User ID (UID)** (`500`) - The numerical equivalent of the username.
-* **Group ID (GID)** (`500`) - The numerical equivalent of the user's primary group name (often the same as the UID for most users, on a Linux system with default settings).
+* **Group ID (GID)** (`500`) - The numerical equivalent of the user's primary group name (often the same as the UID for most users, on a Unix system with default settings).
 * **GECOS** (`jdoe`) - Historical field used to store extra information (usually the user's full name).
 * **Home directory** (`/home/jdoe`) - The absolute path to the user's home directory.
 * **Shell** (`/bin/bash`) - The program automatically launched whenever the user logs in (e.g. on a terminal or through SSH).
@@ -395,7 +395,7 @@ vip:x:512:bob,eve
 
 #### The shadow files
 
-Both `/etc/passwd` and `/etc/group` must be **readable by anyone** on a Linux system,
+Both `/etc/passwd` and `/etc/group` must be **readable by anyone** on a Unix system,
 because they are used by many programs to perform the translation from username to UID and from group name to GID.
 
 It is therefore bad practice to store passwords in these files, even encrypted or hashed.
@@ -429,7 +429,7 @@ The following commands can be used to create, modify and delete users:
 Use `man COMMAND` to read their manual, e.g. `man useradd`.
 
 > Note that these commands are specific to [Ubuntu][ubuntu].
-> They might differ slightly in other Linux distributions
+> They might differ slightly in other Linux distributions or other Unix systems.
 
 ### Creating a login user
 
