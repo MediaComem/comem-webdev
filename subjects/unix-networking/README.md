@@ -4,6 +4,19 @@ Learn the basics of Unix networking and how to make TCP connections.
 
 <!-- slide-include ../../BANNER.md -->
 
+**You will need**
+
+* A Unix CLI
+* An Ubuntu server with a public IP address to connect to
+
+**Recommended reading**
+
+* [Unix Administration](../unix-admin/)
+* [Unix Processes](../unix-processes/)
+
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 
 
 ## Computer networking
@@ -58,7 +71,7 @@ It's an [internet standard][internet-standard] since 2017.
 It uses a 128-bit address space typically represented as 8 groups of 4 hexadecimal digits:
 
 ```
-    `2001:0DB8:0000:CBAD:4321:0000:0000:1234`
+    `2001:0db8:0000:cbad:4321:0000:0000:1234`
 ```
 
 #### IP networks
@@ -164,20 +177,28 @@ Port    | Use
 
 See the [full list][registered-ports].
 
+#### Well-known ports
+
+The port numbers in the range from 0 to 1023 are the **well-known ports** or **system ports**.
+They are used by system processes that provide widely used types of network services, such as SSH or DNS.
+On Unix-like operating systems, a process must execute with **superuser privileges** to be able to bind a network socket on a well-known port.
+
 ### Domain name system
 
 The **Domain Name System (DNS)** is a hierarchical decentralized naming system for computers connected to the Internet or a private network.
 Most prominently, it **translates human-readable domain names** (like `google.com`) **to numerical IP addresses** (like `40.127.1.70`) needed for locating computers with the underlying network protocols.
 The Domain Name System has been an essential component of the functionality of the Internet since 1985.
 
-<!-- slide-column 30 -->
+<p class='center'><img class='w70' src='images/dns.jpg' /></p>
+
+#### DNS hierarchy
 
 The [Internet Corporation for Assigned Names and Numbers (ICANN)][icann] is responsible for managing [top-level domains (TLDs)][tld] like `.com`.
-Management of subdomains is delegated to other organizations.
+Management of second-level domains and so on is delegated to other organizations.
 
-<!-- slide-column -->
+<p class='center'><img class='w80' src='images/dns-hierarchy.png' /></p>
 
-<img class='w100' src='images/dns.jpg' />
+You can buy your own [generic top-level domain][gtld] since 2012 for $185,000.
 
 
 
@@ -324,7 +345,7 @@ For example, the above 2 commands check whether port 80 and 81 are open on the c
 
 
 
-## Making TCP connections
+## Making connections
 
 <!-- slide-front-matter class: center, middle -->
 
@@ -332,19 +353,198 @@ For example, the above 2 commands check whether port 80 and 81 are open on the c
 
 ### Raw TCP connection
 
-Assuming Bob's computer has the IP address `1.1.1.1` and Alice's computer has the IP address `2.2.2.2`.
+Assuming Bob's server has the public IP address `1.1.1.1` and Alice's server has the public IP address `2.2.2.2`.
 
 <!-- slide-column -->
+
+Bob should use `nc` to listen for TCP connections on port 3000:
 
 ```bash
 $> nc -l 3000
 ```
 
+If Bob types some text and presses Enter to send it,
+it should be displayed in Alice's terminal.
+
+```bash
+$> nc -l 3000
+*Hello
+World
+```
+
 <!-- slide-column -->
+
+Alice should use `nc` to connect to TCP port 3000 on Bob's server:
 
 ```bash
 $> nc 1.1.1.1 3000
 ```
+
+Similarly, if Alice types and sends some text, it should appear in Bob's terminal:
+
+```bash
+$> nc 1.1.1.1 3000
+Hello
+*World
+```
+
+<!-- slide-container -->
+
+You have a two-way TCP connection running.
+
+### HTTP request
+
+Playing with TCP is all well and good, but it's a little low level.
+Let's do something that your browser does every day: an HTTP request.
+
+Find out Google's IP address (`3.3.3.3` in this example):
+
+```bash
+$> ping -c 1 google.com
+PING google.com (`3.3.3.3`) 56(84) bytes of data.
+64 bytes from example.net (3.3.3.3): icmp_seq=1 ttl=53 time=0.890 ms
+...
+```
+
+As a reminder, a basic [HTTP request][http-req] looks like this:
+
+```
+GET /path HTTP/1.1
+Header1: Value1
+Header2: Value2
+```
+
+The first line, the status line, indicates the [HTTP method][http-method], resource path and protocol version.
+The next lines are [headers][http-headers] to send additional parameters to the server.
+
+#### Making an HTTP request to Google
+
+Open a TCP connection to the Google IP address you previously found:
+
+```bash
+$> nc 3.3.3.3 80
+```
+
+Type the following lines exactly, followed by **two new lines** to terminate the message:
+
+```
+GET / HTTP/1.1
+Host: google.com
+```
+
+You have just sent an HTTP request to one of Google's servers,
+asking for the website `google.com` with the `Host` header.
+It should respond with something like this:
+
+```
+HTTP/1.1 301 Moved Permanently
+Location: http://www.google.com/
+...
+```
+
+By responding with the HTTP status code [301 Moved Permanently][http-301],
+Google's server is telling you that the website `google.com` has permanently moved to `www.google.com`.
+
+#### Following Google's redirect
+
+The connection should still be open.
+You can make another request, this time to `www.google.com`,
+by typing the following lines exactly, again followed by **two new lines**:
+
+```
+GET / HTTP/1.1
+Host: www.google.com
+```
+
+This time the server should send you Google's home page,
+in HTML format as indicated by the `Content-Type` header:
+
+```
+HTTP/1.1 200 OK
+Date: Wed, 05 Dec 2018 17:33:14 GMT
+Content-Type: text/html; charset=ISO-8859-1
+...
+
+<!doctype html>
+<html itemscope="" itemtype="http://schema.org/WebPage" lang="de">
+...
+</html>
+```
+
+### HTTP response
+
+Let's make a real-world request with an actual browser this time.
+
+Listen for TCP connections on your server on port 3000:
+
+```bash
+$> nc -l 3000
+```
+
+#### Making an HTTP request with a browser
+
+Assuming that your server has the public IP address `4.4.4.4`,
+visit `http://4.4.4.4:3000` in your browser.
+
+Your browser will make an HTTP request to the computer at IP address `4.4.4.4` on port `3000`.
+You should see the request in the terminal where netcat is running:
+
+```
+GET / HTTP/1.1
+Host: 3.121.150.168:3000
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9,fr;q=0.8,pt;q=0.7
+```
+
+#### Sending a plain text HTTP response
+
+Type or copy-paste the following text into the terminal:
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/plain
+
+Hello World
+```
+
+Stop netcat with Ctrl-C.
+The client should display the text once the connection has been closed.
+
+#### Sending an HTTP response with HTML
+
+Re-run the netcat command on the server:
+
+```bash
+$> nc -l 3000
+```
+
+Re-visit `http://4.4.4.4:3000` in your browser,
+then type or copy-paste the following text into the terminal once you have received the request:
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/html
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Some HTML</title>
+    <style>body { color: red; }</style>
+  </head>
+  <body>
+    <h1>This is HTML</h1>
+  &lt;/body&gt;
+&lt;/html&gt;
+```
+
+Stop netcat with Ctrl-C.
+You should see the HTML text appear in your browser.
 
 
 
@@ -362,12 +562,19 @@ $> nc 1.1.1.1 3000
   * [Networking 202](http://www.opsschool.org/en/latest/networking_201.html)
 * [Unix Networking Basics for the Beginner](https://www.networkworld.com/article/2693416/unix-networking-basics-for-the-beginner.html)
 * [Unix Top Networking Commands and What They Tell You](https://www.networkworld.com/article/2697039/unix-top-networking-commands-and-what-they-tell-you.html)
+* [What happens when you type google.com into your browser and press enter?](https://github.com/alex/what-happens-when)
 
 
 
 [arpanet]: https://en.wikipedia.org/wiki/ARPANET
 [cidr]: https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
 [dns]: https://en.wikipedia.org/wiki/Domain_Name_System
+[gtld]: https://en.wikipedia.org/wiki/Generic_top-level_domain
+[http-301]: https://httpstatuses.com/301
+[http-headers]: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
+[http-methods]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
+[http-req]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#HTTP_Requests
+[http-res]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#HTTP_Responses
 [iana]: https://www.iana.org
 [iana-ipv4]: https://www.iana.org/assignments/ipv4-address-space/ipv4-address-space.xhtml
 [iana-ipv6]: https://www.iana.org/assignments/ipv6-address-space/ipv6-address-space.xhtml
