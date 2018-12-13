@@ -91,7 +91,11 @@ If a variable is not set, nothing will be displayed:
 $> echo $FOO
 ```
 
+
+
 ### Listing all environment variables
+
+The `env` command prints all environment variables currently set in your shell, and their values:
 
 ```bash
 $> env
@@ -111,9 +115,136 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 
 
-### The `env` command
+### Setting an environment variable
 
-TODO
+There are multiple ways to set an environment variable.
+The lifetime of the variable depends on how you set it:
+
+* You can set it for one command.
+* You can set it for the current shell session.
+* You can set it in your shell configuration file (e.g. `.bashrc`).
+
+In order to test these techniques,
+download this [simple script](https://git.io/fpdar) which prints the value of an environment variable if set:
+
+```bash
+$> curl -sL https://git.io/fpdar > print-env-var.sh
+
+$> chmod 755 print-env-var.sh
+
+$> print-env-var.sh PATH
+The value of $PATH is /usr/local/sbin:/usr/local/bin:...
+
+$> print-env-var.sh FOO
+$FOO is not set
+```
+
+#### Setting a variable for one command
+
+You can prefix a command by an environment variable assigment:
+
+```bash
+$> `FOO=bar` ./print-env-var.sh FOO
+The value of $FOO is bar
+```
+
+This only sets the variable **for the process executed by that command**.
+As you can see, the variable is still not set if we check later, even in the same shell session:
+
+```bash
+$> ./print-env-var.sh FOO
+$FOO is not set
+```
+
+#### Setting a variable for a shell session
+
+The `export` command exports an environment variable to all the child processes running in the current shell session:
+
+```bash
+$> `export FOO=bar`
+
+$> ./print-env-var.sh FOO
+The value of $FOO is bar
+
+$> ./print-env-var.sh FOO
+The value of $FOO is bar
+```
+
+As you can see, the variable remains set.
+
+However, if you close the shell and reopen a new one, the variable is no longer set:
+
+```bash
+$> ./print-env-var.sh FOO
+$FOO is not set
+```
+
+#### Setting a variable in the shell configuration file
+
+If you add the `export` command to your shell configuration file (`.bash_profile` for [Bash][bash]),
+it will be run every time you start a new shell:
+
+```bash
+$> `echo 'export FOO=bar' >> ~/.bash_profile`
+
+$> cat ~/.bash_profile
+export FOO=bar
+```
+
+This will not immediately take effect in the current shell,
+as the configuration file is only evaluated when the shell starts.
+But you can evaluate it with the `source` command:
+
+```bash
+$> source ~/.bash_profile
+
+$> ./print-env-var.sh FOO
+The value of $FOO is bar
+```
+
+The variable will still be set if you close this shell and launch another one:
+
+```bash
+$> ./print-env-var.sh FOO
+The value of $FOO is bar
+```
+
+
+
+### Removing an environment variable
+
+The `unset` command removes a variable from the environment:
+
+```bash
+$> ./print-env-var.sh FOO
+The value of $FOO is bar
+
+$> unset FOO
+
+$> ./print-env-var.sh FOO
+$FOO is not set
+```
+
+> Of course, if the variable is exported in your shell configuration file,
+> this will only remove it for the current shell session.
+> You must remove the export from the configuration file to remove the variable from future shells.
+
+
+
+### Getting environment variables from code
+
+Every programming language has a simple way of retrieving the value of environment variables:
+
+Language     | Code
+:---         | :---
+Java         | `System.getenv("FOO")`
+Node.js      | `process.env.FOO`
+PHP          | `getenv("FOO")`
+Python       | `os.environ["FOO"]`
+Ruby         | `ENV["FOO"]`
+Shell script | `echo $FOO`
+
+
 
 
 
@@ -121,8 +252,10 @@ TODO
 
 * [Environment Variable][env-var]
 * [Linux/Unix list of common environment variables](https://www.cyberciti.biz/howto/question/general/linux-unix-list-common-environment-variables.php)
+* [All you need to know about Unix environment variables](https://www.networkworld.com/article/3215965/unix/all-you-need-to-know-about-unix-environment-variables.html)
 
 
 
+[bash]: https://en.wikipedia.org/wiki/Bash_(Unix_shell)
 [env-var]: https://en.wikipedia.org/wiki/Environment_variable
 [path]: https://en.wikipedia.org/wiki/Path_(computing)
