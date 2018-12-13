@@ -303,7 +303,7 @@ update-manager-core/bionic-updates 1:18.04.11.8 all
 
 
 
-### The `apt upgrade` and `apt-dist-upgrade` commands
+### The `apt upgrade` and `apt full-upgrade` commands
 
 When you have packages to upgrade, you could of course manually `apt install` each of them,
 but there are also two helpful commands that can do it for you:
@@ -315,7 +315,7 @@ but there are also two helpful commands that can do it for you:
 
   However, it will behave conservatively and **never remove packages that are currently installed**.
   This is to avoid problems in case new versions of your installed packages have widely different dependencies.
-* `apt dist-upgrade`
+* `apt full-upgrade`
 
   This command will do the same as `apt upgrade`, but in addition,
   it will automatically remove any packages that were dependencies of previous versions of your packages
@@ -324,9 +324,9 @@ but there are also two helpful commands that can do it for you:
 The second is "more dangerous" as you have to make sure that none of the removed packages will impact your computer.
 Use it with caution.
 
-### Upgrading packages
+#### Upgrading packages
 
-The `apt upgrade` and `apt dist-upgrade` commands will always ask for confirmation before
+The `apt upgrade` and `apt full-upgrade` commands will always ask for confirmation before
 upgrading, installing or removing any package:
 
 ```bash
@@ -350,14 +350,94 @@ Abort.
 > and how they might be used by your operating system and applications.
 > Otherwise you risk breaking your system.
 
+#### Rebooting after an upgrade
+
+Some packages can be upgraded in place.
+Other packages may **require the computer to be restarted** for the upgrade to take effect.
+
+When that is the case, there will be a warning on the shell every time you connect:
+
+```bash
+$> ssh user@example.com
+Welcome to Ubuntu
+...
+**** System restart required ***
+```
+
+This means that the upgrade process will only be complete once you restart the computer with `sudo reboot`.
+
+
+
+### The `apt remove` command
+
+You can remove a package with the `apt remove <name>` command.
+It will always ask for confirmation:
+
+```bash
+$> `sudo apt remove cowsay`
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+*The following packages will be REMOVED:
+*  cowsay
+0 upgraded, 0 newly installed, 1 to remove and 4 not upgraded.
+After this operation, 89.1 kB disk space will be freed.
+*Do you want to continue? [Y/n] n
+Abort.
+```
+
+This command will uninstall binaries but not configuration files.
+Use `apt purge <name>` to also remove the configuration files.
+
+
+
+### The `apt autoremove` command
+
+The `apt autoremove` command cleans up packages that were previously required but are no longer useful.
+
+Most of the time, there will probably be nothing to remove:
+
+```bash
+$> `sudo apt autoremove`
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+0 upgraded, 0 newly installed, 0 to remove and 4 not upgraded.
+```
+
+> It's good practice to run it after an upgrade and reboot,
+> to make sure there are no unused packages taking up space on the computer.
+
+
+
+### The `apt-get` and `apt-cache` commands
+
+The `apt` command is actually a higher-level frontend to the older and lower-level `apt-get` and `apt-cache` command.
+`apt` is simpler to user, but you will find many examples of these older commands on the internet.
+
+They are mostly equivalent:
+
+`apt` command      | older equivalent
+:---               | :---
+`apt list`         | `dpkg -l`
+`apt search`       | `apt-cache search`
+`apt install`      | `apt-get install`
+`apt update`       | `apt-get update`
+`apt upgrade`      | `apt-get upgrade`
+`apt full-upgrade` | `apt-get dist-upgrade`
+
+> You can also see these equivalent commands with `man apt`.
 
 
 
 
-## TODO
 
-* list --upgradeable
-* apt-get & apt-cache
+## Reference
+
+* [`man apt`](http://manpages.ubuntu.com/manpages/xenial/man8/apt.8.html)
+* [Using apt commands in Linux](https://itsfoss.com/apt-command-guide/)
+
+
 
 
 
