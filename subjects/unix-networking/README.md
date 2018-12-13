@@ -103,7 +103,7 @@ subnetting allows organizations to create smaller, isolated networks with fewer 
 
 This can be used to define **complex network structures** within an organization or to **improve security**.
 
-#### Private address space
+#### Reserved address spaces
 
 Certain ranges of IP addresses are **reserved for private networks**.
 In this address space you **cannot communicate with public machines** without a NAT gateway or proxy.
@@ -115,6 +115,13 @@ First address | Last address    | [Netmask][subnet] | [CIDR][cidr]
 10.0.0.0      | 10.255.255.255  | 255.0.0.0         | /8
 172.16.0.0    | 172.31.255.255  | 255.240.0.0       | /12
 192.168.0.0   | 192.168.255.255 | 255.255.0.0       | /16
+
+Additionally, the following range is **reserved for a virtual network interface**,
+allowing networking applications running on the same machine to communicate with one another:
+
+First address | Last address    | [Netmask][subnet] | [CIDR][cidr]
+:---          | :---            | :---              | :---
+127.0.0.1     | 127.255.255.255 | 255.0.0.0         | /8
 
 #### Network address translation
 
@@ -149,13 +156,21 @@ For example, when a browser displays a web page, it could be making a TCP connec
 <!-- slide-column 45 -->
 
 A typical computer only has one IP address.
-Ports allow initiating or receiving **multiple connections at the same time** on different ports.
+One client can only open one connection at a time on a given IP address and port on a server.
 
-One computer may receive simultaneous connections by an SSH client on port 22, an SMTP mail client on port 25, and an HTTP browser on port 80.
+However, ports allow the same client to initiate **multiple connections at the same time** as long as they are made to **different ports**.
 
 <!-- slide-column -->
 
 <img class='w100' src='images/ports.jpg' />
+
+<!-- slide-container -->
+
+For example, a client may open 3 simultaneous TCP connections to a server:
+
+* On port 22 to connect with an SSH client.
+* On port 25 to retrieve mails with the SMTP protocol.
+* On port 80 to request a web page with a browser using the HTTP protocol.
 
 #### Registered port numbers
 
@@ -181,6 +196,7 @@ See the [full list][registered-ports].
 
 The port numbers in the range from 0 to 1023 are the **well-known ports** or **system ports**.
 They are used by system processes that provide widely used types of network services, such as SSH or DNS.
+
 On Unix-like operating systems, a process must execute with **superuser privileges** to be able to bind a network socket on a well-known port.
 
 ### Domain name system
@@ -217,13 +233,13 @@ Type `ip address` to check your computer's IP address(es).
 
 ```bash
 $> ip address
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue ...
+1: `lo`: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue ...
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet `127.0.0.1`/8 scope host lo
        valid_lft forever preferred_lft forever
     inet6 `::1`/128 scope host 
        valid_lft forever preferred_lft forever
-2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9001 ...
+2: `eth0`: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9001 ...
     link/ether 06:5f:44:85:36:92 brd ff:ff:ff:ff:ff:ff
     inet `172.31.39.219`/20 brd 172.31.47.255 scope global dynamic eth0
        valid_lft 2665sec preferred_lft 2665sec
