@@ -38,6 +38,7 @@ Materials for the COMEM+ web development courses.
   * [Unix Processes](subjects/unix-processes/)
   * [Unix Networking](subjects/unix-networking/)
   * [Unix Environment Variables](subjects/unix-env-vars/)
+  * [APT](subjects/apt/)
 
 **Languages & Frameworks**
 
