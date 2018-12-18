@@ -4,6 +4,9 @@ Learn about reverse proxying and load balancing using nginx.
 
 <!-- slide-include ../../BANNER.md -->
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 
 
 ## TODO
@@ -18,4 +21,5 @@ Learn about reverse proxying and load balancing using nginx.
     * Compression
     * Spoon-feeding
     * Authentication
+  * Vertical vs. horizontal scalability
 * Nginx configuration syntax
