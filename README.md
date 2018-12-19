@@ -71,6 +71,7 @@ Materials for the COMEM+ web development courses.
 * [RESTful APIs](subjects/rest/)
   * [RESTful API Conventions](subjects/rest-conventions/)
   * [apiDoc](subjects/apidoc/)
+* [Reverse Proxying](subjects/reverse-proxy)
 
 **Databases**
 
