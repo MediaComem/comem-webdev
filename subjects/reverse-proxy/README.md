@@ -1,6 +1,6 @@
 # Reverse Proxying
 
-Learn about reverse proxying and load balancing, and put it in practice using nginx.
+Learn what a reverse proxy is, and put it in practice using nginx.
 
 <!-- slide-include ../../BANNER.md -->
 
