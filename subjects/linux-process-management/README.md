@@ -140,7 +140,7 @@ The `systemctl` or **system** **c**on**t**ro**l** command can be used to enable/
 
 Command                          | Description
 :---                             | :---
-`sudo systemctl enable <unit>`   | Enable a new unit file.
+`sudo systemctl enable <unit>`   | Enable a new unit file. This will enable it to start on boot if it has the correct dependencies.
 `sudo systemctl start <unit>`    | Start a unit.
 `sudo systemctl stop <unit>`     | Stop a unit.
 `sudo systemctl reenable <unit>` | Re-enable an existing unit file after its dependencies have been modified.
