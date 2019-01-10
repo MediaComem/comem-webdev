@@ -32,6 +32,7 @@ Materials for the COMEM+ web development courses.
 * [Git](subjects/git/)
   * [Git Branching](subjects/git-branching/)
   * [Collaborating with Git on GitHub](subjects/git-collaborating/)
+  * [Git Hooks](subjects/git-hooks/)
 * [SSH](subjects/ssh/)
 * [Linux](subjects/linux/)
   * [Unix Administration](subjects/unix-admin/)
@@ -40,6 +41,7 @@ Materials for the COMEM+ web development courses.
   * [Unix Environment Variables](subjects/unix-env-vars/)
   * [APT](subjects/apt/)
   * [Linux Process Management](subjects/linux-process-management/)
+  * [Shell Scripting](subjects/shell-scripting/)
 
 **Languages & Frameworks**
 
