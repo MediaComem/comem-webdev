@@ -348,7 +348,7 @@ which means they a good place to define `server` contexts in.
 By convention, nginx has two directories for website configuration files:
 
 * **`sites-available`** contains the actual configuration files.
-  For example, you could create a file at `/etc/nginx/sites-available/site.conf` to configure nginx to serve your website.
+  For example, you could create a file at `/etc/nginx/sites-available/example-site` to configure nginx to serve your website.
 
   This directory is **not** included by nginx,
   so configuration files in it are not automatically picked up.
@@ -362,8 +362,8 @@ but not actually enable them until you put the symbolic link in `sites-enabled`.
 It also allows you to **quickly disable** a website without deleting its configuration file.
 
 ```
-/etc/nginx/sites-available/site.conf
-/etc/nginx/sites-enabled/site -> /etc/nginx/sites-available/site.conf
+/etc/nginx/sites-available/example-site
+/etc/nginx/sites-enabled/example-site -> /etc/nginx/sites-available/example-site
 ```
 
 #### Reloading nginx's configuration
@@ -397,12 +397,12 @@ $> sudo systemctl reload nginx
 Each of the following examples can be put in a separate file in the `/etc/nginx/sites-available` directory:
 
 * Copy a website configuration example.
-* Save it in `/etc/nginx/sites-available/example.conf`.
+* Save it in `/etc/nginx/sites-available/example`.
 * Create a symbolic link to it in `/etc/nginx/sites-enabled` with this command (this is one command on 3 lines):
 
   ```bash
   $> sudo ln -s \
-       /etc/nginx/sites-available/example.conf \
+       /etc/nginx/sites-available/example \
        /etc/nginx/sites-enabled/example
   ```
 * Check that you have not made a mistake:
@@ -451,6 +451,7 @@ making it behave as a **reverse proxy**.
 server {
   listen 80;
   server_name dynamic.example.com;
+  root /path/to/static/files;
 
   # Proxy requests for dynamic content to another server/application.
   location / {
