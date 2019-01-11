@@ -389,10 +389,13 @@ Nginx has many [directives][nginx-directives] that can be put in various context
 These are the most commonly used ones in the `server` context,
 used to serve websites (static or dynamic):
 
-Directive                           | Example value                  | Description
-:---                                | :---                           | :---
-[`listen`][nginx-directive-listen]  | `80`, `localhost:8000`         | Port (and optional address) on which nginx will listen and accept requests from.
-[`server_name`][nginx-server-names] | `example.com, www.example.com` | The server name is a comma-separated list of domain names. Nginx uses it to determine which `server` block handles client requests, depending on the request's `Host` header.
+Directive                              | Example value                              | Description
+:---                                   | :---                                       | :---
+[`listen`][nginx-directive-listen]     | `80`, `localhost:8000`                     | Port (and optional address) on which to listen and accept requests from.
+[`server_name`][nginx-server-names]    | `example.com, www.example.com`             | Comma-separated list of domain names. Determine which `server` block handles client requests.
+[`root`][nginx-directive-root]         | `/home/john_doe/www/site`, `/var/www/site` | The root directory for requests.
+[`index`][nginx-directive-index]       | `index.html`                               | Define files that will be used as an index, i.e. served by default if there is no URL path.
+[`location`][nginx-directive-location] | `/api`, `~* \.jpg$`                        | Vary configuration based on the URL.
 
 
 
@@ -545,7 +548,10 @@ server {
 [horizontal-and-vertical-scaling]: https://en.wikipedia.org/wiki/Scalability#Horizontal_and_vertical_scaling
 [load-balancing]: https://en.wikipedia.org/wiki/Load_balancing_(computing)
 [nginx]: http://nginx.org/
+[nginx-directive-index]: http://nginx.org/en/docs/http/ngx_http_index_module.html#index
 [nginx-directive-listen]: http://nginx.org/en/docs/http/ngx_http_core_module.html#listen
+[nginx-directive-location]: http://nginx.org/en/docs/http/ngx_http_core_module.html#location
+[nginx-directive-root]: http://nginx.org/en/docs/http/ngx_http_core_module.html#root
 [nginx-directives]: http://nginx.org/en/docs/dirindex.html
 [nginx-docs]: http://nginx.org/en/docs/
 [nginx-features]: http://nginx.org/en/#basic_http_features
