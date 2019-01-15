@@ -233,8 +233,8 @@ How then does the browser know that a root certificate authority is valid?
 Browsers and operating systems have **hardcoded lists of root certificates** that are considered to be **trusted**.
 For example:
 
-* [Trusted Root Certificates in iOS][ios-ca]
-* [Trusted Root Certificates in Mozilla Firefox][mozilla-ca]
+* [Trusted Root Certificates in iOS][ios-root-ca-list]
+* [Trusted Root Certificates in Mozilla Firefox][mozilla-root-ca-list]
 
 When your browser checks a TLS's certificate chain of trust,
 it expects the chain's root certificate to be one of the **already trusted** ones;
@@ -242,43 +242,124 @@ otherwise, the TLS certificate is deemed invalid.
 
 In other words, if you want to launch a new company to issue valid TLS certificates,
 you must contact Mozilla, Apple, Microsoft, etc. to have them include your new root certificate
-in their programs.
+in their programs:
+
+* [Apple Root Program][apple-root-ca]
+* [Microsoft Root Program][microsoft-root-ca]
+* [Mozilla Root Program][mozilla-root-ca]
+* [Oracle Root Program][oracle-root-ca]
+
+
+
+## Obtaining a TLS certificate
+
+To obtain a valid TLS certificate, you need to request one from a [**certification authority (CA)**][ca].
+In 2018, the 3 most popular CAs are:
+
+* [IdenTrust][identrust]
+* [Comodo][comodo]
+* [DigiCert][digicert]
+
+Before the certification authority will give you a signed, valid TLS certificate,
+they will make you go through **domain validation**.
+In other words, they will ask you to **prove that you are the legitimate owner of the domain**
+indicated in the certificate.
+
+### Domain validation
+
+There are multiple techniques to do that.
+For example, assuming that you own the domain `example.com`
+and request a TLS certificate for that domain from a CA:
+
+* **HTTP validation:** the CA can ask you to put a file at `http://example.com/abc.txt` containing a random validation token.
+  Doing this proves that you control the server which serves the content for the domain.
+* **DNS validation:** the CA can ask you to create a custom DNS record for your domain.
+  Doing this proves that you control the DNS zone file for the domain.
+* **Email validation:** the CA can send you a mail with a validation link at `admin@example.com`.
+  Following the link proves that you are the administrator of the domain,
+  since only you could manage that email address.
+
+### Purchasing TLS certificates
+
+Some certificate authorities sell you TLS certificates.
+What you pay for is:
+
+* **Compatibility:** Not all root certificates are as widespread.
+  Some may be present in more browsers and operating systems.
+  By paying more, you may get a certificate that is certified to be compatible with more clients.
+* **Warranty:** Many certificate authorities will pay you a given sum of money
+  if your security is compromised because of a weakness in their TLS certificate.
+  You may increase that warranty by purchasing a more expensive certificate.
+* **[Extended Validation Certificate (EV)][ev-certificate]:**
+  Certificate authorities can validate that a legal entity is the owner of a domain,
+  enabling the browser to display a so-called "green-bar certificate".
+
+  ![Extended Validation Certificate](images/ev-certificate.png)
+
+### Let's Encrypt
+
+[Let's Encrypt][letsencrypt] is a **free, automated, and open certificate authority (CA)**, run for the public's benefit.
+It is a service provided by the [Internet Security Research Group (ISRG)][isrg].
+The key principles behind Let's Encrypt are:
+
+* **Free:** Anyone who owns a domain name can use Let's Encrypt to obtain a valid TLS certificate at zero cost.
+* **Automatic:** Software running on a web server can painlessly obtain a certificate,
+  securely configure it for use, and automatically take care of renewal.
+* **Secure:** Let's Encrypt will serve as a platform for advancing TLS security best practices,
+  both on the CA side and by helping site operators properly secure their servers.
+* **Transparent:** All certificates issued or revoked will be publicly recorded and available for anyone to inspect.
+* **Open:** The automatic issuance and renewal protocol will be published as an open standard that others can adopt.
+* **Cooperative:** Much like the underlying Internet protocols themselves,
+  Let's Encrypt is a joint effort to benefit the community, beyond the control of any one organization.
+
+#### Certbot
+
+[Certbot][certbot] is a tool made by the [Electronic Frontier Foundation (EFF)][eff].
+It can be installed on any Linux server and will:
+
+* Help you **obtain Let's Encrypt certificates**.
+* **Configure your web server,** such as [Apache][apache] or [nginx][nginx],
+  to use the certificates.
+* Set up **automatic renewal** for these certificates.
 
 
 
 ## References
 
-* [Public Key Cryptography][pubkey]
-  * [Public-key Certificate][pubkey-certificate]
+* [Public-key Certificate][pubkey-certificate]
+  * [Public Key Cryptography][pubkey]
   * [Chain of Trust][chain-of-trust]
+* [Certificate Authority (CA)][ca]
+  * [Let's Encrypt][letsencrypt]
 * [Generating a self-signed certificate using OpenSSL][self-signed]
 * [Nginx - Configuring HTTPS servers][nginx-ssl]
 
 
 
-## TODO
-
-* request certificate
-  * pay
-    * cost factors: warranty, compatibility
-  * prove domain ownership
-* let's encrypt
-  * certbot
-
-
-
+[apache]: https://www.apache.org
+[apple-root-ca]: https://www.apple.com/certificateauthority/ca_program.html
+[ca]: https://en.wikipedia.org/wiki/Certificate_authority
 [certbot]: https://certbot.eff.org/
 [chain-of-trust]: https://en.wikipedia.org/wiki/Chain_of_trust
 [cipher-suite]: https://en.wikipedia.org/wiki/Cipher_suite
+[comodo]: https://www.comodo.com
 [dh]: https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange
+[digicert]: https://www.digicert.com
 [digital-signature]: https://en.wikipedia.org/wiki/Digital_signature
-[ios-ca]: https://support.apple.com/en-gb/HT204132
+[eff]: https://www.eff.org
+[ev-certificate]: https://en.wikipedia.org/wiki/Extended_Validation_Certificate
+[identrust]: https://www.identrust.com
+[ios-root-ca-list]: https://support.apple.com/en-gb/HT204132
+[isrg]: https://letsencrypt.org/isrg/
 [letsencrypt]: https://letsencrypt.org/
-[mozilla-ca]: https://wiki.mozilla.org/CA/Included_Certificates
+[microsoft-root-ca]: https://docs.microsoft.com/en-us/previous-versions//cc751157(v=technet.10)
+[mozilla-root-ca]: https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/policy/
+[mozilla-root-ca-list]: https://wiki.mozilla.org/CA/Included_Certificates
 [nginx]: http://nginx.org/
 [nginx-ssl]: http://nginx.org/en/docs/http/configuring_https_servers.html
 [nginx-ssl-certificate-directive]: http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate
 [nginx-ssl-certificate-key-directive]: http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate_key
+[oracle-root-ca]: https://www.oracle.com/technetwork/java/javase/javasecarootcertsprogram-1876540.html
 [pki]: https://en.wikipedia.org/wiki/Public_key_infrastructure
 [pubkey]: https://en.wikipedia.org/wiki/Public-key_cryptography
 [pubkey-certificate]: https://en.wikipedia.org/wiki/Public_key_certificate
