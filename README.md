@@ -76,7 +76,8 @@ Materials for the COMEM+ web development courses.
 * [DNS](subjects/dns/)
 * [Reverse Proxying](subjects/reverse-proxy/)
 * [SSL](subjects/ssl/)
-* [Continuous Software Development](subjects/continuous)
+* [Continuous Software Development](subjects/continuous/)
+  * [Automated Testing](subjects/automated-testing/)
 
 **Databases**
 
