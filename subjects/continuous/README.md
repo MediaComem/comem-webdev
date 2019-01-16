@@ -106,7 +106,7 @@ A software development team may define a [workflow][git-workflows] determining w
 
 
 
-## Continuous testing (CT)
+## Continuous Testing (CT)
 
 [**C**ontinuous **T**esting (CT)][ct] is the practice of using automated tests
 to obtain immediate feedback while developing instead of waiting for the Quality Assurance (QA) engineers to manually test the software.
