@@ -31,8 +31,14 @@ Learn about the various kinds of automated tests and write some in JavaScript an
 
 ## TODO
 
+* assertions
+* test runners
+
 * unit tests
+* mocking
+
 * integration tests
+
 * API tests
 * e2e/ui/gui tests
 
