@@ -128,6 +128,159 @@ to test the response time or scalability of software or infrastructure.
 
 
 
+## Writing tests
+
+<!-- slide-front-matter class: center, middle -->
+
+<p class='center'><img class='w80' src='images/apples-and-oranges.png' /></p>
+
+## Unit tests
+
+The goal of unit tests is to test **individual units of source code in isolation**.
+You can view a **unit** as the **smallest testable part of your software**.
+
+For example, you might test an individual JavaScript function:
+
+```js
+function add(a, b) {
+  return a + b;
+}
+```
+
+### How to write a unit test
+
+When writing a unit test for a piece of code, you want to identify the **inputs** and **outputs** (or side effects) of that code.
+
+```js
+function add(a, b) {
+  return a + b;
+}
+```
+
+In this case:
+
+* There are two numbers as inputs, `a` and `b`.
+* There is one number as output.
+
+### Assertions
+
+Once you have the inputs and outputs, you want to define **assertions** on how that code should behave.
+
+```js
+function add(a, b) {
+  return a + b;
+}
+```
+
+Assertions are the outputs you expect for specific inputs.
+For example:
+
+* For inputs 2 and 3, the **expected** output is 5.
+* For inputs -3 and 4, the **expected** output is 1.
+* For inputs 10 and -12, the **expected** output is -2.
+
+When implementing unit tests, you will execute the code and use assertions to compare the **actual** output value with the **expected** one.
+
+### Write PHP unit tests
+
+You'll work with this [sample PHP project][php-sample] for your first unit tests.
+It is a simple command line script to print statistics on a file's contents.
+
+Follow the usage instructions in the README to make sure you can execute the script locally.
+
+The output should look something like this:
+
+```bash
+$> `php file-stats.php data/rainbow.txt`
+File: /path/to/data/rainbow.txt
+Lines: 51
+Words: 255
+Characters: 1284
+Size: 1.25KB
+```
+
+#### Install a PHP test runner
+
+To execute our future PHP unit tests, we'll need a test framework (or test runner).
+The most popular one for PHP is [PHPUnit][phpunit].
+
+To install PHPUnit, you will first need to install [Composer][composer],
+the dependency manager for PHP. It can install packages created by the PHP community, including PHPUnit.
+
+> You can install Composer in a directory by simply downloading it,
+> in which case you must run it with `php composer.phar [args...]`.
+> Or you can install it globally, in which case you can simply run it with `composer [args...]`.
+> These installation methods are described in the documentation.
+
+#### Install PHPUnit
+
+Once you have Composer installed, you can install PHPUnit with it.
+Run this command in the `comem-archidep-php-automated-tests` directory:
+
+```bash
+$> `composer require --dev phpunit/phpunit '^7'`
+./composer.json has been updated
+Loading composer repositories with package information
+Updating dependencies (including require-dev)
+Package operations: 28 installs, 0 updates, 0 removals
+  ...
+  - Installing phpunit/phpunit (7.5.2): Loading from cache
+...
+Generating autoload files
+```
+
+If you have successfully installed it, you should be able to check its version:
+
+```bash
+$> `./vendor/bin/phpunit --version`
+PHPUnit 7.0.0 by Sebastian Bergmann and contributors.
+```
+
+#### Create a test file
+
+You will now create your first test file.
+Create a `tests` directory and save the following contents to `tests/file-stats-tests.php`:
+
+```php
+<?php
+declare(strict_types=1);
+
+use PHPUnit\Framework\TestCase;
+
+require(dirname(__FILE__) . '/../src/functions.php');
+use function FileStats\countBytes;
+use function FileStats\countCharacters;
+use function FileStats\countLines;
+use function FileStats\countWords;
+use function FileStats\formatBytes;
+
+final class FileStatsTest extends TestCase
+{
+    public function testSomething(): void
+    {
+    }
+}
+?>
+```
+
+#### Anatomy of a PHPUnit test case
+
+What you just pasted is a PHPUnit **test case**:
+
+* It inherits from the `PHPUnit\Framework\TestCase` class.
+* It has methods with names that begin with `test`.
+
+```php
+final class FileStatsTest extends TestCase
+{
+    public function testSomething(): void
+    {
+    }
+}
+```
+
+
+
 ## References
 
 * https://smartbear.com/learn/automated-testing/
@@ -173,6 +326,7 @@ to test the response time or scalability of software or infrastructure.
 [api-testing]: https://en.wikipedia.org/wiki/API_testing
 [appium]: https://appium.io
 [automated-tests]: https://en.wikipedia.org/wiki/Test_automation
+[composer]: https://getcomposer.org
 [cucumber]: https://cucumber.io/
 [doctest]: https://pythontesting.net/framework/doctest/doctest-introduction/
 [gui-testing]: https://en.wikipedia.org/wiki/Graphical_user_interface_testing
@@ -187,6 +341,7 @@ to test the response time or scalability of software or infrastructure.
 [node]: https://nodejs.org
 [performance-testing]: https://en.wikipedia.org/wiki/Software_performance_testing
 [php]: http://php.net
+[php-sample]: https://github.com/MediaComem/comem-archidep-php-automated-tests
 [phpunit]: https://phpunit.de
 [python]: https://www.python.org
 [python-unittest]: https://docs.python.org/3/library/unittest.html
