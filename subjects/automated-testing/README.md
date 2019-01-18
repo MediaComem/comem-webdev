@@ -768,13 +768,16 @@ $> npm install --save-dev supertest
 Here's an example of how to write a test with SuperTest:
 
 ```js
+const { expect } = require('chai');
+const supertest = require('supertest');
+
 describe('Some API', function() {
   it('should do something', async function() {
 
     const response = await supertest('http://www.google.com').get('/');
 
     expect(response.status).to.equal(200);
-    expect(response.body).to.have.string('Google');
+    expect(response.text).to.have.string('Google');
   });
 });
 ```
