@@ -765,11 +765,24 @@ $> npm install --save-dev supertest
 
 ### Using SuperTest
 
-TODO:
+Here's an example of how to write a test with SuperTest:
 
-* example
-* async/await
-* write 2 tests
+```js
+describe('Some API', function() {
+  it('should do something', async function() {
+
+    const response = await supertest('http://www.google.com').get('/');
+
+    expect(response.status).to.equal(200);
+    expect(response.body).to.have.string('Google');
+  });
+});
+```
+
+Write at least two tests for the greeter API:
+
+* Test that simply calling the URL returns a default greeting.
+* Test a more complex greeting by sending URL query parameters.
 
 
 
