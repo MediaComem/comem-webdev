@@ -8,8 +8,8 @@ Learn about the various kinds of automated tests and write some in JavaScript an
 
 * A Unix CLI
 * A code editor (like [Visual Studio Code][vscode])
-* [Node.js][node] 10+ and [PHP][php] installed,
-  and a basic knowledge of these languages
+* [Node.js][node] 10.x and [PHP][php] 5+ installed
+* Basic knowledge of JavaScript and PHP
 
 **Recommended reading**
 
@@ -128,15 +128,15 @@ to test the response time or scalability of software or infrastructure.
 
 
 
-## Writing tests
+## Unit tests
 
 <!-- slide-front-matter class: center, middle -->
 
-<p class='center'><img class='w80' src='images/apples-and-oranges.png' /></p>
+<p class='center'><img class='w80' src='images/unit-tests.png' /></p>
 
-## Unit tests
+## What is a unit test?
 
-The goal of unit tests is to test **individual units of source code in isolation**.
+The goal of [unit testing][unit-testing] is to test **individual units of source code in isolation**.
 You can view a **unit** as the **smallest testable part of your software**.
 
 For example, you might test an individual JavaScript function:
@@ -201,7 +201,7 @@ Size: 1.25KB
 
 #### Install a PHP test runner
 
-To execute our future PHP unit tests, we'll need a test framework (or test runner).
+To execute our future PHP unit tests, we'll need a test framework, including a **test runner**.
 The most popular one for PHP is [PHPUnit][phpunit].
 
 To install PHPUnit, you will first need to install [Composer][composer],
@@ -239,7 +239,7 @@ PHPUnit 7.0.0 by Sebastian Bergmann and contributors.
 #### Create a test file
 
 You will now create your first test file.
-Create a `tests` directory and save the following contents to `tests/file-stats-tests.php`:
+Create a `tests` directory and save the following contents to `tests/file-stats.php`:
 
 ```php
 <?php
@@ -265,19 +265,511 @@ final class FileStatsTest extends TestCase
 
 #### Anatomy of a PHPUnit test case
 
-What you just pasted is a PHPUnit **test case**:
+What you just pasted is a PHPUnit **test suite** composed of one **test case**:
 
 * It inherits from the `PHPUnit\Framework\TestCase` class.
 * It has methods with names that begin with `test`.
+  Those are what PHPUnit will execute when running the file.
+
+<p class='center'><img class='w80' src='images/test-runner.jpg' /></p>
+
+#### Run your first test
+
+You can run all the test cases in a file with this command:
+
+```bash
+$> `./vendor/bin/phpunit --bootstrap vendor/autoload.php tests/file-stats.php`
+PHPUnit 7.5.2 by Sebastian Bergmann and contributors.
+
+R                                                                   1 / 1 (100%)
+
+Time: 29 ms, Memory: 4.00MB
+
+There was 1 risky test:
+
+1) FileStatsTest::testSomething
+This test did not perform any assertions
+
+/path/to/projects/comem-archidep-php-automated-tests/tests/file-stats.php:12
+
+OK, but incomplete, skipped, or risky tests!
+Tests: 1, Assertions: 0, Risky: 1.
+```
+
+As you can see, the `testSomething` method was executed,
+but the test runner is warning us that it **did not perform any assertions**.
+
+A test that performs no assertions is basically useless, since it tests nothing.
+
+#### PHPUnit assertions
+
+PHPUnit is not only a test runner, but also provides functions to make assertions.
+Here are a few:
+
+Assertion                            | Description
+:---                                 | :---
+`assertEquals($expected, $actual)`   | Reports an error if `$expected` and `$actual` are not equal.
+`assertEmpty($actual)`               | Reports an error if `$actual` is not empty.
+`assertContains($needle, $haystack)` | Reports an error if `$haystack` does not contain `$needle`.
+`assertFileExists($file)`            | Reports an error if `$file` is not an actual file.
+
+These are just a few examples, here's a [complete list][phpunit-assertions].
+
+##### Failing assertions
+
+Write an assertion in the `testSomething` method that you know to be false.
+For example, `1` and `2` are not equal:
 
 ```php
-final class FileStatsTest extends TestCase
-{
-    public function testSomething(): void
-    {
-    }
+public function testSomething(): void {
+  $this.assertEquals(1, 2);
 }
 ```
+
+If you run this test, you will see something like the following output:
+
+```php
+F                                                                   1 / 1 (100%)
+Time: 30 ms, Memory: 4.00MB
+
+There was 1 failure:
+
+1) FileStatsTest::testSomething
+Failed asserting that 2 matches expected 1.
+```
+
+It of course failed because the **actual value**, `2`, is not equal to the **expected value**, `1`,
+which what you **asserted** should be the case.
+
+> Note that if you run `echo $?` right after running the test,
+> you will see that PHPUnit exited with a non-zero code
+> to indicate that the tests failed.
+
+##### Successful assertions
+
+This time, update the assertion to something you know to be true:
+
+```php
+public function testSomething(): void {
+  $this.assertEquals(3, 1 + 2);
+}
+```
+
+Then run the test again:
+
+```php
+.                                                                   1 / 1 (100%)
+
+Time: 27 ms, Memory: 4.00MB
+
+OK (1 test, 1 assertion)
+```
+
+This time, the assertion succeeded because the **expected** and **actual** values are in fact equal,
+so the test runner completed without incident.
+
+> This time, running `echo $?` right after running the test returns zero,
+> since all tests completed successfully.
+
+#### Write some tests
+
+Read the file `src/functions.php`.
+It contains various functions.
+Write **at least one test for each function**.
+As a reminder:
+
+* Determine each function's **inputs** and **outputs**.
+* Write a test that **calls a function** with specific inputs.
+* Write an assertion to check that the **actual result** matches **what you expected**.
+
+For example:
+
+```php
+public function testCountWords() {
+  $input = 'Hello World';
+  $expectedResult = 2;
+  $actualResult = countWords($input);
+  $this->assertEquals($expectedResult, $actualResult);
+}
+```
+
+Of if you want to be concise:
+
+```php
+public function testCountWords() {
+  $this->assertEquals(2, countWords('Hello World'));
+}
+```
+
+### Write JavaScript unit tests
+
+In the previous exercice, the functions you were testing were implemented in PHP.
+Since the tests actually execute the functions, they must be implemented in PHP as well.
+
+Now you will switch to this [sample JavaScript project][js-sample] implemented with [Node.js][node] (a server-side JavaScript runtime).
+
+Follow the usage instructions and make sure you can visit http://localhost:3000 and see the application working.
+As you can see, it's a very simple project, just to have something to test.
+
+Take some time to read the [contents of the `lib` directory][js-sample-lib],
+as that is the code you will write unit tests for.
+Note the use of the [decorator pattern][decorator].
+
+You can also read the [`buildGreeting` function in `routes/greeter.js`][js-sample-build-greeting],
+which shows how these classes are used.
+
+#### Install a JavaScript test runner
+
+To write JavaScript tests, you will need to install a test runner in the same language.
+In this tutorial, you will use [Mocha][mocha], one of the most popular JavaScript test frameworks.
+
+Run the following command in the project's directory to install Mocha as a development tool:
+
+```bash
+$> npm install --save-dev mocha
+```
+
+> [npm][npm] is the most popular JavaScript package manager and the world's largest software repository.
+
+#### Create a Mocha test file
+
+Create a `tests` directory and save the following contents into a file named `tests/code.test.js`:
+
+```js
+describe('Something', function() {
+  it('should do something', function() {
+  });
+
+  it('should do something else', function() {
+  });
+});
+```
+
+Mocha provides two basic methods to organize tests:
+
+* `describe` allows you to indicate a brief description of the **subject of the following tests**.
+* `it` defines a test case, including a brief description of the test.
+
+  > It's good practice to start the description with the word "should",
+  > so that test cases read "it should ..." which sounds like proper English.
+
+#### Running Mocha tests
+
+Run the following command to execute all files with names ending with `.test.js` in the `tests` directory:
+
+```bash
+$> ./node_modules/mocha/bin/mocha 'tests/**/*.test.js'
+
+  Greeter
+    ✓ should test something
+    ✓ should test something else
+
+  2 passing (6ms)
+```
+
+As you can see, Mocha read your test cases and executed the two functions passed to `it`.
+Mocha considers a test successful if it does nothing.
+
+##### Add a shortcut npm script for Mocha
+
+To avoid typing that rather complex Mocha command every time,
+you can add the following line in the `package.json` file:
+
+```json
+  ...
+  "scripts": {
+    "dev": "cross-env DEBUG=greeter:* nodemon ./bin/www",
+    `"mocha": "mocha 'tests/**/*.test.js'",`
+    "start": "node ./bin/www"
+  }
+  ...
+```
+
+This defines an [npm script][npm-scripts] that allows you to run the command by simply typing `npm run mocha`:
+
+```bash
+$> npm run mocha
+
+  Greeter
+    ✓ should test something
+    ✓ should test something else
+
+  2 passing (6ms)
+```
+
+#### Assertion library
+
+Earlier when you wrote unit tests in PHP, assertions were provided out of the box by PHPUnit.
+Mocha does not do this. It is a minimalistic test framework, focusing only on running tests.
+
+You will have to install an **assertion library**, i.e. a library that focuses on helping you to write assertions.
+There are many like [Chai][chai], [Must.js][mustjs] or [Should.js][shouldjs].
+
+You will use [Chai][chai] for this tutorial.
+It's a popular assertion library with a [Behavior-Driven Development][bdd] syntax:
+
+```js
+expect(1 + 2).to.equal(3);
+```
+
+Install it by running the following command in the project's directory:
+
+```bash
+$> npm install --save-dev chai
+```
+
+#### Import the code to test
+
+Add the following lines to the top of your `tests/code.test.js` file:
+
+```js
+const { expect } = require('chai');
+
+const ExcitementDecorator = require('../lib/excitement-decorator');
+const Greeter = require('../lib/greeter');
+const LoudDecorator = require('../lib/loud-decorator');
+const RandomDecorator = require('../lib/random-decorator');
+```
+
+These lines import the classes to test from the relevant files,
+so that they are available in the test file.
+
+#### Write a test
+
+Now you have everything you need to write some JavaScript tests.
+Take a minute to look at the [assertions provided by Chai][chai-assertions],
+
+Write a simple test:
+
+```js
+describe('Greeter', function() {
+  it('should produce a simple greeting', function() {
+    // TODO: Create a greeter and call its "toString()" method.
+    // TODO: Assert that the expected result should be equal to "Hi Bob".
+  });
+});
+```
+
+### Mocking
+
+The loud decorator works like this:
+
+```js
+let greeter = new Greeter();
+greeter.setName('Bob');
+greeter.setSalutation('Hi');
+console.log(greeter.toString()); // Hi Bob
+
+let greeter = new LoudDecorator(greeter);
+greeter.setLoud();
+console.log(greeter.toString()); // HI BOB
+```
+
+Write a unit test for it.
+
+#### Not a unit test
+
+You might have written something similar to this:
+
+```js
+describe('LoudDecorator', function() {
+  it('should make a greeting louder', function() {
+
+    let greeter = new Greeter();
+    greeter.setName('Bob');
+    greeter.setSalutation('Hi');
+
+    greeter = new LoudDecorator(greeter);
+    greeter.setLoud();
+
+    expect(greeter.toString()).to.equal('HI BOB');
+  });
+});
+```
+
+It could be argued that **this is not a unit test**.
+
+Why? Because it does not test the smallest possible unit of code in isolation.
+**It tests two things:** both `Greeter` and `LoudDecorator`.
+If the test fails, it might be **hard to identify which of these two components has the bug**.
+
+This is why this test could be better described as an [**integration test**][integration-testing],
+i.e. a test on multiple components working together.
+
+#### Can I still make it a unit test?
+
+What if you wanted to test `LoudDecorator` alone?
+
+You would need a way to pass it something that looks like a `Greeter` object,
+without using the actual `Greeter` class.
+
+Enter the concept of [mocks][mocking].
+A **mock object** is a simulated object that mimics the behavior of a real object in a controlled way.
+To take a real metaphor, car designers use a crash test dummy to simulate the dynamic behavior of a human in vehicle impacts.
+
+#### Install a mocking library
+
+Much like with assertions, Mocha does not provide any mocking functionality by default.
+
+However, there are many JavaScript mocking libraries like [JsMockito][jsmockito], [Sinon][sinon], [testdouble.js][testdoublejs].
+You will use Sinon in this tutorial.
+
+Install it by running the following command in the project's directory:
+
+```bash
+$> npm install --save-dev sinon
+```
+
+Add the following line to the top of your `tests/code.test.js` file:
+
+```js
+const { fake } = require('sinon');
+```
+
+#### How do I create a mock object?
+
+Sinon has a `fake` method that can be used to easily create customizable fake functions:
+
+```js
+const fakeFunc = fake.returns(2);
+console.log(fakeFunc()); // 2
+```
+
+You can create a mock object by adding fake functions to it:
+
+```js
+const mockObject = {
+  hello: fake.returns('Hello')
+};
+
+console.log(mockObject.hello()); // Hello
+```
+
+Armed with your new mocking knowledge, write a better test for `LoudDecorator`,
+one that **does not use the `Greeter` class**, but creates a mock greeter object instead.
+
+#### Why use mocks?
+
+By mocking the dependencies of `LoudDecorator`,
+you are writing a **true unit test** since you are only testing `LoudDecorator` itself.
+If the dependency is complex, that is probably a good thing.
+
+If an object has any of the following characteristics, it may be useful to use a mock object in its place:
+
+* The object supplies **non-deterministic results** (e.g. the current time or the current temperature).
+* It has **states that are difficult to create** or reproduce (e.g. a network error).
+* It is **slow** (e.g. a complete database, which would have to be initialized before the test).
+* It does not yet exist or **may change behavior**.
+* It would have to include information and methods exclusively for testing purposes (and not for its actual task).
+
+### Why write unit tests?
+
+Unit tests allow to isolate each part of a program and **prove that each individual part is correct**.
+
+> Unit tests provide a strict, written contract.
+
+Unit tests **find problems early in the development cycle**.
+
+> The process of writing unit tests forces the programmer to think through inputs, outputs, and error conditions,
+> and thus more crisply define the unit's desired behavior.
+> The cost of finding a bug when the code is first written is considerably lower than the cost of detecting, identifying, and correcting the bug later.
+
+Unit tests may **reduce uncertainty** in the units themselves.
+
+> By testing the parts of a program first and then testing the sum of its parts, integration testing becomes much easier.
+
+Unit tests provide a sort of **living documentation** of the system.
+
+> Looking at a unit's tests can give a basic understanding of the unit's interface.
+
+#### Disadvantages of unit tests
+
+Unit tests **will not catch every error in the program**, because they cannot evaluate every execution path in any but the most trivial programs.
+They will not catch integration errors or broader system-level errors.
+
+Software testing is a combinatorial problem.
+For every logical branch (true or false), a test case must be written, which is quite **time-consuming** and might not be worth the effort.
+
+To obtain the intended benefits from unit testing, **rigorous discipline is needed** throughout the software development process.
+You must keep track of which tests have been written already, which are missing,
+and ensure that failures are reviewed and addressed immediately.
+
+
+
+## Integration tests
+
+When doing integration tests, individual software **units are combined and tested as a group**.
+This **ensures that components work well together**, not only individually as tested by unit tests.
+
+The tools used to write integration tests are often the same as for unit tests,
+so you do not need to install any new library.
+
+### Write some integration tests
+
+Go back to the sample PHP project and write an integration test for the `countBytes` and `formatBytes` function working together,
+similarly to how they are used [in the `file-stats.php` script][php-sample-integration].
+
+Go back to the sample JavaScript project and write an integration test using the `Greeter`, `ExcitementDecorator` and `LoudDecorator` together,
+similarly to how they are used [in the `buildGreeting` function][js-sample-build-greeting].
+
+### Advantages and disadvantages of integration testing
+
+**Advantages**
+
+* Integration tests help **discover interfacing problems** between components.
+* Integration tests **catch system-level issues**, such as broken database schema, mistaken cache integration, and so on,
+  which might be difficult to identify with unit tests.
+
+**Disadvantages**
+
+* **Finding bugs is more difficult** than with unit tests.
+  When an integration test fails, since multiple components are combined, it may be unclear which one is causing the bug.
+
+
+
+## API tests
+
+[API testing][api-testing] is a part of [integration testing][integration-testing].
+
+Specifically, it involves **testing application programming interfaces (APIs)** directly
+to **determine if they meet expectations** for functionality, reliability, performance and security.
+
+API testing is considered critical for automating testing because APIs now serve as the primary interface to application logic
+and because GUI tests are difficult to maintain with the short release cycles and frequent changes commonly used with Agile software development.
+
+### Testing a web API
+
+The sample JavaScript project provides a web API.
+
+Make sure you have it available on http://localhost:3000 by running `npm run dev` in the project's directory.
+
+You should be able to access the web API with this URL: http://localhost:3000/greeter?excitement=1&loud=&name=Bob&salutation=Hello
+
+It should return a [JSON][json] response with the text "Hello Bob!".
+
+### Install an API test library
+
+Mocha does not provide any API testing functionality,
+but there are many tools that can help you do this such as [REST-assured][rest-assured], [SoapUI][soapui] or [SuperTest][supertest].
+
+You will use SuperTest, a JavaScript API testing library, in this tutorial.
+
+Install it by running the following command in the project's directory:
+
+```bash
+$> npm install --save-dev supertest
+```
+
+> Note that you do **not** have to use a JavaScript API testing tool to test a web API implemented in JavaScript.
+> As long as it can make HTTP calls, any tool in any language will do.
+
+### Using SuperTest
+
+TODO:
+
+* example
+* async/await
+* write 2 tests
 
 
 
@@ -294,28 +786,13 @@ final class FileStatsTest extends TestCase
 
 ## TODO
 
-* assertions
-* test runners
-
-* unit tests
-* mocking
-
-* integration tests
-
-* API tests
 * e2e/ui/gui tests
-
 * performance tests
 * acceptance tests
 
 * bdd
 * tdd
 
-* write test in php
-* write test in JavaScript
-
-* mocking?
-* write integration test in JavaScript
 * unit vs integration test
 
 * write e2e test in JavaScript
@@ -323,11 +800,16 @@ final class FileStatsTest extends TestCase
 
 
 [acceptance-testing]: https://en.wikipedia.org/wiki/Acceptance_testing
+[api]: https://en.wikipedia.org/wiki/Application_programming_interface
 [api-testing]: https://en.wikipedia.org/wiki/API_testing
 [appium]: https://appium.io
 [automated-tests]: https://en.wikipedia.org/wiki/Test_automation
+[bdd]: https://en.wikipedia.org/wiki/Behavior-driven_development
+[chai]: https://www.chaijs.com
+[chai-assertions]: https://www.chaijs.com/api/bdd/
 [composer]: https://getcomposer.org
 [cucumber]: https://cucumber.io/
+[decorator]: https://en.wikipedia.org/wiki/Decorator_pattern
 [doctest]: https://pythontesting.net/framework/doctest/doctest-introduction/
 [gui-testing]: https://en.wikipedia.org/wiki/Graphical_user_interface_testing
 [integration-testing]: https://en.wikipedia.org/wiki/Integration_testing
@@ -336,23 +818,39 @@ final class FileStatsTest extends TestCase
 [jest]: https://jestjs.io
 [jmeter]: https://jmeter.apache.org/
 [js]: https://en.wikipedia.org/wiki/JavaScript
+[js-sample]: https://github.com/MediaComem/comem-archidep-js-automated-tests
+[js-sample-build-greeting]: https://github.com/MediaComem/comem-archidep-js-automated-tests/blob/a1d78d25b303ccb64e606e270c4b0f1b2296b495/routes/greeter.js#L22-L45
+[js-sample-lib]: https://github.com/MediaComem/comem-archidep-js-automated-tests/tree/master/lib
+[jsmockito]: https://jsmockito.org
+[json]: https://www.json.org
 [junit]: https://junit.org
 [mocha]: https://mochajs.org
+[mocking]: https://en.wikipedia.org/wiki/Mock_object
+[mustjs]: https://github.com/moll/js-must
 [node]: https://nodejs.org
+[npm]: https://www.npmjs.com
+[npm-scripts]: https://docs.npmjs.com/misc/scripts
 [performance-testing]: https://en.wikipedia.org/wiki/Software_performance_testing
 [php]: http://php.net
 [php-sample]: https://github.com/MediaComem/comem-archidep-php-automated-tests
+[php-sample-integration]: https://github.com/MediaComem/comem-archidep-php-automated-tests/blob/b86ffe31fdbd9f51ef58491fa44f09737f1adb4a/file-stats.php#L25
 [phpunit]: https://phpunit.de
+[phpunit-assertions]: https://phpunit.readthedocs.io/en/7.4/assertions.html
 [python]: https://www.python.org
 [python-unittest]: https://docs.python.org/3/library/unittest.html
 [qa]: https://en.wikipedia.org/wiki/Quality_assurance
+[rest-assured]: http://rest-assured.io
 [robotium]: https://github.com/RobotiumTech/robotium
 [rspec]: http://rspec.info
 [ruby]: https://www.ruby-lang.org
 [ruby-test-unit]: https://test-unit.github.io
+[soapui]: https://www.soapui.org
 [selenium-webdriver]: https://www.seleniumhq.org/projects/webdriver/
+[shouldjs]: http://shouldjs.github.io
+[sinon]: https://sinonjs.org
 [supertest]: https://github.com/visionmedia/supertest
 [system-testing]: https://en.wikipedia.org/wiki/System_testing
 [tape]: https://github.com/substack/tape
+[testdoublejs]: https://github.com/testdouble/testdouble.js/
 [unit-testing]: https://en.wikipedia.org/wiki/Unit_testing
 [vscode]: https://code.visualstudio.com
