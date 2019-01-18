@@ -786,6 +786,122 @@ Write at least two tests for the greeter API:
 
 
 
+## Test-Driven Development (TDD)
+
+<!-- slide-front-matter class: center, middle -->
+
+<p class='center'><img class='w80' src='images/tdd.jpeg' /></p>
+
+### What is test-driven development?
+
+As the name implies, [test-driven development][tdd] is **driven by tests**.
+
+When you want to add a new feature to your software,
+instead of developing your code first, then writing your tests, you use this process:
+
+1. Define the requirements for the new feature.
+2. **Write a test for the feature first.**
+
+   > The test will fail at first, since the feature does not exist yet.
+3. **Then,** implement the feature.
+
+   > Until the test succeeds.
+4. Finally, refactor your code to improve it if necessary.
+
+This process improves code quality because it forces you to really think about
+your features up front to write the tests, before even starting to write one line of feature code.
+
+### Apply TDD
+
+You will add a new feature: the `Greeter` class should have a customizable separator.
+For example, if you set the separator to `, ` (a comma and a space),
+a simple greeter with its name set to `Bob` and its salutation set to `Hi` should produce `Hi, Bob` instead of `Hi Bob`.
+
+* **Write the test for this feature first.**
+  Make sure you can run it and see it fail.
+* Then implement the required code until the test passes.
+
+
+
+## Behavior-Driven Development (BDD)
+
+[Behavior-driven development][bdd] is quite similar to test-driven development:
+you start with the tests, then you implement the features.
+
+The difference is that instead of writing tests only in code,
+you use a [domain-specific language (DSL)][dsl] that allows you to express business requirements in readable language.
+
+This theoretically allows more business-oriented project members to participate in the definition of automated tests.
+
+### Cucumber & Gherkin
+
+You will use [Cucumber][cucumber], a very popular BDD test framework and runner.
+
+It uses [Gherkin][gherkin], a language that allows you to define business requirements with
+a simple structure sentence using the keywords `Given`, `Then` and `When`:
+
+```
+Feature: Guess the word
+
+  # The first example has two steps
+  Scenario: Maker starts a game
+    When the Maker starts a game
+    Then the Maker waits for a Breaker to join
+
+  # The second example has three steps
+  Scenario: Breaker joins a game
+    Given the Maker has started a game with the word "silky"
+    When the Breaker joins the Maker's game
+    Then the Breaker must guess a word with 5 characters
+```
+
+### Install Cucumber
+
+Run the following command in the project's directory to install Cucumber:
+
+```bash
+$> npm install --save-dev cucumber cucumber-pretty
+```
+
+Add the following line to your `package.json` file to facilitate running the `cucumber` command:
+
+```json
+  ...
+  "scripts": {
+    `"cucumber": "cucumber-js -f node_modules/cucumber-pretty",`
+    "dev": "cross-env DEBUG=greeter:* nodemon ./bin/www",
+    "mocha": "mocha 'tests/**/*.test.js'",
+    "start": "node ./bin/www"
+  }
+  ...
+```
+
+You should now be able to run Cucumber by typing `npm run cucumber`.
+
+### Implement a Cucumber feature test
+
+Creates a `features` directory and save the following contents to a file named `features/greeter.feature`:
+
+```txt
+Feature: Greeter
+  In order to be properly greeted
+  As a customer
+  I must give my name and salutation
+
+  Scenario: simple greeting
+    Given I am named "Bob"
+    And I want to be saluted with "Hi"
+    When I am greeted
+    Then the greeting should be "Hi Bob"
+```
+
+Create the necessary support files so that you can execute this feature with Cucumber.
+You will need to define a World, and the various Steps.
+
+Use the [Cucumber JS documentation][cucumber-js].
+
+
+
 ## References
 
 * https://smartbear.com/learn/automated-testing/
@@ -822,8 +938,11 @@ Write at least two tests for the greeter API:
 [chai-assertions]: https://www.chaijs.com/api/bdd/
 [composer]: https://getcomposer.org
 [cucumber]: https://cucumber.io/
+[cucumber-js]: https://github.com/cucumber/cucumber-js
 [decorator]: https://en.wikipedia.org/wiki/Decorator_pattern
 [doctest]: https://pythontesting.net/framework/doctest/doctest-introduction/
+[dsl]: https://en.wikipedia.org/wiki/Domain-specific_language
+[gherkin]: https://docs.cucumber.io/gherkin/reference/
 [gui-testing]: https://en.wikipedia.org/wiki/Graphical_user_interface_testing
 [integration-testing]: https://en.wikipedia.org/wiki/Integration_testing
 [jasmine]: https://jasmine.github.io
@@ -864,6 +983,7 @@ Write at least two tests for the greeter API:
 [supertest]: https://github.com/visionmedia/supertest
 [system-testing]: https://en.wikipedia.org/wiki/System_testing
 [tape]: https://github.com/substack/tape
+[tdd]: https://en.wikipedia.org/wiki/Test-driven_development
 [testdoublejs]: https://github.com/testdouble/testdouble.js/
 [unit-testing]: https://en.wikipedia.org/wiki/Unit_testing
 [vscode]: https://code.visualstudio.com
