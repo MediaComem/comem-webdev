@@ -322,7 +322,7 @@ For example, `1` and `2` are not equal:
 
 ```php
 public function testSomething(): void {
-  $this.assertEquals(1, 2);
+  $this->assertEquals(1, 2);
 }
 ```
 
@@ -351,7 +351,7 @@ This time, update the assertion to something you know to be true:
 
 ```php
 public function testSomething(): void {
-  $this.assertEquals(3, 1 + 2);
+  $this->assertEquals(3, 1 + 2);
 }
 ```
 
