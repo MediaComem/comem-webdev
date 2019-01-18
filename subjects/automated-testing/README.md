@@ -786,6 +786,96 @@ Write at least two tests for the greeter API:
 
 
 
+## End-to-end tests
+
+End-to-end tests, or [Graphical User Interface (GUI) tests][gui-testing] are automated tests
+focused on testing the whole system from the user perspective.
+
+For example, testing tools like [Selenium WebDriver][selenium-webdriver] allow you to control
+a browser and simulate a user by navigating to web pages, filling forms, clicking buttons, etc.
+
+### Install Selenium WebDriver
+
+Run the following command in the project's directory to install Selenium WebDriver:
+
+```bash
+$> npm install --save-dev selenium-webdriver
+```
+
+> Also follow the additional [installation instructions][selenium-webdriver-install] for your operating system if applicable.
+> For example for Google Chrome on Windows, you must download the Chrome driver to a directory,
+> and put that directory into your [system's `PATH` environment variable][windows-path].
+
+### Create a file for your end-to-end test
+
+Save the following contents to a file named `tests/e2e.test.js`:
+
+```js
+const webdriver = require('selenium-webdriver');
+const { By } = require('selenium-webdriver');
+const port = process.env.PORT || 3000;
+const baseUrl = process.env.BASE_URL || \`http://localhost:${port}`;
+
+describe('Greeter web page', function() {
+  this.timeout(10000);
+
+  let driver;
+
+  beforeEach(async function() {
+    driver = await new webdriver.Builder()
+      .forBrowser('chrome')
+      .build();
+  });
+
+  afterEach(async function() {
+    await driver.quit();
+  });
+
+  it('should produce a complex greeting', async function() {
+    await driver.get(baseUrl);
+  });
+});
+```
+
+#### Run your end-to-end test
+
+Make sure you have a terminal open with the `npm run dev` command running,
+and the application available at http://localhost:3000 before the next step.
+
+Run the tests again with `npm run mocha`
+Mocha should execute the new test case, open your browser, display the page, and immediately close the browser.
+
+### Implement the end-to-end test
+
+Add the following content to your test after the `driver.get` call, and run the tests again:
+
+```js
+const salutationSelect = await driver.findElement(By.name('salutation'));
+await salutationSelect.sendKeys('Pirate');
+
+const randomInput = await driver.findElement(By.name('random'));
+await randomInput.click();
+
+const nameInput = await driver.findElement(By.name('name'));
+await nameInput.clear();
+await nameInput.sendKeys('webdriver');
+
+const excitementInput = await driver.findElement(By.name('excitement'));
+await excitementInput.clear();
+await excitementInput.sendKeys('2');
+
+const loudCheckbox = await driver.findElement(By.name('loud'));
+await loudCheckbox.click();
+
+await driver.wait(async function() { // Wait until the title is correct
+  const title = await driver.findElement(By.css('h1.jumbotron-heading'));
+  const text = await title.getText(); // Retrieve the title's text
+  return text === 'AHOY WEBDRIVER!!'; // Check its expected value
+});
+```
+
+
+
 ## Test-Driven Development (TDD)
 
 <!-- slide-front-matter class: center, middle -->
@@ -978,6 +1068,7 @@ Use the [Cucumber JS documentation][cucumber-js].
 [ruby-test-unit]: https://test-unit.github.io
 [soapui]: https://www.soapui.org
 [selenium-webdriver]: https://www.seleniumhq.org/projects/webdriver/
+[selenium-webdriver-install]: https://www.npmjs.com/package/selenium-webdriver#installation
 [shouldjs]: http://shouldjs.github.io
 [sinon]: https://sinonjs.org
 [supertest]: https://github.com/visionmedia/supertest
@@ -987,3 +1078,4 @@ Use the [Cucumber JS documentation][cucumber-js].
 [testdoublejs]: https://github.com/testdouble/testdouble.js/
 [unit-testing]: https://en.wikipedia.org/wiki/Unit_testing
 [vscode]: https://code.visualstudio.com
+[windows-path]: https://www.computerhope.com/issues/ch000549.htm
