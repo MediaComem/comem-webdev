@@ -506,7 +506,7 @@ you can add the following line in the `package.json` file:
   ...
   "scripts": {
     "dev": "cross-env DEBUG=greeter:* nodemon ./bin/www",
-    `"mocha": "mocha 'tests/**/*.test.js'",`
+    `"mocha": "mocha tests/**/*.test.js",`
     "start": "node ./bin/www"
   }
   ...
@@ -675,11 +675,29 @@ console.log(mockObject.hello()); // Hello
 Armed with your new mocking knowledge, write a better test for `LoudDecorator`,
 one that **does not use the `Greeter` class**, but creates a mock greeter object instead.
 
-#### Why use mocks?
+#### Mocking example
+
+Here's the same test as before but with a mock object instead of the real greeter object:
+
+```js
+it('should make a greeting louder', function() {
+
+  const mockGreeter = {
+    toString: fake.returns('Hello')
+  };
+
+  const decorator = new LoudDecorator(mockGreeter);
+  decorator.setLoud();
+
+  expect(decorator.toString()).to.equal('HELLO');
+});
+```
 
 By mocking the dependencies of `LoudDecorator`,
 you are writing a **true unit test** since you are only testing `LoudDecorator` itself.
 If the dependency is complex, that is probably a good thing.
+
+#### Why use mocks?
 
 If an object has any of the following characteristics, it may be useful to use a mock object in its place:
 
@@ -813,8 +831,8 @@ Here's an example of how to write a test with SuperTest:
 const { expect } = require('chai');
 const supertest = require('supertest');
 
-describe('Some API', function() {
-  it('should do something', async function() {
+describe('Google', function() {
+  it('should display its home page', async function() {
 
     // Make a GET request on www.google.com
     const response = await supertest('http://www.google.com').get('/');
@@ -831,12 +849,16 @@ describe('Some API', function() {
 This test retrieves the Google home page and makes two assertions,
 one on the status code of the response, and one on the body.
 
+You can save this test to a new file named `tests/api.test.js` and run `npm run mocha` again to execute it.
+
 ### Write API tests
 
 Write at least two tests for the greeter API:
 
 * Test that simply calling the `/greeter` API without any parameters returns a default greeting.
 * Test that a more complex greeting is created by sending URL query parameters (like `name` or `excitement`).
+
+> Read the [Chai API][chai-assertions] to see what kind of assertions might be useful for these tests.
 
 
 
@@ -860,7 +882,17 @@ $> npm install --save-dev selenium-webdriver
 
 Also follow the additional [installation instructions][selenium-webdriver-install] for your operating system if applicable.
 For example for Google Chrome, you may need to download the Chrome driver to a directory,
-and put that directory into your [system's `PATH` environment variable][windows-path].
+and put that directory into your `PATH`.
+
+> To add a directory to the `PATH` on Windows,
+> modify your [system's `Path` environment variable][windows-path].
+> Double-click on the `Path` variable and add the full path to the directory as a new entry.
+
+> To add a directory to the `PATH` on Linux or macOS,
+> save the following command to your `.bash_profile` file,
+> then restart your terminal:
+>
+>     export PATH=$PATH:/path/to/directory
 
 ### Create a file for your end-to-end test
 
@@ -939,17 +971,14 @@ below the `driver.get` call:
 // Click the random checkbox
 const randomInput = await driver.findElement(By.name('random'));
 await randomInput.click();
-
 // Fill the name field
 const nameInput = await driver.findElement(By.name('name'));
 await nameInput.clear();
 await nameInput.sendKeys('webdriver');
-
 // Fill the excitement field
 const excitementInput = await driver.findElement(By.name('excitement'));
 await excitementInput.clear();
 await excitementInput.sendKeys('2');
-
 // Click the loud checkbox
 const loudCheckbox = await driver.findElement(By.name('loud'));
 await loudCheckbox.click();
@@ -957,8 +986,11 @@ await loudCheckbox.click();
 // Wait until the correct greeting is displayed in the title
 await driver.wait(async function() {
   const title = await driver.findElement(By.css('h1.jumbotron-heading'));
-  return title.getText() === 'HELLO WEBDRIVER!!'; // Check its expected value
+  const text = await title.getText();
+  return text === 'HELLO WEBDRIVER!!'; // Check its expected value
 });
+
+await new Promise(resolve => setTimeout(resolve, 1000));
 ```
 
 
@@ -1084,6 +1116,72 @@ You have implemented your first feature using test-driven development:
 * You implemented a failing test first.
 * Then you implemented the feature to make the test pass.
 
+### Enable the rest of the tests again
+
+Remove the `.only` from your test.
+If you run the tests with `npm run mocha` again,
+you will probably see some tests failing:
+
+```
+2 passing (12s)
+5 failing
+```
+
+You should see errors similar to this:
+
+```
+1) Greeter API
+     should produce a simple greeting:
+
+    AssertionError: expected { greeting: 'HelloundefinedWorld' }
+      to deeply equal { greeting: 'Hello World' }
+
+    + expected - actual
+
+     {
+    -  "greeting": "HelloundefinedWorld"
+    +  "greeting": "Hello World"
+     }
+
+    at Context.<anonymous> (tests/api.test.js:17:35)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+```
+
+### Why write automated tests?
+
+Thanks to the tests you wrote earlier,
+you can easily identify that after implementing this latest separator feature,
+you have introduced a **change in behavior**.
+
+This is also called a **regression**,
+because things that previously worked do not work anymore.
+In other words, you have introduced a bug.
+
+#### Fix the bug and run the tests again
+
+You can easily fix the issue by modifying the constructor of the `Greeter` class as follows:
+
+```js
+constructor() {
+  this.separator = ' ';
+}
+```
+
+Now that you have done so,
+your automated test suite allows you to quickly check
+that everything works as it did before:
+
+```bash
+$> npm run mocha
+
+  Greeter API
+    ✓ should produce a simple greeting (40ms)
+    ✓ should produce a complex greeting
+  ...
+
+  7 passing (4s)
+```
+
 
 
 ## Behavior-Driven Development (BDD)
@@ -1099,8 +1197,10 @@ This theoretically allows more business-oriented project members to participate 
 ### Cucumber & Gherkin
 
 You will use [Cucumber][cucumber], a very popular BDD test framework and runner.
+It has a [JavaScript implementation][cucumber-js].
 
-It uses [Gherkin][gherkin], a language that allows you to define business requirements with
+Cucumber uses [Gherkin][gherkin],
+a language that allows you to define business requirements with
 a simple structure sentence using the keywords `Given`, `Then` and `When`:
 
 ```
@@ -1141,7 +1241,7 @@ Add the following line to your `package.json` file to facilitate running the `cu
 
 You should now be able to run Cucumber by typing `npm run cucumber`.
 
-### Implement a Cucumber feature test
+### Add a Cucumber feature test
 
 Creates a `features` directory and save the following contents to a file named `features/greeter.feature`:
 
@@ -1158,36 +1258,214 @@ Feature: Greeter
     Then the greeting should be "Hi Bob"
 ```
 
-Create the necessary support files so that you can execute this feature with Cucumber.
-You will need to define a World, and the various Steps.
+#### Run a feature test
 
-Use the [Cucumber JS documentation][cucumber-js].
+If you execute `npm run cucumber`,
+you should see that Cucumber will read the feature file you created,
+parse the Gherkin language, and execute the `Given`, `When` and `Then` steps one by one.
+
+```
+Feature: Greeter
+
+  Scenario: simple greeting
+    Given I am named "Bob"
+    ? undefined
+    And I want to be saluted with "Hi"
+    ? undefined
+    When I am greeted
+    ? undefined
+    Then the greeting should be "Hi Bob"
+    ? undefined
+```
+
+#### Unimplemented steps
+
+Cucumber will also warn you that these `Given`, `When` and `Then` steps are not implemented:
+
+```Warnings:
+1) Scenario: simple greeting # features/greeter.feature:6
+   ? Given I am named "Bob"
+       Undefined. Implement with the following snippet:
+
+         Given('I am named {string}', function (string) {
+           // Write code here that turns the phrase above into concrete actions
+           return 'pending';
+         });
+...
+```
+
+This is to be expected.
+Cucumber cannot magically determine what you mean by `Given that I am named "Bob"`.
+
+It is your job to tell Cucumber how to interpret these steps by writing the corresponding code.
+You will need to set up the necessary support files in a new `features/support` directory.
+
+### The Cucumber world
+
+Cucumber runs scenarios in a [World][cucumber-world].
+The world is simply a JavaScript object which is the context in which
+Cucumber steps will be executed.
+In other words, the world will be available as `this` in the steps' implementation.
+
+Create a world by saving the following contents to a file named `features/support/world.js`:
+
+```js
+const { setWorldConstructor } = require('cucumber')
+
+const Greeter = require('../../lib/greeter');
+
+class GreeterWorld {
+  constructor() {
+    this.greeter = new Greeter();
+  }
+}
+
+setWorldConstructor(GreeterWorld);
+```
+
+This world defines a `this.greeter` variable which you will use when next implementing the steps.
+
+### Cucumber steps
+
+Cucumber suggests how you may implement the steps in the warnings it prints:
+
+```js
+Given('I am named {string}', function(string) {
+  // Write code here that turns the phrase above into concrete actions
+  return 'pending';
+});
+```
+
+This code should go into a new file named `features/support/steps.js`.
+Create this file now with these lines at the top:
+
+```js
+const { expect } = require('chai')
+const { Given, When, Then } = require('cucumber')
+```
+
+#### Implement a step
+
+Do as instructed by the warning and implement the required code.
+
+For the first `Given I am named {string}` step,
+you want to set the greeter's name.
+You might remember that you just defined `this.greeter` in the Cucumber world,
+so you can use it in this step:
+
+```js
+Given('I am named {string}', function(name) {
+  this.greeter.setName(name);
+});
+```
+
+Do the same for the salutation step:
+
+```js
+Given('I want to be saluted with {string}', function(salutation) {
+  this.greeter.setSalutation(salutation);
+});
+```
+
+These are the **setup** steps of this scenario.
+
+#### Implement the remaining steps
+
+The `When I am greeted` step is the **action** in this scenario.
+It should create the greeting and store the result in a variable
+so that you can run assertions on it later:
+
+```js
+When('I am greeted', function() {
+  this.greeting = this.greeter.toString();
+});
+```
+
+The `Then the greeting should be "..."` step is the **assertion** in this scenario.
+In it, you should assert that the actual greeting matches the expected one:
+
+```js
+Then('the greeting should be {string}', function(greeting) {
+  expect(this.greeting).to.equal(greeting);
+});
+```
+
+#### All the steps
+
+The final `steps.js` file should look like this:
+
+```js
+const { expect } = require('chai')
+const { Given, When, Then } = require('cucumber')
+
+Given('I am named {string}', function(name) {
+  this.greeter.setName(name);
+});
+
+Given('I want to be saluted with {string}', function(salutation) {
+  this.greeter.setSalutation(salutation);
+});
+
+When('I am greeted', function() {
+  this.greeting = this.greeter.toString();
+});
+
+Then('the greeting should be {string}', function(greeting) {
+  expect(this.greeting).to.equal(greeting);
+});
+```
+
+### Run the full Cucumber feature
+
+Armed with your world and steps,
+you can now run the fully functional Cucumber scenario:
+
+```bash
+$> npm run cucumber
+
+Feature: Greeter
+
+  Scenario: simple greeting
+    Given I am named "Bob"
+    And I want to be saluted with "Hi"
+    When I am greeted
+    Then the greeting should be "Hi Bob"
+
+1 scenario (1 passed)
+4 steps (4 passed)
+0m00.004s
+```
+
+### Why use Cucumber?
+
+To sum up,
+Cucumber is simply another test runner.
+You could implement unit tests, integration tests, API tests or end-to-end tests with it,
+provided that you implement the required code in the Cucumber world and steps.
+
+What makes it valuable compared to standard test frameworks is:
+
+* Tests are written with a **human-readable syntax**,
+  making them easy to understand.
+* With the support of a development team to actually implement the steps,
+  the Gherkin feature files themselves could conceivably be **written by
+  business-oriented team members with no programming skills**.
 
 
 
 ## References
 
-* https://smartbear.com/learn/automated-testing/
-* http://www.continuousagile.com/unblock/test_types.html
-* https://learn.techbeacon.com/units/3-types-automated-tests
-* https://www.softwaretestinghelp.com/automation-testing-tutorial-2/
-* https://www.atlassian.com/continuous-delivery/software-testing/types-of-software-testing
-* https://edwardthienhoang.wordpress.com/2014/10/29/i-dont-write-unit-tests-because-the-excuses/
-
-
-
-## TODO
-
-* e2e/ui/gui tests
-* performance tests
-* acceptance tests
-
-* bdd
-* tdd
-
-* unit vs integration test
-
-* write e2e test in JavaScript
+* [Test Automation][automated-tests]
+  * [Unit Testing][unit-testing]
+  * [Integration Testing][integration-testing]
+  * [System Testing][system-testing]
+  * [API Testing][api-testing]
+  * [GUI Testing][gui-testing]
+  * [Performance Testing][performance-testing]
+* [Smartbear - Automated Testing](https://smartbear.com/learn/automated-testing/)
+* [The 3 Types of Automated Tests](https://learn.techbeacon.com/units/3-types-automated-tests)
+* [Atlassian CI/CD - Types of Software Testing](https://www.atlassian.com/continuous-delivery/software-testing/types-of-software-testing)
+* [I Don't Write Unit Tests Because... The Excuses](https://edwardthienhoang.wordpress.com/2014/10/29/i-dont-write-unit-tests-because-the-excuses/)
 
 
 
@@ -1202,6 +1480,7 @@ Use the [Cucumber JS documentation][cucumber-js].
 [composer]: https://getcomposer.org
 [cucumber]: https://cucumber.io/
 [cucumber-js]: https://github.com/cucumber/cucumber-js
+[cucumber-world]: https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/world.md
 [decorator]: https://en.wikipedia.org/wiki/Decorator_pattern
 [doctest]: https://pythontesting.net/framework/doctest/doctest-introduction/
 [dsl]: https://en.wikipedia.org/wiki/Domain-specific_language
