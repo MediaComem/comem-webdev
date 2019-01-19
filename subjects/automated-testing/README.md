@@ -271,7 +271,7 @@ What you just pasted is a PHPUnit **test suite** composed of one **test case**:
 * It has methods with names that begin with `test`.
   Those are what PHPUnit will execute when running the file.
 
-<p class='center'><img class='w80' src='images/test-runner.jpg' /></p>
+<p class='center'><img class='w80' src='images/unit-test-exec.jpg' /></p>
 
 #### Run your first test
 
@@ -436,7 +436,7 @@ $> npm install --save-dev mocha
 Create a `tests` directory and save the following contents into a file named `tests/code.test.js`:
 
 ```js
-describe('Something', function() {
+describe('Subject', function() {
   it('should do something', function() {
   });
 
@@ -460,7 +460,7 @@ Run the following command to execute all files with names ending with `.test.js`
 ```bash
 $> ./node_modules/mocha/bin/mocha 'tests/**/*.test.js'
 
-  Greeter
+  Subject
     ✓ should test something
     ✓ should test something else
 
@@ -469,6 +469,33 @@ $> ./node_modules/mocha/bin/mocha 'tests/**/*.test.js'
 
 As you can see, Mocha read your test cases and executed the two functions passed to `it`.
 Mocha considers a test successful if it does nothing.
+
+##### Mocha test structure
+
+The calls to `describe` and `it` form a structure.
+In this example, the two `it` functions are within the `describe` function:
+
+```js
+describe('`Subject`', function() {
+  it('`should do something`', function() {
+  });
+
+  it('`should do something else`', function() {
+  });
+});
+```
+
+This structure is reflected in the output:
+
+```bash
+$> ./node_modules/mocha/bin/mocha 'tests/**/*.test.js'
+
+  `Subject`
+    ✓ `should test something`
+    ✓ `should test something else`
+
+  2 passing (6ms)
+```
 
 ##### Add a shortcut npm script for Mocha
 
@@ -488,7 +515,7 @@ you can add the following line in the `package.json` file:
 This defines an [npm script][npm-scripts] that allows you to run the command by simply typing `npm run mocha`:
 
 ```bash
-$> npm run mocha
+$> `npm run mocha`
 
   Greeter
     ✓ should test something
@@ -701,6 +728,8 @@ and ensure that failures are reviewed and addressed immediately.
 When doing integration tests, individual software **units are combined and tested as a group**.
 This **ensures that components work well together**, not only individually as tested by unit tests.
 
+<p class='center'><img class='w70' src='images/integration-test-exec.jpg' /></p>
+
 The tools used to write integration tests are often the same as for unit tests,
 so you do not need to install any new library.
 
@@ -734,25 +763,38 @@ similarly to how they are used [in the `buildGreeting` function][js-sample-build
 Specifically, it involves **testing application programming interfaces (APIs)** directly
 to **determine if they meet expectations** for functionality, reliability, performance and security.
 
-API testing is considered critical for automating testing because APIs now serve as the primary interface to application logic
-and because GUI tests are difficult to maintain with the short release cycles and frequent changes commonly used with Agile software development.
+For example, your application may provide a [RESTful][rest] API or an [RPC][rpc] API accessible over the Internet.
+Automated tests can make HTTP calls to these APIs and compared actual outcomes with expected outcomes.
+
+> API tests are a type of integration test since they test all components of your API working together.
+
+### Benefits of API tests
+
+API testing is considered critical for automating testing
+because APIs now serve as the primary interface to application logic.
+Higher level end-to-end tests are also more difficult to maintain
+with the short release cycles and frequent changes commonly used with iterative software development.
+
+<p class='center'><img class='w80' src='images/api-test-exec.jpg' /></p>
 
 ### Testing a web API
 
-The sample JavaScript project provides a web API.
-
+The sample JavaScript project you used to write JavaScript unit tests also provides a web API.
 Make sure you have it available on http://localhost:3000 by running `npm run dev` in the project's directory.
 
 You should be able to access the web API with this URL: http://localhost:3000/greeter?excitement=1&loud=&name=Bob&salutation=Hello
 
 It should return a [JSON][json] response with the text "Hello Bob!".
 
+You can write tests that do the same and assert that the response is as expected.
+
 ### Install an API test library
 
-Mocha does not provide any API testing functionality,
+Mocha does not provide any API testing functionality out of the box,
 but there are many tools that can help you do this such as [REST-assured][rest-assured], [SoapUI][soapui] or [SuperTest][supertest].
 
 You will use SuperTest, a JavaScript API testing library, in this tutorial.
+It has a nice syntax to easily make HTTP requests to your API.
 
 Install it by running the following command in the project's directory:
 
@@ -774,18 +816,27 @@ const supertest = require('supertest');
 describe('Some API', function() {
   it('should do something', async function() {
 
+    // Make a GET request on www.google.com
     const response = await supertest('http://www.google.com').get('/');
 
+    // Assert that the response status code is 200 OK
     expect(response.status).to.equal(200);
+
+    // Assert that the response contains the text "Google"
     expect(response.text).to.have.string('Google');
   });
 });
 ```
 
+This test retrieves the Google home page and makes two assertions,
+one on the status code of the response, and one on the body.
+
+### Write API tests
+
 Write at least two tests for the greeter API:
 
-* Test that simply calling the URL returns a default greeting.
-* Test a more complex greeting by sending URL query parameters.
+* Test that simply calling the `/greeter` API without any parameters returns a default greeting.
+* Test that a more complex greeting is created by sending URL query parameters (like `name` or `excitement`).
 
 
 
@@ -793,6 +844,8 @@ Write at least two tests for the greeter API:
 
 End-to-end tests, or [Graphical User Interface (GUI) tests][gui-testing] are automated tests
 focused on testing the whole system from the user perspective.
+
+<p class='center'><img class='w70' src='images/e2e-test-exec.jpg' /></p>
 
 For example, testing tools like [Selenium WebDriver][selenium-webdriver] allow you to control
 a browser and simulate a user by navigating to web pages, filling forms, clicking buttons, etc.
@@ -805,9 +858,9 @@ Run the following command in the project's directory to install Selenium WebDriv
 $> npm install --save-dev selenium-webdriver
 ```
 
-> Also follow the additional [installation instructions][selenium-webdriver-install] for your operating system if applicable.
-> For example for Google Chrome on Windows, you must download the Chrome driver to a directory,
-> and put that directory into your [system's `PATH` environment variable][windows-path].
+Also follow the additional [installation instructions][selenium-webdriver-install] for your operating system if applicable.
+For example for Google Chrome, you may need to download the Chrome driver to a directory,
+and put that directory into your [system's `PATH` environment variable][windows-path].
 
 ### Create a file for your end-to-end test
 
@@ -826,7 +879,7 @@ describe('Greeter web page', function() {
 
   beforeEach(async function() {
     driver = await new webdriver.Builder()
-      .forBrowser('chrome')
+      .forBrowser('chrome') // Change to your browser if required
       .build();
   });
 
@@ -846,34 +899,65 @@ Make sure you have a terminal open with the `npm run dev` command running,
 and the application available at http://localhost:3000 before the next step.
 
 Run the tests again with `npm run mocha`
-Mocha should execute the new test case, open your browser, display the page, and immediately close the browser.
+Mocha should execute the new test case, open your browser,
+display the page, and immediately close the browser.
+
+### Selenium WebDriver API
+
+Selenium offers various features to inspect and manipulate web pages.
+
+For example, you can retrieve a DOM element by its `name` attribute,
+which is useful for finding a form field:
+
+```js
+const nameInputField = await driver.findElement(By.name('name'));
+```
+
+You can then type into that field by using the field's `sendKeys` method:
+
+```js
+await nameInputField.sendKeys('Bob');
+```
+
+Or if the element is a checkbox, you could click on it with the `click` method:
+
+```js
+const checkbox = await driver.findElement(By.name('enabled'));
+await checkbox.click();
+```
+
+Read the [Selenium WebDriver API][selenium-webdriver-api] for information on other methods at your disposal.
+For example, the `findElement` method returns [`WebElement`][selenium-webdriver-api-web-element] instances.
 
 ### Implement the end-to-end test
 
-Add the following content to your test after the `driver.get` call, and run the tests again:
+Here's a working test for the Greeter API.
+This code goes into the `should produce a complex greeting` test
+below the `driver.get` call:
 
 ```js
-const salutationSelect = await driver.findElement(By.name('salutation'));
-await salutationSelect.sendKeys('Pirate');
-
+// Click the random checkbox
 const randomInput = await driver.findElement(By.name('random'));
 await randomInput.click();
 
+// Fill the name field
 const nameInput = await driver.findElement(By.name('name'));
 await nameInput.clear();
 await nameInput.sendKeys('webdriver');
 
+// Fill the excitement field
 const excitementInput = await driver.findElement(By.name('excitement'));
 await excitementInput.clear();
 await excitementInput.sendKeys('2');
 
+// Click the loud checkbox
 const loudCheckbox = await driver.findElement(By.name('loud'));
 await loudCheckbox.click();
 
-await driver.wait(async function() { // Wait until the title is correct
+// Wait until the correct greeting is displayed in the title
+await driver.wait(async function() {
   const title = await driver.findElement(By.css('h1.jumbotron-heading'));
-  const text = await title.getText(); // Retrieve the title's text
-  return text === 'AHOY WEBDRIVER!!'; // Check its expected value
+  return title.getText() === 'HELLO WEBDRIVER!!'; // Check its expected value
 });
 ```
 
@@ -896,7 +980,7 @@ instead of developing your code first, then writing your tests, you use this pro
 2. **Write a test for the feature first.**
 
    > The test will fail at first, since the feature does not exist yet.
-3. **Then,** implement the feature.
+3. **Then,** implement the feature by writing the necessary code.
 
    > Until the test succeeds.
 4. Finally, refactor your code to improve it if necessary.
@@ -907,12 +991,98 @@ your features up front to write the tests, before even starting to write one lin
 ### Apply TDD
 
 You will add a new feature: the `Greeter` class should have a customizable separator.
-For example, if you set the separator to `, ` (a comma and a space),
-a simple greeter with its name set to `Bob` and its salutation set to `Hi` should produce `Hi, Bob` instead of `Hi Bob`.
 
-* **Write the test for this feature first.**
-  Make sure you can run it and see it fail.
-* Then implement the required code until the test passes.
+For example, if you set the separator to a comma and a space,
+a greeter with its name set to `Bob` and its salutation set to `Hi` should produce `Hi, Bob` instead of `Hi Bob`.
+The end result should work like this:
+
+```js
+const greeter = new Greeter();
+greeter.setName('Bob');
+greeter.setSalutation('Hi');
+greeter.setSeparator(', ');
+
+console.log(greeter.toString()); // "Hi, Bob"
+```
+
+#### Write the test first
+
+**Write the test for this new feature first.**
+
+Your test should call `setSeparator` and make an assertion that the result should be "Hi, Bob":
+
+```js
+it.only('should produce a greeting with a separator', function() {
+
+  const greeter = new Greeter();
+  greeter.setName('Bob');
+  greeter.setSalutation('Hi');
+  greeter.setSeparator(', ');
+
+  expect(greeter.toString()).to.equal('Hi, Bob');
+});
+```
+
+> Note the `.only` after `it`.
+> This makes Mocha execute only that test for now.
+> You will remove it later when you are done implementing the feature.
+
+#### Make sure the test fails
+
+When you run this new test, it should fail, since you have not implemented the `setSeparator` method yet:
+
+```bash
+$> npm run mocha
+
+  Greeter
+    1) should produce a greeting with a separator
+
+  0 passing (10ms)
+  1 failing
+
+  1) Greeter
+       should produce a greeting with a separator:
+     TypeError: greeter.setSeparator is not a function
+      at Context.<anonymous> (tests/code.test.js:11:13)
+```
+
+#### Implement the feature
+
+Add the following getter and setter to the `Greeter` class:
+
+```js
+getSeparator() {
+  return this.separator;
+}
+
+setSeparator(separator) {
+  this.separator = separator;
+}
+```
+
+Then modify the last line in the `toString` method to this:
+
+```js
+return \`${this.getSalutation()}${this.getSeparator()}${this.getName()}`;
+```
+
+#### Make sure the test passes
+
+Now that you have implemented the feature, the test should pass:
+
+```bash
+$> npm run mocha
+
+Greeter
+    ✓ should produce a greeting with a separator
+
+  1 passing (7ms)
+```
+
+You have implemented your first feature using test-driven development:
+
+* You implemented a failing test first.
+* Then you implemented the feature to make the test pass.
 
 
 
@@ -1064,13 +1234,17 @@ Use the [Cucumber JS documentation][cucumber-js].
 [python]: https://www.python.org
 [python-unittest]: https://docs.python.org/3/library/unittest.html
 [qa]: https://en.wikipedia.org/wiki/Quality_assurance
+[rest]: https://en.wikipedia.org/wiki/Representational_state_transfer
 [rest-assured]: http://rest-assured.io
 [robotium]: https://github.com/RobotiumTech/robotium
+[rpc]: https://en.wikipedia.org/wiki/Remote_procedure_call
 [rspec]: http://rspec.info
 [ruby]: https://www.ruby-lang.org
 [ruby-test-unit]: https://test-unit.github.io
 [soapui]: https://www.soapui.org
 [selenium-webdriver]: https://www.seleniumhq.org/projects/webdriver/
+[selenium-webdriver-api]: https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/
+[selenium-webdriver-api-web-element]: https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_WebElement.html
 [selenium-webdriver-install]: https://www.npmjs.com/package/selenium-webdriver#installation
 [shouldjs]: http://shouldjs.github.io
 [sinon]: https://sinonjs.org
