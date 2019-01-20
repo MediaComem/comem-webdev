@@ -430,7 +430,7 @@ Header1: Value1
 Header2: Value2
 ```
 
-The first line, the status line, indicates the [HTTP method][http-method], resource path and protocol version.
+The first line, the status line, indicates the [HTTP method][http-methods], resource path and protocol version.
 The next lines are [headers][http-headers] to send additional parameters to the server.
 
 #### Making an HTTP request to Google
