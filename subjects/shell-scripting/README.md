@@ -94,7 +94,7 @@ Basically, what you can put in a script depends on the interpreter you're using.
 Simply create your script:
 
 ```bash
-$> echo '#!/bin/bash\necho Hello World' > test.sh
+$> printf '#!/bin/bash\necho Hello World' > test.sh
 ```
 
 Make it an executable:
