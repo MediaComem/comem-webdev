@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const config = {
   title: 'Media Engineering Web Dev',
-  version: '2018-2019',
+  version: '2019-2020',
   repoUrl: 'https://github.com/MediaComem/comem-webdev',
   remark: {
     highlightLines: true,
@@ -17,7 +17,7 @@ const config = {
     gitUrl: 'git@github.com:MediaComem/comem-webdev-docs.git',
     baseUrl: 'https://mediacomem.github.io/comem-webdev-docs',
     branch: 'master',
-    version: '2018-2019'
+    version: '2019-2020'
   }
 };
 
