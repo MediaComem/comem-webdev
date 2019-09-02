@@ -78,6 +78,8 @@ Materials for the COMEM+ web development courses.
 * [SSL](subjects/ssl/)
 * [Continuous Software Development](subjects/continuous/)
   * [Automated Testing](subjects/automated-testing/)
+* [WebSockets](subjects/ws/)
+* [Web Application Messaging Protocol (WAMP)](subjects/wamp/)
 
 **Databases**
 
