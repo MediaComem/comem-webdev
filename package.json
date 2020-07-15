@@ -30,7 +30,7 @@
     "gulp-doctoc": "^0.1.4",
     "gulp-util": "^3.0.8",
     "html-pdf": "^2.2.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.19",
     "micromodal": "^0.3.0",
     "through2": "^2.0.3",
     "tippy.js": "^1.4.1"
